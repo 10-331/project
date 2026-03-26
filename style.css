@@ -154,3 +154,10 @@ body{
     opacity: 0 !important;
   }
 }
+
+@media screen and (max-width: 768px){
+  .items--16{
+    top: 28%;   /* 下げる */
+    left: 16%;  /* 右に寄せる */
+  }
+}
