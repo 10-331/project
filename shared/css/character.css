@@ -4422,7 +4422,7 @@ body {
     left:0vw;
     top:120px;
     top:32vw;
-    background:url("../img/character/device_btn_movie_off_sp.png") center center no-repeat;
+    background:url("../img/character/device_btn_movie_hidden_sp.png") center center no-repeat;
     background-size:cover
   }
   .detail__device__inner .device--button__movie.is--hidden {
