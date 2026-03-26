@@ -114,3 +114,24 @@ body{
   background: url("./shared/img/character/device_btn_movie_off.png") center center no-repeat !important;
   background-size: cover !important;
 }
+
+  .detail__device__inner .device--button__zoom{
+    background: url("./shared/img/character/device_btn_zoom_off_sp.png") center center no-repeat !important;
+    background-size: cover !important;
+  }
+
+  .detail__device__inner .device--button__voice{
+    background: url("./shared/img/character/device_btn_voice_off_sp.png") center center no-repeat !important;
+    background-size: cover !important;
+  }
+}
+
+.detail__device__inner .device--button__zoom{
+  background: url("./shared/img/character/device_btn_zoom_off.png") center center no-repeat !important;
+  background-size: cover !important;
+}
+
+.detail__device__inner .device--button__voice{
+  background: url("./shared/img/character/device_btn_voice_off.png") center center no-repeat !important;
+  background-size: cover !important;
+}
