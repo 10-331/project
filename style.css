@@ -100,3 +100,17 @@ body{
   line-height: 1;
   cursor: pointer;
 }
+
+
+/* --- movieボタンを強制的に通常表示へ --- */
+@media screen and (max-width: 768px){
+  .detail__device__inner .device--button__movie{
+    background: url("./shared/img/character/device_btn_movie_off_sp.png") center center no-repeat !important;
+    background-size: cover !important;
+  }
+}
+
+.detail__device__inner .device--button__movie{
+  background: url("./shared/img/character/device_btn_movie_off.png") center center no-repeat !important;
+  background-size: cover !important;
+}
