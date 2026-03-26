@@ -135,3 +135,22 @@ body{
   background: url("./shared/img/character/device_btn_voice_off.png") center center no-repeat !important;
   background-size: cover !important;
 }
+
+
+@media screen and (max-width: 768px){
+  .detail__device__inner .device--button__zoom{
+    background-image: url("./shared/img/character/device_btn_zoom_off_sp.png") !important;
+  }
+
+  .detail__device__inner .device--button__voice{
+    background-image: url("./shared/img/character/device_btn_voice_off_sp.png") !important;
+  }
+
+  .detail__device__inner .device--button__movie{
+    background-image: url("./shared/img/character/device_btn_movie_off_sp.png") !important;
+  }
+
+  .detail__device__inner .device--button img{
+    opacity: 0 !important;
+  }
+}
