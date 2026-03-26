@@ -154,14 +154,3 @@ body{
     opacity: 0 !important;
   }
 }
-
-@media screen and (max-width: 768px){
-  .device--top{
-    overflow: hidden;
-  }
-
-  .device--top img{
-    transform: translateY(-6px) scale(1.02);
-    transform-origin: top center;
-  }
-}
