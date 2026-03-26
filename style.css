@@ -161,7 +161,7 @@ body{
   }
 
   .device--top img{
-    transform: translateY(-10px) scale(1.02);
+    transform: translateY(-6px) scale(1.02);
     transform-origin: top center;
   }
 }
