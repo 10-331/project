@@ -14,6 +14,33 @@ body{
   display: none;
 }
 
+/* ===== 元CSSへの微調整 ===== */
+
+/* 上のベージュ帯をほんの少し下げる */
+.device--top{
+  transform: translateY(6px);
+}
+
+/* 左ボタン列を少し右へ寄せる */
+.device--button{
+  transform: translateX(12px);
+}
+
+/* 人物をほんの少し右下へ */
+.device--visual{
+  transform: translate(6px, 4px);
+}
+
+/* 下の緑カードを少し下げる */
+.device--card{
+  transform: translateY(8px);
+}
+
+/* 全体の奥行きを少し足す */
+.detail__device__inner{
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.08));
+}
+
 /* Zoomだけは静止版でも使えるようにする */
 .zoom--bg{
   position: fixed;
