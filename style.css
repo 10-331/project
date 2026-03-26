@@ -7,10 +7,6 @@ body{
   overflow-x: hidden;
 }
 
-/* movieボタンを出すならこの行は消す */
-.device--button__movie.is--hidden{
-  display: none;
-}
 
 /* ===== 元CSSへの微調整 ===== */
 
