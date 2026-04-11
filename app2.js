@@ -216,9 +216,16 @@ function renderTime() {
   if (!leftTime) return;
 
   const now = new Date();
+
+  const y = now.getFullYear();
+  const mo = now.getMonth() + 1;
+  const d = now.getDate();
+
   const h = String(now.getHours()).padStart(2, "0");
   const m = String(now.getMinutes()).padStart(2, "0");
-  leftTime.textContent = `${h}:${m}`;
+  const s = String(now.getSeconds()).padStart(2, "0");
+
+  leftTime.innerHTML = `${y}/${mo}/${d}<br>${h}:${m}:${s}`;
 }
 
 function renderLine() {
@@ -306,4 +313,4 @@ if (menuButton && menuOverlay) {
 
 /* 初期化 */
 update();
-setInterval(update, 30000);
+setInterval(update, 1000);
