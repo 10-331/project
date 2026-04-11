@@ -10,7 +10,7 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
 
-  --topbar-h: 58px;
+  --topbar-h: 52px;
   --left-strip-w: 12.8%;
 }
 
@@ -42,6 +42,7 @@ button{
   background:none;
 }
 
+/* 全体 */
 .app{
   width:100vw;
   height:100svh;
@@ -66,7 +67,6 @@ button{
   overflow:hidden;
 }
 
-/* 2枚目寄せで縦画面の見え方を優先 */
 .screen-frame{
   position:relative;
   width:100%;
@@ -183,23 +183,24 @@ button{
 /* メニュー */
 .menu-button{
   position:absolute;
-  top:10px;
+  top:6px;
   right:12px;
-  width:56px;
-  height:56px;
+  width:44px;
+  height:38px;
   background:rgba(45,45,45,.92);
-  border-radius:12px;
+  border-radius:10px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:7px;
+  gap:5px;
   z-index:15;
+  cursor:pointer;
 }
 
 .menu-button span{
   display:block;
-  width:28px;
+  width:22px;
   height:2px;
   background:#fff;
   border-radius:999px;
@@ -284,7 +285,7 @@ button{
   position:absolute;
   left:0;
   right:0;
-  bottom:17.2%;
+  bottom:20.2%;
   z-index:12;
   pointer-events:none;
 }
@@ -292,26 +293,27 @@ button{
 .talk-box{
   position:relative;
   display:block;
-  width:67%;
-  margin-left:19%;
-  min-height:92px;
-  background:rgba(235,118,91,.78);
+  width:66%;
+  margin-left:18.2%;
+  min-height:88px;
+  background:rgba(190, 48, 48, .72);
   color:#fff;
   border:2px solid rgba(255,255,255,.75);
   border-radius:999px;
-  padding:34px 24px 20px 50px;
-  box-shadow:0 10px 24px rgba(0,0,0,.12);
+  padding:30px 22px 18px 44px;
+  box-shadow:0 10px 24px rgba(0,0,0,.10);
   text-align:left;
   backdrop-filter:blur(1px);
   pointer-events:auto;
+  cursor:pointer;
 }
 
 #talkName{
   position:absolute;
-  top:-12px;
-  left:20px;
-  min-width:92px;
-  height:34px;
+  top:-11px;
+  left:18px;
+  min-width:88px;
+  height:32px;
   padding:0 18px;
   display:flex;
   align-items:center;
@@ -319,7 +321,7 @@ button{
   background:#fbfbd3;
   color:#fff;
   border-radius:999px;
-  font-size:17px;
+  font-size:16px;
   font-weight:700;
   line-height:1;
   box-shadow:0 4px 10px rgba(0,0,0,.08);
@@ -328,8 +330,8 @@ button{
 
 #talkText{
   display:block;
-  font-size:17px;
-  line-height:1.35;
+  font-size:15px;
+  line-height:1.32;
   letter-spacing:.01em;
   white-space:normal;
   word-break:break-word;
@@ -345,7 +347,7 @@ button{
   display:none;
   justify-content:flex-end;
   align-items:flex-start;
-  padding:74px 12px 12px;
+  padding:60px 12px 12px;
   background:rgba(0,0,0,.28);
 }
 
@@ -386,34 +388,34 @@ button{
   }
 
   .menu-button{
-    width:52px;
-    height:52px;
+    width:42px;
+    height:36px;
   }
 
   .menu-button span{
-    width:26px;
+    width:20px;
   }
 
   .talk-layer{
-    bottom:17%;
+    bottom:20%;
   }
 
   .talk-box{
-    width:68%;
-    margin-left:19%;
-    min-height:88px;
-    padding:32px 20px 18px 42px;
+    width:67%;
+    margin-left:18%;
+    min-height:84px;
+    padding:28px 18px 16px 40px;
   }
 
   #talkName{
-    min-width:84px;
-    height:32px;
-    font-size:16px;
+    min-width:80px;
+    height:30px;
+    font-size:15px;
   }
 
   #talkText{
-    font-size:15px;
-    line-height:1.32;
+    font-size:14px;
+    line-height:1.3;
   }
 }
 
@@ -472,16 +474,16 @@ button{
   }
 
   .menu-button{
-    top:6px;
+    top:5px;
     right:8px;
-    width:46px;
-    height:46px;
-    border-radius:10px;
+    width:40px;
+    height:32px;
+    border-radius:9px;
+    gap:4px;
   }
 
   .menu-button span{
-    width:22px;
-    gap:0;
+    width:18px;
   }
 
   .talk-layer{
