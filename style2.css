@@ -49,10 +49,10 @@ button{
   align-items:center;
   overflow:hidden;
   padding:
-    calc(8px + var(--safe-top))
-    calc(8px + var(--safe-right))
-    calc(8px + var(--safe-bottom))
-    calc(8px + var(--safe-left));
+    var(--safe-top)
+    var(--safe-right)
+    var(--safe-bottom)
+    var(--safe-left);
 }
 
 .home-screen{
