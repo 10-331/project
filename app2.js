@@ -1,538 +1,316 @@
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+const talkBox = document.getElementById("talkBox");
+const talkName = document.getElementById("talkName");
+const talkText = document.getElementById("talkText");
+const leftTime = document.getElementById("leftTime");
+
+const bgMorning = document.getElementById("bgMorning");
+const bgEvening = document.getElementById("bgEvening");
+const bgNight = document.getElementById("bgNight");
+
+const menuButton = document.getElementById("menuButton");
+const menuOverlay = document.getElementById("menuOverlay");
+
+/*
+  自動再生
+  5000 = 5秒
+*/
+const AUTO_ADVANCE_MS = 5000;
+let autoAdvanceTimer = null;
+
+/*
+  時間帯ごとに
+  - city（街）
+  - station（駅）
+  を持つ
+  背景とセリフは必ず一致
+  低確率でその場所だけ不穏版セリフに切り替える
+*/
+const SCENES = {
+  morning: [
+    {
+      id: "city",
+      background: "./assets/images/bg/bg-morning.png",
+      lines: [
+        { name: "綾", text: "いい天気〜！今日はどこに出かけようかな〜" },
+        { name: "綾", text: "朝の街って、少し静かだね" },
+        { name: "綾", text: "まだ人も少なくて歩きやすいかも" }
+      ],
+      eerieChance: 0.02,
+      eerieLines: [
+        { name: "綾", text: "……あれ。今、誰かいたような" },
+        { name: "綾", text: "朝なのに、変に静かだね" }
+      ]
+    },
+    {
+      id: "station",
+      background: "./assets/images/bg/bg-morning-station.png",
+      lines: [
+        { name: "綾", text: "朝の駅はやっぱり忙しそう" },
+        { name: "綾", text: "この時間、少しだけ苦手かも" },
+        { name: "綾", text: "電車の音、今日は近く感じるね" }
+      ],
+      eerieChance: 0.02,
+      eerieLines: [
+        { name: "綾", text: "……今のアナウンス、流れた？" },
+        { name: "綾", text: "誰もいないのに、音だけするね" }
+      ]
+    }
+  ],
+
+  evening: [
+    {
+      id: "city",
+      background: "./assets/images/bg/bg-evening.png",
+      lines: [
+        { name: "綾", text: "夕方って、なんとなく寄り道したくなる" },
+        { name: "綾", text: "この時間の街、けっこう好きかも" },
+        { name: "綾", text: "少し涼しくなってきたね" }
+      ],
+      eerieChance: 0.05,
+      eerieLines: [
+        { name: "綾", text: "さっきから同じ景色ばかり見てる気がする" },
+        { name: "綾", text: "この道、前にも通ったっけ" }
+      ]
+    },
+    {
+      id: "station",
+      background: "./assets/images/bg/bg-evening-station.png",
+      lines: [
+        { name: "綾", text: "帰る人が多い時間だね" },
+        { name: "綾", text: "少しだけ、落ち着かないかも" },
+        { name: "綾", text: "夕方の駅って慌ただしいね" }
+      ],
+      eerieChance: 0.05,
+      eerieLines: [
+        { name: "綾", text: "……ホーム、こんなに暗かったっけ" },
+        { name: "綾", text: "人はいるのに、妙に静かだね" }
+      ]
+    }
+  ],
+
+  night: [
+    {
+      id: "city",
+      background: "./assets/images/bg/bg-night.png",
+      lines: [
+        { name: "綾", text: "夜は静かだね" },
+        { name: "綾", text: "この時間の街、嫌いじゃないよ" },
+        { name: "綾", text: "少し歩いてから帰ろうかな" }
+      ],
+      eerieChance: 0.08,
+      eerieLines: [
+        { name: "綾", text: "……誰か、見てる？" },
+        { name: "綾", text: "さっきから音がしないね" }
+      ]
+    },
+    {
+      id: "station",
+      background: "./assets/images/bg/bg-night-station.png",
+      lines: [
+        { name: "綾", text: "この時間の駅、少し怖いね" },
+        { name: "綾", text: "人が少ないと音が響くね" },
+        { name: "綾", text: "早く帰った方がいいかな" }
+      ],
+      eerieChance: 0.08,
+      eerieLines: [
+        { name: "綾", text: "電光掲示板、全部止まってない？" },
+        { name: "綾", text: "……さっき、誰か立ってたよね" }
+      ]
+    }
+  ]
+};
+
+let currentPeriod = "";
+let currentLineIndex = 0;
+let currentScene = null;
+
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 
-:root{
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-right: env(safe-area-inset-right, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left: env(safe-area-inset-left, 0px);
-
-  --topbar-h: 52px;
-  --left-strip-w: 18%;
+function getPeriodByHour(hour) {
+  if (hour >= 5 && hour < 16) return "morning";
+  if (hour >= 16 && hour < 19) return "evening";
+  return "night";
 }
 
-html,
-body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
+function getSceneStorageKey(period) {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  return `home-scene-${period}-${y}-${m}-${d}`;
 }
 
-body{
-  background:#ddd;
-  font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+/*
+  同じ日・同じ時間帯では、
+  リロードしても同じ場所 / 同じ不穏状態を使う
+*/
+function buildScene(period) {
+  const storageKey = getSceneStorageKey(period);
+  const saved = localStorage.getItem(storageKey);
+
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      const matched = SCENES[period].find(scene => scene.id === parsed.id);
+
+      if (matched) {
+        return {
+          period,
+          id: matched.id,
+          background: matched.background,
+          lines:
+            parsed.mode === "eerie" && matched.eerieLines?.length
+              ? matched.eerieLines
+              : matched.lines,
+          mode: parsed.mode === "eerie" ? "eerie" : "normal"
+        };
+      }
+    } catch (e) {
+      // 壊れていても作り直す
+    }
+  }
+
+  const baseScene = pickRandom(SCENES[period]);
+  const isEerie = Math.random() < baseScene.eerieChance;
+
+  const result = {
+    period,
+    id: baseScene.id,
+    background: baseScene.background,
+    lines: isEerie && baseScene.eerieLines?.length
+      ? baseScene.eerieLines
+      : baseScene.lines,
+    mode: isEerie ? "eerie" : "normal"
+  };
+
+  localStorage.setItem(
+    storageKey,
+    JSON.stringify({ id: result.id, mode: result.mode })
+  );
+
+  return result;
 }
 
-img{
-  display:block;
-  max-width:100%;
+function applyBackground(scene) {
+  if (!bgMorning || !bgEvening || !bgNight) return;
+
+  bgMorning.classList.remove("is-active");
+  bgEvening.classList.remove("is-active");
+  bgNight.classList.remove("is-active");
+
+  if (scene.period === "morning") {
+    bgMorning.src = scene.background;
+    bgMorning.classList.add("is-active");
+  } else if (scene.period === "evening") {
+    bgEvening.src = scene.background;
+    bgEvening.classList.add("is-active");
+  } else {
+    bgNight.src = scene.background;
+    bgNight.classList.add("is-active");
+  }
 }
 
-a{
-  color:inherit;
-  text-decoration:none;
+function renderTime() {
+  if (!leftTime) return;
+
+  const now = new Date();
+
+  const y = now.getFullYear();
+  const mo = now.getMonth() + 1;
+  const d = now.getDate();
+
+  const h = String(now.getHours()).padStart(2, "0");
+  const m = String(now.getMinutes()).padStart(2, "0");
+  const s = String(now.getSeconds()).padStart(2, "0");
+
+  leftTime.innerHTML = `${y}/${mo}/${d}<br>${h}:${m}:${s}`;
 }
 
-button{
-  font:inherit;
-  border:none;
-  background:none;
+function renderLine() {
+  if (!talkName || !talkText || !currentScene) return;
+
+  const arr = currentScene.lines;
+  if (!arr || !arr.length) return;
+
+  const line = arr[currentLineIndex];
+  talkName.textContent = line.name;
+  talkText.textContent = line.text;
 }
 
-/* 全体 */
-.app{
-  width:100vw;
-  height:100svh;
-  height:100dvh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-  padding:
-    var(--safe-top)
-    var(--safe-right)
-    var(--safe-bottom)
-    var(--safe-left);
+function setSceneForPeriod(period) {
+  currentScene = buildScene(period);
+  currentLineIndex = 0;
+  applyBackground(currentScene);
+  renderLine();
+  restartAutoAdvance();
 }
 
-.home-screen{
-  width:100%;
-  height:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
+function update() {
+  const now = new Date();
+  const newPeriod = getPeriodByHour(now.getHours());
+
+  renderTime();
+
+  if (newPeriod !== currentPeriod) {
+    currentPeriod = newPeriod;
+    setSceneForPeriod(currentPeriod);
+  }
 }
 
-.screen-frame{
-  position:relative;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#000;
-  flex:0 0 auto;
+function nextLine(fromTap = true) {
+  if (!currentScene || !currentScene.lines?.length) return;
+
+  currentLineIndex = (currentLineIndex + 1) % currentScene.lines.length;
+  renderLine();
+
+  if (fromTap) {
+    restartAutoAdvance();
+  }
 }
 
-/* 上部バー */
-.top-bar{
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:var(--topbar-h);
-  background:#cbccc5;
-  z-index:9;
+function stopAutoAdvance() {
+  if (autoAdvanceTimer) {
+    clearInterval(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+  }
 }
 
-/* 背景 */
-.bg-layer{
-  position:absolute;
-  inset:0;
-  overflow:hidden;
+function startAutoAdvance() {
+  stopAutoAdvance();
+
+  autoAdvanceTimer = setInterval(() => {
+    nextLine(false);
+  }, AUTO_ADVANCE_MS);
 }
 
-.bg-image{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center center;
-  opacity:0;
-  transition:opacity .5s ease;
+function restartAutoAdvance() {
+  stopAutoAdvance();
+  startAutoAdvance();
 }
 
-.bg-image.is-active{
-  opacity:1;
-}
-
-.bg-overlay{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to bottom, rgba(255,255,255,.06), rgba(0,0,0,.05));
-  pointer-events:none;
-}
-
-/* 左帯 */
-.left-strip{
-  position:absolute;
-  left:0;
-  top:0;
-  width:var(--left-strip-w);
-  min-width:68px;
-  max-width:96px;
-  height:100%;
-  background:#fbfbd3;
-  z-index:3;
-  overflow:hidden;
-}
-
-.left-strip-inner{
-  position:relative;
-  width:100%;
-  height:100%;
-}
-
-/* 左下IDカード本体 */
-.left-id-card{
-  position:absolute;
-  left:10px;
-  bottom:26px;
-  width:240px;
-  color:#111;
-  line-height:1.12;
-  transform-origin:left bottom;
-  transform:rotate(-90deg) translateX(-100%);
-}
-
-.left-id-card *{
-  white-space:nowrap;
-}
-
-.left-id-title{
-  font-size:11px;
-  margin-bottom:4px;
-  display:inline-block;
-  margin-right:6px;
-}
-
-.left-id-main{
-  font-size:17px;
-  font-weight:700;
-  margin-bottom:10px;
-  display:inline-block;
-  margin-right:10px;
-  word-break:normal;
-}
-
-.left-id-sub{
-  font-size:11px;
-  margin-bottom:6px;
-}
-
-.left-id-time{
-  font-size:11px;
-  line-height:1.25;
-  margin-bottom:10px;
-  font-variant-numeric:tabular-nums;
-  word-break:normal;
-}
-
-.barcode{
-  width:180px;
-  height:24px;
-  background:
-    repeating-linear-gradient(
-      to right,
-      #000 0 2px,
-      transparent 2px 4px,
-      #000 4px 5px,
-      transparent 5px 8px
-    );
+/* セリフタップで次へ */
+if (talkBox) {
+  talkBox.addEventListener("click", () => {
+    nextLine(true);
+  });
 }
 
 /* メニュー */
-.menu-button{
-  position:absolute;
-  top:6px;
-  right:12px;
-  width:44px;
-  height:38px;
-  background:rgba(45,45,45,.92);
-  border-radius:10px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
-  z-index:15;
-  cursor:pointer;
+if (menuButton && menuOverlay) {
+  menuButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menuOverlay.classList.toggle("is-open");
+  });
+
+  menuOverlay.addEventListener("click", (e) => {
+    if (e.target === menuOverlay) {
+      menuOverlay.classList.remove("is-open");
+    }
+  });
 }
 
-.menu-button span{
-  display:block;
-  width:22px;
-  height:2px;
-  background:#fff;
-  border-radius:999px;
-}
-
-/* キャラ */
-.character-layer{
-  position:absolute;
-  inset:0;
-  z-index:4;
-  pointer-events:none;
-}
-
-.character-layer img{
-  position:absolute;
-  left:55%;
-  bottom:-77%;
-  transform:translateX(-50%);
-  width:auto;
-  height:166%;
-  max-width:none;
-  max-height:none;
-  object-fit:contain;
-}
-
-/* 右UI */
-.ui-buttons{
-  position:absolute;
-  inset:0;
-  z-index:8;
-  pointer-events:none;
-}
-
-.ui-btn{
-  position:absolute;
-  display:block;
-  pointer-events:auto;
-}
-
-.ui-btn img{
-  display:block;
-  width:100%;
-  height:auto;
-}
-
-.ui-btn.sub{
-  opacity:.9;
-}
-
-/* 個別配置 */
-.ui-btn-world{
-  top:10%;
-  right:0%;
-  width:45%;
-}
-
-.ui-btn-character{
-  top:26.2%;
-  right:12.5%;
-  width:30%;
-}
-
-.ui-btn-illust{
-  top:37%;
-  right:-2%;
-  width:27%;
-}
-
-.ui-btn-gallery{
-  top:68%;
-  right:2%;
-  width:15%;
-}
-
-.ui-btn-story{
-  right:0%;
-  bottom:32.5%;
-  width:34%;
-}
-
-.ui-btn-main{
-  right:-0.5%;
-  bottom:3%;
-  width:58%;
-}
-
-/* セリフ */
-.talk-layer{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:28%;
-  z-index:12;
-  pointer-events:none;
-}
-
-.talk-box{
-  position:relative;
-  display:block;
-  width:60%;
-  margin-left:10%;
-  min-height:auto;
-  background:rgba(190, 48, 48, .72);
-  color:#fff;
-  border:2px solid rgba(255,255,255,.75);
-  border-radius:999px;
-  padding:25px 0 18px 15px;
-  box-shadow:0 10px 24px rgba(0,0,0,.10);
-  text-align:left;
-  backdrop-filter:blur(1px);
-  pointer-events:auto;
-  cursor:pointer;
-}
-
-#talkName{
-  position:absolute;
-  top:-8px;
-  left:14px;
-  min-width:72px;
-  height:26px;
-  padding:0 12px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#fbfbd3;
-  color:#fff;
-  border-radius:999px;
-  font-size:13px;
-  font-weight:700;
-  line-height:1;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
-  text-shadow:0 1px 2px rgba(0,0,0,.12);
-}
-
-#talkText{
-  display:block;
-  font-size:13px;
-  line-height:1.22;
-  letter-spacing:0;
-  white-space:normal;
-  word-break:break-word;
-  text-align:left;
-  text-shadow:0 1px 2px rgba(0,0,0,.18);
-}
-
-/* メニューオーバーレイ */
-.menu-overlay{
-  position:absolute;
-  inset:0;
-  z-index:20;
-  display:none;
-  justify-content:flex-end;
-  align-items:flex-start;
-  padding:60px 12px 12px;
-  background:rgba(0,0,0,.28);
-}
-
-.menu-overlay.is-open{
-  display:flex;
-}
-
-.menu-card{
-  width:min(220px, 72vw);
-  background:#fff;
-  padding:12px;
-  border-radius:22px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  box-shadow:0 18px 40px rgba(0,0,0,.18);
-}
-
-.menu-card a{
-  display:block;
-  padding:14px 16px;
-  border-radius:12px;
-  font-size:16px;
-}
-
-/* 小さめ端末 */
-@media (max-width: 390px){
-  .left-strip{
-    min-width:68px;
-    max-width:90px;
-  }
-
-  .left-id-card{
-    left:8px;
-    bottom:20px;
-    width:210px;
-  }
-
-  .left-id-main{
-    font-size:15px;
-  }
-
-  .left-id-time{
-    font-size:10px;
-    line-height:1.2;
-  }
-
-  .barcode{
-    width:160px;
-    height:22px;
-  }
-
-  .menu-button{
-    width:42px;
-    height:36px;
-  }
-
-  .menu-button span{
-    width:20px;
-  }
-
-  .talk-layer{
-    bottom:30%;
-  }
-
-  .talk-box{
-    width:60%;
-    margin-left:10%;
-    min-height:auto;
-    padding:20px 20px 18px 36px;
-  }
-
-  #talkName{
-    min-width:72px;
-    height:26px;
-    font-size:13px;
-  }
-
-  #talkText{
-    font-size:13px;
-    line-height:1.22;
-  }
-}
-
-/* 横向きだけ比率維持 */
-@media (orientation: landscape){
-  :root{
-    --topbar-h: 44px;
-    --left-strip-w: 10%;
-  }
-
-  .screen-frame{
-    width:min(100vw, calc(100dvh * (844 / 390)));
-    height:min(100dvh, calc(100vw * (390 / 844)));
-    aspect-ratio:844 / 390;
-  }
-
-  .left-strip{
-    min-width:72px;
-    max-width:96px;
-  }
-
-  .left-id-card{
-    left:8px;
-    bottom:18px;
-    width:210px;
-  }
-
-  .left-id-main{
-    font-size:14px;
-  }
-
-  .left-id-time{
-    font-size:10px;
-    line-height:1.2;
-  }
-
-  .barcode{
-    width:150px;
-    height:20px;
-  }
-
-  .character-layer img{
-    left:46%;
-    width:34%;
-    height:auto;
-    bottom:auto;
-    max-height:92%;
-  }
-
-  .menu-button{
-    top:5px;
-    right:8px;
-    width:40px;
-    height:32px;
-    border-radius:9px;
-    gap:4px;
-  }
-
-  .menu-button span{
-    width:18px;
-  }
-
-  .talk-layer{
-    bottom:10%;
-  }
-
-  .talk-box{
-    width:40%;
-    margin-left:15%;
-    min-height:84px;
-    padding:28px 20px 16px 38px;
-  }
-
-  #talkName{
-    top:-10px;
-    left:20px;
-    min-width:78px;
-    height:30px;
-    font-size:14px;
-  }
-
-  #talkText{
-    font-size:13px;
-    line-height:1.4;
-  }
-}
+/* 初期化 */
+update();
+setInterval(update, 1000);
