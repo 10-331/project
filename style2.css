@@ -316,7 +316,7 @@ button{
   position:absolute;
   left:0;
   right:-0;
-  bottom:29%;
+  bottom:25%;
   z-index:12;
   pointer-events:none;
 }
@@ -324,7 +324,7 @@ button{
 .talk-box{
   position:relative;
   display:block;
-  width:61%;
+  width:66%;
   margin-left:10%;
   min-height:65px;
   background:rgba(190, 48, 48, .72);
