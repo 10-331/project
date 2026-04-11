@@ -11,6 +11,13 @@ const menuButton = document.getElementById("menuButton");
 const menuOverlay = document.getElementById("menuOverlay");
 
 /*
+  自動再生
+  5000 = 5秒
+*/
+const AUTO_ADVANCE_MS = 5000;
+let autoAdvanceTimer = null;
+
+/*
   時間帯ごとに
   - city（街）
   - station（駅）
@@ -136,7 +143,7 @@ function getSceneStorageKey(period) {
 }
 
 /*
-  同じ時間帯・同じ日なら、
+  同じ日・同じ時間帯では、
   リロードしても同じ場所 / 同じ不穏状態を使う
 */
 function buildScene(period) {
@@ -153,14 +160,15 @@ function buildScene(period) {
           period,
           id: matched.id,
           background: matched.background,
-          lines: parsed.mode === "eerie" && matched.eerieLines?.length
-            ? matched.eerieLines
-            : matched.lines,
+          lines:
+            parsed.mode === "eerie" && matched.eerieLines?.length
+              ? matched.eerieLines
+              : matched.lines,
           mode: parsed.mode === "eerie" ? "eerie" : "normal"
         };
       }
     } catch (e) {
-      // 壊れてても無視して作り直す
+      // 壊れていても作り直す
     }
   }
 
@@ -192,7 +200,6 @@ function applyBackground(scene) {
   bgEvening.classList.remove("is-active");
   bgNight.classList.remove("is-active");
 
-  // 既存HTMLを変えずに、時間帯ごとのスロットを使う
   if (scene.period === "morning") {
     bgMorning.src = scene.background;
     bgMorning.classList.add("is-active");
@@ -218,8 +225,9 @@ function renderLine() {
   if (!talkName || !talkText || !currentScene) return;
 
   const arr = currentScene.lines;
-  const line = arr[currentLineIndex];
+  if (!arr || !arr.length) return;
 
+  const line = arr[currentLineIndex];
   talkName.textContent = line.name;
   talkText.textContent = line.text;
 }
@@ -229,6 +237,7 @@ function setSceneForPeriod(period) {
   currentLineIndex = 0;
   applyBackground(currentScene);
   renderLine();
+  restartAutoAdvance();
 }
 
 function update() {
@@ -243,17 +252,45 @@ function update() {
   }
 }
 
-function nextLine() {
+function nextLine(fromTap = true) {
   if (!currentScene || !currentScene.lines?.length) return;
 
   currentLineIndex = (currentLineIndex + 1) % currentScene.lines.length;
   renderLine();
+
+  if (fromTap) {
+    restartAutoAdvance();
+  }
 }
 
+function stopAutoAdvance() {
+  if (autoAdvanceTimer) {
+    clearInterval(autoAdvanceTimer);
+    autoAdvanceTimer = null;
+  }
+}
+
+function startAutoAdvance() {
+  stopAutoAdvance();
+
+  autoAdvanceTimer = setInterval(() => {
+    nextLine(false);
+  }, AUTO_ADVANCE_MS);
+}
+
+function restartAutoAdvance() {
+  stopAutoAdvance();
+  startAutoAdvance();
+}
+
+/* セリフタップで次へ */
 if (talkBox) {
-  talkBox.addEventListener("click", nextLine);
+  talkBox.addEventListener("click", () => {
+    nextLine(true);
+  });
 }
 
+/* メニュー */
 if (menuButton && menuOverlay) {
   menuButton.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -267,5 +304,6 @@ if (menuButton && menuOverlay) {
   });
 }
 
+/* 初期化 */
 update();
 setInterval(update, 30000);
