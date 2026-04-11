@@ -2,10 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Home UI Prototype</title>
   <link rel="stylesheet" href="./style2.css" />
 </head>
@@ -13,11 +10,12 @@
   <div class="app">
     <main class="home-screen" id="homeScreen">
       <div class="screen-frame">
+
         <!-- 背景 -->
         <div class="bg-layer">
-          <img id="bgMorning" class="bg-image is-active" src="./assets/images/bg/bg-morning.jpg" alt="morning background" />
-          <img id="bgEvening" class="bg-image" src="./assets/images/bg/bg-evening.jpg" alt="evening background" />
-          <img id="bgNight" class="bg-image" src="./assets/images/bg/bg-night.jpg" alt="night background" />
+          <img id="bgMorning" class="bg-image is-active" src="./assets/images/bg/bg-morning.jpg" />
+          <img id="bgEvening" class="bg-image" src="./assets/images/bg/bg-evening.jpg" />
+          <img id="bgNight" class="bg-image" src="./assets/images/bg/bg-night.jpg" />
           <div class="bg-overlay"></div>
         </div>
 
@@ -25,66 +23,59 @@
         <aside class="left-strip">
           <div class="left-strip-inner">
             <div class="left-id-card">
-              <div class="left-id-title">ID: TR7391</div>
-              <div class="left-id-sub">[JST]</div>
-              <div class="left-id-time" id="leftTime">--:--</div>
-              <div class="left-id-barcode"></div>
+              <div>ID: TR7391</div>
+              <div>[JST]</div>
+              <div id="leftTime">--:--</div>
+              <div class="barcode"></div>
             </div>
           </div>
         </aside>
 
-        <!-- 右上メニュー -->
-        <button class="menu-button" id="menuButton" aria-label="menu">
+        <!-- メニュー -->
+        <button class="menu-button" id="menuButton">
           <span></span>
           <span></span>
           <span></span>
         </button>
 
-        <!-- キャラクター -->
+        <!-- キャラ -->
         <section class="character-layer">
-          <img
-            class="main-character"
-            id="mainCharacter"
-            src="./assets/images/chars/aya-home.png"
-            alt="character"
-          />
+          <img id="mainCharacter" src="./assets/images/chars/aya-home.png" />
         </section>
 
         <!-- 右UI -->
-        <nav class="ui-buttons" aria-label="main navigation">
-          <a class="ui-btn ui-btn-world sub-ui" href="./world.html">
-            <img src="./assets/images/ui/btn-world.png" alt="世界設定" />
+        <nav class="ui-buttons">
+          <a class="ui-btn sub" href="./world.html">
+            <img src="./assets/images/ui/btn-world.png">
           </a>
 
-          <a class="ui-btn ui-btn-illust sub-ui" href="./illust.html">
-            <img src="./assets/images/ui/btn-illust.png" alt="イラスト" />
+          <a class="ui-btn sub" href="./illust.html">
+            <img src="./assets/images/ui/btn-illust.png">
           </a>
 
-          <a class="ui-btn ui-btn-gift sub-ui" href="./gallery.html">
-            <img src="./assets/images/ui/btn-gallery.png" alt="ギャラリー" />
+          <a class="ui-btn sub" href="./gallery.html">
+            <img src="./assets/images/ui/btn-gallery.png">
           </a>
 
-          <a class="ui-btn ui-btn-story main-ui" href="./novel.html">
-            <img src="./assets/images/ui/btn-story.png" alt="小説" />
+          <a class="ui-btn main" href="./novel.html">
+            <img src="./assets/images/ui/btn-story.png">
           </a>
 
-          <a class="ui-btn ui-btn-main main-ui" href="./game.html">
-            <img src="./assets/images/ui/btn-main.png" alt="メインコンテンツ" />
+          <a class="ui-btn main" href="./game.html">
+            <img src="./assets/images/ui/btn-main.png">
           </a>
         </nav>
 
         <!-- セリフ -->
         <section class="talk-layer">
-          <button class="talk-box" id="talkBox" type="button" aria-label="セリフを切り替える">
-            <span class="talk-name" id="talkName">綾</span>
-            <span class="talk-text" id="talkText">
-              いい天気〜！今日はどこに出かけようかな〜
-            </span>
+          <button class="talk-box" id="talkBox">
+            <span id="talkName">綾</span>
+            <span id="talkText">いい天気〜！今日はどこに出かけようかな〜</span>
           </button>
         </section>
 
         <!-- メニューオーバーレイ -->
-        <div class="menu-overlay" id="menuOverlay" hidden>
+        <div class="menu-overlay" id="menuOverlay">
           <div class="menu-card">
             <a href="./index.html">ホーム</a>
             <a href="./game.html">ゲーム</a>
@@ -93,6 +84,7 @@
             <a href="./gallery.html">ギャラリー</a>
           </div>
         </div>
+
       </div>
     </main>
   </div>
