@@ -404,30 +404,6 @@ button{
   font-size:16px;
 }
 
-/* 横向きだけ比率維持 */
-@media (orientation: landscape){
-  :root{
-    --topbar-h: 44px;
-    --left-strip-w: 8.6%;
-  }
-
-  .screen-frame{
-    width:min(100vw, calc(100dvh * (844 / 390)));
-    height:min(100dvh, calc(100vw * (390 / 844)));
-    aspect-ratio:844 / 390;
-  }
-
-  .left-strip{
-    min-width:58px;
-    max-width:76px;
-  }
-
-  .character-layer img{
-    left:46%;
-    width:34%;
-    max-height:92%;
-  }
-
 /* 小さめ端末 */
 @media (max-width: 390px){
   .left-strip{
