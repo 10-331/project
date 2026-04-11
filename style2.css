@@ -280,6 +280,12 @@ button{
   width:60%;
 }
 
+.ui-buttons .ui-btn:nth-child(6){
+  right:-0.5%;
+  bottom:4%;
+  width:60%;
+}
+
 /* セリフ */
 .talk-layer{
   position:absolute;
