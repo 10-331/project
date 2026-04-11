@@ -67,12 +67,12 @@ button{
 .screen-frame{
   position:relative;
   width:min(
-    calc((100dvh - var(--safe-top) - var(--safe-bottom) - 16px) * (var(--base-w) / var(--base-h))),
-    calc(100vw - var(--safe-left) - var(--safe-right) - 16px)
+    calc((100dvh - var(--safe-top) - var(--safe-bottom)) * (var(--base-w) / var(--base-h))),
+    calc(100vw - var(--safe-left) - var(--safe-right))
   );
   height:min(
-    calc(100dvh - var(--safe-top) - var(--safe-bottom) - 16px),
-    calc((100vw - var(--safe-left) - var(--safe-right) - 16px) * (var(--base-h) / var(--base-w)))
+    calc(100dvh - var(--safe-top) - var(--safe-bottom)),
+    calc((100vw - var(--safe-left) - var(--safe-right)) * (var(--base-h) / var(--base-w)))
   );
   aspect-ratio:390 / 844;
   overflow:hidden;
