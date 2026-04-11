@@ -250,30 +250,6 @@ button{
   opacity:.9;
 }
 
-/* 右UI */
-.ui-buttons{
-  position:absolute;
-  inset:0;
-  z-index:8;
-  pointer-events:none;
-}
-
-.ui-btn{
-  position:absolute;
-  display:block;
-  pointer-events:auto;
-}
-
-.ui-btn img{
-  display:block;
-  width:100%;
-  height:auto;
-}
-
-.ui-btn.sub{
-  opacity:.9;
-}
-
 /* 個別配置 */
 .ui-btn-world{
   top:10%;
