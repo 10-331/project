@@ -216,11 +216,11 @@ button{
 
 .character-layer img{
   position:absolute;
-  left:60%;
-  bottom:-85%;
+  left:57%;
+  bottom:-77%;
   transform:translateX(-50%);
   width:auto;
-  height:175%;
+  height:166%;
   max-width:none;
   max-height:none;
   object-fit:contain;
@@ -251,41 +251,41 @@ button{
 }
 
 .ui-buttons .ui-btn:nth-child(1){
-  top:7.5%;
-  right:2.2%;
-  width:31%;
+  top:10%;
+  right:-1%;
+  width:60%;
 }
 
 .ui-buttons .ui-btn:nth-child(2){
-  top:22.3%;
-  right:8.4%;
-  width:18%;
+  top:18.3%;
+  right:-16%;
+  width:55%;
 }
 
 .ui-buttons .ui-btn:nth-child(3){
-  top:33.2%;
-  right:1.5%;
-  width:17.5%;
+  top:46.2%;
+  right:-2.5%;
+  width:35.5%;
 }
 
 .ui-buttons .ui-btn:nth-child(4){
-  top:46.7%;
-  right:4.6%;
-  width:24%;
+  top:25.7%;
+  right:-15.6%;
+  width:50%;
 }
 
 .ui-buttons .ui-btn:nth-child(5){
-  right:-1.2%;
-  bottom:7.3%;
-  width:43%;
+  right:-0.5%;
+  bottom:4%;
+  width:60%;
 }
 
 /* セリフ */
 .talk-layer{
   position:absolute;
   left:0;
-  right:0;
-  bottom:20.2%;
+  right:-0;
+  bottom:25%;
   z-index:12;
   pointer-events:none;
 }
@@ -294,8 +294,8 @@ button{
   position:relative;
   display:block;
   width:66%;
-  margin-left:18.2%;
-  min-height:88px;
+  margin-left:10%;
+  min-height:78px;
   background:rgba(190, 48, 48, .72);
   color:#fff;
   border:2px solid rgba(255,255,255,.75);
@@ -330,7 +330,7 @@ button{
 
 #talkText{
   display:block;
-  font-size:15px;
+  font-size:14px;
   line-height:1.32;
   letter-spacing:.01em;
   white-space:normal;
