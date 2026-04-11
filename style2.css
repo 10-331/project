@@ -409,9 +409,9 @@ button{
 
   .talk-box{
     width:60%;
-    margin-left:6%;
+    margin-left:10%;
     min-height:auto;
-    padding:16px 16px 12px 30px;
+    padding:22px 20px 18px 36px;
   }
 
   #talkName{
