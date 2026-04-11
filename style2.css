@@ -276,33 +276,33 @@ button{
 
 /* 個別配置 */
 .ui-btn-world{
-  top:7%;
+  top:8%;
   right:-2%;
-  width:55%;
+  width:50%;
 }
 
 .ui-btn-character{
-  top:33%;
-  right:0%;
-  width:30%;
+  top:25%;
+  right:10%;
+  width:31%;
 }
 
 .ui-btn-illust{
-  top:60.2%;
-  right:0%;
-  width:20%;
+  top:38%;
+  right:-2%;
+  width:29%;
 }
 
 .ui-btn-gallery{
-  top:44.7%;
-  right:3%;
-  width:32%;
+  top:67%;
+  right:0%;
+  width:23%;
 }
 
 .ui-btn-story{
   right:0%;
-  bottom:40%;
-  width:50%;
+  bottom:33%;
+  width:35%;
 }
 
 .ui-btn-main{
