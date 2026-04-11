@@ -1,56 +1,178 @@
-/* ===== 左帯 ===== */
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+:root{
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  --topbar-h: 52px;
+  --left-strip-w: 18%;
+}
+
+html,
+body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+body{
+  background:#ddd;
+  font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+}
+
+img{
+  display:block;
+  max-width:100%;
+}
+
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+  border:none;
+  background:none;
+}
+
+/* 全体 */
+.app{
+  width:100vw;
+  height:100svh;
+  height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  padding:
+    var(--safe-top)
+    var(--safe-right)
+    var(--safe-bottom)
+    var(--safe-left);
+}
+
+.home-screen{
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+.screen-frame{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  flex:0 0 auto;
+}
+
+/* 上部バー */
+.top-bar{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:var(--topbar-h);
+  background:#cbccc5;
+  z-index:9;
+}
+
+/* 背景 */
+.bg-layer{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
+
+.bg-image{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  opacity:0;
+  transition:opacity .5s ease;
+}
+
+.bg-image.is-active{
+  opacity:1;
+}
+
+.bg-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom, rgba(255,255,255,.06), rgba(0,0,0,.05));
+  pointer-events:none;
+}
+
+/* 左帯 */
 .left-strip{
   position:absolute;
   left:0;
   top:0;
-  height:100%;
-  width:18%;
+  width:var(--left-strip-w);
   min-width:68px;
   max-width:96px;
-  background:#e6e2b8;
-  z-index:5;
+  height:100%;
+  background:#fbfbd3;
+  z-index:3;
+  overflow:hidden;
 }
 
-/* ===== IDカード全体（回転） ===== */
+.left-strip-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+/* 左下IDカード本体 */
 .left-id-card{
   position:absolute;
   left:10px;
-  bottom:22px;
-
-  width:220px;
-
-  transform:rotate(-90deg);
-  transform-origin:left bottom;
-
+  bottom:26px;
+  width:240px;
   color:#111;
   line-height:1.12;
+  transform-origin:left bottom;
+  transform:rotate(-90deg) translateX(-100%);
 }
 
-/* ===== IDラベル ===== */
+.left-id-card *{
+  white-space:nowrap;
+}
+
 .left-id-title{
   font-size:11px;
   margin-bottom:4px;
   display:inline-block;
-  margin-right:8px;
+  margin-right:6px;
 }
 
-/* ===== IDメイン ===== */
 .left-id-main{
   font-size:17px;
   font-weight:700;
-  margin-bottom:8px;
+  margin-bottom:10px;
   display:inline-block;
-  margin-right:12px;
+  margin-right:10px;
   word-break:normal;
 }
 
-/* ===== JST ===== */
 .left-id-sub{
   font-size:11px;
   margin-bottom:6px;
 }
 
-/* ===== 時刻 ===== */
 .left-id-time{
   font-size:11px;
   line-height:1.25;
@@ -59,7 +181,6 @@
   word-break:normal;
 }
 
-/* ===== バーコード ===== */
 .barcode{
   width:180px;
   height:24px;
@@ -73,7 +194,345 @@
     );
 }
 
-/* ===== 念のため（被り防止） ===== */
-.left-id-card *{
-  white-space:nowrap;
+/* メニュー */
+.menu-button{
+  position:absolute;
+  top:6px;
+  right:12px;
+  width:44px;
+  height:38px;
+  background:rgba(45,45,45,.92);
+  border-radius:10px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  z-index:15;
+  cursor:pointer;
+}
+
+.menu-button span{
+  display:block;
+  width:22px;
+  height:2px;
+  background:#fff;
+  border-radius:999px;
+}
+
+/* キャラ */
+.character-layer{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+}
+
+.character-layer img{
+  position:absolute;
+  left:55%;
+  bottom:-77%;
+  transform:translateX(-50%);
+  width:auto;
+  height:166%;
+  max-width:none;
+  max-height:none;
+  object-fit:contain;
+}
+
+/* 右UI */
+.ui-buttons{
+  position:absolute;
+  inset:0;
+  z-index:8;
+  pointer-events:none;
+}
+
+.ui-btn{
+  position:absolute;
+  display:block;
+  pointer-events:auto;
+}
+
+.ui-btn img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.ui-btn.sub{
+  opacity:.9;
+}
+
+/* 個別配置 */
+.ui-btn-world{
+  top:10%;
+  right:0%;
+  width:45%;
+}
+
+.ui-btn-character{
+  top:26.2%;
+  right:12.5%;
+  width:30%;
+}
+
+.ui-btn-illust{
+  top:37%;
+  right:-2%;
+  width:27%;
+}
+
+.ui-btn-gallery{
+  top:68%;
+  right:2%;
+  width:15%;
+}
+
+.ui-btn-story{
+  right:0%;
+  bottom:32.5%;
+  width:34%;
+}
+
+.ui-btn-main{
+  right:-0.5%;
+  bottom:3%;
+  width:58%;
+}
+
+/* セリフ */
+.talk-layer{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:28%;
+  z-index:12;
+  pointer-events:none;
+}
+
+.talk-box{
+  position:relative;
+  display:block;
+  width:60%;
+  margin-left:10%;
+  min-height:auto;
+  background:rgba(190, 48, 48, .72);
+  color:#fff;
+  border:2px solid rgba(255,255,255,.75);
+  border-radius:999px;
+  padding:25px 0 18px 15px;
+  box-shadow:0 10px 24px rgba(0,0,0,.10);
+  text-align:left;
+  backdrop-filter:blur(1px);
+  pointer-events:auto;
+  cursor:pointer;
+}
+
+#talkName{
+  position:absolute;
+  top:-8px;
+  left:14px;
+  min-width:72px;
+  height:26px;
+  padding:0 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fbfbd3;
+  color:#fff;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  line-height:1;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  text-shadow:0 1px 2px rgba(0,0,0,.12);
+}
+
+#talkText{
+  display:block;
+  font-size:13px;
+  line-height:1.22;
+  letter-spacing:0;
+  white-space:normal;
+  word-break:break-word;
+  text-align:left;
+  text-shadow:0 1px 2px rgba(0,0,0,.18);
+}
+
+/* メニューオーバーレイ */
+.menu-overlay{
+  position:absolute;
+  inset:0;
+  z-index:20;
+  display:none;
+  justify-content:flex-end;
+  align-items:flex-start;
+  padding:60px 12px 12px;
+  background:rgba(0,0,0,.28);
+}
+
+.menu-overlay.is-open{
+  display:flex;
+}
+
+.menu-card{
+  width:min(220px, 72vw);
+  background:#fff;
+  padding:12px;
+  border-radius:22px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  box-shadow:0 18px 40px rgba(0,0,0,.18);
+}
+
+.menu-card a{
+  display:block;
+  padding:14px 16px;
+  border-radius:12px;
+  font-size:16px;
+}
+
+/* 小さめ端末 */
+@media (max-width: 390px){
+  .left-strip{
+    min-width:68px;
+    max-width:90px;
+  }
+
+  .left-id-card{
+    left:8px;
+    bottom:20px;
+    width:210px;
+  }
+
+  .left-id-main{
+    font-size:15px;
+  }
+
+  .left-id-time{
+    font-size:10px;
+    line-height:1.2;
+  }
+
+  .barcode{
+    width:160px;
+    height:22px;
+  }
+
+  .menu-button{
+    width:42px;
+    height:36px;
+  }
+
+  .menu-button span{
+    width:20px;
+  }
+
+  .talk-layer{
+    bottom:30%;
+  }
+
+  .talk-box{
+    width:60%;
+    margin-left:10%;
+    min-height:auto;
+    padding:20px 20px 18px 36px;
+  }
+
+  #talkName{
+    min-width:72px;
+    height:26px;
+    font-size:13px;
+  }
+
+  #talkText{
+    font-size:13px;
+    line-height:1.22;
+  }
+}
+
+/* 横向きだけ比率維持 */
+@media (orientation: landscape){
+  :root{
+    --topbar-h: 44px;
+    --left-strip-w: 10%;
+  }
+
+  .screen-frame{
+    width:min(100vw, calc(100dvh * (844 / 390)));
+    height:min(100dvh, calc(100vw * (390 / 844)));
+    aspect-ratio:844 / 390;
+  }
+
+  .left-strip{
+    min-width:72px;
+    max-width:96px;
+  }
+
+  .left-id-card{
+    left:8px;
+    bottom:18px;
+    width:210px;
+  }
+
+  .left-id-main{
+    font-size:14px;
+  }
+
+  .left-id-time{
+    font-size:10px;
+    line-height:1.2;
+  }
+
+  .barcode{
+    width:150px;
+    height:20px;
+  }
+
+  .character-layer img{
+    left:46%;
+    width:34%;
+    height:auto;
+    bottom:auto;
+    max-height:92%;
+  }
+
+  .menu-button{
+    top:5px;
+    right:8px;
+    width:40px;
+    height:32px;
+    border-radius:9px;
+    gap:4px;
+  }
+
+  .menu-button span{
+    width:18px;
+  }
+
+  .talk-layer{
+    bottom:10%;
+  }
+
+  .talk-box{
+    width:40%;
+    margin-left:15%;
+    min-height:84px;
+    padding:28px 20px 16px 38px;
+  }
+
+  #talkName{
+    top:-10px;
+    left:20px;
+    min-width:78px;
+    height:30px;
+    font-size:14px;
+  }
+
+  #talkText{
+    font-size:13px;
+    line-height:1.4;
+  }
 }
