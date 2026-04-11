@@ -276,39 +276,39 @@ button{
 
 /* 個別配置 */
 .ui-btn-world{
-  top:8%;
-  right:-2%;
-  width:50%;
+  top:10%;
+  right:-1%;
+  width:45%;
 }
 
 .ui-btn-character{
-  top:25%;
+  top:27%;
   right:10%;
-  width:31%;
+  width:30%;
 }
 
 .ui-btn-illust{
-  top:38%;
-  right:-2%;
-  width:29%;
+  top:39%;
+  right:-3%;
+  width:28%;
 }
 
 .ui-btn-gallery{
-  top:67%;
+  top:68%;
   right:0%;
-  width:23%;
+  width:18%;
 }
 
 .ui-btn-story{
   right:0%;
-  bottom:33%;
-  width:35%;
+  bottom:30%;
+  width:34%;
 }
 
 .ui-btn-main{
   right:-0.5%;
-  bottom:4%;
-  width:60%;
+  bottom:3%;
+  width:58%;
 }
 
 /* セリフ */
