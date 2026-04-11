@@ -474,137 +474,47 @@ button{
     max-height:92%;
   }
 
- @media (orientation: landscape){
-  :root{
-    --topbar-h: 44px;
-    --left-strip-w: 8.6%;
-  }
-
-  .screen-frame{
-    width:min(100vw, calc(100dvh * (844 / 390)));
-    height:min(100dvh, calc(100vw * (390 / 844)));
-    aspect-ratio:844 / 390;
-  }
-
+@media (max-width: 390px){
   .left-strip{
-    min-width:58px;
-    max-width:76px;
+    min-width:48px;
   }
 
-  .character-layer img{
-    left:46%;
-    width:34%;
-    max-height:92%;
+  .left-id-main{
+    font-size:16px;
   }
 
-  .ui-btn-world{
-    top:11%;
-    right:2%;
-    width:16%;
-  }
-
-  .ui-btn-character{
-    top:28%;
-    right:4%;
-    width:10%;
-  }
-
-  .ui-btn-illust{
-    top:43%;
-    right:1.5%;
-    width:11%;
-  }
-
-  .ui-btn-gallery{
-    top:59%;
-    right:3%;
-    width:14%;
-  }
-
-  .ui-btn-story{
-    right:0;
-    bottom:33%;
-    width:18%;
-  }
-
-  .ui-btn-main{
-    right:0;
-    bottom:5%;
-    width:25%;
+  .left-id-time{
+    font-size:14px;
   }
 
   .menu-button{
-    top:5px;
-    right:8px;
-    width:40px;
-    height:32px;
-    border-radius:9px;
-    gap:4px;
+    width:42px;
+    height:36px;
   }
 
   .menu-button span{
-    width:18px;
+    width:20px;
   }
 
   .talk-layer{
-    bottom:10%;
+    bottom:30%;
   }
 
   .talk-box{
-    width:40%;
-    margin-left:15%;
-    min-height:84px;
-    padding:28px 20px 16px 38px;
+    width:60%;
+    margin-left:6%;
+    min-height:auto;
+    padding:16px 16px 12px 30px;
   }
 
   #talkName{
-    top:-10px;
-    left:20px;
-    min-width:78px;
-    height:30px;
-    font-size:14px;
+    min-width:72px;
+    height:26px;
+    font-size:13px;
   }
 
   #talkText{
     font-size:13px;
-    line-height:1.4;
-  }
-}
-
-  .menu-button{
-    top:5px;
-    right:8px;
-    width:40px;
-    height:32px;
-    border-radius:9px;
-    gap:4px;
-  }
-
-  .menu-button span{
-    width:18px;
-  }
-
-  .talk-layer{
-    bottom:10%;
-  }
-
-  .talk-box{
-    width:40%;
-    margin-left:15%;
-    min-height:84px;
-    padding:28px 20px 16px 38px;
-  }
-
-  #talkName{
-    top:-10px;
-    left:20px;
-    min-width:78px;
-    height:30px;
-    font-size:14px;
-  }
-
-  #talkText{
-    font-size:13px;
-    line-height:1.4;
+    line-height:1.22;
   }
 }
