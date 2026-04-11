@@ -1,511 +1,102 @@
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+const talkBox = document.getElementById("talkBox");
+const talkName = document.getElementById("talkName");
+const talkText = document.getElementById("talkText");
+const leftTime = document.getElementById("leftTime");
+
+const bgMorning = document.getElementById("bgMorning");
+const bgEvening = document.getElementById("bgEvening");
+const bgNight = document.getElementById("bgNight");
+
+const menuButton = document.getElementById("menuButton");
+const menuOverlay = document.getElementById("menuOverlay");
+
+const lines = {
+  morning: [
+    { name: "綾", text: "いい天気〜！今日はどこに出かけようかな〜" },
+    { name: "綾", text: "朝の空気、気持ちいいね" },
+    { name: "綾", text: "まだ眠いけど、どこか行きたい気分" }
+  ],
+  evening: [
+    { name: "綾", text: "ちょっと涼しくなってきたね" },
+    { name: "綾", text: "夕方って、なんとなく寄り道したくなる" },
+    { name: "綾", text: "この時間の景色、けっこう好きかも" }
+  ],
+  night: [
+    { name: "綾", text: "夜は静かだね" },
+    { name: "綾", text: "そろそろ帰る？ まだ少し歩く？" },
+    { name: "綾", text: "こういう時間って、考えごとしちゃうなあ" }
+  ]
+};
+
+let currentPeriod = "";
+let currentLineIndex = 0;
+
+function getPeriodByHour(hour){
+  if (hour >= 5 && hour < 16) return "morning";
+  if (hour >= 16 && hour < 19) return "evening";
+  return "night";
 }
 
-:root{
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-right: env(safe-area-inset-right, 0px);
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
-  --safe-left: env(safe-area-inset-left, 0px);
+function setBg(period){
+  bgMorning.classList.remove("is-active");
+  bgEvening.classList.remove("is-active");
+  bgNight.classList.remove("is-active");
 
-  --topbar-h: 52px;
-  --left-strip-w: 12.8%;
+  if (period === "morning") bgMorning.classList.add("is-active");
+  if (period === "evening") bgEvening.classList.add("is-active");
+  if (period === "night") bgNight.classList.add("is-active");
 }
 
-html,
-body{
-  width:100%;
-  height:100%;
-  overflow:hidden;
+function renderTime(){
+  const now = new Date();
+  const h = String(now.getHours()).padStart(2, "0");
+  const m = String(now.getMinutes()).padStart(2, "0");
+  leftTime.textContent = `${h}:${m}`;
 }
 
-body{
-  background:#ddd;
-  font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+function renderLine(){
+  const arr = lines[currentPeriod];
+  const line = arr[currentLineIndex];
+  talkName.textContent = line.name;
+  talkText.textContent = line.text;
 }
 
-img{
-  display:block;
-  max-width:100%;
-}
+function update(){
+  const now = new Date();
+  const newPeriod = getPeriodByHour(now.getHours());
 
-a{
-  color:inherit;
-  text-decoration:none;
-}
+  renderTime();
 
-button{
-  font:inherit;
-  border:none;
-  background:none;
-}
-
-/* 全体 */
-.app{
-  width:100vw;
-  height:100svh;
-  height:100dvh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-  padding:
-    var(--safe-top)
-    var(--safe-right)
-    var(--safe-bottom)
-    var(--safe-left);
-}
-
-.home-screen{
-  width:100%;
-  height:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-}
-
-/* 縦持ちは幅いっぱい使う */
-.screen-frame{
-  position:relative;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  background:#000;
-  flex:0 0 auto;
-}
-
-/* 上部バー */
-.top-bar{
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:var(--topbar-h);
-  background:#cbccc5;
-  z-index:9;
-}
-
-/* 背景 */
-.bg-layer{
-  position:absolute;
-  inset:0;
-  overflow:hidden;
-}
-
-.bg-image{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center center;
-  opacity:0;
-  transition:opacity .5s ease;
-}
-
-.bg-image.is-active{
-  opacity:1;
-}
-
-.bg-overlay{
-  position:absolute;
-  inset:0;
-  background:linear-gradient(to bottom, rgba(255,255,255,.06), rgba(0,0,0,.05));
-  pointer-events:none;
-}
-
-/* 左帯 */
-.left-strip{
-  position:absolute;
-  left:0;
-  top:0;
-  width:var(--left-strip-w);
-  min-width:52px;
-  max-width:78px;
-  height:100%;
-  background:#fbfbd3;
-  z-index:3;
-}
-
-.left-strip-inner{
-  position:relative;
-  width:100%;
-  height:100%;
-}
-
-.left-id-card{
-  position:absolute;
-  left:8px;
-  bottom:18px;
-  width:calc(100% - 14px);
-  color:#111;
-  line-height:1.12;
-}
-
-.left-id-title{
-  font-size:11px;
-  margin-bottom:4px;
-}
-
-.left-id-main{
-  font-size:17px;
-  font-weight:700;
-  margin-bottom:10px;
-  word-break:break-all;
-}
-
-.left-id-sub{
-  font-size:11px;
-  margin-bottom:8px;
-}
-
-.left-id-time{
-  font-size:15px;
-  margin-bottom:12px;
-  font-variant-numeric:tabular-nums;
-}
-
-.barcode{
-  width:100%;
-  height:56px;
-  background:
-    repeating-linear-gradient(
-      to right,
-      #000 0 2px,
-      transparent 2px 4px,
-      #000 4px 5px,
-      transparent 5px 8px
-    );
-}
-
-/* メニュー */
-.menu-button{
-  position:absolute;
-  top:6px;
-  right:12px;
-  width:46px;
-  height:40px;
-  background:rgba(45,45,45,.92);
-  border-radius:10px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:6px;
-  z-index:15;
-}
-
-.menu-button span{
-  display:block;
-  width:24px;
-  height:2px;
-  background:#fff;
-  border-radius:999px;
-}
-
-/* キャラ */
-.character-layer{
-  position:absolute;
-  inset:0;
-  z-index:4;
-  pointer-events:none;
-}
-
-.character-layer img{
-  position:absolute;
-  left:51.5%;
-  bottom:0;
-  transform:translateX(-50%);
-  width:73%;
-  max-width:none;
-  height:auto;
-  max-height:87%;
-  object-fit:contain;
-}
-
-/* 右UI */
-.ui-buttons{
-  position:absolute;
-  inset:0;
-  z-index:8;
-  pointer-events:none;
-}
-
-.ui-btn{
-  position:absolute;
-  display:block;
-  pointer-events:auto;
-}
-
-.ui-btn img{
-  display:block;
-  width:100%;
-  height:auto;
-}
-
-.ui-btn.sub{
-  opacity:.9;
-}
-
-.ui-buttons .ui-btn:nth-child(1){
-  top:7.5%;
-  right:2.2%;
-  width:31%;
-}
-
-.ui-buttons .ui-btn:nth-child(2){
-  top:22.3%;
-  right:8.4%;
-  width:18%;
-}
-
-.ui-buttons .ui-btn:nth-child(3){
-  top:33.2%;
-  right:1.5%;
-  width:17.5%;
-}
-
-.ui-buttons .ui-btn:nth-child(4){
-  top:46.7%;
-  right:4.6%;
-  width:24%;
-}
-
-.ui-buttons .ui-btn:nth-child(5){
-  right:-1.2%;
-  bottom:7.3%;
-  width:43%;
-}
-
-/* セリフ */
-.talk-layer{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:20.2%;
-  z-index:12;
-  pointer-events:none;
-}
-
-.talk-box{
-  position:relative;
-  display:block;
-  width:66%;
-  margin-left:18.2%;
-  min-height:88px;
-  background:rgba(197, 72, 63, .72);
-  color:#fff;
-  border:2px solid rgba(255,255,255,.75);
-  border-radius:999px;
-  padding:30px 22px 18px 44px;
-  box-shadow:0 10px 24px rgba(0,0,0,.10);
-  text-align:left;
-  backdrop-filter:blur(1px);
-  pointer-events:auto;
-}
-
-#talkName{
-  position:absolute;
-  top:-11px;
-  left:18px;
-  min-width:88px;
-  height:32px;
-  padding:0 18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#fbfbd3;
-  color:#fff;
-  border-radius:999px;
-  font-size:16px;
-  font-weight:700;
-  line-height:1;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
-  text-shadow:0 1px 2px rgba(0,0,0,.12);
-}
-
-#talkText{
-  display:block;
-  font-size:15px;
-  line-height:1.32;
-  letter-spacing:.01em;
-  white-space:normal;
-  word-break:break-word;
-  text-align:left;
-  text-shadow:0 1px 2px rgba(0,0,0,.18);
-}
-
-/* メニューオーバーレイ */
-.menu-overlay{
-  position:absolute;
-  inset:0;
-  z-index:20;
-  display:none;
-  justify-content:flex-end;
-  align-items:flex-start;
-  padding:74px 12px 12px;
-  background:rgba(0,0,0,.28);
-}
-
-.menu-overlay.is-open{
-  display:flex;
-}
-
-.menu-card{
-  width:min(220px, 72vw);
-  background:#fff;
-  padding:12px;
-  border-radius:22px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  box-shadow:0 18px 40px rgba(0,0,0,.18);
-}
-
-.menu-card a{
-  display:block;
-  padding:14px 16px;
-  border-radius:12px;
-  font-size:16px;
-}
-
-/* 小さめ端末 */
-@media (max-width: 390px){
-  .left-strip{
-    min-width:48px;
-  }
-
-  .left-id-main{
-    font-size:16px;
-  }
-
-  .left-id-time{
-    font-size:14px;
-  }
-
-  .menu-button{
-    width:44px;
-    height:38px;
-  }
-
-  .menu-button span{
-    width:22px;
-  }
-
-  .talk-layer{
-    bottom:20%;
-  }
-
-  .talk-box{
-    width:67%;
-    margin-left:18%;
-    min-height:84px;
-    padding:28px 18px 16px 40px;
-  }
-
-  #talkName{
-    min-width:80px;
-    height:30px;
-    font-size:15px;
-  }
-
-  #talkText{
-    font-size:14px;
-    line-height:1.3;
+  if (newPeriod !== currentPeriod) {
+    currentPeriod = newPeriod;
+    currentLineIndex = 0;
+    setBg(newPeriod);
+    renderLine();
   }
 }
 
-/* 横向きだけ比率維持 */
-@media (orientation: landscape){
-  :root{
-    --topbar-h: 44px;
-    --left-strip-w: 8.6%;
-  }
-
-  .screen-frame{
-    width:min(100vw, calc(100dvh * (844 / 390)));
-    height:min(100dvh, calc(100vw * (390 / 844)));
-    aspect-ratio:844 / 390;
-  }
-
-  .left-strip{
-    min-width:58px;
-    max-width:76px;
-  }
-
-  .character-layer img{
-    left:46%;
-    width:34%;
-    max-height:92%;
-  }
-
-  .ui-buttons .ui-btn:nth-child(1){
-    top:11%;
-    right:2%;
-    width:16%;
-  }
-
-  .ui-buttons .ui-btn:nth-child(2){
-    top:28%;
-    right:4%;
-    width:10%;
-  }
-
-  .ui-buttons .ui-btn:nth-child(3){
-    top:43%;
-    right:1.5%;
-    width:11%;
-  }
-
-  .ui-buttons .ui-btn:nth-child(4){
-    top:59%;
-    right:3%;
-    width:14%;
-  }
-
-  .ui-buttons .ui-btn:nth-child(5){
-    right:0;
-    bottom:5%;
-    width:25%;
-  }
-
-  .menu-button{
-    top:6px;
-    right:8px;
-    width:42px;
-    height:34px;
-    border-radius:9px;
-    gap:5px;
-  }
-
-  .menu-button span{
-    width:20px;
-  }
-
-  .talk-layer{
-    bottom:10%;
-  }
-
-  .talk-box{
-    width:40%;
-    margin-left:15%;
-    min-height:84px;
-    padding:28px 20px 16px 38px;
-  }
-
-  #talkName{
-    top:-10px;
-    left:20px;
-    min-width:78px;
-    height:30px;
-    font-size:14px;
-  }
-
-  #talkText{
-    font-size:13px;
-    line-height:1.4;
-  }
+function nextLine(){
+  const arr = lines[currentPeriod];
+  currentLineIndex = (currentLineIndex + 1) % arr.length;
+  renderLine();
 }
+
+if (talkBox) {
+  talkBox.addEventListener("click", nextLine);
+}
+
+if (menuButton && menuOverlay) {
+  menuButton.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menuOverlay.classList.toggle("is-open");
+  });
+
+  menuOverlay.addEventListener("click", (e) => {
+    if (e.target === menuOverlay) {
+      menuOverlay.classList.remove("is-open");
+    }
+  });
+}
+
+update();
+setInterval(update, 30000);
