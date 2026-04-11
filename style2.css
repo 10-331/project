@@ -5,13 +5,13 @@
 }
 
 :root{
-  --base-w:390;
-  --base-h:844;
-
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-left: env(safe-area-inset-left, 0px);
+
+  --topbar-h: 58px;
+  --left-strip-w: 12.8%;
 }
 
 html,
@@ -42,7 +42,6 @@ button{
   background:none;
 }
 
-/* 全体 */
 .app{
   width:100vw;
   height:100svh;
@@ -67,7 +66,7 @@ button{
   overflow:hidden;
 }
 
-/* 縦持ちは幅いっぱい使う */
+/* 2枚目寄せで縦画面の見え方を優先 */
 .screen-frame{
   position:relative;
   width:100%;
@@ -75,6 +74,17 @@ button{
   overflow:hidden;
   background:#000;
   flex:0 0 auto;
+}
+
+/* 上部バー */
+.top-bar{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:var(--topbar-h);
+  background:#cbccc5;
+  z-index:9;
 }
 
 /* 背景 */
@@ -102,7 +112,7 @@ button{
 .bg-overlay{
   position:absolute;
   inset:0;
-  background:linear-gradient(to bottom, rgba(255,255,255,.06), rgba(0,0,0,.06));
+  background:linear-gradient(to bottom, rgba(255,255,255,.06), rgba(0,0,0,.05));
   pointer-events:none;
 }
 
@@ -111,11 +121,11 @@ button{
   position:absolute;
   left:0;
   top:0;
-  width:14%;
+  width:var(--left-strip-w);
   min-width:52px;
   max-width:78px;
   height:100%;
-  background:#e5e2c6;
+  background:#fbfbd3;
   z-index:3;
 }
 
@@ -131,7 +141,7 @@ button{
   bottom:18px;
   width:calc(100% - 14px);
   color:#111;
-  line-height:1.15;
+  line-height:1.12;
 }
 
 .left-id-title{
@@ -173,23 +183,23 @@ button{
 /* メニュー */
 .menu-button{
   position:absolute;
-  top:12px;
+  top:10px;
   right:12px;
-  width:48px;
-  height:48px;
+  width:56px;
+  height:56px;
   background:rgba(45,45,45,.92);
-  border-radius:10px;
+  border-radius:12px;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
-  gap:6px;
+  gap:7px;
   z-index:15;
 }
 
 .menu-button span{
   display:block;
-  width:24px;
+  width:28px;
   height:2px;
   background:#fff;
   border-radius:999px;
@@ -205,13 +215,13 @@ button{
 
 .character-layer img{
   position:absolute;
-  left:52%;
+  left:51.5%;
   bottom:0;
   transform:translateX(-50%);
-  width:72%;
+  width:73%;
   max-width:none;
   height:auto;
-  max-height:86%;
+  max-height:87%;
   object-fit:contain;
 }
 
@@ -236,37 +246,37 @@ button{
 }
 
 .ui-btn.sub{
-  opacity:.82;
+  opacity:.9;
 }
 
 .ui-buttons .ui-btn:nth-child(1){
-  top:8.5%;
-  right:2.5%;
-  width:28%;
+  top:7.5%;
+  right:2.2%;
+  width:31%;
 }
 
 .ui-buttons .ui-btn:nth-child(2){
-  top:23.5%;
-  right:6%;
+  top:22.3%;
+  right:8.4%;
   width:18%;
 }
 
 .ui-buttons .ui-btn:nth-child(3){
-  top:34%;
-  right:2%;
-  width:19%;
+  top:33.2%;
+  right:1.5%;
+  width:17.5%;
 }
 
 .ui-buttons .ui-btn:nth-child(4){
-  top:48.5%;
-  right:4%;
+  top:46.7%;
+  right:4.6%;
   width:24%;
 }
 
 .ui-buttons .ui-btn:nth-child(5){
-  right:-1%;
-  bottom:7%;
-  width:46%;
+  right:-1.2%;
+  bottom:7.3%;
+  width:43%;
 }
 
 /* セリフ */
@@ -274,7 +284,7 @@ button{
   position:absolute;
   left:0;
   right:0;
-  bottom:14%;
+  bottom:17.2%;
   z-index:12;
   pointer-events:none;
 }
@@ -282,46 +292,49 @@ button{
 .talk-box{
   position:relative;
   display:block;
-  width:68%;
-  margin-left:20%;
-  min-height:96px;
-  background:rgba(198,92,76,.92);
+  width:67%;
+  margin-left:19%;
+  min-height:92px;
+  background:rgba(235,118,91,.78);
   color:#fff;
-  border:2px solid rgba(255,255,255,.72);
+  border:2px solid rgba(255,255,255,.75);
   border-radius:999px;
-  padding:34px 24px 20px 48px;
-  box-shadow:0 10px 24px rgba(0,0,0,.16);
+  padding:34px 24px 20px 50px;
+  box-shadow:0 10px 24px rgba(0,0,0,.12);
   text-align:left;
+  backdrop-filter:blur(1px);
   pointer-events:auto;
 }
 
 #talkName{
   position:absolute;
   top:-12px;
-  left:26px;
+  left:20px;
   min-width:92px;
-  height:36px;
+  height:34px;
   padding:0 18px;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:#d8d2a2;
-  color:#4a4635;
+  background:#fbfbd3;
+  color:#fff;
   border-radius:999px;
   font-size:17px;
   font-weight:700;
   line-height:1;
-  box-shadow:0 4px 10px rgba(0,0,0,.10);
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  text-shadow:0 1px 2px rgba(0,0,0,.12);
 }
 
 #talkText{
   display:block;
-  font-size:15px;
-  line-height:1.45;
-  letter-spacing:.02em;
+  font-size:17px;
+  line-height:1.35;
+  letter-spacing:.01em;
   white-space:normal;
   word-break:break-word;
   text-align:left;
+  text-shadow:0 1px 2px rgba(0,0,0,.18);
 }
 
 /* メニューオーバーレイ */
@@ -372,45 +385,52 @@ button{
     font-size:14px;
   }
 
+  .menu-button{
+    width:52px;
+    height:52px;
+  }
+
+  .menu-button span{
+    width:26px;
+  }
+
+  .talk-layer{
+    bottom:17%;
+  }
+
   .talk-box{
-    width:70%;
+    width:68%;
     margin-left:19%;
-    min-height:90px;
+    min-height:88px;
     padding:32px 20px 18px 42px;
   }
 
   #talkName{
     min-width:84px;
-    height:34px;
+    height:32px;
     font-size:16px;
   }
 
   #talkText{
-    font-size:14px;
+    font-size:15px;
+    line-height:1.32;
   }
 }
 
 /* 横向きだけ比率維持 */
 @media (orientation: landscape){
   :root{
-    --base-w:844;
-    --base-h:390;
+    --topbar-h: 44px;
+    --left-strip-w: 8.6%;
   }
 
   .screen-frame{
-    width:min(
-      calc((100dvh - var(--safe-top) - var(--safe-bottom)) * (var(--base-w) / var(--base-h))),
-      calc(100vw - var(--safe-left) - var(--safe-right))
-    );
-    height:min(
-      calc(100dvh - var(--safe-top) - var(--safe-bottom)),
-      calc((100vw - var(--safe-left) - var(--safe-right)) * (var(--base-h) / var(--base-w)))
-    );
+    width:min(100vw, calc(100dvh * (844 / 390)));
+    height:min(100dvh, calc(100vw * (390 / 844)));
     aspect-ratio:844 / 390;
   }
 
   .left-strip{
-    width:9%;
     min-width:58px;
     max-width:76px;
   }
@@ -422,25 +442,25 @@ button{
   }
 
   .ui-buttons .ui-btn:nth-child(1){
-    top:8%;
+    top:11%;
     right:2%;
     width:16%;
   }
 
   .ui-buttons .ui-btn:nth-child(2){
-    top:25%;
+    top:28%;
     right:4%;
     width:10%;
   }
 
   .ui-buttons .ui-btn:nth-child(3){
-    top:41%;
+    top:43%;
     right:1.5%;
     width:11%;
   }
 
   .ui-buttons .ui-btn:nth-child(4){
-    top:58%;
+    top:59%;
     right:3%;
     width:14%;
   }
@@ -449,6 +469,19 @@ button{
     right:0;
     bottom:5%;
     width:25%;
+  }
+
+  .menu-button{
+    top:6px;
+    right:8px;
+    width:46px;
+    height:46px;
+    border-radius:10px;
+  }
+
+  .menu-button span{
+    width:22px;
+    gap:0;
   }
 
   .talk-layer{
