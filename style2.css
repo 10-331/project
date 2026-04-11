@@ -140,8 +140,8 @@ button{
 /* 左下IDカード本体 */
 .left-id-card{
   position:absolute;
-  left:6px;
-  bottom:14px;
+  left:30px;
+  bottom:30px;
   width:190px;
   color:#111;
   line-height:1.08;
