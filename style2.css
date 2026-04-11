@@ -216,13 +216,13 @@ button{
 
 .character-layer img{
   position:absolute;
-  left:51.5%;
-  bottom:0;
+  left:58%;
+  bottom:-70%;
   transform:translateX(-50%);
-  width:73%;
+  width:230%;
   max-width:none;
   height:auto;
-  max-height:87%;
+  max-height:none;
   object-fit:contain;
 }
 
