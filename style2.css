@@ -251,27 +251,27 @@ button{
 }
 
 .ui-buttons .ui-btn:nth-child(1){
-  top:10%;
-  right:-1%;
-  width:60%;
-}
-
-.ui-buttons .ui-btn:nth-child(2){
-  top:18.3%;
-  right:-16%;
+  top:7%;
+  right:-2%;
   width:55%;
 }
 
+.ui-buttons .ui-btn:nth-child(2){
+  top:33%;
+  right:0%;
+  width:30%;
+}
+
 .ui-buttons .ui-btn:nth-child(3){
-  top:46.2%;
-  right:-2.5%;
-  width:35.5%;
+  top:60.2%;
+  right:0%;
+  width:20%;
 }
 
 .ui-buttons .ui-btn:nth-child(4){
-  top:25.7%;
-  right:-15.6%;
-  width:50%;
+  top:44.7%;
+  right:3%;
+  width:32%;
 }
 
 .ui-buttons .ui-btn:nth-child(5){
@@ -281,9 +281,9 @@ button{
 }
 
 .ui-buttons .ui-btn:nth-child(6){
-  right:-0.5%;
-  bottom:4%;
-  width:60%;
+  right:0%;
+  bottom:40%;
+  width:50%;
 }
 
 /* セリフ */
