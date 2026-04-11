@@ -294,9 +294,9 @@ button{
 }
 
 .ui-btn-gallery{
-  top:66%;
-  right:0%;
-  width:20%;
+  top:68%;
+  right:2%;
+  width:15%;
 }
 
 .ui-btn-story{
@@ -307,8 +307,8 @@ button{
 
 .ui-btn-main{
   right:-0.5%;
-  bottom:4%;
-  width:60%;
+  bottom:3%;
+  width:58%;
 }
 
 /* セリフ */
