@@ -135,18 +135,21 @@ button{
   width:100%;
   height:100%;
   overflow:visible;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding-bottom:14px;
 }
 
-/* 左下IDカード本体 */
+/* 左下IDカード本体
+   回転を維持しつつ、見える位置に収める */
 .left-id-card{
-  position:absolute;
-  left:30px;
-  bottom:30px;
-  width:190px;
+  width:170px;
   color:#111;
   line-height:1.08;
-  transform-origin:left bottom;
-  transform:rotate(-90deg) translate(-100%, 0);
+  transform:rotate(-90deg);
+  transform-origin:center center;
+  flex:0 0 auto;
 }
 
 .left-id-card *{
@@ -402,10 +405,12 @@ button{
     max-width:90px;
   }
 
+  .left-strip-inner{
+    padding-bottom:10px;
+  }
+
   .left-id-card{
-    left:4px;
-    bottom:10px;
-    width:170px;
+    width:150px;
   }
 
   .left-id-main{
@@ -418,7 +423,7 @@ button{
   }
 
   .barcode{
-    width:135px;
+    width:130px;
     height:18px;
   }
 
@@ -472,10 +477,12 @@ button{
     max-width:96px;
   }
 
+  .left-strip-inner{
+    padding-bottom:8px;
+  }
+
   .left-id-card{
-    left:6px;
-    bottom:10px;
-    width:165px;
+    width:145px;
   }
 
   .left-id-main{
@@ -488,7 +495,7 @@ button{
   }
 
   .barcode{
-    width:125px;
+    width:120px;
     height:16px;
   }
 
