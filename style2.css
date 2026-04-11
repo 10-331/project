@@ -404,52 +404,6 @@ button{
   font-size:16px;
 }
 
-/* 小さめ端末 */
-@media (max-width: 390px){
-  .left-strip{
-    min-width:48px;
-  }
-
-  .left-id-main{
-    font-size:16px;
-  }
-
-  .left-id-time{
-    font-size:14px;
-  }
-
-  .menu-button{
-    width:42px;
-    height:36px;
-  }
-
-  .menu-button span{
-    width:20px;
-  }
-
-  .talk-layer{
-    bottom:20%;
-  }
-
-  .talk-box{
-    width:67%;
-    margin-left:18%;
-    min-height:74px;
-    padding:28px 18px 16px 40px;
-  }
-
-  #talkName{
-    min-width:80px;
-    height:30px;
-    font-size:15px;
-  }
-
-  #talkText{
-    font-size:14px;
-    line-height:1.3;
-  }
-}
-
 /* 横向きだけ比率維持 */
 @media (orientation: landscape){
   :root{
@@ -474,6 +428,7 @@ button{
     max-height:92%;
   }
 
+/* 小さめ端末 */
 @media (max-width: 390px){
   .left-strip{
     min-width:48px;
@@ -516,5 +471,67 @@ button{
   #talkText{
     font-size:13px;
     line-height:1.22;
+  }
+}
+
+/* 横向きだけ比率維持 */
+@media (orientation: landscape){
+  :root{
+    --topbar-h: 44px;
+    --left-strip-w: 8.6%;
+  }
+
+  .screen-frame{
+    width:min(100vw, calc(100dvh * (844 / 390)));
+    height:min(100dvh, calc(100vw * (390 / 844)));
+    aspect-ratio:844 / 390;
+  }
+
+  .left-strip{
+    min-width:58px;
+    max-width:76px;
+  }
+
+  .character-layer img{
+    left:46%;
+    width:34%;
+    max-height:92%;
+  }
+
+  .menu-button{
+    top:5px;
+    right:8px;
+    width:40px;
+    height:32px;
+    border-radius:9px;
+    gap:4px;
+  }
+
+  .menu-button span{
+    width:18px;
+  }
+
+  .talk-layer{
+    bottom:10%;
+  }
+
+  .talk-box{
+    width:40%;
+    margin-left:15%;
+    min-height:84px;
+    padding:28px 20px 16px 38px;
+  }
+
+  #talkName{
+    top:-10px;
+    left:20px;
+    min-width:78px;
+    height:30px;
+    font-size:14px;
+  }
+
+  #talkText{
+    font-size:13px;
+    line-height:1.4;
   }
 }
