@@ -4,23 +4,21 @@ const talkText = document.getElementById("talkText");
 const leftTime = document.getElementById("leftTime");
 
 const bgMorning = document.getElementById("bgMorning");
+const bgNoon = document.getElementById("bgNoon");
 const bgEvening = document.getElementById("bgEvening");
 const bgNight = document.getElementById("bgNight");
 
 /*
   自動再生
-  5000 = 5秒
+  10000 = 10秒
 */
 const AUTO_ADVANCE_MS = 10000;
 let autoAdvanceTimer = null;
 
 /*
-  時間帯ごとに
-  - city（街）
+  朝 / 昼 / 夕 / 夜
+  - city（外）
   - station（駅）
-  を持つ
-  背景とセリフは必ず一致
-  低確率でその場所だけ不穏版セリフに切り替える
 */
 const SCENES = {
   morning: [
@@ -50,6 +48,37 @@ const SCENES = {
       eerieLines: [
         { name: "綾", text: "……今のアナウンス、流れた？" },
         { name: "綾", text: "誰もいないのに、音だけするね" }
+      ]
+    }
+  ],
+
+  noon: [
+    {
+      id: "city",
+      background: "./assets/images/bg/bg-noon.png",
+      lines: [
+        { name: "綾", text: "お昼の街って、朝よりずっとにぎやかだね" },
+        { name: "綾", text: "少し歩くだけでも、なんだか暑いかも" },
+        { name: "綾", text: "どこかで休んでいこうかな" }
+      ],
+      eerieChance: 0.03,
+      eerieLines: [
+        { name: "綾", text: "……さっきから視線を感じる気がする" },
+        { name: "綾", text: "明るいのに、落ち着かないね" }
+      ]
+    },
+    {
+      id: "station",
+      background: "./assets/images/bg/bg-noon-station.png",
+      lines: [
+        { name: "綾", text: "昼の駅は少しだけ落ち着いてるね" },
+        { name: "綾", text: "この時間なら、まだ人混みもましかも" },
+        { name: "綾", text: "ぼんやりしてると、乗り過ごしそう" }
+      ],
+      eerieChance: 0.03,
+      eerieLines: [
+        { name: "綾", text: "……今の音、どこからしたの？" },
+        { name: "綾", text: "人はいるのに、妙に遠く感じるね" }
       ]
     }
   ],
@@ -126,7 +155,8 @@ function pickRandom(arr) {
 }
 
 function getPeriodByHour(hour) {
-  if (hour >= 5 && hour < 16) return "morning";
+  if (hour >= 5 && hour < 11) return "morning";
+  if (hour >= 11 && hour < 16) return "noon";
   if (hour >= 16 && hour < 19) return "evening";
   return "night";
 }
@@ -139,10 +169,6 @@ function getSceneStorageKey(period) {
   return `home-scene-${period}-${y}-${m}-${d}`;
 }
 
-/*
-  同じ日・同じ時間帯では、
-  リロードしても同じ場所 / 同じ不穏状態を使う
-*/
 function buildScene(period) {
   const storageKey = getSceneStorageKey(period);
   const saved = localStorage.getItem(storageKey);
@@ -191,15 +217,19 @@ function buildScene(period) {
 }
 
 function applyBackground(scene) {
-  if (!bgMorning || !bgEvening || !bgNight) return;
+  if (!bgMorning || !bgNoon || !bgEvening || !bgNight) return;
 
   bgMorning.classList.remove("is-active");
+  bgNoon.classList.remove("is-active");
   bgEvening.classList.remove("is-active");
   bgNight.classList.remove("is-active");
 
   if (scene.period === "morning") {
     bgMorning.src = scene.background;
     bgMorning.classList.add("is-active");
+  } else if (scene.period === "noon") {
+    bgNoon.src = scene.background;
+    bgNoon.classList.add("is-active");
   } else if (scene.period === "evening") {
     bgEvening.src = scene.background;
     bgEvening.classList.add("is-active");
@@ -213,11 +243,9 @@ function renderTime() {
   if (!leftTime) return;
 
   const now = new Date();
-
   const y = now.getFullYear();
   const mo = now.getMonth() + 1;
   const d = now.getDate();
-
   const h = String(now.getHours()).padStart(2, "0");
   const m = String(now.getMinutes()).padStart(2, "0");
   const s = String(now.getSeconds()).padStart(2, "0");
@@ -287,13 +315,11 @@ function restartAutoAdvance() {
   startAutoAdvance();
 }
 
-/* セリフタップで次へ */
 if (talkBox) {
   talkBox.addEventListener("click", () => {
     nextLine(true);
   });
 }
 
-/* 初期化 */
 update();
 setInterval(update, 1000);
