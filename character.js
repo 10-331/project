@@ -1,104 +1,192 @@
-const mainMenuButtons = document.querySelectorAll(".main-menu-btn");
+const menuCards = document.querySelectorAll(".menu-card");
 const contentPanels = document.querySelectorAll(".content-panel");
 
 const visualTabs = document.querySelectorAll("[data-visual-tab]");
-const visualPanels = document.querySelectorAll("#panel-visual .sub-panel");
+const visualPanels = document.querySelectorAll("#panel-visual .subpanel");
 
 const talkTabs = document.querySelectorAll("[data-talk-tab]");
-const talkPanels = document.querySelectorAll("#panel-talk .sub-panel");
+const talkPanels = document.querySelectorAll("#panel-talk .subpanel");
 
-const modal = document.getElementById("imageModal");
-const modalImg = document.getElementById("imageModalImg");
+const imageModal = document.getElementById("imageModal");
+const imageModalImg = document.getElementById("imageModalImg");
+const imageModalBackdrop = document.getElementById("imageModalBackdrop");
+const imageModalClose = document.getElementById("imageModalClose");
 
 const relationFromAya = document.getElementById("relationFromAya");
 const relationToAya = document.getElementById("relationToAya");
 const relationSelector = document.getElementById("relationSelector");
 
-/* ===== パネル切替 ===== */
-function showPanel(id){
-  contentPanels.forEach(p=>{
-    p.classList.toggle("is-active", p.id === `panel-${id}`);
-  });
-  mainMenuButtons.forEach(b=>{
-    b.classList.toggle("is-active", b.dataset.panel === id);
-  });
-}
-
-mainMenuButtons.forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    showPanel(btn.dataset.panel);
-  });
-});
-
-/* ===== タブ ===== */
-visualTabs.forEach(btn=>{
-  btn.onclick = ()=>{
-    visualTabs.forEach(b=>b.classList.remove("is-active"));
-    visualPanels.forEach(p=>p.classList.remove("is-active"));
-
-    btn.classList.add("is-active");
-    document.getElementById("visual-"+btn.dataset.visualTab).classList.add("is-active");
-  };
-});
-
-talkTabs.forEach(btn=>{
-  btn.onclick = ()=>{
-    talkTabs.forEach(b=>b.classList.remove("is-active"));
-    talkPanels.forEach(p=>p.classList.remove("is-active"));
-
-    btn.classList.add("is-active");
-    document.getElementById("talk-"+btn.dataset.talkTab).classList.add("is-active");
-  };
-});
-
-/* ===== モーダル ===== */
-document.querySelectorAll("[data-image]").forEach(el=>{
-  el.onclick = ()=>{
-    modal.classList.add("is-open");
-    modalImg.src = el.dataset.image;
-  };
-});
-
-document.querySelector(".image-modal-backdrop").onclick = ()=>modal.classList.remove("is-open");
-document.querySelector(".image-modal-close").onclick = ()=>modal.classList.remove("is-open");
-
-/* ===== 関係性 ===== */
 const relationData = [
-  { name:"添", from:"甘えたいのに引く", to:"放っておけない" },
-  { name:"陽葵", from:"安心できる", to:"一人にしない" },
+  {
+    id: "ten",
+    name: "添",
+    fromAya: "距離が近いほど言葉を選びすぎてしまう。\n甘えたいのに、先に引いてしまう相手。",
+    toAya: "放っておけない。\n触れすぎると壊れそうで、でも目を離せない。"
+  },
+  {
+    id: "himawari",
+    name: "陽葵",
+    fromAya: "一緒にいると呼吸がしやすい。\n日常へ引き戻してくれる人。",
+    toAya: "無理に聞き出さず、でも一人にはしない。\nその距離を大事にしたい。"
+  },
+  {
+    id: "rinon",
+    name: "燐音",
+    fromAya: "明るさに少し救われる。\n眩しいけれど、嫌ではない。",
+    toAya: "静かで不安定で、だからこそ気になる。\n軽く扱いたくない相手。"
+  },
+  {
+    id: "minamino",
+    name: "南野",
+    fromAya: "完全には信じきれない。\nでも無視もできない存在。",
+    toAya: "扱いを間違えれば崩れる。\n観察と保護の境界にいる相手。"
+  },
+  {
+    id: "rakuro",
+    name: "落露",
+    fromAya: "どこか引っかかる。\n理解したくないのに意識してしまう。",
+    toAya: "危うさを孕んだまま立っている。\n壊れる瞬間を見逃せない。"
+  },
+  {
+    id: "family",
+    name: "家族",
+    fromAya: "思い出そうとすると輪郭が痛む。\n近いはずなのに、遠い。",
+    toAya: "守りたかった。\nけれど届かなかった時間が残っている。"
+  }
 ];
 
-function initRelation(){
-  relationSelector.innerHTML = "";
+function clearActiveMenu() {
+  menuCards.forEach((card) => card.classList.remove("is-active"));
+}
 
-  relationData.forEach((r,i)=>{
-    const btn = document.createElement("button");
-    btn.className = "relation-btn";
-    btn.textContent = r.name;
+function hidePanels() {
+  contentPanels.forEach((panel) => panel.classList.remove("is-active"));
+}
 
-    if(i===0){
-      btn.classList.add("is-active");
-      relationFromAya.textContent = r.from;
-      relationToAya.textContent = r.to;
-    }
+function showPanel(panelId, cardEl) {
+  hidePanels();
+  clearActiveMenu();
 
-    btn.onclick = ()=>{
-      document.querySelectorAll(".relation-btn").forEach(b=>b.classList.remove("is-active"));
-      btn.classList.add("is-active");
+  const target = document.getElementById(`panel-${panelId}`);
+  if (target) target.classList.add("is-active");
+  if (cardEl) cardEl.classList.add("is-active");
+}
 
-      relationFromAya.style.opacity=0;
-      relationToAya.style.opacity=0;
+function openVisualTab(name) {
+  visualTabs.forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.visualTab === name);
+  });
 
-      setTimeout(()=>{
-        relationFromAya.textContent=r.from;
-        relationToAya.textContent=r.to;
-        relationFromAya.style.opacity=1;
-        relationToAya.style.opacity=1;
-      },80);
-    };
-
-    relationSelector.appendChild(btn);
+  visualPanels.forEach((panel) => {
+    panel.classList.toggle("is-active", panel.id === `visual-${name}`);
   });
 }
 
-initRelation();
+function openTalkTab(name) {
+  talkTabs.forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.talkTab === name);
+  });
+
+  talkPanels.forEach((panel) => {
+    panel.classList.toggle("is-active", panel.id === `talk-${name}`);
+  });
+}
+
+function openImageModal(src, alt) {
+  imageModalImg.src = src;
+  imageModalImg.alt = alt || "";
+  imageModal.classList.add("is-open");
+  imageModal.setAttribute("aria-hidden", "false");
+}
+
+function closeImageModal() {
+  imageModal.classList.remove("is-open");
+  imageModal.setAttribute("aria-hidden", "true");
+  imageModalImg.src = "";
+  imageModalImg.alt = "";
+  clearActiveMenu();
+}
+
+function renderRelationButtons() {
+  relationSelector.innerHTML = "";
+
+  relationData.forEach((item, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "relation-btn";
+    button.textContent = item.name;
+    button.dataset.relationId = item.id;
+
+    if (index === 0) {
+      button.classList.add("is-active");
+      relationFromAya.textContent = item.fromAya;
+      relationToAya.textContent = item.toAya;
+    }
+
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".relation-btn").forEach((btn) => {
+        btn.classList.remove("is-active");
+      });
+      button.classList.add("is-active");
+
+      relationFromAya.style.opacity = "0";
+      relationToAya.style.opacity = "0";
+
+      setTimeout(() => {
+        relationFromAya.textContent = item.fromAya;
+        relationToAya.textContent = item.toAya;
+        relationFromAya.style.opacity = "1";
+        relationToAya.style.opacity = "1";
+      }, 50);
+    });
+
+    relationSelector.appendChild(button);
+  });
+}
+
+menuCards.forEach((card) => {
+  card.addEventListener("click", () => {
+    const mode = card.dataset.mode;
+
+    if (mode === "image") {
+      hidePanels();
+      clearActiveMenu();
+      card.classList.add("is-active");
+      openImageModal(card.dataset.image, card.dataset.alt);
+      return;
+    }
+
+    if (mode === "panel") {
+      showPanel(card.dataset.panel, card);
+    }
+  });
+});
+
+visualTabs.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    openVisualTab(btn.dataset.visualTab);
+  });
+});
+
+talkTabs.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    openTalkTab(btn.dataset.talkTab);
+  });
+});
+
+document.querySelectorAll(".thumb-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    openImageModal(btn.dataset.image, btn.dataset.alt);
+  });
+});
+
+imageModalBackdrop.addEventListener("click", closeImageModal);
+imageModalClose.addEventListener("click", closeImageModal);
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeImageModal();
+  }
+});
+
+renderRelationButtons();
