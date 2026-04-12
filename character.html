@@ -13,41 +13,37 @@
   <main class="character-page">
     <div class="character-layout">
 
-      <!-- 左 4 : 固定エリア -->
-      <section class="left-pane" aria-label="character silhouette">
+      <!-- 左 -->
+      <section class="left-pane">
         <div class="silhouette-wrap">
           <div
             class="character-silhouette"
             style="--figure-url: url('./assets/images/chars/aya-home.png');"
-            aria-hidden="true"
           ></div>
         </div>
       </section>
 
-      <!-- 右 6 : 可変エリア -->
+      <!-- 右 -->
       <section class="right-pane">
 
-        <!-- 上部：コンテンツ表示窓 -->
+        <!-- 上：表示窓 -->
         <div class="content-window">
           <div class="content-window-inner">
 
-            <!-- 初期表示 -->
+            <!-- 初期 -->
             <section class="content-panel is-active" id="panel-home">
               <div class="placeholder-panel">
-                <p class="placeholder-title">CHARACTER MENU</p>
-                <p class="placeholder-text">右下のメニューから閲覧したい項目を選択してください。</p>
+                <p class="placeholder-title">CHARACTER</p>
+                <p class="placeholder-text">メニューから選択してください</p>
               </div>
             </section>
 
-            <!-- プロフィール帳 -->
+            <!-- プロフィール -->
             <section class="content-panel" id="panel-profile">
               <div class="single-card">
-                <button
-                  class="open-image-btn"
-                  data-image="./assets/images/character/profile-book.png"
-                  data-alt="プロフィール帳"
-                >
-                  プロフィール帳を開く
+                <button class="open-image-btn"
+                  data-image="./assets/images/character/profile-book.png">
+                  プロフィール帳
                 </button>
               </div>
             </section>
@@ -55,12 +51,9 @@
             <!-- 履歴書 -->
             <section class="content-panel" id="panel-resume">
               <div class="single-card">
-                <button
-                  class="open-image-btn"
-                  data-image="./assets/images/character/resume.png"
-                  data-alt="履歴書"
-                >
-                  履歴書を開く
+                <button class="open-image-btn"
+                  data-image="./assets/images/character/resume.png">
+                  履歴書
                 </button>
               </div>
             </section>
@@ -69,77 +62,45 @@
             <section class="content-panel" id="panel-visual">
               <div class="sub-tabs">
                 <button class="sub-tab is-active" data-visual-tab="full">立ち絵</button>
-                <button class="sub-tab" data-visual-tab="face">表情差分</button>
+                <button class="sub-tab" data-visual-tab="face">表情</button>
               </div>
 
               <div class="sub-panel is-active" id="visual-full">
                 <div class="visual-grid">
-                  <button class="visual-thumb" data-image="./assets/images/chars/aya-home.png" data-alt="綾 立ち絵1">
-                    <img src="./assets/images/chars/aya-home.png" alt="綾 立ち絵1" />
+                  <button class="visual-thumb" data-image="./assets/images/chars/aya-home.png">
+                    <img src="./assets/images/chars/aya-home.png">
                   </button>
-                  <button class="visual-thumb" data-image="./assets/images/chars/aya-visual-2.png" data-alt="綾 立ち絵2">
-                    <img src="./assets/images/chars/aya-visual-2.png" alt="綾 立ち絵2" />
-                  </button>
-                  <button class="visual-thumb" data-image="./assets/images/chars/aya-visual-3.png" data-alt="綾 立ち絵3">
-                    <img src="./assets/images/chars/aya-visual-3.png" alt="綾 立ち絵3" />
+                  <button class="visual-thumb" data-image="./assets/images/chars/aya-visual-2.png">
+                    <img src="./assets/images/chars/aya-visual-2.png">
                   </button>
                 </div>
               </div>
 
               <div class="sub-panel" id="visual-face">
                 <div class="visual-grid face-grid">
-                  <button class="visual-thumb" data-image="./assets/images/chars/aya-face-1.png" data-alt="綾 表情1">
-                    <img src="./assets/images/chars/aya-face-1.png" alt="綾 表情1" />
-                  </button>
-                  <button class="visual-thumb" data-image="./assets/images/chars/aya-face-2.png" data-alt="綾 表情2">
-                    <img src="./assets/images/chars/aya-face-2.png" alt="綾 表情2" />
-                  </button>
-                  <button class="visual-thumb" data-image="./assets/images/chars/aya-face-3.png" data-alt="綾 表情3">
-                    <img src="./assets/images/chars/aya-face-3.png" alt="綾 表情3" />
+                  <button class="visual-thumb" data-image="./assets/images/chars/aya-face-1.png">
+                    <img src="./assets/images/chars/aya-face-1.png">
                   </button>
                 </div>
               </div>
             </section>
 
-            <!-- トークサンプル -->
+            <!-- トーク -->
             <section class="content-panel" id="panel-talk">
               <div class="sub-tabs">
-                <button class="sub-tab is-active" data-talk-tab="ten">添に対して</button>
-                <button class="sub-tab" data-talk-tab="others">他者に対して</button>
-                <button class="sub-tab" data-talk-tab="self">独白</button>
-                <button class="sub-tab" data-talk-tab="memo">話法メモ</button>
+                <button class="sub-tab is-active" data-talk-tab="ten">添</button>
+                <button class="sub-tab" data-talk-tab="others">他者</button>
               </div>
 
               <div class="sub-panel is-active" id="talk-ten">
                 <div class="text-card">
                   <p>「……別に、なんでもない」</p>
-                  <p>「添、それ以上はだめ」</p>
-                  <p>「そういうとこ、ずるいよ」</p>
                 </div>
               </div>
 
               <div class="sub-panel" id="talk-others">
                 <div class="text-card">
-                  <p>「あ、はい……すみません」</p>
-                  <p>「えっと、私は大丈夫です」</p>
-                  <p>「ありがとうございます」</p>
-                </div>
-              </div>
-
-              <div class="sub-panel" id="talk-self">
-                <div class="text-card">
-                  <p>「……どうしてこんなことに」</p>
-                  <p>「まだ、平気」</p>
-                  <p>「少しだけ、考えさせて」</p>
-                </div>
-              </div>
-
-              <div class="sub-panel" id="talk-memo">
-                <div class="text-card">
-                  <p><strong>一人称:</strong> 私</p>
-                  <p><strong>基本口調:</strong> 柔らかいが、曖昧さを含む</p>
-                  <p><strong>感情が乱れる時:</strong> 語尾が短くなる、言い淀みが増える</p>
-                  <p><strong>対 添:</strong> 他者より距離が近く、抑えた感情が滲みやすい</p>
+                  <p>「あ、はい……」</p>
                 </div>
               </div>
             </section>
@@ -147,52 +108,52 @@
             <!-- 関係性 -->
             <section class="content-panel" id="panel-relation">
               <div class="relation-vs">
+
                 <div class="relation-messages">
                   <div class="relation-box">
                     <p class="relation-label">綾 → 相手</p>
-                    <p class="relation-text" id="relationFromAya"></p>
+                    <p id="relationFromAya" class="relation-text"></p>
                   </div>
+
                   <div class="relation-divider">VS</div>
+
                   <div class="relation-box">
                     <p class="relation-label">相手 → 綾</p>
-                    <p class="relation-text" id="relationToAya"></p>
+                    <p id="relationToAya" class="relation-text"></p>
                   </div>
                 </div>
 
-                <div class="relation-selector" id="relationSelector">
-                  <!-- JSで生成 -->
-                </div>
+                <div id="relationSelector" class="relation-selector"></div>
               </div>
             </section>
 
           </div>
         </div>
 
-        <!-- 下部：メインメニュー -->
+        <!-- 下：メニュー -->
         <div class="menu-area">
           <div class="menu-grid">
-            <button class="main-menu-btn" data-action="panel" data-panel="profile">プロフィール帳</button>
-            <button class="main-menu-btn" data-action="panel" data-panel="talk">トークサンプル</button>
-            <button class="main-menu-btn" data-action="panel" data-panel="visual">ビジュアル</button>
-            <button class="main-menu-btn" data-action="panel" data-panel="resume">履歴書</button>
-            <button class="main-menu-btn" data-action="panel" data-panel="relation">関係性</button>
+            <button class="main-menu-btn" data-panel="profile">プロフィール</button>
+            <button class="main-menu-btn" data-panel="talk">トーク</button>
+            <button class="main-menu-btn" data-panel="visual">ビジュアル</button>
+            <button class="main-menu-btn" data-panel="resume">履歴書</button>
+            <button class="main-menu-btn relation-btn-main" data-panel="relation">関係性</button>
           </div>
         </div>
 
       </section>
     </div>
 
-    <!-- 画像モーダル -->
-    <div class="image-modal" id="imageModal" aria-hidden="true">
-      <div class="image-modal-backdrop" id="imageModalBackdrop"></div>
+    <!-- モーダル -->
+    <div class="image-modal" id="imageModal">
+      <div class="image-modal-backdrop"></div>
       <div class="image-modal-dialog">
-        <button class="image-modal-close" id="imageModalClose" type="button" aria-label="閉じる">×</button>
-        <img id="imageModalImg" src="" alt="" />
+        <button class="image-modal-close">×</button>
+        <img id="imageModalImg">
       </div>
     </div>
   </main>
 
-  <script src="./shared/header.js"></script>
   <script src="./character.js"></script>
 </body>
 </html>
