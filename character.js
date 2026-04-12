@@ -66,6 +66,11 @@ function hidePanels() {
   contentPanels.forEach((panel) => panel.classList.remove("is-active"));
 }
 
+function resetCharacterView() {
+  hidePanels();
+  clearActiveMenu();
+}
+
 function showPanel(panelId, cardEl) {
   hidePanels();
   clearActiveMenu();
@@ -73,11 +78,6 @@ function showPanel(panelId, cardEl) {
   const target = document.getElementById(`panel-${panelId}`);
   if (target) target.classList.add("is-active");
   if (cardEl) cardEl.classList.add("is-active");
-}
-
-function resetCharacterView() {
-  hidePanels();
-  clearActiveMenu();
 }
 
 function openVisualTab(name) {
@@ -116,6 +116,8 @@ function closeImageModal() {
 }
 
 function renderRelationButtons() {
+  if (!relationSelector || !relationFromAya || !relationToAya) return;
+
   relationSelector.innerHTML = "";
 
   relationData.forEach((item, index) => {
@@ -131,7 +133,9 @@ function renderRelationButtons() {
       relationToAya.textContent = item.toAya;
     }
 
-    button.addEventListener("click", () => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+
       document.querySelectorAll(".relation-btn").forEach((btn) => {
         btn.classList.remove("is-active");
       });
@@ -193,12 +197,17 @@ document.querySelectorAll(".thumb-btn").forEach((btn) => {
   });
 });
 
-imageModalBackdrop.addEventListener("click", closeImageModal);
-imageModalClose.addEventListener("click", closeImageModal);
+if (imageModalBackdrop) {
+  imageModalBackdrop.addEventListener("click", closeImageModal);
+}
+
+if (imageModalClose) {
+  imageModalClose.addEventListener("click", closeImageModal);
+}
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
-    if (imageModal.classList.contains("is-open")) {
+    if (imageModal?.classList.contains("is-open")) {
       closeImageModal();
     } else {
       resetCharacterView();
@@ -206,9 +215,9 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-/* メニューでも内容でもない場所を押したら初期状態に戻す */
+/* 外側タップで初期状態に戻す */
 document.addEventListener("click", (event) => {
-  if (imageModal.classList.contains("is-open")) return;
+  if (imageModal?.classList.contains("is-open")) return;
 
   const clickedMenu = menuStack?.contains(event.target);
   const clickedContent = floatingContent?.contains(event.target);
