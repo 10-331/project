@@ -14,7 +14,7 @@ const menuOverlay = document.getElementById("menuOverlay");
   自動再生
   5000 = 5秒
 */
-const AUTO_ADVANCE_MS = 15000;
+const AUTO_ADVANCE_MS = 10000;
 let autoAdvanceTimer = null;
 
 /*
