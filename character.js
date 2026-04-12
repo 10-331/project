@@ -1,5 +1,6 @@
 const menuButtons = document.querySelectorAll(".menu-card");
 const panels = document.querySelectorAll(".character-panel");
+const panelArea = document.getElementById("characterPanelArea");
 
 const visualTabs = document.querySelectorAll("[data-visual-tab]");
 const visualPanels = document.querySelectorAll(".visual-panel");
@@ -12,14 +13,24 @@ const imageModalImg = document.getElementById("imageModalImg");
 const imageModalBackdrop = document.getElementById("imageModalBackdrop");
 const imageModalClose = document.getElementById("imageModalClose");
 
-function openPanel(name) {
-  menuButtons.forEach((btn) => {
-    btn.classList.toggle("is-active", btn.dataset.panel === name);
-  });
+function clearPanels() {
+  panels.forEach((panel) => panel.classList.remove("is-active"));
+  menuButtons.forEach((btn) => btn.classList.remove("is-active"));
+  panelArea.classList.remove("has-active");
+}
 
-  panels.forEach((panel) => {
-    panel.classList.toggle("is-active", panel.id === `panel-${name}`);
-  });
+function openPanel(name, buttonEl) {
+  clearPanels();
+
+  const target = document.getElementById(`panel-${name}`);
+  if (target) {
+    target.classList.add("is-active");
+    panelArea.classList.add("has-active");
+  }
+
+  if (buttonEl) {
+    buttonEl.classList.add("is-active");
+  }
 }
 
 function openVisualTab(name) {
@@ -58,7 +69,18 @@ function closeImageModal() {
 
 menuButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
-    openPanel(btn.dataset.panel);
+    const action = btn.dataset.action;
+
+    if (action === "modal") {
+      clearPanels();
+      btn.classList.add("is-active");
+      openImageModal(btn.dataset.image, btn.dataset.alt);
+      return;
+    }
+
+    if (action === "panel") {
+      openPanel(btn.dataset.panel, btn);
+    }
   });
 });
 
@@ -74,17 +96,25 @@ talkTabs.forEach((btn) => {
   });
 });
 
-document.querySelectorAll(".thumb-btn, .image-open-btn").forEach((btn) => {
+document.querySelectorAll(".thumb-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     openImageModal(btn.dataset.image, btn.dataset.alt);
   });
 });
 
-imageModalBackdrop.addEventListener("click", closeImageModal);
-imageModalClose.addEventListener("click", closeImageModal);
+imageModalBackdrop.addEventListener("click", () => {
+  closeImageModal();
+  menuButtons.forEach((btn) => btn.classList.remove("is-active"));
+});
+
+imageModalClose.addEventListener("click", () => {
+  closeImageModal();
+  menuButtons.forEach((btn) => btn.classList.remove("is-active"));
+});
 
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     closeImageModal();
+    menuButtons.forEach((btn) => btn.classList.remove("is-active"));
   }
 });
