@@ -1,316 +1,481 @@
-const talkBox = document.getElementById("talkBox");
-const talkName = document.getElementById("talkName");
-const talkText = document.getElementById("talkText");
-const leftTime = document.getElementById("leftTime");
-
-const bgMorning = document.getElementById("bgMorning");
-const bgEvening = document.getElementById("bgEvening");
-const bgNight = document.getElementById("bgNight");
-
-const menuButton = document.getElementById("menuButton");
-const menuOverlay = document.getElementById("menuOverlay");
-
-/*
-  自動再生
-  5000 = 5秒
-*/
-const AUTO_ADVANCE_MS = 10000;
-let autoAdvanceTimer = null;
-
-/*
-  時間帯ごとに
-  - city（街）
-  - station（駅）
-  を持つ
-  背景とセリフは必ず一致
-  低確率でその場所だけ不穏版セリフに切り替える
-*/
-const SCENES = {
-  morning: [
-    {
-      id: "city",
-      background: "./assets/images/bg/bg-morning.png",
-      lines: [
-        { name: "綾", text: "いい天気〜！今日はどこに出かけようかな〜" },
-        { name: "綾", text: "朝の街って、少し静かだね" },
-        { name: "綾", text: "まだ人も少なくて歩きやすいかも" }
-      ],
-      eerieChance: 0.02,
-      eerieLines: [
-        { name: "綾", text: "……あれ。今、誰かいたような" },
-        { name: "綾", text: "朝なのに、変に静かだね" }
-      ]
-    },
-    {
-      id: "station",
-      background: "./assets/images/bg/bg-morning-station.png",
-      lines: [
-        { name: "綾", text: "朝の駅はやっぱり忙しそう" },
-        { name: "綾", text: "この時間、少しだけ苦手かも" },
-        { name: "綾", text: "電車の音、今日は近く感じるね" }
-      ],
-      eerieChance: 0.02,
-      eerieLines: [
-        { name: "綾", text: "……今のアナウンス、流れた？" },
-        { name: "綾", text: "誰もいないのに、音だけするね" }
-      ]
-    }
-  ],
-
-  evening: [
-    {
-      id: "city",
-      background: "./assets/images/bg/bg-evening.png",
-      lines: [
-        { name: "綾", text: "夕方って、なんとなく寄り道したくなる" },
-        { name: "綾", text: "この時間の街、けっこう好きかも" },
-        { name: "綾", text: "少し涼しくなってきたね" }
-      ],
-      eerieChance: 0.05,
-      eerieLines: [
-        { name: "綾", text: "さっきから同じ景色ばかり見てる気がする" },
-        { name: "綾", text: "この道、前にも通ったっけ" }
-      ]
-    },
-    {
-      id: "station",
-      background: "./assets/images/bg/bg-evening-station.png",
-      lines: [
-        { name: "綾", text: "帰る人が多い時間だね" },
-        { name: "綾", text: "少しだけ、落ち着かないかも" },
-        { name: "綾", text: "夕方の駅って慌ただしいね" }
-      ],
-      eerieChance: 0.05,
-      eerieLines: [
-        { name: "綾", text: "……ホーム、こんなに暗かったっけ" },
-        { name: "綾", text: "人はいるのに、妙に静かだね" }
-      ]
-    }
-  ],
-
-  night: [
-    {
-      id: "city",
-      background: "./assets/images/bg/bg-night.png",
-      lines: [
-        { name: "綾", text: "夜は静かだね" },
-        { name: "綾", text: "この時間の街、嫌いじゃないよ" },
-        { name: "綾", text: "少し歩いてから帰ろうかな" }
-      ],
-      eerieChance: 0.08,
-      eerieLines: [
-        { name: "綾", text: "……誰か、見てる？" },
-        { name: "綾", text: "さっきから音がしないね" }
-      ]
-    },
-    {
-      id: "station",
-      background: "./assets/images/bg/bg-night-station.png",
-      lines: [
-        { name: "綾", text: "この時間の駅、少し怖いね" },
-        { name: "綾", text: "人が少ないと音が響くね" },
-        { name: "綾", text: "早く帰った方がいいかな" }
-      ],
-      eerieChance: 0.08,
-      eerieLines: [
-        { name: "綾", text: "電光掲示板、全部止まってない？" },
-        { name: "綾", text: "……さっき、誰か立ってたよね" }
-      ]
-    }
-  ]
-};
-
-let currentPeriod = "";
-let currentLineIndex = 0;
-let currentScene = null;
-
-function pickRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-function getPeriodByHour(hour) {
-  if (hour >= 5 && hour < 16) return "morning";
-  if (hour >= 16 && hour < 19) return "evening";
-  return "night";
+:root{
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+
+  --topbar-h: 52px;
+  --left-strip-w: 18%;
 }
 
-function getSceneStorageKey(period) {
-  const now = new Date();
-  const y = now.getFullYear();
-  const m = String(now.getMonth() + 1).padStart(2, "0");
-  const d = String(now.getDate()).padStart(2, "0");
-  return `home-scene-${period}-${y}-${m}-${d}`;
+html,
+body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
 }
 
-/*
-  同じ日・同じ時間帯では、
-  リロードしても同じ場所 / 同じ不穏状態を使う
-*/
-function buildScene(period) {
-  const storageKey = getSceneStorageKey(period);
-  const saved = localStorage.getItem(storageKey);
+body{
+  background:#ddd;
+  font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+}
 
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      const matched = SCENES[period].find(scene => scene.id === parsed.id);
+img{
+  display:block;
+  max-width:100%;
+}
 
-      if (matched) {
-        return {
-          period,
-          id: matched.id,
-          background: matched.background,
-          lines:
-            parsed.mode === "eerie" && matched.eerieLines?.length
-              ? matched.eerieLines
-              : matched.lines,
-          mode: parsed.mode === "eerie" ? "eerie" : "normal"
-        };
-      }
-    } catch (e) {
-      // 壊れていても作り直す
-    }
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
+button{
+  font:inherit;
+  border:none;
+  background:none;
+}
+
+/* 全体 */
+.app{
+  width:100vw;
+  height:100svh;
+  height:100dvh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  padding:
+    var(--safe-top)
+    var(--safe-right)
+    var(--safe-bottom)
+    var(--safe-left);
+}
+
+.home-screen{
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+  padding-top:52px; /* 共通ヘッダー分 */
+}
+
+.screen-frame{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  flex:0 0 auto;
+}
+
+/* 背景 */
+.bg-layer{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+}
+
+.bg-image{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center center;
+  opacity:0;
+  transition:opacity .5s ease;
+}
+
+.bg-image.is-active{
+  opacity:1;
+}
+
+.bg-overlay{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom, rgba(255,255,255,.06), rgba(0,0,0,.05));
+  pointer-events:none;
+}
+
+/* 左帯 */
+.left-strip{
+  position:absolute;
+  left:0;
+  top:0;
+  width:18%;
+  min-width:68px;
+  max-width:96px;
+  height:100%;
+  background:#fbfbd3;
+  z-index:3;
+  overflow:visible;
+}
+
+.left-strip-inner{
+  position:relative;
+  width:100%;
+  height:100%;
+  overflow:visible;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  padding-bottom:45px;
+}
+
+/* 左下IDカード本体 */
+.left-id-card{
+  width:126px;
+  margin-left:16px;
+  color:#111;
+  line-height:0.88;
+  transform:rotate(-90deg) translateY(-16px);
+  transform-origin:center center;
+  flex:0 0 auto;
+}
+
+.left-id-card *{
+  white-space:nowrap;
+}
+
+.left-id-title{
+  font-size:10px;
+  margin-bottom:2px;
+  display:inline-block;
+  margin-right:6px;
+}
+
+.left-id-main{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:4px;
+  display:inline-block;
+  margin-right:8px;
+  word-break:normal;
+}
+
+.left-id-sub{
+  font-size:10px;
+  margin-bottom:2px;
+}
+
+.left-id-time{
+  font-size:8px;
+  line-height:1.1;
+  margin-bottom:4px;
+  font-variant-numeric:tabular-nums;
+  word-break:normal;
+}
+
+.barcode{
+  width:126px;
+  height:14px;
+  background:
+    repeating-linear-gradient(
+      to right,
+      #000 0 2px,
+      transparent 2px 4px,
+      #000 4px 5px,
+      transparent 5px 8px
+    );
+}
+
+/* キャラ */
+.character-layer{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+}
+
+.character-layer img{
+  position:absolute;
+  left:55%;
+  bottom:-77%;
+  transform:translateX(-50%);
+  width:auto;
+  height:166%;
+  max-width:none;
+  max-height:none;
+  object-fit:contain;
+}
+
+/* 右UI */
+.ui-buttons{
+  position:absolute;
+  inset:0;
+  z-index:8;
+  pointer-events:none;
+}
+
+.ui-btn{
+  position:absolute;
+  display:block;
+  pointer-events:auto;
+}
+
+.ui-btn img{
+  display:block;
+  width:100%;
+  height:auto;
+}
+
+.ui-btn.sub{
+  opacity:.9;
+}
+
+/* 個別配置 */
+.ui-btn-world{
+  top:3%;
+  right:0%;
+  width:45%;
+}
+
+.ui-btn-character{
+  top:21.5%;
+  right:12.5%;
+  width:30%;
+}
+
+.ui-btn-illust{
+  top:34%;
+  right:-2%;
+  width:27%;
+}
+
+.ui-btn-gallery{
+  top:68.5%;
+  right:2%;
+  width:15%;
+}
+
+.ui-btn-story{
+  right:0%;
+  bottom:31%;
+  width:34%;
+}
+
+.ui-btn-main{
+  right:-0.5%;
+  bottom:3%;
+  width:58%;
+}
+
+/* セリフ */
+.talk-layer{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:28%;
+  z-index:12;
+  pointer-events:none;
+}
+
+.talk-box{
+  position:relative;
+  display:block;
+  width:60%;
+  margin-left:10%;
+  min-height:auto;
+  background:rgba(190, 48, 48, .72);
+  color:#fff;
+  border:2px solid rgba(255,255,255,.75);
+  border-radius:999px;
+  padding:25px 0 18px 15px;
+  box-shadow:0 10px 24px rgba(0,0,0,.10);
+  text-align:left;
+  backdrop-filter:blur(1px);
+  pointer-events:auto;
+  cursor:pointer;
+}
+
+#talkName{
+  position:absolute;
+  top:-8px;
+  left:14px;
+  min-width:72px;
+  height:26px;
+  padding:0 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#fbfbd3;
+  color:#fff;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+  line-height:1;
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
+  text-shadow:0 1px 2px rgba(0,0,0,.12);
+}
+
+#talkText{
+  display:block;
+  font-size:13px;
+  line-height:1.22;
+  letter-spacing:0;
+  white-space:normal;
+  word-break:break-word;
+  text-align:left;
+  text-shadow:0 1px 2px rgba(0,0,0,.18);
+}
+
+/* 小さめ端末 */
+@media (max-width: 430px){
+  .home-screen{
+    padding-top:52px;
   }
 
-  const baseScene = pickRandom(SCENES[period]);
-  const isEerie = Math.random() < baseScene.eerieChance;
+  .left-strip{
+    min-width:68px;
+    max-width:90px;
+  }
 
-  const result = {
-    period,
-    id: baseScene.id,
-    background: baseScene.background,
-    lines: isEerie && baseScene.eerieLines?.length
-      ? baseScene.eerieLines
-      : baseScene.lines,
-    mode: isEerie ? "eerie" : "normal"
-  };
+  .left-strip-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    overflow:visible;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    padding-bottom:44px;
+  }
 
-  localStorage.setItem(
-    storageKey,
-    JSON.stringify({ id: result.id, mode: result.mode })
-  );
+  .left-id-card{
+    width:126px;
+    margin-left:16px;
+    color:#111;
+    line-height:0.88;
+    transform:rotate(-90deg) translateY(-8px);
+    transform-origin:center center;
+    flex:0 0 auto;
+  }
 
-  return result;
-}
+  .left-id-main{
+    font-size:14px;
+    margin-bottom:3px;
+  }
 
-function applyBackground(scene) {
-  if (!bgMorning || !bgEvening || !bgNight) return;
+  .left-id-time{
+    font-size:8px;
+    line-height:1.05;
+    margin-bottom:3px;
+  }
 
-  bgMorning.classList.remove("is-active");
-  bgEvening.classList.remove("is-active");
-  bgNight.classList.remove("is-active");
+  .barcode{
+    width:126px;
+    height:12px;
+  }
 
-  if (scene.period === "morning") {
-    bgMorning.src = scene.background;
-    bgMorning.classList.add("is-active");
-  } else if (scene.period === "evening") {
-    bgEvening.src = scene.background;
-    bgEvening.classList.add("is-active");
-  } else {
-    bgNight.src = scene.background;
-    bgNight.classList.add("is-active");
+  .talk-layer{
+    bottom:30%;
+  }
+
+  .talk-box{
+    width:60%;
+    margin-left:10%;
+    min-height:auto;
+    padding:20px 20px 18px 36px;
+  }
+
+  #talkName{
+    min-width:72px;
+    height:26px;
+    font-size:13px;
+  }
+
+  #talkText{
+    font-size:13px;
+    line-height:1.22;
   }
 }
 
-function renderTime() {
-  if (!leftTime) return;
+/* 横向き */
+@media (orientation: landscape){
+  :root{
+    --topbar-h: 44px;
+    --left-strip-w: 10%;
+  }
 
-  const now = new Date();
+  .home-screen{
+    padding-top:44px;
+  }
 
-  const y = now.getFullYear();
-  const mo = now.getMonth() + 1;
-  const d = now.getDate();
+  .screen-frame{
+    width:min(100vw, calc(100dvh * (844 / 390)));
+    height:min(100dvh, calc(100vw * (390 / 844)));
+    aspect-ratio:844 / 390;
+  }
 
-  const h = String(now.getHours()).padStart(2, "0");
-  const m = String(now.getMinutes()).padStart(2, "0");
-  const s = String(now.getSeconds()).padStart(2, "0");
+  .left-strip{
+    min-width:72px;
+    max-width:96px;
+  }
 
-  leftTime.innerHTML = `${y}/${mo}/${d}<br>${h}:${m}:${s}`;
-}
+  .left-strip-inner{
+    padding-bottom:18px;
+  }
 
-function renderLine() {
-  if (!talkName || !talkText || !currentScene) return;
+  .left-id-card{
+    width:112px;
+    margin-left:6px;
+    transform:rotate(-90deg) translateY(-8px);
+  }
 
-  const arr = currentScene.lines;
-  if (!arr || !arr.length) return;
+  .left-id-main{
+    font-size:13px;
+    margin-bottom:3px;
+  }
 
-  const line = arr[currentLineIndex];
-  talkName.textContent = line.name;
-  talkText.textContent = line.text;
-}
+  .left-id-time{
+    font-size:8px;
+    line-height:1.05;
+    margin-bottom:3px;
+  }
 
-function setSceneForPeriod(period) {
-  currentScene = buildScene(period);
-  currentLineIndex = 0;
-  applyBackground(currentScene);
-  renderLine();
-  restartAutoAdvance();
-}
+  .barcode{
+    width:112px;
+    height:12px;
+  }
 
-function update() {
-  const now = new Date();
-  const newPeriod = getPeriodByHour(now.getHours());
+  .character-layer img{
+    left:46%;
+    width:34%;
+    height:auto;
+    bottom:auto;
+    max-height:92%;
+  }
 
-  renderTime();
+  .talk-layer{
+    bottom:10%;
+  }
 
-  if (newPeriod !== currentPeriod) {
-    currentPeriod = newPeriod;
-    setSceneForPeriod(currentPeriod);
+  .talk-box{
+    width:40%;
+    margin-left:15%;
+    min-height:84px;
+    padding:28px 20px 16px 38px;
+  }
+
+  #talkName{
+    top:-10px;
+    left:20px;
+    min-width:78px;
+    height:30px;
+    font-size:14px;
+  }
+
+  #talkText{
+    font-size:13px;
+    line-height:1.4;
   }
 }
-
-function nextLine(fromTap = true) {
-  if (!currentScene || !currentScene.lines?.length) return;
-
-  currentLineIndex = (currentLineIndex + 1) % currentScene.lines.length;
-  renderLine();
-
-  if (fromTap) {
-    restartAutoAdvance();
-  }
-}
-
-function stopAutoAdvance() {
-  if (autoAdvanceTimer) {
-    clearInterval(autoAdvanceTimer);
-    autoAdvanceTimer = null;
-  }
-}
-
-function startAutoAdvance() {
-  stopAutoAdvance();
-
-  autoAdvanceTimer = setInterval(() => {
-    nextLine(false);
-  }, AUTO_ADVANCE_MS);
-}
-
-function restartAutoAdvance() {
-  stopAutoAdvance();
-  startAutoAdvance();
-}
-
-/* セリフタップで次へ */
-if (talkBox) {
-  talkBox.addEventListener("click", () => {
-    nextLine(true);
-  });
-}
-
-/* メニュー */
-if (menuButton && menuOverlay) {
-  menuButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    menuOverlay.classList.toggle("is-open");
-  });
-
-  menuOverlay.addEventListener("click", (e) => {
-    if (e.target === menuOverlay) {
-      menuOverlay.classList.remove("is-open");
-    }
-  });
-}
-
-/* 初期化 */
-update();
-setInterval(update, 1000);
