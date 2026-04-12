@@ -1,36 +1,68 @@
-const menuButtons = document.querySelectorAll(".menu-card");
-const panels = document.querySelectorAll(".character-panel");
-const panelArea = document.getElementById("characterPanelArea");
+const mainMenuButtons = document.querySelectorAll(".main-menu-btn");
+const contentPanels = document.querySelectorAll(".content-panel");
 
 const visualTabs = document.querySelectorAll("[data-visual-tab]");
-const visualPanels = document.querySelectorAll(".visual-panel");
+const visualPanels = document.querySelectorAll("#panel-visual .sub-panel");
 
 const talkTabs = document.querySelectorAll("[data-talk-tab]");
-const talkPanels = document.querySelectorAll(".talk-panel");
+const talkPanels = document.querySelectorAll("#panel-talk .sub-panel");
 
 const imageModal = document.getElementById("imageModal");
 const imageModalImg = document.getElementById("imageModalImg");
 const imageModalBackdrop = document.getElementById("imageModalBackdrop");
 const imageModalClose = document.getElementById("imageModalClose");
 
-function clearPanels() {
-  panels.forEach((panel) => panel.classList.remove("is-active"));
-  menuButtons.forEach((btn) => btn.classList.remove("is-active"));
-  panelArea.classList.remove("has-active");
-}
+const relationFromAya = document.getElementById("relationFromAya");
+const relationToAya = document.getElementById("relationToAya");
+const relationSelector = document.getElementById("relationSelector");
 
-function openPanel(name, buttonEl) {
-  clearPanels();
-
-  const target = document.getElementById(`panel-${name}`);
-  if (target) {
-    target.classList.add("is-active");
-    panelArea.classList.add("has-active");
+const relationData = [
+  {
+    id: "ten",
+    name: "添",
+    fromAya: "距離が近いほど言葉を選びすぎてしまう。\n甘えたいのに、先に引いてしまう相手。",
+    toAya: "放っておけない。\n触れすぎると壊れそうで、でも目を離せない。"
+  },
+  {
+    id: "himawari",
+    name: "陽葵",
+    fromAya: "一緒にいると呼吸がしやすい。\n日常へ引き戻してくれる人。",
+    toAya: "無理に聞き出さず、でも一人にはしない。\nその距離を大事にしたい。"
+  },
+  {
+    id: "rinon",
+    name: "燐音",
+    fromAya: "明るさに少し救われる。\n眩しいけれど、嫌ではない。",
+    toAya: "静かで不安定で、だからこそ気になる。\n軽く扱いたくない相手。"
+  },
+  {
+    id: "minamino",
+    name: "南野",
+    fromAya: "完全には信じきれない。\nでも無視もできない存在。",
+    toAya: "扱いを間違えれば崩れる。\n観察と保護の境界にいる相手。"
+  },
+  {
+    id: "rakuro",
+    name: "落露",
+    fromAya: "どこか引っかかる。\n理解したくないのに意識してしまう。",
+    toAya: "危うさを孕んだまま立っている。\n壊れる瞬間を見逃せない。"
+  },
+  {
+    id: "family",
+    name: "家族",
+    fromAya: "思い出そうとすると輪郭が痛む。\n近いはずなのに、遠い。",
+    toAya: "守りたかった。\nけれど届かなかった時間が残っている。"
   }
+];
 
-  if (buttonEl) {
-    buttonEl.classList.add("is-active");
-  }
+function showPanel(panelId) {
+  contentPanels.forEach((panel) => {
+    panel.classList.toggle("is-active", panel.id === `panel-${panelId}`);
+  });
+
+  mainMenuButtons.forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.panel === panelId);
+  });
 }
 
 function openVisualTab(name) {
@@ -67,20 +99,55 @@ function closeImageModal() {
   imageModalImg.alt = "";
 }
 
-menuButtons.forEach((btn) => {
+function renderRelationButtons() {
+  relationSelector.innerHTML = "";
+
+  relationData.forEach((item, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "relation-btn";
+    button.textContent = item.name;
+    button.dataset.relationId = item.id;
+
+    if (index === 0) {
+      button.classList.add("is-active");
+      relationFromAya.textContent = item.fromAya;
+      relationToAya.textContent = item.toAya;
+    }
+
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".relation-btn").forEach((btn) => {
+        btn.classList.remove("is-active");
+      });
+      button.classList.add("is-active");
+      relationFromAya.textContent = item.fromAya;
+      relationToAya.textContent = item.toAya;
+    });
+
+    relationSelector.appendChild(button);
+  });
+}
+
+mainMenuButtons.forEach((btn) => {
   btn.addEventListener("click", () => {
     const action = btn.dataset.action;
-
-    if (action === "modal") {
-      clearPanels();
-      btn.classList.add("is-active");
-      openImageModal(btn.dataset.image, btn.dataset.alt);
-      return;
-    }
+    const panel = btn.dataset.panel;
 
     if (action === "panel") {
-      openPanel(btn.dataset.panel, btn);
+      showPanel(panel);
     }
+  });
+});
+
+document.querySelectorAll(".open-image-btn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    openImageModal(btn.dataset.image, btn.dataset.alt);
+  });
+});
+
+document.querySelectorAll(".visual-thumb").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    openImageModal(btn.dataset.image, btn.dataset.alt);
   });
 });
 
@@ -96,25 +163,13 @@ talkTabs.forEach((btn) => {
   });
 });
 
-document.querySelectorAll(".thumb-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    openImageModal(btn.dataset.image, btn.dataset.alt);
-  });
-});
+imageModalBackdrop.addEventListener("click", closeImageModal);
+imageModalClose.addEventListener("click", closeImageModal);
 
-imageModalBackdrop.addEventListener("click", () => {
-  closeImageModal();
-  menuButtons.forEach((btn) => btn.classList.remove("is-active"));
-});
-
-imageModalClose.addEventListener("click", () => {
-  closeImageModal();
-  menuButtons.forEach((btn) => btn.classList.remove("is-active"));
-});
-
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
     closeImageModal();
-    menuButtons.forEach((btn) => btn.classList.remove("is-active"));
   }
 });
+
+renderRelationButtons();
