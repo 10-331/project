@@ -384,7 +384,7 @@ button{
     width:60%;
     margin-left:10%;
     min-height:auto;
-    padding:20px 20px 18px 36px;
+    padding:25px 20px 15px 20px;
   }
 
   #talkName{
@@ -479,3 +479,4 @@ button{
     line-height:1.4;
   }
 }
+
