@@ -107,12 +107,17 @@ function openImageModal(src, alt) {
   imageModal.setAttribute("aria-hidden", "false");
 }
 
-function closeImageModal() {
+function closeImageModal({ reset = true } = {}) {
   imageModal.classList.remove("is-open");
   imageModal.setAttribute("aria-hidden", "true");
   imageModalImg.src = "";
   imageModalImg.alt = "";
-  clearActiveMenu();
+
+  if (reset) {
+    resetCharacterView();
+  } else {
+    clearActiveMenu();
+  }
 }
 
 function renderRelationButtons() {
@@ -197,27 +202,43 @@ document.querySelectorAll(".thumb-btn").forEach((btn) => {
   });
 });
 
+if (imageModalImg) {
+  imageModalImg.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
+}
+
 if (imageModalBackdrop) {
-  imageModalBackdrop.addEventListener("click", closeImageModal);
+  imageModalBackdrop.addEventListener("click", () => {
+    closeImageModal({ reset: true });
+  });
 }
 
 if (imageModalClose) {
-  imageModalClose.addEventListener("click", closeImageModal);
+  imageModalClose.addEventListener("click", () => {
+    closeImageModal({ reset: true });
+  });
 }
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     if (imageModal?.classList.contains("is-open")) {
-      closeImageModal();
+      closeImageModal({ reset: true });
     } else {
       resetCharacterView();
     }
   }
 });
 
-/* 外側タップで初期状態に戻す */
+/* メニューでも内容でもない場所を押したら初期状態に戻す */
 document.addEventListener("click", (event) => {
-  if (imageModal?.classList.contains("is-open")) return;
+  if (imageModal?.classList.contains("is-open")) {
+    const clickedDialog = event.target.closest(".image-modal-dialog");
+    if (!clickedDialog) {
+      closeImageModal({ reset: true });
+    }
+    return;
+  }
 
   const clickedMenu = menuStack?.contains(event.target);
   const clickedContent = floatingContent?.contains(event.target);
