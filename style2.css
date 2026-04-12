@@ -144,10 +144,10 @@ button{
 /* 左下IDカード本体 */
 .left-id-card{
   width:126px;          /* ← ID〜バーコードまでの幅を少し詰める */
-  margin-left:10px;     /* ← 少し中央寄せ */
+  margin-left:16px;     /* ← 少し中央寄せ */
   color:#111;
   line-height:0.88;     /* ← 縦の詰まりを強める */
-  transform:rotate(-90deg);
+  transform:rotate(-90deg) translateY(-16px);
   transform-origin:center center;
   flex:0 0 auto;
 }
