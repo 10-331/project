@@ -65,6 +65,7 @@ button{
   justify-content:center;
   align-items:center;
   overflow:hidden;
+  padding-top:52px; /* 共通ヘッダー分 */
 }
 
 .screen-frame{
@@ -74,17 +75,6 @@ button{
   overflow:hidden;
   background:#000;
   flex:0 0 auto;
-}
-
-/* 上部バー */
-.top-bar{
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  height:var(--topbar-h);
-  background:#cbccc5;
-  z-index:9;
 }
 
 /* 背景 */
@@ -196,32 +186,6 @@ button{
       #000 4px 5px,
       transparent 5px 8px
     );
-}
-
-/* メニュー */
-.menu-button{
-  position:absolute;
-  top:6px;
-  right:12px;
-  width:44px;
-  height:38px;
-  background:rgba(45,45,45,.92);
-  border-radius:10px;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  gap:5px;
-  z-index:15;
-  cursor:pointer;
-}
-
-.menu-button span{
-  display:block;
-  width:22px;
-  height:2px;
-  background:#fff;
-  border-radius:999px;
 }
 
 /* キャラ */
@@ -364,42 +328,12 @@ button{
   text-shadow:0 1px 2px rgba(0,0,0,.18);
 }
 
-/* メニューオーバーレイ */
-.menu-overlay{
-  position:absolute;
-  inset:0;
-  z-index:20;
-  display:none;
-  justify-content:flex-end;
-  align-items:flex-start;
-  padding:60px 12px 12px;
-  background:rgba(0,0,0,.28);
-}
-
-.menu-overlay.is-open{
-  display:flex;
-}
-
-.menu-card{
-  width:min(220px, 72vw);
-  background:#fff;
-  padding:12px;
-  border-radius:22px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  box-shadow:0 18px 40px rgba(0,0,0,.18);
-}
-
-.menu-card a{
-  display:block;
-  padding:14px 16px;
-  border-radius:12px;
-  font-size:16px;
-}
-
 /* 小さめ端末 */
 @media (max-width: 430px){
+  .home-screen{
+    padding-top:52px;
+  }
+
   .left-strip{
     min-width:68px;
     max-width:90px;
@@ -442,15 +376,6 @@ button{
     height:12px;
   }
 
-  .menu-button{
-    width:42px;
-    height:36px;
-  }
-
-  .menu-button span{
-    width:20px;
-  }
-
   .talk-layer{
     bottom:30%;
   }
@@ -479,6 +404,10 @@ button{
   :root{
     --topbar-h: 44px;
     --left-strip-w: 10%;
+  }
+
+  .home-screen{
+    padding-top:44px;
   }
 
   .screen-frame{
@@ -524,19 +453,6 @@ button{
     height:auto;
     bottom:auto;
     max-height:92%;
-  }
-
-  .menu-button{
-    top:5px;
-    right:8px;
-    width:40px;
-    height:32px;
-    border-radius:9px;
-    gap:4px;
-  }
-
-  .menu-button span{
-    width:18px;
   }
 
   .talk-layer{
