@@ -27,27 +27,27 @@ const SCENES = {
       background: "./assets/images/bg/bg-morning.png",
       lines: [
         { name: "綾", text: "いい天気〜！今日はどこに出かけようかな〜" },
-        { name: "綾", text: "朝の街って、少し静かだね" },
-        { name: "綾", text: "まだ人も少なくて歩きやすいかも" }
+        { name: "綾", text: "あ、あれ……おかしいな、ここどこ？" },
+        { name: "綾", text: "仕事、結構楽しくて好きなんだよね" }
       ],
-      eerieChance: 0.02,
+      eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "……あれ。今、誰かいたような" },
-        { name: "綾", text: "朝なのに、変に静かだね" }
+        { name: "綾", text: "今、なんか…………きのせい、かな" },
+        { name: "綾", text: "……お母さん、って。あ、あれ。なんだっけ？" }
       ]
     },
     {
       id: "station",
       background: "./assets/images/bg/bg-morning-station.png",
       lines: [
-        { name: "綾", text: "朝の駅はやっぱり忙しそう" },
-        { name: "綾", text: "この時間、少しだけ苦手かも" },
-        { name: "綾", text: "電車の音、今日は近く感じるね" }
+        { name: "綾", text: "わ～すごい人！　やっぱり都会ってすごいや" },
+        { name: "綾", text: "み、みんな歩くの早くない！？" },
+        { name: "綾", text: "で、電車ってどうやって乗るの！？" }
       ],
-      eerieChance: 0.02,
+      eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "……今のアナウンス、流れた？" },
-        { name: "綾", text: "誰もいないのに、音だけするね" }
+        { name: "綾", text: "……あ、れ？　なんで誰もいないんだろ" },
+        { name: "綾", text: "…………これ、本当に乗って大丈夫なやつ？" }
       ]
     }
   ],
@@ -57,28 +57,28 @@ const SCENES = {
       id: "city",
       background: "./assets/images/bg/bg-noon.png",
       lines: [
-        { name: "綾", text: "お昼の街って、朝よりずっとにぎやかだね" },
-        { name: "綾", text: "少し歩くだけでも、なんだか暑いかも" },
-        { name: "綾", text: "どこかで休んでいこうかな" }
+        { name: "綾", text: "わ～いやっとお昼だ！　ご飯何にしようかな" },
+        { name: "綾", text: "やっぱり外の空気って好きだなあ" },
+        { name: "綾", text: "珈琲飲みたくなってきたなあ" }
       ],
-      eerieChance: 0.03,
+      eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "……さっきから視線を感じる気がする" },
-        { name: "綾", text: "明るいのに、落ち着かないね" }
+        { name: "綾", text: "なんか、さっきから同じところ歩いてる？" },
+        { name: "綾", text: "変なの、誰かに見られているみたい" }
       ]
     },
     {
       id: "station",
       background: "./assets/images/bg/bg-noon-station.png",
       lines: [
-        { name: "綾", text: "昼の駅は少しだけ落ち着いてるね" },
-        { name: "綾", text: "この時間なら、まだ人混みもましかも" },
-        { name: "綾", text: "ぼんやりしてると、乗り過ごしそう" }
+        { name: "綾", text: "駅っていつ来ても混雑してるんだ……！？" },
+        { name: "綾", text: "えっ制服！？　が、学生が駅にいるってこと！？" },
+        { name: "綾", text: "地上でもわからないのに地下なんてもっと分かんないってば" }
       ],
-      eerieChance: 0.03,
+      eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "……今の音、どこからしたの？" },
-        { name: "綾", text: "人はいるのに、妙に遠く感じるね" }
+        { name: "綾", text: "昔もここに来たことあるような気がする。へんなの" },
+        { name: "綾", text: "添くんの元カノ、さん？　そ、そうなんですね……？" }
       ]
     }
   ],
@@ -88,28 +88,28 @@ const SCENES = {
       id: "city",
       background: "./assets/images/bg/bg-evening.png",
       lines: [
-        { name: "綾", text: "夕方って、なんとなく寄り道したくなる" },
-        { name: "綾", text: "この時間の街、けっこう好きかも" },
-        { name: "綾", text: "少し涼しくなってきたね" }
+        { name: "綾", text: "もう1日終わっちゃいそう。あっという間だったなあ" },
+        { name: "綾", text: "う、さすがに寒くなってきた" },
+        { name: "綾", text: "なんかいいにおいする！　お腹すいたかも" }
       ],
-      eerieChance: 0.05,
+      eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "さっきから同じ景色ばかり見てる気がする" },
-        { name: "綾", text: "この道、前にも通ったっけ" }
+        { name: "綾", text: "……夕方ね、本当は苦手なの。秘密だよ" },
+        { name: "綾", text: "帰る場所ってなんなんだろう。……なんてね、冗談だよ" }
       ]
     },
     {
       id: "station",
       background: "./assets/images/bg/bg-evening-station.png",
       lines: [
-        { name: "綾", text: "帰る人が多い時間だね" },
-        { name: "綾", text: "少しだけ、落ち着かないかも" },
-        { name: "綾", text: "夕方の駅って慌ただしいね" }
+        { name: "綾", text: "夕方のチャイムって地域差あるんだね" },
+        { name: "綾", text: "ほ、本当に人がすごいね……！？" },
+        { name: "綾", text: "このままどこか出かけようかなあ" }
       ],
-      eerieChance: 0.05,
+      eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "……ホーム、こんなに暗かったっけ" },
-        { name: "綾", text: "人はいるのに、妙に静かだね" }
+        { name: "綾", text: "……なんか、鈴みたいな音がしたような" },
+        { name: "綾", text: "ペットロボ？　あはは、好きそうに見えた？" }
       ]
     }
   ],
@@ -119,28 +119,28 @@ const SCENES = {
       id: "city",
       background: "./assets/images/bg/bg-night.png",
       lines: [
-        { name: "綾", text: "夜は静かだね" },
-        { name: "綾", text: "この時間の街、嫌いじゃないよ" },
-        { name: "綾", text: "少し歩いてから帰ろうかな" }
+        { name: "綾", text: "夜もにぎわってる場所多いね" },
+        { name: "綾", text: "へえ……星、こっちはあんまり見えないんだ" },
+        { name: "綾", text: "ん、あれ？　家どっちだっけ" }
       ],
-      eerieChance: 0.08,
+      eerieChance: 0.2,
       eerieLines: [
-        { name: "綾", text: "……誰か、見てる？" },
-        { name: "綾", text: "さっきから音がしないね" }
+        { name: "綾", text: "……私の居場所って、本当にここなのかな" },
+        { name: "綾", text: "たまに変な夢見るんだよね。忘れちゃうんだけど" }
       ]
     },
     {
       id: "station",
       background: "./assets/images/bg/bg-night-station.png",
       lines: [
-        { name: "綾", text: "この時間の駅、少し怖いね" },
-        { name: "綾", text: "人が少ないと音が響くね" },
-        { name: "綾", text: "早く帰った方がいいかな" }
+        { name: "綾", text: "終電？　始発？　……べ、勉強になります！" },
+        { name: "綾", text: "な、なんか……治安、あんまり良くなかったりする？" },
+        { name: "綾", text: "どうにかして壁を登れないかな。あっちに行きたいのに" }
       ],
-      eerieChance: 0.08,
+      eerieChance: 0.2,
       eerieLines: [
-        { name: "綾", text: "電光掲示板、全部止まってない？" },
-        { name: "綾", text: "……さっき、誰か立ってたよね" }
+        { name: "綾", text: "……さっきから同じところを歩いているような気がする" },
+        { name: "綾", text: "なにか忘れてるような……あっ今日添くんウチ来るんだっけ！？" }
       ]
     }
   ]
