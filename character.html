@@ -13,8 +13,8 @@
   <div class="character-page">
     <div class="character-stage">
 
+      <!-- 左の立ち絵 -->
       <div class="character-figure-wrap">
-        <!-- シルエット表示 -->
         <div
           class="character-figure-silhouette"
           style="--figure-url: url('./assets/images/chars/aya-home.png');"
@@ -22,128 +22,127 @@
         ></div>
       </div>
 
-      <div class="character-menu">
-        <button class="menu-card is-active" data-panel="profile">プロフィール帳</button>
-        <button class="menu-card" data-panel="talk">トークサンプル</button>
-        <button class="menu-card" data-panel="visual">ビジュアル</button>
-        <button class="menu-card" data-panel="resume">履歴書</button>
-        <button class="menu-card" data-panel="relation">関係性</button>
+      <!-- 右の選択肢 -->
+      <div class="character-menu" aria-label="character navigation">
+        <button class="menu-card" data-action="modal" data-image="./assets/images/character/profile-book.png" data-alt="プロフィール帳">
+          プロフィール帳
+        </button>
+
+        <button class="menu-card" data-action="panel" data-panel="talk">
+          トークサンプル
+        </button>
+
+        <button class="menu-card" data-action="panel" data-panel="visual">
+          ビジュアル
+        </button>
+
+        <button class="menu-card" data-action="modal" data-image="./assets/images/character/resume.png" data-alt="履歴書">
+          履歴書
+        </button>
+
+        <button class="menu-card" data-action="panel" data-panel="relation">
+          関係性
+        </button>
       </div>
 
-      <div class="character-panel-area">
-
-        <section class="character-panel is-active" id="panel-profile">
-          <div class="single-action">
-            <button
-              class="image-open-btn"
-              data-image="./assets/images/character/profile-book.png"
-              data-alt="プロフィール帳"
-            >
-              プロフィール帳を開く
-            </button>
-          </div>
-        </section>
-
-        <section class="character-panel" id="panel-resume">
-          <div class="single-action">
-            <button
-              class="image-open-btn"
-              data-image="./assets/images/character/resume.png"
-              data-alt="履歴書"
-            >
-              履歴書を開く
-            </button>
-          </div>
-        </section>
+      <!-- 押した時だけ出る内容 -->
+      <div class="character-panel-area" id="characterPanelArea" aria-live="polite">
 
         <section class="character-panel" id="panel-visual">
-          <div class="sub-tabs">
-            <button class="sub-tab is-active" data-visual-tab="full">立ち絵</button>
-            <button class="sub-tab" data-visual-tab="face">表情差分</button>
-          </div>
-
-          <div class="visual-panel is-active" id="visual-full">
-            <div class="visual-grid">
-              <button class="thumb-btn" data-image="./assets/images/chars/aya-home.png" data-alt="綾 立ち絵1">
-                <img src="./assets/images/chars/aya-home.png" alt="綾 立ち絵1" />
-              </button>
-              <button class="thumb-btn" data-image="./assets/images/chars/aya-visual-2.png" data-alt="綾 立ち絵2">
-                <img src="./assets/images/chars/aya-visual-2.png" alt="綾 立ち絵2" />
-              </button>
-              <button class="thumb-btn" data-image="./assets/images/chars/aya-visual-3.png" data-alt="綾 立ち絵3">
-                <img src="./assets/images/chars/aya-visual-3.png" alt="綾 立ち絵3" />
-              </button>
+          <div class="panel-box">
+            <div class="sub-tabs">
+              <button class="sub-tab is-active" data-visual-tab="full">立ち絵</button>
+              <button class="sub-tab" data-visual-tab="face">表情差分</button>
             </div>
-          </div>
 
-          <div class="visual-panel" id="visual-face">
-            <div class="visual-grid face-grid">
-              <button class="thumb-btn" data-image="./assets/images/chars/aya-face-1.png" data-alt="綾 表情1">
-                <img src="./assets/images/chars/aya-face-1.png" alt="綾 表情1" />
-              </button>
-              <button class="thumb-btn" data-image="./assets/images/chars/aya-face-2.png" data-alt="綾 表情2">
-                <img src="./assets/images/chars/aya-face-2.png" alt="綾 表情2" />
-              </button>
-              <button class="thumb-btn" data-image="./assets/images/chars/aya-face-3.png" data-alt="綾 表情3">
-                <img src="./assets/images/chars/aya-face-3.png" alt="綾 表情3" />
-              </button>
+            <div class="visual-panel is-active" id="visual-full">
+              <div class="visual-grid">
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-home.png" data-alt="綾 立ち絵1">
+                  <img src="./assets/images/chars/aya-home.png" alt="綾 立ち絵1" />
+                </button>
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-visual-2.png" data-alt="綾 立ち絵2">
+                  <img src="./assets/images/chars/aya-visual-2.png" alt="綾 立ち絵2" />
+                </button>
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-visual-3.png" data-alt="綾 立ち絵3">
+                  <img src="./assets/images/chars/aya-visual-3.png" alt="綾 立ち絵3" />
+                </button>
+              </div>
+            </div>
+
+            <div class="visual-panel" id="visual-face">
+              <div class="visual-grid face-grid">
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-face-1.png" data-alt="綾 表情1">
+                  <img src="./assets/images/chars/aya-face-1.png" alt="綾 表情1" />
+                </button>
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-face-2.png" data-alt="綾 表情2">
+                  <img src="./assets/images/chars/aya-face-2.png" alt="綾 表情2" />
+                </button>
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-face-3.png" data-alt="綾 表情3">
+                  <img src="./assets/images/chars/aya-face-3.png" alt="綾 表情3" />
+                </button>
+              </div>
             </div>
           </div>
         </section>
 
         <section class="character-panel" id="panel-talk">
-          <div class="sub-tabs">
-            <button class="sub-tab is-active" data-talk-tab="ten">添に対して</button>
-            <button class="sub-tab" data-talk-tab="others">他者に対して</button>
-            <button class="sub-tab" data-talk-tab="self">独白</button>
-            <button class="sub-tab" data-talk-tab="memo">話法メモ</button>
-          </div>
-
-          <div class="talk-panel is-active" id="talk-ten">
-            <div class="talk-block">
-              <p>「……別に、なんでもない」</p>
-              <p>「添、それ以上はだめ」</p>
-              <p>「そういうとこ、ずるいよ」</p>
+          <div class="panel-box">
+            <div class="sub-tabs">
+              <button class="sub-tab is-active" data-talk-tab="ten">添に対して</button>
+              <button class="sub-tab" data-talk-tab="others">他者に対して</button>
+              <button class="sub-tab" data-talk-tab="self">独白</button>
+              <button class="sub-tab" data-talk-tab="memo">話法メモ</button>
             </div>
-          </div>
 
-          <div class="talk-panel" id="talk-others">
-            <div class="talk-block">
-              <p>「あ、はい……すみません」</p>
-              <p>「えっと、私は大丈夫です」</p>
-              <p>「ありがとうございます」</p>
+            <div class="talk-panel is-active" id="talk-ten">
+              <div class="talk-block">
+                <p>「……別に、なんでもない」</p>
+                <p>「添、それ以上はだめ」</p>
+                <p>「そういうとこ、ずるいよ」</p>
+              </div>
             </div>
-          </div>
 
-          <div class="talk-panel" id="talk-self">
-            <div class="talk-block">
-              <p>「……どうしてこんなことに」</p>
-              <p>「まだ、平気」</p>
-              <p>「少しだけ、考えさせて」</p>
+            <div class="talk-panel" id="talk-others">
+              <div class="talk-block">
+                <p>「あ、はい……すみません」</p>
+                <p>「えっと、私は大丈夫です」</p>
+                <p>「ありがとうございます」</p>
+              </div>
             </div>
-          </div>
 
-          <div class="talk-panel" id="talk-memo">
-            <div class="memo-block">
-              <p><strong>一人称:</strong> 私</p>
-              <p><strong>基本口調:</strong> 柔らかいが、曖昧さを含む</p>
-              <p><strong>感情が乱れる時:</strong> 語尾が短くなる、言い淀みが増える</p>
-              <p><strong>対 添:</strong> 他者より距離が近く、抑えた感情が滲みやすい</p>
+            <div class="talk-panel" id="talk-self">
+              <div class="talk-block">
+                <p>「……どうしてこんなことに」</p>
+                <p>「まだ、平気」</p>
+                <p>「少しだけ、考えさせて」</p>
+              </div>
+            </div>
+
+            <div class="talk-panel" id="talk-memo">
+              <div class="memo-block">
+                <p><strong>一人称:</strong> 私</p>
+                <p><strong>基本口調:</strong> 柔らかいが、曖昧さを含む</p>
+                <p><strong>感情が乱れる時:</strong> 語尾が短くなる、言い淀みが増える</p>
+                <p><strong>対 添:</strong> 他者より距離が近く、抑えた感情が滲みやすい</p>
+              </div>
             </div>
           </div>
         </section>
 
         <section class="character-panel" id="panel-relation">
-          <div class="relation-list">
-            <a href="./ten.html" class="relation-card">叢雲添</a>
-            <a href="./himawari.html" class="relation-card">陽葵</a>
-            <a href="./rinon.html" class="relation-card">星野燐音</a>
+          <div class="panel-box">
+            <div class="relation-list">
+              <a href="./ten.html" class="relation-card">叢雲添</a>
+              <a href="./himawari.html" class="relation-card">陽葵</a>
+              <a href="./rinon.html" class="relation-card">星野燐音</a>
+            </div>
           </div>
         </section>
 
       </div>
     </div>
 
+    <!-- 画像モーダル -->
     <div class="image-modal" id="imageModal" aria-hidden="true">
       <div class="image-modal-backdrop" id="imageModalBackdrop"></div>
       <div class="image-modal-dialog">
