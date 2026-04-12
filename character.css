@@ -374,13 +374,13 @@ img{
 
   .menu-stack{
     top:16%;
-    left:13%;
+    left:15%;
     right:8%;
     gap:14px;
   }
 
   .menu-card{
-    width:86%;
+    width:88%;
     min-height:50px;
     padding:0 14px;
     font-size:14px;
