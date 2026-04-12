@@ -43,7 +43,7 @@ a{
   background:#F0F0F0;
 }
 
-/* 左の立ち絵領域 */
+/* 左の立ち絵 */
 .character-figure-wrap{
   position:absolute;
   left:6%;
@@ -73,16 +73,16 @@ a{
     filter .35s ease;
 }
 
-/* 右メニュー */
+/* 右のメインボタン列 */
 .character-menu{
   position:absolute;
   top:16%;
   right:9%;
-  width:40%;
+  width:30%;
   display:flex;
   flex-direction:column;
   gap:14px;
-  z-index:3;
+  z-index:4;
 }
 
 .menu-card{
@@ -108,13 +108,13 @@ a{
     inset 0 -4px 0 rgba(0,0,0,.10);
 }
 
-/* 内容エリアは初期非表示 */
+/* 左に開く内容パネル */
 .character-panel-area{
   position:absolute;
-  top:16%;
-  left:47%;
-  width:45%;
-  height:70%;
+  top:18%;
+  right:36%;
+  width:34%;
+  height:54%;
   z-index:2;
   pointer-events:none;
 }
@@ -200,7 +200,7 @@ a{
 .talk-block,
 .memo-block{
   border:1px solid rgba(0,0,0,.12);
-  background:rgba(255,255,255,.62);
+  background:rgba(255,255,255,.72);
   border-radius:18px;
   padding:14px;
 }
@@ -317,10 +317,10 @@ a{
   }
 
   .character-panel-area{
-    top:16%;
-    left:48%;
-    width:43%;
-    height:70%;
+    top:18%;
+    right:38%;
+    width:32%;
+    height:48%;
   }
 
   .sub-tabs{
