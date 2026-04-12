@@ -16,6 +16,9 @@ const relationFromAya = document.getElementById("relationFromAya");
 const relationToAya = document.getElementById("relationToAya");
 const relationSelector = document.getElementById("relationSelector");
 
+const menuStack = document.querySelector(".menu-stack");
+const floatingContent = document.querySelector(".floating-content");
+
 const relationData = [
   {
     id: "ten",
@@ -70,6 +73,11 @@ function showPanel(panelId, cardEl) {
   const target = document.getElementById(`panel-${panelId}`);
   if (target) target.classList.add("is-active");
   if (cardEl) cardEl.classList.add("is-active");
+}
+
+function resetCharacterView() {
+  hidePanels();
+  clearActiveMenu();
 }
 
 function openVisualTab(name) {
@@ -145,7 +153,9 @@ function renderRelationButtons() {
 }
 
 menuCards.forEach((card) => {
-  card.addEventListener("click", () => {
+  card.addEventListener("click", (event) => {
+    event.stopPropagation();
+
     const mode = card.dataset.mode;
 
     if (mode === "image") {
@@ -163,19 +173,22 @@ menuCards.forEach((card) => {
 });
 
 visualTabs.forEach((btn) => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (event) => {
+    event.stopPropagation();
     openVisualTab(btn.dataset.visualTab);
   });
 });
 
 talkTabs.forEach((btn) => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (event) => {
+    event.stopPropagation();
     openTalkTab(btn.dataset.talkTab);
   });
 });
 
 document.querySelectorAll(".thumb-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (event) => {
+    event.stopPropagation();
     openImageModal(btn.dataset.image, btn.dataset.alt);
   });
 });
@@ -185,7 +198,23 @@ imageModalClose.addEventListener("click", closeImageModal);
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
-    closeImageModal();
+    if (imageModal.classList.contains("is-open")) {
+      closeImageModal();
+    } else {
+      resetCharacterView();
+    }
+  }
+});
+
+/* メニューでも内容でもない場所を押したら初期状態に戻す */
+document.addEventListener("click", (event) => {
+  if (imageModal.classList.contains("is-open")) return;
+
+  const clickedMenu = menuStack?.contains(event.target);
+  const clickedContent = floatingContent?.contains(event.target);
+
+  if (!clickedMenu && !clickedContent) {
+    resetCharacterView();
   }
 });
 
