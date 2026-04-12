@@ -138,7 +138,7 @@ button{
   display:flex;
   align-items:flex-end;
   justify-content:center;
-  padding-bottom:34px; /* ← 少し上に持ち上げる */
+  padding-bottom:40px; /* ← 少し上に持ち上げる */
 }
 
 /* 左下IDカード本体 */
