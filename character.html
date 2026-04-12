@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Character</title>
+<link rel="stylesheet" href="./character.css" />
+</head>
+<body>
+
+<div class="character-page">
+
+  <!-- 左：立ち絵 -->
+  <div class="character-left">
+    <img src="./assets/images/chars/aya-home.png" class="character-img" />
+  </div>
+
+  <!-- 右：UI -->
+  <div class="character-right">
+
+    <!-- メニュー -->
+    <div class="menu">
+      <button data-target="profile">プロフィール帳</button>
+      <button data-target="resume">履歴書</button>
+      <button data-target="visual">ビジュアル</button>
+      <button data-target="talk">トーク</button>
+      <button data-target="relation">関係性</button>
+    </div>
+
+    <!-- 内容 -->
+    <div class="content">
+
+      <!-- ビジュアル -->
+      <div id="visual" class="panel active">
+        <div class="visual-grid">
+          <img src="./assets/images/chars/aya-home.png" class="zoomable" />
+          <img src="./assets/images/chars/aya-visual-2.png" class="zoomable" />
+          <img src="./assets/images/chars/aya-visual-3.png" class="zoomable" />
+        </div>
+
+        <div class="visual-grid face">
+          <img src="./assets/images/chars/aya-face-1.png" class="zoomable" />
+          <img src="./assets/images/chars/aya-face-2.png" class="zoomable" />
+          <img src="./assets/images/chars/aya-face-3.png" class="zoomable" />
+        </div>
+      </div>
+
+      <!-- トーク -->
+      <div id="talk" class="panel">
+        <div class="talk-tabs">
+          <button data-tab="ten" class="active">添</button>
+          <button data-tab="others">他者</button>
+          <button data-tab="self">独白</button>
+        </div>
+
+        <div class="talk-content active" id="talk-ten">
+          <p>「……別に、なんでもない」</p>
+          <p>「添、それ以上はだめ」</p>
+        </div>
+
+        <div class="talk-content" id="talk-others">
+          <p>「あ、はい…すみません」</p>
+        </div>
+
+        <div class="talk-content" id="talk-self">
+          <p>「……どうしてこんなことに」</p>
+        </div>
+      </div>
+
+      <!-- 関係 -->
+      <div id="relation" class="panel">
+        <a href="ten.html">叢雲添</a>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- モーダル -->
+<div class="modal" id="modal">
+  <div class="modal-bg"></div>
+  <img id="modal-img" />
+</div>
+
+<script src="./character.js"></script>
+</body>
+</html>
