@@ -7,9 +7,6 @@ const bgMorning = document.getElementById("bgMorning");
 const bgEvening = document.getElementById("bgEvening");
 const bgNight = document.getElementById("bgNight");
 
-const menuButton = document.getElementById("menuButton");
-const menuOverlay = document.getElementById("menuOverlay");
-
 /*
   自動再生
   5000 = 5秒
@@ -294,20 +291,6 @@ function restartAutoAdvance() {
 if (talkBox) {
   talkBox.addEventListener("click", () => {
     nextLine(true);
-  });
-}
-
-/* メニュー */
-if (menuButton && menuOverlay) {
-  menuButton.addEventListener("click", (e) => {
-    e.stopPropagation();
-    menuOverlay.classList.toggle("is-open");
-  });
-
-  menuOverlay.addEventListener("click", (e) => {
-    if (e.target === menuOverlay) {
-      menuOverlay.classList.remove("is-open");
-    }
   });
 }
 
