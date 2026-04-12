@@ -4,15 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Home UI Prototype</title>
+
+  <link rel="stylesheet" href="./shared/header.css" />
   <link rel="stylesheet" href="./style2.css" />
 </head>
 <body>
+
+  <!-- 共通ヘッダー -->
+  <div id="commonHeaderMount"></div>
+
   <div class="app">
     <main class="home-screen" id="homeScreen">
       <div class="screen-frame">
-
-        <!-- 上部バー -->
-        <div class="top-bar"></div>
 
         <!-- 背景 -->
         <div class="bg-layer">
@@ -34,13 +37,6 @@
             </div>
           </div>
         </aside>
-
-        <!-- 右上メニュー -->
-        <button class="menu-button" id="menuButton" type="button" aria-label="menu">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
 
         <!-- キャラ -->
         <section class="character-layer">
@@ -86,22 +82,11 @@
           </button>
         </section>
 
-        <!-- メニューオーバーレイ -->
-        <div class="menu-overlay" id="menuOverlay">
-          <div class="menu-card">
-            <a href="./index.html">ホーム</a>
-            <a href="./game.html">ゲーム</a>
-            <a href="./novel.html">小説</a>
-            <a href="./character.html">キャラクター紹介</a>
-            <a href="./world.html">世界設定</a>
-            <a href="./gallery.html">ギャラリー</a>
-          </div>
-        </div>
-
       </div>
     </main>
   </div>
 
+  <script src="./shared/header.js"></script>
   <script src="./app2.js"></script>
 </body>
 </html>
