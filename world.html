@@ -60,16 +60,18 @@
         var(--safe-left);
     }
 
+    /* 背景：等高線と世界地図の線画を合成 */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       background-image:
-        url("data:image/svg+xml,%3Csvg width='1000' height='1000' viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 150 Q 250 100 500 150 T 1000 150 M0 450 Q 250 400 500 450 T 1000 450 M0 750 Q 250 700 500 750 T 1000 750' fill='none' stroke='rgba(74,64,56,0.05)' stroke-width='1'/%3E%3Ccircle cx='150' cy='150' r='2' fill='rgba(74,64,56,0.08)'/%3E%3Ccircle cx='850' cy='450' r='2' fill='rgba(74,64,56,0.08)'/%3E%3Cpath d='M300 0 L300 1000 M700 0 L700 1000' fill='none' stroke='rgba(74,64,56,0.025)' stroke-width='1'/%3E%3C/svg%3E");
-      background-size: cover;
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='600' viewBox='0 0 1200 600' opacity='0.04'%3E%3Cpath d='M150 150 L200 130 L250 160 L300 140 L350 180 L320 250 L250 280 L180 250 Z M500 100 L600 80 L700 120 L750 200 L700 300 L600 350 L500 320 L450 200 Z M850 250 L950 220 L1050 260 L1000 350 L900 380 L800 320 Z M200 400 L300 380 L400 420 L350 500 L250 520 L150 480 Z' fill='none' stroke='%234a4038' stroke-width='1'/%3E%3C/svg%3E"),
+        url("data:image/svg+xml,%3Csvg width='1000' height='1000' viewBox='0 0 1000 1000' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 150 Q 250 100 500 150 T 1000 150 M0 450 Q 250 400 500 450 T 1000 450 M0 750 Q 250 700 500 750 T 1000 750' fill='none' stroke='rgba(74,64,56,0.04)' stroke-width='1'/%3E%3Ccircle cx='150' cy='150' r='2' fill='rgba(74,64,56,0.06)'/%3E%3Ccircle cx='850' cy='450' r='2' fill='rgba(74,64,56,0.06)'/%3E%3Cpath d='M300 0 L300 1000 M700 0 L700 1000' fill='none' stroke='rgba(74,64,56,0.02)' stroke-width='1'/%3E%3C/svg%3E");
+      background-size: 1400px auto, cover;
+      background-position: center;
       z-index: -2;
       pointer-events: none;
-      opacity: .9;
     }
 
     a {
@@ -90,10 +92,7 @@
       display: flex;
       align-items: center;
       position: relative;
-      padding:
-        calc(var(--header-h) + 44px)
-        0
-        88px;
+      padding: calc(var(--header-h) + 44px) 0 88px;
     }
 
     .hero-bg-accent {
@@ -171,10 +170,6 @@
       border-right-color: var(--text-main);
     }
 
-    .mobile-nav {
-      display: none;
-    }
-
     /* --- SECTION CARDS --- */
     .section-wrapper {
       margin-bottom: clamp(96px, 18vh, 220px);
@@ -241,15 +236,24 @@
       transform: translateY(0);
     }
 
-.card-content::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 34px;
-  height: 34px;
-  background: linear-gradient(-135deg, transparent 50%, var(--bg-base) 50%);
-}
+    /* 右上の装飾：逆三角形（下向き矢印風）、アニメーション追加 */
+    .card-content::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 40px;
+      height: 20px;
+      background: var(--bg-base);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      opacity: 0.8;
+      animation: arrow-slide-down 2s ease-out forwards;
+      animation-play-state: paused;
+    }
+
+    .card-content.is-visible::after {
+      animation-play-state: running;
+    }
 
     .card-title {
       font-size: clamp(1.4rem, 3.6vw, 2.35rem);
@@ -276,6 +280,23 @@
       padding-top: 22px;
     }
 
+    .ui-item {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+      animation-play-state: paused;
+    }
+
+    .card-content.is-visible .ui-item {
+      opacity: 1;
+      transform: translateY(0);
+      animation-play-state: running;
+    }
+
+    /* ステータス項目のアニメーション遅延 */
+    .card-content.is-visible .ui-item:nth-child(1) { transition-delay: 0.3s; }
+    .card-content.is-visible .ui-item:nth-child(2) { transition-delay: 0.45s; }
+
     .ui-item-label {
       font-family: var(--font-ui);
       font-size: 0.56rem;
@@ -295,14 +316,10 @@
       overflow-wrap: anywhere;
     }
 
-    .village-section .district-tag {
-      color: var(--accent-red);
-    }
+    .village-section .district-tag { color: var(--accent-red); }
+    .village-section .card-title { color: var(--accent-red); }
 
-    .village-section .card-title {
-      color: var(--accent-red);
-    }
-
+    /* FOOTER */
     .footer-archive {
       padding: 120px 0 64px;
       text-align: center;
@@ -316,47 +333,18 @@
       line-height: 1.8;
     }
 
-    /* --- Tablet --- */
+    /* アニメーション定義 */
+    @keyframes arrow-slide-down {
+      0% { transform: translateY(-10px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 0.8; }
+    }
+
+    /* ---Tablet--- */
     @media (max-width: 980px) {
-      .container {
-        padding: 0 18px;
-      }
-
-      .hero {
-        padding-top: calc(var(--header-h) + 32px);
-        padding-bottom: 64px;
-      }
-
-      .hero-bg-accent {
-        right: -6px;
-        font-size: clamp(5rem, 17vw, 10rem);
-        opacity: .8;
-      }
-
-      .editorial-card {
-        grid-template-columns: 1fr;
-        gap: 18px;
-      }
-
-      .card-meta {
-        position: static;
-        margin-bottom: 0;
-        padding-left: 0;
-      }
-
-      .huge-number {
-        font-size: clamp(4.2rem, 12vw, 6rem);
-        margin-bottom: 8px;
-      }
-
-      .card-content {
-        padding: clamp(24px, 5vw, 42px);
-      }
-
-      .side-nav {
-        display: none;
-      }
-
+      .container { padding: 0 18px; }
+      .editorial-card { grid-template-columns: 1fr; gap: 18px; }
+      .card-meta { position: static; }
+      .side-nav { display: none; }
       .mobile-nav {
         display: flex;
         position: sticky;
@@ -364,157 +352,25 @@
         z-index: 90;
         gap: 10px;
         overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
         padding: 8px 0 12px;
-        margin: 0 0 18px;
         scrollbar-width: none;
       }
-
-      .mobile-nav::-webkit-scrollbar {
-        display: none;
-      }
-
       .mobile-nav a {
         flex: 0 0 auto;
         min-height: 36px;
-        display: inline-flex;
-        align-items: center;
         padding: 0 14px;
         border: 1px solid var(--border-thin);
         background: var(--glass-bg-strong);
         color: var(--text-main);
         font-family: var(--font-ui);
         font-size: 0.7rem;
-        letter-spacing: 0.14em;
-        text-transform: uppercase;
         border-radius: 999px;
-        box-shadow: 0 8px 20px rgba(40, 28, 20, 0.05);
-        white-space: nowrap;
       }
     }
 
-    /* --- Mobile --- */
     @media (max-width: 640px) {
-      :root {
-        --header-h: 52px;
-      }
-
-      body {
-        line-height: 1.85;
-      }
-
-      .container {
-        padding: 0 14px;
-      }
-
-      .hero {
-        min-height: auto;
-        padding:
-          calc(var(--header-h) + 24px)
-          0
-          44px;
-      }
-
-      .hero-bg-accent {
-        right: -18px;
-        top: 18%;
-        transform: none;
-        font-size: 4.2rem;
-        writing-mode: horizontal-tb;
-        letter-spacing: .04em;
-        color: rgba(0,0,0,0.03);
-      }
-
-      .hero-content {
-        max-width: 100%;
-      }
-
-      .text-group {
-        margin-bottom: 54px;
-      }
-
-      .text-group p {
-        font-size: clamp(.98rem, 4.6vw, 1.18rem);
-        letter-spacing: 0.04em;
-        line-height: 1.95;
-        margin-bottom: .25rem;
-      }
-
-      .section-wrapper {
-        margin-bottom: 84px;
-      }
-
-      .district-tag {
-        font-size: 0.64rem;
-        letter-spacing: 0.18em;
-        gap: 10px;
-      }
-
-      .district-tag::before {
-        width: 24px;
-      }
-
-      .card-content {
-        padding: 22px 18px 20px;
-        border-radius: 0;
-      }
-
-      .card-content::after {
-        width: 24px;
-        height: 24px;
-      }
-
-      .card-title {
-        margin-bottom: 18px;
-        font-size: clamp(1.2rem, 6vw, 1.55rem);
-        line-height: 1.5;
-      }
-
-      .card-body p {
-        font-size: 0.95rem;
-        margin-bottom: 1rem;
-      }
-
-      .ui-status-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
-        margin-top: 24px;
-        padding-top: 18px;
-      }
-
-      .ui-item-value {
-        font-size: 0.82rem;
-      }
-
-      .footer-archive {
-        padding: 72px 0 40px;
-      }
-
-      .footer-archive p {
-        font-size: 0.62rem;
-        letter-spacing: 0.22em;
-      }
-    }
-
-    /* --- Very small devices --- */
-    @media (max-width: 390px) {
-      .text-group p {
-        font-size: 0.95rem;
-      }
-
-      .huge-number {
-        font-size: 3.6rem;
-      }
-
-      .mobile-nav a {
-        padding: 0 12px;
-        font-size: 0.64rem;
-        letter-spacing: 0.1em;
-      }
-
-      .card-content {
-        padding: 20px 16px 18px;
-      }
+      .text-group p { font-size: clamp(.98rem, 4.6vw, 1.18rem); }
+      .card-content { padding: 22px 18px 20px; border-radius: 0; }
     }
   </style>
 </head>
