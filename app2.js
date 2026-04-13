@@ -2,11 +2,7 @@ const talkBox = document.getElementById("talkBox");
 const talkName = document.getElementById("talkName");
 const talkText = document.getElementById("talkText");
 const leftTime = document.getElementById("leftTime");
-
-const bgMorning = document.getElementById("bgMorning");
-const bgNoon = document.getElementById("bgNoon");
-const bgEvening = document.getElementById("bgEvening");
-const bgNight = document.getElementById("bgNight");
+const mainBg = document.getElementById("mainBg");
 
 /*
   自動再生
@@ -190,9 +186,7 @@ function buildScene(period) {
           mode: parsed.mode === "eerie" ? "eerie" : "normal"
         };
       }
-    } catch (e) {
-      // 壊れていても作り直す
-    }
+    } catch (e) {}
   }
 
   const baseScene = pickRandom(SCENES[period]);
@@ -216,26 +210,12 @@ function buildScene(period) {
   return result;
 }
 
+/* 背景適用（1枚だけ） */
 function applyBackground(scene) {
-  if (!bgMorning || !bgNoon || !bgEvening || !bgNight) return;
+  if (!mainBg || !scene?.background) return;
 
-  bgMorning.classList.remove("is-active");
-  bgNoon.classList.remove("is-active");
-  bgEvening.classList.remove("is-active");
-  bgNight.classList.remove("is-active");
-
-  if (scene.period === "morning") {
-    bgMorning.src = scene.background;
-    bgMorning.classList.add("is-active");
-  } else if (scene.period === "noon") {
-    bgNoon.src = scene.background;
-    bgNoon.classList.add("is-active");
-  } else if (scene.period === "evening") {
-    bgEvening.src = scene.background;
-    bgEvening.classList.add("is-active");
-  } else {
-    bgNight.src = scene.background;
-    bgNight.classList.add("is-active");
+  if (mainBg.getAttribute("src") !== scene.background) {
+    mainBg.setAttribute("src", scene.background);
   }
 }
 
@@ -290,9 +270,7 @@ function nextLine(fromTap = true) {
   currentLineIndex = (currentLineIndex + 1) % currentScene.lines.length;
   renderLine();
 
-  if (fromTap) {
-    restartAutoAdvance();
-  }
+  if (fromTap) restartAutoAdvance();
 }
 
 function stopAutoAdvance() {
