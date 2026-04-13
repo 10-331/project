@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>World Archive</title>
+
+  <link rel="stylesheet" href="./shared/header.css" />
+
+  <style>
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    :root{
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+
+      --topbar-h: 52px;
+
+      --bg-1:#0d1016;
+      --bg-2:#141925;
+      --bg-3:#090b10;
+
+      --text:#f3efe8;
+      --muted:rgba(243,239,232,.68);
+
+      --panel:rgba(13,16,24,.68);
+      --panel-soft:rgba(18,22,32,.58);
+      --line:rgba(255,255,255,.10);
+
+      --accent-blue:#7aa7c8;
+      --accent-gray:#a7afbf;
+      --accent-red:#b84f4f;
+
+      --shadow:0 16px 40px rgba(0,0,0,.28);
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    html,body{
+      width:100%;
+      min-height:100%;
+    }
+
+    body{
+      background:
+        radial-gradient(circle at 50% 12%, rgba(122,167,200,.14), transparent 28%),
+        radial-gradient(circle at 50% 82%, rgba(184,79,79,.10), transparent 26%),
+        linear-gradient(180deg, var(--bg-2) 0%, #10131b 28%, #0c0f15 58%, var(--bg-3) 100%);
+      color:var(--text);
+      font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+      line-height:1.85;
+      letter-spacing:.03em;
+      overflow-x:hidden;
+      padding:
+        var(--safe-top)
+        var(--safe-right)
+        max(28px, var(--safe-bottom))
+        var(--safe-left);
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size:28px 28px;
+      mask-image:linear-gradient(180deg, rgba(0,0,0,.6), transparent 90%);
+      z-index:0;
+    }
+
+    img{
+      display:block;
+      max-width:100%;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    button{
+      font:inherit;
+      border:none;
+      background:none;
+    }
+
+    .page{
+      position:relative;
+      z-index:1;
+      width:min(100%, 1040px);
+      margin:0 auto;
+      padding:14px 14px 72px;
+    }
+
+    .hero{
+      position:relative;
+      min-height:86svh;
+      min-height:86dvh;
+      display:flex;
+      align-items:center;
+      padding-top:72px; /* 共通ヘッダー分 */
+      padding-bottom:8vh;
+    }
+
+    .hero-box{
+      width:100%;
+      position:relative;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.03), transparent 30%),
+        rgba(9,12,18,.42);
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+      padding:clamp(28px, 6vw, 58px);
+      overflow:hidden;
+    }
+
+    .hero-box::after{
+      content:"WORLD ARCHIVE";
+      position:absolute;
+      top:16px;
+      right:18px;
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      font-size:11px;
+      letter-spacing:.18em;
+      color:rgba(243,239,232,.34);
+    }
+
+    .hero-lead{
+      display:grid;
+      gap:clamp(44px, 9vw, 96px);
+      max-width:42rem;
+    }
+
+    .lead-block p{
+      font-size:clamp(20px, 4.1vw, 34px);
+      line-height:1.9;
+      text-shadow:0 4px 16px rgba(0,0,0,.24);
+    }
+
+    .lead-block p + p{
+      margin-top:.15em;
+    }
+
+    .lead-block.soft{
+      color:rgba(243,239,232,.92);
+    }
+
+    .lead-block.deep p:last-child{
+      color:#f1d0bd;
+    }
+
+    .micro-noise{
+      margin-top:10px;
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      font-size:11px;
+      color:rgba(243,239,232,.34);
+      letter-spacing:.12em;
+    }
+
+    .scroll-indicator{
+      position:absolute;
+      left:50%;
+      bottom:22px;
+      transform:translateX(-50%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      font-size:11px;
+      color:rgba(243,239,232,.52);
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .scroll-indicator::after{
+      content:"";
+      width:1px;
+      height:38px;
+      background:linear-gradient(180deg, rgba(255,255,255,.8), transparent);
+      animation:floatLine 1.8s ease-in-out infinite;
+    }
+
+    @keyframes floatLine{
+      0%,100%{
+        transform:translateY(0);
+        opacity:.4;
+      }
+      50%{
+        transform:translateY(6px);
+        opacity:.9;
+      }
+    }
+
+    .quick-nav{
+      position:sticky;
+      top:56px;
+      z-index:15;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin:0 0 22px;
+      padding:12px 0 6px;
+      backdrop-filter:blur(8px);
+      -webkit-backdrop-filter:blur(8px);
+    }
+
+    .quick-nav a{
+      min-height:38px;
+      display:inline-flex;
+      align-items:center;
+      padding:0 14px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      background:rgba(10,13,20,.56);
+      box-shadow:var(--shadow);
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      font-size:12px;
+      letter-spacing:.08em;
+      color:rgba(243,239,232,.82);
+    }
+
+    .timeline{
+      position:relative;
+      display:grid;
+      gap:26px;
+    }
+
+    .timeline::before{
+      content:"";
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:16px;
+      width:1px;
+      background:linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
+    }
+
+    .section-card{
+      position:relative;
+      margin-left:34px;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:var(--panel);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      opacity:0;
+      transform:translateY(28px);
+      transition:
+        opacity .9s ease,
+        transform .9s ease,
+        border-color .35s ease,
+        background .35s ease;
+    }
+
+    .section-card.is-visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .section-card::before{
+      content:"";
+      position:absolute;
+      left:-26px;
+      top:34px;
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background:#0d1017;
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:0 0 0 6px rgba(255,255,255,.035);
+    }
+
+    .section-head{
+      padding:24px 22px 18px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .section-label{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+
+    .section-index{
+      min-width:42px;
+      height:26px;
+      padding:0 10px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      font-size:11px;
+      color:rgba(243,239,232,.78);
+    }
+
+    .section-title{
+      font-size:clamp(26px, 5vw, 42px);
+      line-height:1.2;
+      font-weight:500;
+    }
+
+    .section-sub{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      line-height:1.75;
+    }
+
+    .section-body{
+      padding:22px;
+      display:grid;
+      gap:18px;
+    }
+
+    .section-body p{
+      font-size:15px;
+      color:rgba(243,239,232,.92);
+    }
+
+    .quote-line{
+      padding-left:14px;
+      border-left:3px solid rgba(255,255,255,.16);
+      font-size:16px;
+      color:rgba(243,239,232,.96);
+    }
+
+    .info-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+      margin-top:2px;
+    }
+
+    .mini-card{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      padding:14px 14px 12px;
+    }
+
+    .mini-title{
+      margin-bottom:7px;
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:rgba(243,239,232,.5);
+    }
+
+    .mini-text{
+      font-size:13px;
+      line-height:1.75;
+      color:rgba(243,239,232,.86);
+    }
+
+    .keyword-list{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .keyword{
+      min-height:34px;
+      display:inline-flex;
+      align-items:center;
+      padding:0 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.035);
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      font-size:12px;
+      color:rgba(243,239,232,.88);
+      letter-spacing:.04em;
+    }
+
+    .hama .section-head{
+      background:linear-gradient(180deg, rgba(122,167,200,.16), rgba(122,167,200,.03));
+    }
+
+    .bureau .section-head{
+      background:linear-gradient(180deg, rgba(167,175,191,.15), rgba(167,175,191,.03));
+    }
+
+    .bureau{
+      background:
+        linear-gradient(180deg, rgba(170,178,194,.06), transparent 22%),
+        rgba(13,16,24,.70);
+    }
+
+    .bureau .quote-line{
+      border-left-color:rgba(167,175,191,.55);
+    }
+
+    .village{
+      background:
+        linear-gradient(180deg, rgba(184,79,79,.08), transparent 24%),
+        rgba(12,10,11,.76);
+      border-color:rgba(184,79,79,.24);
+      transform:translateY(28px) skewX(-.6deg);
+    }
+
+    .village.is-visible{
+      transform:translateY(0) skewX(-.6deg);
+    }
+
+    .village::after{
+      content:"WARNING: CLASSIFIED";
+      position:absolute;
+      top:14px;
+      right:16px;
+      font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+      font-size:10px;
+      letter-spacing:.14em;
+      color:rgba(241,144,144,.68);
+    }
+
+    .village .section-head{
+      background:linear-gradient(180deg, rgba(184,79,79,.14), rgba(143,122,98,.03));
+    }
+
+    .village .quote-line{
+      border-left-color:rgba(184,79,79,.62);
+      color:#f0ddd2;
+    }
+
+    .footer-note{
+      margin:30px 0 0 34px;
+      padding:24px 22px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:24px;
+      background:rgba(10,13,20,.72);
+      box-shadow:var(--shadow);
+      opacity:0;
+      transform:translateY(20px);
+      transition:opacity .9s ease, transform .9s ease;
+    }
+
+    .footer-note.is-visible{
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .footer-note p{
+      font-size:14px;
+      color:rgba(243,239,232,.86);
+    }
+
+    .footer-note p + p{
+      margin-top:12px;
+    }
+
+    @media (max-width: 720px){
+      .page{
+        padding-inline:14px;
+      }
+
+      .hero{
+        min-height:82svh;
+        min-height:82dvh;
+      }
+
+      .hero-box,
+      .section-card,
+      .footer-note{
+        border-radius:24px;
+      }
+
+      .lead-block p{
+        font-size:clamp(18px, 5.8vw, 28px);
+        line-height:1.95;
+      }
+
+      .quick-nav{
+        top:52px;
+      }
+
+      .timeline::before{
+        left:12px;
+      }
+
+      .section-card{
+        margin-left:28px;
+      }
+
+      .section-card::before{
+        left:-21px;
+      }
+
+      .section-title{
+        font-size:clamp(24px, 7vw, 34px);
+      }
+
+      .section-body p{
+        font-size:14px;
+      }
+
+      .info-grid{
+        grid-template-columns:1fr;
+      }
+
+      .footer-note{
+        margin-left:28px;
+      }
+    }
+
+    @media (min-width: 900px){
+      .hero-box{
+        padding:58px 66px;
+      }
+
+      .section-head{
+        padding:28px 28px 22px;
+      }
+
+      .section-body{
+        padding:26px 28px 30px;
+      }
+
+      .section-body p{
+        font-size:16px;
+      }
+
+      .footer-note p{
+        font-size:15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="commonHeaderMount"></div>
+
+  <div class="page">
+    <section class="hero" aria-labelledby="worldTitle">
+      <div class="hero-box">
+        <h1 id="worldTitle" style="position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;">世界設定</h1>
+
+        <div class="hero-lead">
+          <div class="lead-block">
+            <p>誰もが旅に焦がれる近未来。</p>
+            <p>観光業の競争が熾烈を極めるJPNでは、</p>
+            <p>人気観光地は「独立観光特区」として</p>
+            <p>独自の発展を遂げていた。</p>
+          </div>
+
+          <div class="lead-block soft">
+            <p>めくるめく色づいていくHAMA18区と、</p>
+            <p>その地に身を置いたばかりの彼女。</p>
+            <p>未体験の新しい出会いと、</p>
+            <p>ほんの少しの違和感。</p>
+          </div>
+
+          <div class="lead-block deep">
+            <p>ずっと、何か大事なことを忘れている気がした。</p>
+            <p>ぼんやりとした違和感を辿るように、彼女は外へ足を運ぶ。</p>
+            <p>祭囃子の鳴る方へ。</p>
+            <p>今日こそ、お里へ往くために。</p>
+            <div class="micro-noise">──本当に？</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-indicator" aria-hidden="true">Scroll</div>
+    </section>
+
+    <nav class="quick-nav" aria-label="世界設定のセクション移動">
+      <a href="#hama">CURRENT</a>
+      <a href="#bureau">S局</a>
+      <a href="#village">村</a>
+    </nav>
+
+    <main class="timeline">
+      <section id="hama" class="section-card hama reveal">
+        <div class="section-head">
+          <div class="section-label">
+            <span class="section-index">01</span>
+            <span>Current / HAMA18区</span>
+          </div>
+          <h2 class="section-title">光と観光の街で、彼女は今を生きている。</h2>
+          <div class="section-sub">
+            再開発、観光事業、祭礼区画、居住区。HAMA18区はJPNでも高い集客力を持つ独立観光特区のひとつとされている。
+          </div>
+        </div>
+
+        <div class="section-body">
+          <p>
+            光、音、広告、観光、熱気。HAMA18区は、訪れる者ごとに異なる顔を見せる街だ。
+            昼は洗練された商業区、夜は雑多で鮮やかな歓楽街として、整えられた景観と説明しきれない余白が同居している。
+          </p>
+
+          <p>
+            彼女がいま身を置くのも、このHAMA18区である。見知らぬ街。見知らぬ仕事。見知らぬ人々。
+            それでも不思議と、ここへ来るべくして来たような感覚だけが残っていた。
+          </p>
+
+          <p class="quote-line">
+            賑わいは、安心の証明であると同時に、異物を見えなくするための幕でもある。
+          </p>
+
+          <div class="info-grid">
+            <div class="mini-card">
+              <div class="mini-title">Area Notes</div>
+              <div class="mini-text">
+                観光導線に沿って整備された街区と、その隙間に残る旧来の名残が共存している。
+                祭の気配が都市の中に溶け込んでいる。
+              </div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-title">Mood</div>
+              <div class="mini-text">
+                華やかさ、匿名性、熱気。人の多さが安心にも不穏さにも見える、不安定な明るさを持つエリア。
+              </div>
+            </div>
+          </div>
+
+          <div class="keyword-list" aria-label="HAMA18区のキーワード">
+            <span class="keyword">独立観光特区</span>
+            <span class="keyword">HAMA18区</span>
+            <span class="keyword">再開発地区</span>
+            <span class="keyword">祭礼エリア</span>
+            <span class="keyword">居住区</span>
+            <span class="keyword">商業区</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="bureau" class="section-card bureau reveal">
+        <div class="section-head">
+          <div class="section-label">
+            <span class="section-index">02</span>
+            <span>Archive / S局</span>
+          </div>
+          <h2 class="section-title">記録することと、隠すことは、ときどき同じ意味になる。</h2>
+          <div class="section-sub">
+            S局は一般社会の表層からは見えにくい機関であり、異常事案や秘匿記録と接していると噂されている。
+          </div>
+        </div>
+
+        <div class="section-body">
+          <p>
+            整然とした管理。曖昧な記録。表に出ない報告。S局は真実を保存する場所であると同時に、
+            真実を見えなくするための場所でもある。どこまでが保全で、どこからが隠蔽なのか、その境界はいつも不明瞭だ。
+          </p>
+
+          <p>
+            彼女もまた、かつてこの組織と無関係ではいられなかった。何を見てきたのか、どのような役割を担っていたのか。
+            いま残っているのは、断片的な輪郭だけである。
+          </p>
+
+          <p class="quote-line">
+            記録されることは、保存ではなく隔離に近い。
+          </p>
+
+          <div class="info-grid">
+            <div class="mini-card">
+              <div class="mini-title">Function</div>
+              <div class="mini-text">
+                異常事案、非公開案件、整理されない記録。社会の外縁で起こる出来事に、静かに関わり続けている。
+              </div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-title">Impression</div>
+              <div class="mini-text">
+                正しさのための組織にも、都合のための組織にも見える。見る角度によって意味が変わる場所。
+              </div>
+            </div>
+          </div>
+
+          <div class="keyword-list" aria-label="S局のキーワード">
+            <span class="keyword">S局</span>
+            <span class="keyword">特別案件</span>
+            <span class="keyword">秘匿記録</span>
+            <span class="keyword">異常事案</span>
+            <span class="keyword">保全部門</span>
+            <span class="keyword">実働部門</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="village" class="section-card village reveal">
+        <div class="section-head">
+          <div class="section-label">
+            <span class="section-index">03</span>
+            <span>Root / 村</span>
+          </div>
+          <h2 class="section-title">祭囃子の鳴る方へ。すべての違和感は、そこへ遡っていく。</h2>
+          <div class="section-sub">
+            地図の上では小さな共同体であっても、その土地には長く引き継がれてきた風習と、外から見えない決まりが残っている。
+          </div>
+        </div>
+
+        <div class="section-body">
+          <p>
+            村には祭があり、祠があり、鈴の音があり、外の人間には測りきれない結びつきがあった。
+            信仰と生活は分かたれず、人も家も土地も、ひとつの流れの中に置かれていた。
+          </p>
+
+          <p>
+            やがて、その村は大きな喪失を迎える。消えた人々。残された痕跡。燃えたものと、消えたものと、残ってしまったもの。
+            彼女の違和感は、いつだってこの場所へ繋がっている。
+          </p>
+
+          <p class="quote-line">
+            異常と呼ぶには近すぎて、日常と呼ぶには遠すぎる。
+          </p>
+
+          <div class="info-grid">
+            <div class="mini-card">
+              <div class="mini-title">Custom</div>
+              <div class="mini-text">
+                共同体の内部でだけ共有される暗黙の規範が強く、外部から見れば異質でも、内部では生活の一部として扱われている。
+              </div>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-title">Afterimage</div>
+              <div class="mini-text">
+                村の記憶は過去に留まらず、現在の感覚や行動にまで薄く影を落としている。
+              </div>
+            </div>
+          </div>
+
+          <div class="keyword-list" aria-label="村のキーワード">
+            <span class="keyword">因習村</span>
+            <span class="keyword">神隠し</span>
+            <span class="keyword">祠</span>
+            <span class="keyword">鈴</span>
+            <span class="keyword">祭</span>
+            <span class="keyword">消失事件</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <section class="footer-note reveal">
+      <p>
+        現在を知ることは、過去を辿ることでもある。街の賑わいも、秘匿された記録も、遠い村の祭囃子も、すべてはひとつの物語の上に折り重なっている。
+      </p>
+      <p>
+        彼女が忘れているものは何か。この街で出会うものは何を意味するのか。その答えは、まだページの奥に眠っている。
+      </p>
+    </section>
+  </div>
+
+  <script src="./shared/header.js"></script>
+
+  <script>
+    const revealTargets = document.querySelectorAll('.reveal');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, {
+      threshold: 0.12
+    });
+
+    revealTargets.forEach((el) => observer.observe(el));
+  </script>
+</body>
+</html>
