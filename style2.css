@@ -92,7 +92,11 @@ button{
   object-fit:cover;
   object-position:center center;
   opacity:0;
-  transition:opacity .5s ease;
+  transition:opacity .35s ease;
+}
+
+.bg-image.is-ready{
+  opacity:1;
 }
 
 .bg-image.is-active{
