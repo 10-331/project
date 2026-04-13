@@ -241,15 +241,15 @@
       transform: translateY(0);
     }
 
-    .card-content::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 34px;
-      height: 34px;
-      background: linear-gradient(135deg, transparent 50%, var(--bg-base) 50%);
-    }
+.card-content::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(-135deg, transparent 50%, var(--bg-base) 50%);
+}
 
     .card-title {
       font-size: clamp(1.4rem, 3.6vw, 2.35rem);
@@ -278,7 +278,7 @@
 
     .ui-item-label {
       font-family: var(--font-ui);
-      font-size: 0.62rem;
+      font-size: 0.56rem;
       color: var(--text-soft);
       text-transform: uppercase;
       letter-spacing: 0.14em;
@@ -289,7 +289,7 @@
 
     .ui-item-value {
       font-family: var(--font-ui);
-      font-size: 0.88rem;
+      font-size: 0.8rem;
       font-weight: 500;
       line-height: 1.6;
       overflow-wrap: anywhere;
@@ -445,7 +445,7 @@
       }
 
       .district-tag {
-        font-size: 0.66rem;
+        font-size: 0.64rem;
         letter-spacing: 0.18em;
         gap: 10px;
       }
