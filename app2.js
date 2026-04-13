@@ -145,6 +145,8 @@ const SCENES = {
 let currentPeriod = "";
 let currentLineIndex = 0;
 let currentScene = null;
+let currentBgSrc = "";
+let pendingBgToken = 0;
 
 function pickRandom(arr) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -186,7 +188,9 @@ function buildScene(period) {
           mode: parsed.mode === "eerie" ? "eerie" : "normal"
         };
       }
-    } catch (e) {}
+    } catch (e) {
+      // 壊れていても作り直す
+    }
   }
 
   const baseScene = pickRandom(SCENES[period]);
@@ -210,12 +214,44 @@ function buildScene(period) {
   return result;
 }
 
-/* 背景適用（1枚だけ） */
-function applyBackground(scene) {
+function preloadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.decoding = "async";
+    img.onload = () => resolve(src);
+    img.onerror = () => reject(new Error(`画像を読み込めませんでした: ${src}`));
+    img.src = src;
+  });
+}
+
+/*
+  背景適用
+  - 読み込み完了後に差し替える
+  - 連続切り替え時は最後の要求だけ反映
+*/
+async function applyBackground(scene) {
   if (!mainBg || !scene?.background) return;
 
-  if (mainBg.getAttribute("src") !== scene.background) {
-    mainBg.setAttribute("src", scene.background);
+  const nextSrc = scene.background;
+  if (currentBgSrc === nextSrc) return;
+
+  const token = ++pendingBgToken;
+
+  try {
+    await preloadImage(nextSrc);
+
+    if (token !== pendingBgToken) return;
+
+    mainBg.classList.remove("is-ready");
+    mainBg.src = nextSrc;
+    currentBgSrc = nextSrc;
+
+    requestAnimationFrame(() => {
+      if (token !== pendingBgToken) return;
+      mainBg.classList.add("is-ready");
+    });
+  } catch (error) {
+    console.error(error);
   }
 }
 
@@ -270,7 +306,9 @@ function nextLine(fromTap = true) {
   currentLineIndex = (currentLineIndex + 1) % currentScene.lines.length;
   renderLine();
 
-  if (fromTap) restartAutoAdvance();
+  if (fromTap) {
+    restartAutoAdvance();
+  }
 }
 
 function stopAutoAdvance() {
@@ -296,6 +334,12 @@ function restartAutoAdvance() {
 if (talkBox) {
   talkBox.addEventListener("click", () => {
     nextLine(true);
+  });
+}
+
+if (mainBg) {
+  mainBg.addEventListener("load", () => {
+    mainBg.classList.add("is-ready");
   });
 }
 
