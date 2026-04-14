@@ -251,7 +251,7 @@ img{
   margin-left:4%;
   margin-top:20px;
   min-height:100px;
-  margin-left:2%;
+  margin-left:10%;
 }
 
 .floating-content{
@@ -434,9 +434,9 @@ img{
 
 .secret-trigger{
   position:absolute;
-  right:8%;
-  bottom:8%;
-  width:66px;
+  right:20%;
+  bottom:19%;
+  width:70px;
   height:84px;
   z-index:6;
   cursor:pointer;
@@ -466,7 +466,7 @@ img{
 
 .secret-trigger__back{
   background:#0f0f12;
-  transform:translate(10px, 12px);
+  transform:translate(6px, 8px);
   z-index:1;
 }
 
@@ -885,9 +885,10 @@ img{
   }
 
   .secret-trigger{
-    right:7%;
-    bottom:7%;
+    right:12%;
+    bottom:15%;
     width:58px;
     height:74px;
   }
 }
+
