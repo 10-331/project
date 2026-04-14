@@ -802,25 +802,25 @@ img{
   }
 
   .menu-card--profile{
-    width:63%;
-    margin-left:14%;
+    width:80%;
+    margin-left:0%;
   }
 
   .menu-card--talk{
-    width:52%;
+    width:35%;
     min-height:76px;
     margin-left:0;
   }
 
   .menu-card--visual{
-    width:58%;
-    min-height:96px;
-    margin-left:18%;
+    width:38%;
+    min-height:120px;
+    margin-left:45%;
   }
 
   .menu-card--resume{
     width:72%;
-    min-height:88px;
+    min-height:100px;
     margin-left:5%;
   }
 
