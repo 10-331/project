@@ -42,16 +42,10 @@ img{
   overflow:hidden;
 }
 
-/* 右上の黒い飾りは消す */
-.board-corner{
-  display:none;
-}
-
-/* 左右 4:6 */
 .board-left{
   position:absolute;
   inset:0 auto 0 0;
-  width:40%;
+  width:44%;
   z-index:1;
 }
 
@@ -87,10 +81,9 @@ img{
   -webkit-mask-position:center bottom;
   mask-position:center bottom;
   -webkit-mask-size:100%;
-  mask-size:300%;
+  mask-size:280%;
 
-  /* ここで位置だけ動かす */
-  transform: translate(6%, 10%);
+  transform: translate(12%, 0%);
 }
 
 /* 右のメニュー札 */
