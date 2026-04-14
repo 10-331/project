@@ -119,9 +119,9 @@ img{
 
 .character-silhouette{
   position:absolute;
-  left:-4%;
-  bottom:10%;
-  width:300%;
+  left:-25%;
+  bottom:2%;
+  width:200%;
   height:300%;
   background:#b7b5b8;
   opacity:.96;
@@ -783,12 +783,11 @@ img{
   }
 
   .character-silhouette{
-    left:-80%;
-    top:-1%;
-    width:280%;
-    height:100%;
-    -webkit-mask-size:100%;
-    mask-size:100%;
+    left:-10%;
+    width:130%;
+    height:90%;
+    -webkit-mask-size:88%;
+    mask-size:88%;
   }
 
   .menu-stack{
