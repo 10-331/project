@@ -224,6 +224,7 @@ img{
 .menu-card--talk{
   --card-bg:var(--paper-talk);
   width:30%;
+  margin-top:20px;
   min-height:150px;
   margin-left:2%;
 }
@@ -231,6 +232,7 @@ img{
 .menu-card--visual{
   --card-bg:var(--paper-visual);
   width:40%;
+  margin-top:-100px;
   min-height:200px;
   margin-left:40%;
 }
@@ -247,6 +249,9 @@ img{
   width:34%;
   min-height:94px;
   margin-left:4%;
+  margin-top:20px;
+  min-height:100px;
+  margin-left:2%;
 }
 
 .floating-content{
