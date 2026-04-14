@@ -219,27 +219,26 @@ img{
 .menu-card--profile{
   --card-bg:var(--paper-profile);
   width:80%;
-  margin-left:16%;
 }
 
 .menu-card--talk{
   --card-bg:var(--paper-talk);
-  width:60%;
-  min-height:84px;
+  width:30%;
+  min-height:150px;
   margin-left:2%;
 }
 
 .menu-card--visual{
   --card-bg:var(--paper-visual);
-  width:52%;
-  min-height:118px;
-  margin-left:22%;
+  width:40%;
+  min-height:200px;
+  margin-left:40%;
 }
 
 .menu-card--resume{
   --card-bg:var(--paper-resume);
   width:66%;
-  min-height:102px;
+  min-height:160px;
   margin-left:8%;
 }
 
