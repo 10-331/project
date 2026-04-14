@@ -34,7 +34,7 @@ html {
 }
 
 body {
-  background: url("./assets/images/bg/detail_bg.png") center center / cover no-repeat fixed;
+  background: url("../images/bg/detail_bg.png") center center / cover no-repeat fixed;
   color: var(--text-main);
   font-family: var(--font-serif);
   line-height: 1.95;
