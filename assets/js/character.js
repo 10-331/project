@@ -17,7 +17,11 @@ const relationToAya = document.getElementById("relationToAya");
 const relationSelector = document.getElementById("relationSelector");
 
 const menuStack = document.querySelector(".menu-stack");
-const floatingContent = document.querySelector(".floating-content");
+const floatingContent = document.getElementById("floatingContent");
+const characterPage = document.getElementById("characterPage");
+const secretTrigger = document.getElementById("secretTrigger");
+
+let isCorrupted = false;
 
 const relationData = [
   {
@@ -89,6 +93,8 @@ function openTalkTab(name) {
 }
 
 function openImageModal(src, alt) {
+  if (!imageModal || !imageModalImg) return;
+
   imageModalImg.src = src;
   imageModalImg.alt = alt || "";
   imageModal.classList.add("is-open");
@@ -96,6 +102,8 @@ function openImageModal(src, alt) {
 }
 
 function closeImageModal({ reset = true } = {}) {
+  if (!imageModal || !imageModalImg) return;
+
   imageModal.classList.remove("is-open");
   imageModal.setAttribute("aria-hidden", "true");
   imageModalImg.src = "";
@@ -142,11 +150,41 @@ function renderRelationButtons() {
         relationToAya.textContent = item.toAya;
         relationFromAya.style.opacity = "1";
         relationToAya.style.opacity = "1";
-      }, 50);
+      }, 60);
     });
 
     relationSelector.appendChild(button);
   });
+}
+
+function runGlitchBurst() {
+  if (!characterPage) return;
+
+  characterPage.classList.remove("glitch-burst");
+  void characterPage.offsetWidth;
+  characterPage.classList.add("glitch-burst");
+
+  window.setTimeout(() => {
+    characterPage.classList.remove("glitch-burst");
+  }, 380);
+}
+
+function setCorruptedState(nextState) {
+  isCorrupted = nextState;
+
+  if (!characterPage || !secretTrigger) return;
+
+  characterPage.classList.toggle("is-corrupted", isCorrupted);
+  secretTrigger.setAttribute(
+    "aria-label",
+    isCorrupted ? "通常ページに戻す" : "裏ページに切り替える"
+  );
+
+  runGlitchBurst();
+}
+
+function toggleCorruptedState() {
+  setCorruptedState(!isCorrupted);
 }
 
 menuCards.forEach((card) => {
@@ -190,6 +228,13 @@ document.querySelectorAll(".thumb-btn").forEach((btn) => {
   });
 });
 
+if (secretTrigger) {
+  secretTrigger.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleCorruptedState();
+  });
+}
+
 if (imageModalImg) {
   imageModalImg.addEventListener("click", (event) => {
     event.stopPropagation();
@@ -212,13 +257,12 @@ document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") {
     if (imageModal?.classList.contains("is-open")) {
       closeImageModal({ reset: true });
-    } else {
-      resetCharacterView();
+      return;
     }
+    resetCharacterView();
   }
 });
 
-/* メニューでも内容でもない場所を押したら初期状態に戻す */
 document.addEventListener("click", (event) => {
   if (imageModal?.classList.contains("is-open")) {
     const clickedDialog = event.target.closest(".image-modal-dialog");
@@ -230,8 +274,9 @@ document.addEventListener("click", (event) => {
 
   const clickedMenu = menuStack?.contains(event.target);
   const clickedContent = floatingContent?.contains(event.target);
+  const clickedSecret = secretTrigger?.contains(event.target);
 
-  if (!clickedMenu && !clickedContent) {
+  if (!clickedMenu && !clickedContent && !clickedSecret) {
     resetCharacterView();
   }
 });
