@@ -150,7 +150,6 @@ img{
 
 .menu-card{
   --card-bg:#ddd;
-  --card-tilt:0deg;
   position:relative;
   width:74%;
   min-height:62px;
@@ -214,7 +213,6 @@ img{
   --card-bg:var(--paper-profile);
   width:80%;
   margin-left:0;
-  --card-tilt:0deg;
 }
 
 .menu-card--profile .menu-card__deco{
@@ -230,10 +228,9 @@ img{
 .menu-card--talk{
   --card-bg:var(--paper-talk);
   width:30%;
-  margin-top:20px;
+  margin-top:30px;
   min-height:150px;
   margin-left:2%;
-  --card-tilt:-2deg;
 }
 
 .menu-card--talk .menu-card__deco{
@@ -243,10 +240,9 @@ img{
 .menu-card--visual{
   --card-bg:var(--paper-visual);
   width:40%;
-  margin-top:-100px;
+  margin-top:-130px;
   min-height:200px;
   margin-left:40%;
-  --card-tilt:3deg;
 }
 
 .menu-card--visual .menu-card__deco{
@@ -258,7 +254,6 @@ img{
   width:66%;
   min-height:160px;
   margin-left:8%;
-  --card-tilt:-1deg;
 }
 
 .menu-card--resume::after{
@@ -290,7 +285,7 @@ img{
   min-height:94px;
   margin-left:10%;
   margin-top:20px;
-  --card-tilt:2deg;
+
 }
 
 .menu-card--relation .menu-card__deco{
@@ -876,22 +871,23 @@ img{
 
   .menu-card--talk{
     width:32%;
-    min-height:130px;
+    min-height:80px;
     margin-left:0;
     margin-top:14px;
   }
 
   .menu-card--visual{
     width:40%;
-    min-height:170px;
+    min-height:100px;
     margin-left:42%;
-    margin-top:-88px;
+    margin-top:-80px;
   }
 
   .menu-card--resume{
     width:70%;
-    min-height:120px;
+    min-height:95px;
     margin-left:6%;
+    margin-top:5px;
   }
 
   .menu-card--relation{
