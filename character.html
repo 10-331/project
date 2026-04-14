@@ -4,51 +4,74 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Character</title>
-<link rel="stylesheet" href="./assets/css/header.css" />
-<link rel="stylesheet" href="./assets/css/character.css" />
+  <link rel="stylesheet" href="./assets/css/header.css" />
+  <link rel="stylesheet" href="./assets/css/character.css" />
 </head>
 <body>
   <div id="commonHeaderMount"></div>
 
-  <main class="character-page">
+  <main class="character-page" id="characterPage">
     <section class="character-board">
 
+      <div class="board-noise" aria-hidden="true"></div>
+      <div class="board-vignette" aria-hidden="true"></div>
       <div class="board-corner" aria-hidden="true"></div>
 
       <div class="board-left">
-<div
-  class="character-silhouette"
-  style="--figure-url: url('/project/assets/images/chars/aya-home.png');"
-  aria-hidden="true"
-></div>
+        <div
+          class="character-silhouette"
+          style="--figure-url: url('/project/assets/images/chars/aya-home.png');"
+          aria-hidden="true"
+        ></div>
       </div>
 
       <div class="board-right">
         <nav class="menu-stack" aria-label="character menu">
-          <button class="menu-card" data-mode="image" data-image="./assets/images/character/profile-book.png" data-alt="プロフィール帳">
-            プロフィール帳
+          <button
+            class="menu-card menu-card--profile"
+            data-mode="image"
+            data-image="./assets/images/character/profile-book.png"
+            data-alt="プロフィール帳"
+          >
+            <span class="menu-card__label" data-text="プロフィール">プロフィール</span>
           </button>
 
-          <button class="menu-card" data-mode="panel" data-panel="talk">
-            トークサンプル
+          <button
+            class="menu-card menu-card--talk"
+            data-mode="panel"
+            data-panel="talk"
+          >
+            <span class="menu-card__label" data-text="トークサンプル">トークサンプル</span>
           </button>
 
-          <button class="menu-card" data-mode="panel" data-panel="visual">
-            ビジュアル
+          <button
+            class="menu-card menu-card--visual"
+            data-mode="panel"
+            data-panel="visual"
+          >
+            <span class="menu-card__label" data-text="ビジュアル">ビジュアル</span>
           </button>
 
-          <button class="menu-card" data-mode="image" data-image="./assets/images/character/resume.png" data-alt="履歴書">
-            履歴書
+          <button
+            class="menu-card menu-card--resume"
+            data-mode="image"
+            data-image="./assets/images/character/resume.png"
+            data-alt="履歴書"
+          >
+            <span class="menu-card__label" data-text="履歴書">履歴書</span>
           </button>
 
-          <button class="menu-card menu-card--accent" data-mode="panel" data-panel="relation">
-            関係性
+          <button
+            class="menu-card menu-card--relation"
+            data-mode="panel"
+            data-panel="relation"
+          >
+            <span class="menu-card__label" data-text="関係性">関係性</span>
           </button>
         </nav>
       </div>
 
       <div class="floating-content" id="floatingContent">
-        <!-- 初期は非表示 -->
         <section class="content-panel" id="panel-talk">
           <div class="content-card">
             <div class="subtabs">
@@ -151,6 +174,16 @@
         </section>
       </div>
 
+      <button
+        class="secret-trigger"
+        id="secretTrigger"
+        type="button"
+        aria-label="裏ページに切り替える"
+        title="切り替え"
+      >
+        <span class="secret-trigger__front"></span>
+        <span class="secret-trigger__back"></span>
+      </button>
     </section>
 
     <div class="image-modal" id="imageModal" aria-hidden="true">
@@ -162,7 +195,7 @@
     </div>
   </main>
 
-<script src="./assets/js/header.js"></script>
-<script src="./assets/js/character.js"></script>
+  <script src="./assets/js/header.js"></script>
+  <script src="./assets/js/character.js"></script>
 </body>
 </html>
