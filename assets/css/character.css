@@ -218,22 +218,19 @@ img{
 
 .menu-card--profile{
   --card-bg:var(--paper-profile);
-  --card-tilt:-1deg;
-  width:58%;
+  width:80%;
   margin-left:16%;
 }
 
 .menu-card--talk{
   --card-bg:var(--paper-talk);
-  --card-tilt:-2deg;
-  width:48%;
+  width:60%;
   min-height:84px;
   margin-left:2%;
 }
 
 .menu-card--visual{
   --card-bg:var(--paper-visual);
-  --card-tilt:1deg;
   width:52%;
   min-height:118px;
   margin-left:22%;
@@ -241,7 +238,6 @@ img{
 
 .menu-card--resume{
   --card-bg:var(--paper-resume);
-  --card-tilt:.5deg;
   width:66%;
   min-height:102px;
   margin-left:8%;
@@ -249,7 +245,6 @@ img{
 
 .menu-card--relation{
   --card-bg:var(--paper-relation);
-  --card-tilt:-1deg;
   width:34%;
   min-height:94px;
   margin-left:4%;
