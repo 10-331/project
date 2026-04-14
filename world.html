@@ -2,100 +2,682 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>World Archive | HAMA 18-DISTRICT</title>
+
   <link rel="stylesheet" href="./shared/header.css" />
-  <link rel="stylesheet" href="./world.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Serif+JP:wght@300;600&family=Outfit:wght@100;300;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+
+      --header-h: 52px;
+
+      --text-main: #2b2622;
+      --text-soft: rgba(43, 38, 34, 0.52);
+
+      --accent-blue: #86a9bf;
+      --accent-red: #b86c6c;
+      --accent-gray: #a2a8b3;
+
+      --glass-bg: rgba(255, 255, 255, 0.52);
+      --glass-bg-strong: rgba(255, 255, 255, 0.72);
+      --border-thin: rgba(74, 64, 56, 0.12);
+      --shadow-soft: 0 18px 40px rgba(40, 28, 20, 0.08);
+
+      --font-serif: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", serif;
+      --font-en: "Cinzel", serif;
+      --font-ui: "Outfit", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: url("./assets/images/bg/detail_bg.png") center center / cover no-repeat fixed;
+      color: var(--text-main);
+      font-family: var(--font-serif);
+      line-height: 1.95;
+      overflow-x: hidden;
+      padding:
+        var(--safe-top)
+        var(--safe-right)
+        max(20px, var(--safe-bottom))
+        var(--safe-left);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font: inherit;
+      border: none;
+      background: none;
+      color: inherit;
+    }
+
+    .container {
+      width: min(100%, 1100px);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* --- HERO SECTION --- */
+    .hero {
+      min-height: min(100svh, 920px);
+      min-height: min(100dvh, 920px);
+      display: flex;
+      align-items: center;
+      position: relative;
+      padding: calc(var(--header-h) + 44px) 0 88px;
+    }
+
+    .hero-bg-accent {
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-en);
+      font-size: clamp(6rem, 18vw, 13rem);
+      color: rgba(0, 0, 0, 0.025);
+      z-index: -1;
+      writing-mode: vertical-rl;
+      line-height: 1;
+      pointer-events: none;
+      letter-spacing: -0.04em;
+      user-select: none;
+    }
+
+    .hero-content {
+      width: 100%;
+      max-width: 820px;
+      min-height: 58vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .text-group {
+      margin-bottom: clamp(56px, 10vh, 116px);
+      opacity: 0;
+      transform: translateY(-18px);
+      filter: blur(5px);
+      transition:
+        opacity 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.95s cubic-bezier(0.16, 1, 0.3, 1),
+        filter 0.95s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+
+    .text-group.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      filter: blur(0);
+      pointer-events: auto;
+    }
+
+    .text-group p {
+      font-size: clamp(0.94rem, 2.05vw, 1.24rem);
+      letter-spacing: 0.06em;
+      margin-bottom: 0.28rem;
+      font-weight: 300;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    .text-group.last-group p:last-child {
+      color: var(--accent-red);
+      font-weight: 500;
+      margin-top: 0.8rem;
+    }
+
+    /* --- NAVIGATION --- */
+    .side-nav {
+      position: fixed;
+      left: 32px;
+      bottom: 32px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .side-nav a {
+      font-family: var(--font-ui);
+      font-size: 0.65rem;
+      color: var(--text-soft);
+      letter-spacing: 0.28em;
+      writing-mode: vertical-rl;
+      padding: 12px 0;
+      border-right: 1px solid var(--border-thin);
+      transition: color .3s ease, border-color .3s ease;
+    }
+
+    .side-nav a:hover {
+      color: var(--text-main);
+      border-right-color: var(--text-main);
+    }
+
+    .mobile-nav {
+      display: none;
+    }
+
+    /* --- SECTION CARDS --- */
+    .section-wrapper {
+      margin-bottom: clamp(96px, 18vh, 220px);
+      scroll-margin-top: calc(var(--header-h) + 18px);
+    }
+
+    .editorial-card {
+      display: grid;
+      grid-template-columns: minmax(180px, .78fr) minmax(0, 1.22fr);
+      gap: 40px;
+      align-items: start;
+    }
+
+    .card-meta {
+      position: sticky;
+      top: calc(var(--header-h) + 28px);
+      align-self: start;
+    }
+
+    .huge-number {
+      font-family: var(--font-en);
+      font-size: clamp(5.4rem, 10vw, 8.6rem);
+      line-height: 0.82;
+      color: rgba(0,0,0,0.035);
+      margin-bottom: 12px;
+    }
+
+    .district-tag {
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      letter-spacing: 0.26em;
+      color: var(--accent-blue);
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      line-height: 1.6;
+    }
+
+    .district-tag::before {
+      content: "";
+      width: 36px;
+      height: 1px;
+      background: currentColor;
+      flex: 0 0 auto;
+    }
+
+    .card-content {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: clamp(28px, 6vw, 72px);
+      border: 1px solid var(--border-thin);
+      position: relative;
+      box-shadow: var(--shadow-soft);
+      opacity: 0;
+      transform: translateY(34px);
+      transition: all 1s ease;
+      min-width: 0;
+    }
+
+    .card-content.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-content::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 28px;
+      height: 28px;
+      background: rgba(255,255,255,.92);
+      clip-path: polygon(100% 0, 0 0, 100% 100%);
+      opacity: 0.95;
+    }
+
+    .card-content::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      width: 34px;
+      height: 34px;
+      background: rgba(255,255,255,.92);
+      clip-path: polygon(0 100%, 100% 100%, 100% 0);
+      opacity: 0.95;
+    }
+
+    .card-title {
+      font-size: clamp(1.4rem, 3.6vw, 2.35rem);
+      font-weight: 600;
+      line-height: 1.45;
+      margin-bottom: 28px;
+      word-break: keep-all;
+      overflow-wrap: anywhere;
+    }
+
+    .card-body p {
+      margin-bottom: 1.4rem;
+      font-size: clamp(.95rem, 2vw, 1.05rem);
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .ui-status-grid {
+      margin-top: 36px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+      border-top: 1px solid var(--border-thin);
+      padding-top: 22px;
+    }
+
+    .ui-item {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .card-content.is-visible .ui-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-content.is-visible .ui-item:nth-child(1) { transition-delay: 0.22s; }
+    .card-content.is-visible .ui-item:nth-child(2) { transition-delay: 0.34s; }
+
+    .ui-item-label {
+      font-family: var(--font-ui);
+      font-size: 0.56rem;
+      color: var(--text-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      display: block;
+      margin-bottom: 5px;
+      line-height: 1.6;
+    }
+
+    .ui-item-value {
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      font-weight: 500;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    /* ここだけ追加: 既存構造を壊さず説明トリガー化 */
+    .world-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+      color: inherit;
+      cursor: pointer;
+      transition: opacity .2s ease;
+    }
+
+    .world-trigger:hover {
+      opacity: 0.74;
+    }
+
+    .world-trigger::after {
+      content: "↗";
+      font-size: 0.72em;
+      opacity: 0.5;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    .village-section .district-tag { color: var(--accent-red); }
+    .village-section .card-title { color: var(--accent-red); }
+
+    .footer-archive {
+      padding: 120px 0 64px;
+      text-align: center;
+    }
+
+    .footer-archive p {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      letter-spacing: 0.34em;
+      color: var(--text-soft);
+      line-height: 1.8;
+    }
+
+    /* --- term modal --- */
+    .term-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      z-index: 999;
+    }
+
+    .term-modal.is-open {
+      display: block;
+    }
+
+    .term-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.54);
+      opacity: 0;
+      transition: opacity .22s ease;
+    }
+
+    .term-modal.is-open .term-modal-backdrop {
+      opacity: 1;
+    }
+
+    .term-modal-dialog {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(88vw, 520px);
+      padding: 22px 20px 20px;
+      background: #f4f4f4;
+      color: #232323;
+      border: 1px solid rgba(0,0,0,.08);
+      border-radius: 18px;
+      box-shadow: 0 24px 60px rgba(0,0,0,.22);
+      transform: translate(-50%, calc(-50% + 10px));
+      opacity: 0;
+      transition: opacity .22s ease, transform .22s ease;
+    }
+
+    .term-modal.is-open .term-modal-dialog {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+
+    .term-modal-label {
+      margin: 0 0 8px;
+      font-family: var(--font-ui);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      color: #7a7a7a;
+    }
+
+    .term-modal-title {
+      margin: 0 0 12px;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .term-modal-body {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.8;
+      white-space: pre-line;
+    }
+
+    .term-modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.06);
+      color: #333;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .term-modal-close:hover {
+      background: rgba(0,0,0,.12);
+    }
+
+    /* --- Tablet --- */
+    @media (max-width: 980px) {
+      .container { padding: 0 18px; }
+
+      .editorial-card {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .card-meta {
+        position: static;
+      }
+
+      .side-nav {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: flex;
+        position: sticky;
+        top: calc(var(--header-h) + 6px);
+        z-index: 90;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 8px 0 12px;
+        scrollbar-width: none;
+      }
+
+      .mobile-nav::-webkit-scrollbar {
+        display: none;
+      }
+
+      .mobile-nav a {
+        flex: 0 0 auto;
+        min-width: 104px;
+        min-height: 38px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 0 14px;
+        border: 1px solid var(--border-thin);
+        background: var(--glass-bg-strong);
+        color: var(--text-main);
+        font-family: var(--font-ui);
+        font-size: 0.67rem;
+        letter-spacing: 0.12em;
+        border-radius: 10px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: calc(var(--header-h) + 26px) 0 52px;
+      }
+
+      .hero-content {
+        min-height: 46vh;
+      }
+
+      .hero-bg-accent {
+        font-size: 4.4rem;
+        right: -16px;
+      }
+
+      .text-group p {
+        font-size: clamp(0.88rem, 4vw, 1.05rem);
+        letter-spacing: 0.035em;
+      }
+
+      .card-content {
+        padding: 22px 18px 20px;
+        border-radius: 0;
+      }
+
+      .card-content::after {
+        width: 22px;
+        height: 22px;
+      }
+
+      .card-content::before {
+        width: 26px;
+        height: 26px;
+      }
+
+      .term-modal-dialog {
+        width: min(90vw, 420px);
+        padding: 18px 16px 16px;
+        border-radius: 16px;
+      }
+
+      .term-modal-title {
+        font-size: 18px;
+      }
+
+      .term-modal-body {
+        font-size: 13px;
+        line-height: 1.75;
+      }
+    }
+  </style>
 </head>
 <body>
+
   <div id="commonHeaderMount"></div>
 
-  <main class="world-page">
-    <div class="world-shell">
+  <nav class="side-nav" aria-label="section navigation">
+    <a href="#hama">HAMA / D18</a>
+    <a href="#bureau">S-BUREAU</a>
+    <a href="#village">ORIGIN</a>
+  </nav>
 
-      <nav class="world-topnav" aria-label="section navigation">
-        <a href="#section-current">HAMA / D18</a>
-        <a href="#section-bureau">S-BUREAU</a>
-        <a href="#section-origin">ORIGIN</a>
-      </nav>
+  <div class="container">
+    <section class="hero">
+      <div class="hero-bg-accent" aria-hidden="true">HAMA</div>
 
-      <header class="world-hero">
-        <h1>HAMA</h1>
-        <div class="hero-copy">
+      <div class="hero-content">
+        <div class="text-group reveal">
           <p>誰もが旅に焦がれる近未来。</p>
           <p>観光業の競争が熾烈を極めるJPNでは、</p>
           <p>人気観光地は”独立観光特区”として</p>
           <p>活躍していた。</p>
+        </div>
+
+        <div class="text-group reveal">
           <p>めくるめく色づいていくHAMA18区と、</p>
           <p>その地に身を置いたばかりの彼女。</p>
           <p>未知の出会いと、ほんの少しの違和感。</p>
+        </div>
+
+        <div class="text-group last-group reveal">
           <p>──ずっと、何かを忘れているような気がしていた。</p>
           <p>ぼんやりとした違和感を探すために、彼女は外へ足を運ぶ。</p>
           <p>祭囃子の鳴る方へ、呼ばれた場所へと往くために。</p>
         </div>
-      </header>
+      </div>
+    </section>
 
-      <nav class="world-index" aria-label="chapter index">
-        <a href="#section-current">CURRENT</a>
-        <a href="#section-bureau">S-BUREAU</a>
-        <a href="#section-origin">ORIGIN</a>
-      </nav>
+    <nav class="mobile-nav" aria-label="section navigation mobile">
+      <a href="#hama">CURRENT</a>
+      <a href="#bureau">S-BUREAU</a>
+      <a href="#village">ORIGIN</a>
+    </nav>
 
-      <section class="world-section" id="section-current">
-        <div class="section-no">01</div>
-        <div class="section-meta">Current: HAMA</div>
-        <h2>光と観光の街で、<br>彼女は今を生きている。</h2>
+    <main>
+      <section id="hama" class="section-wrapper">
+        <div class="editorial-card">
+          <div class="card-meta">
+            <div class="huge-number">01</div>
+            <div class="district-tag">Current: HAMA</div>
+          </div>
 
-        <div class="section-copy">
-          <p>昼は洗練された商業区、夜は雑多で鮮やかな歓楽街。HAMA18区は、JPNの中でも高い集客力を誇る独立観光特区のひとつだ。</p>
-          <p>観光のために整えられた都市でありながら、その隙間には古い気配や説明しきれない余白が残されている。彼女がいま暮らしているのも、この街の一角である。</p>
-        </div>
+          <div class="card-content reveal">
+            <h2 class="card-title">光と観光の街で、<br>彼女は今を生きている。</h2>
+            <div class="card-body">
+              <p>昼は洗練された商業区、夜は雑多で鮮やかな歓楽街。再開発が進むHAMA18区は、訪れる者ごとに異なる顔を見せる。彼女が今身を置く場所も、この喧騒の只中にある。</p>
+            </div>
 
-        <div class="world-keywords">
-          <button class="world-keyword" data-term="hama18">HAMA18区</button>
-          <button class="world-keyword" data-term="tourist-zone">独立観光特区</button>
-          <button class="world-keyword" data-term="discomfort">違和感</button>
-        </div>
-      </section>
-
-      <section class="world-section" id="section-bureau">
-        <div class="section-no">02</div>
-        <div class="section-meta">Archive: S-Log</div>
-        <h2>記録することと、<br>隠すことは、<br>ときどき同じ意味になる。</h2>
-
-        <div class="section-copy">
-          <p>S局。一般社会の表層からは見えにくい機関。異常事案や秘匿記録を管理するその場所は、真実を保存し、同時に隔離する場所でもある。</p>
-          <p>彼女もまた、かつてこの組織と無関係ではいられなかった。任務、記録、そして秘匿。断片的な記憶の輪郭は、いつもこの無機質な場所を指し示している。</p>
-        </div>
-
-        <div class="world-keywords">
-          <button class="world-keyword" data-term="deviant">変異体</button>
-          <button class="world-keyword" data-term="local-bureau">防衛省 地方支分部局</button>
-          <button class="world-keyword" data-term="s-bureau">S局</button>
-          <button class="world-keyword" data-term="classified">秘匿記録</button>
+            <div class="ui-status-grid">
+              <div class="ui-item">
+                <span class="ui-item-label">Locus</span>
+                <button class="ui-item-value world-trigger" type="button" data-term="hama18">HAMA18区</button>
+              </div>
+              <div class="ui-item">
+                <span class="ui-item-label">Authority</span>
+                <button class="ui-item-value world-trigger" type="button" data-term="tourist-zone">独立観光特区</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="world-section" id="section-origin">
-        <div class="section-no">03</div>
-        <div class="section-meta">Origin: Root</div>
-        <h2>祭囃子の鳴る方へ。</h2>
+      <section id="bureau" class="section-wrapper">
+        <div class="editorial-card">
+          <div class="card-meta">
+            <div class="huge-number">02</div>
+            <div class="district-tag" style="color: var(--accent-gray);">Archive: S-Log</div>
+          </div>
 
-        <div class="section-copy">
-          <p>地図から消えた共同体。長く引き継がれてきた風習。彼女を呼ぶ鈴の音。すべての違和感の根源は、この閉ざされた「お里」へと遡っていく。</p>
-          <p>地図の上では小さな共同体でしかなかったはずのその場所は、彼女の記憶と感覚の奥底に、今も消えない影を残している。</p>
-        </div>
+          <div class="card-content reveal">
+            <h2 class="card-title">記録することと、<br>隠すことは、<br>ときどき同じ意味になる。</h2>
+            <div class="card-body">
+              <p>S局。一般社会の表層からは見えにくい機関。異常事案や秘匿記録を管理するその場所は、真実を保存し、同時に隔離する場所でもある。</p>
+            </div>
 
-        <div class="world-keywords">
-          <button class="world-keyword" data-term="kamikakushi">神隠し</button>
-          <button class="world-keyword" data-term="village">お里</button>
-          <button class="world-keyword" data-term="bell">鈴の音</button>
+            <div class="ui-status-grid">
+              <div class="ui-item">
+                <span class="ui-item-label">Entity</span>
+                <button class="ui-item-value world-trigger" type="button" data-term="deviant">変異体</button>
+              </div>
+              <div class="ui-item">
+                <span class="ui-item-label">Security</span>
+                <button class="ui-item-value world-trigger" type="button" data-term="local-bureau">防衛省 地方支分部局</button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <footer class="world-footer">WAITING FOR NEXT DEPARTURE</footer>
-    </div>
-  </main>
+      <section id="village" class="section-wrapper village-section">
+        <div class="editorial-card">
+          <div class="card-meta">
+            <div class="huge-number">03</div>
+            <div class="district-tag">Origin: Root</div>
+          </div>
+
+          <div class="card-content reveal">
+            <h2 class="card-title">祭囃子の鳴る方へ。</h2>
+            <div class="card-body">
+              <p>地図から消えた共同体。長く引き継がれてきた風習。彼女を呼ぶ鈴の音。すべての違和感の根源は、この閉ざされた「お里」へと遡っていく。</p>
+            </div>
+
+            <div class="ui-status-grid">
+              <div class="ui-item">
+                <span class="ui-item-label">Status</span>
+                <button class="ui-item-value world-trigger" type="button" data-term="kamikakushi">神隠し</button>
+              </div>
+              <div class="ui-item">
+                <span class="ui-item-label">Phenomena</span>
+                <button class="ui-item-value world-trigger" type="button" data-term="bell">鈴の音</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer-archive">
+      <p>WAITING FOR NEXT DEPARTURE</p>
+    </footer>
+  </div>
 
   <div class="term-modal" id="termModal" aria-hidden="true">
     <div class="term-modal-backdrop" id="termModalBackdrop"></div>
@@ -109,6 +691,105 @@
   </div>
 
   <script src="./shared/header.js"></script>
-  <script src="./world-popup.js"></script>
+  <script>
+    const revealTargets = document.querySelectorAll('.reveal');
+    let hasStartedReveal = false;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (!hasStartedReveal) return;
+
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: "0px 0px -8% 0px"
+    });
+
+    revealTargets.forEach(el => observer.observe(el));
+
+    function startRevealOnScroll() {
+      if (hasStartedReveal) return;
+      if (window.scrollY > 24) {
+        hasStartedReveal = true;
+        revealTargets.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.92) {
+            el.classList.add('is-visible');
+          }
+        });
+        window.removeEventListener('scroll', startRevealOnScroll);
+      }
+    }
+
+    window.addEventListener('scroll', startRevealOnScroll, { passive: true });
+
+    /* --- popup terms --- */
+    const termData = {
+      hama18: {
+        title: "HAMA18区",
+        body: "独立観光特区のひとつ。\n観光客に向けて整備された街区でありながら、その隙間には説明しきれない古い気配が残っている。"
+      },
+      "tourist-zone": {
+        title: "独立観光特区",
+        body: "観光産業を推進するために成立した特区。\n一般的な都市運営とは異なる優先順位で管理され、表向きには華やかさと利便性が強調される。"
+      },
+      deviant: {
+        title: "変異体",
+        body: "既知の分類や管理基準から逸脱した存在。\n一般にはほとんど語られず、秘匿機関の管理対象として扱われる。"
+      },
+      "local-bureau": {
+        title: "防衛省 地方支分部局",
+        body: "中央の統制下にありながら、地域単位で異常事案や秘匿記録の実務を扱う機関。\n表社会からはほとんど見えない。"
+      },
+      kamikakushi: {
+        title: "神隠し",
+        body: "綾の過去に深く結びついた集団消失事案。\n説明のつかない欠落として扱われており、彼女の違和感の根源とつながっている。"
+      },
+      bell: {
+        title: "鈴の音",
+        body: "綾を呼ぶ感覚とともに反復される象徴的な音。\n祭囃子や因習、沈んだ記憶の底と結びつく手がかり。"
+      }
+    };
+
+    const termModal = document.getElementById("termModal");
+    const termModalBackdrop = document.getElementById("termModalBackdrop");
+    const termModalClose = document.getElementById("termModalClose");
+    const termModalTitle = document.getElementById("termModalTitle");
+    const termModalBody = document.getElementById("termModalBody");
+    const worldTriggers = document.querySelectorAll(".world-trigger");
+
+    function openTermModal(key) {
+      const item = termData[key];
+      if (!item) return;
+
+      termModalTitle.textContent = item.title;
+      termModalBody.textContent = item.body;
+      termModal.classList.add("is-open");
+      termModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeTermModal() {
+      termModal.classList.remove("is-open");
+      termModal.setAttribute("aria-hidden", "true");
+    }
+
+    worldTriggers.forEach((button) => {
+      button.addEventListener("click", () => {
+        openTermModal(button.dataset.term);
+      });
+    });
+
+    termModalBackdrop.addEventListener("click", closeTermModal);
+    termModalClose.addEventListener("click", closeTermModal);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && termModal.classList.contains("is-open")) {
+        closeTermModal();
+      }
+    });
+  </script>
 </body>
 </html>
