@@ -110,13 +110,6 @@ img{
   z-index:1;
 }
 
-.board-right{
-  position:absolute;
-  inset:0 0 0 auto;
-  width:58%;
-  z-index:2;
-}
-
 .character-silhouette{
   position:absolute;
   left:-25%;
@@ -125,6 +118,13 @@ img{
   height:300%;
   background:#b7b5b8;
   opacity:.96;
+  transition:
+    left .35s ease,
+    bottom .35s ease,
+    width .35s ease,
+    height .35s ease,
+    filter .35s ease,
+    opacity .35s ease;
 
   -webkit-mask-image:var(--figure-url);
   mask-image:var(--figure-url);
@@ -143,6 +143,7 @@ img{
   top:11%;
   left:7%;
   right:10%;
+  z-index:2;
   display:flex;
   flex-direction:column;
   gap:18px;
@@ -168,7 +169,7 @@ img{
   box-shadow:1px 2px 4px rgba(0,0,0,.05);
   cursor:pointer;
   transform:rotate(var(--card-tilt));
-  transition:transform .22s ease, box-shadow .22s ease, filter .22s ease;
+  transition:transform .22s ease, box-shadow .22s ease, filter .22s ease, opacity .22s ease;
   isolation:isolate;
 }
 
@@ -403,6 +404,10 @@ img{
   grid-template-columns:repeat(3, minmax(0, 1fr));
 }
 
+.visual-grid--single{
+  grid-template-columns:minmax(0, 1fr);
+}
+
 .thumb-btn{
   border:1px solid rgba(147,136,118,.16);
   border-radius:10px;
@@ -415,6 +420,10 @@ img{
   width:100%;
   height:108px;
   object-fit:contain;
+}
+
+.visual-grid--single .thumb-btn img{
+  height:180px;
 }
 
 .relation-vs{
@@ -481,10 +490,10 @@ img{
   bottom:19%;
   width:70px;
   height:84px;
-  z-index:6;
+  z-index:2;
   cursor:pointer;
   transform:rotate(-2deg);
-  transition:transform .2s ease, filter .2s ease;
+  transition:transform .2s ease, filter .2s ease, opacity .2s ease;
 }
 
 .secret-trigger:hover{
@@ -632,7 +641,7 @@ img{
 .character-page.is-corrupted .character-silhouette{
   background:#7a0014;
   opacity:.92;
-    left:-83%;
+  left:-83%;
   bottom:4%;
   animation:
     silhouetteFlicker .22s steps(2, end) infinite,
@@ -661,7 +670,13 @@ img{
 
 .character-page.is-corrupted .menu-card--profile{
   --card-bg:#090b11;
+  filter:saturate(.55) brightness(.78);
 }
+
+.character-page.is-corrupted .menu-card--profile .menu-card__label{
+  opacity:.72;
+}
+
 .character-page.is-corrupted .menu-card--talk{
   --card-bg:#0a0c12;
 }
@@ -860,7 +875,6 @@ img{
   }
 }
 
-/* モバイル */
 @media (max-width: 768px){
   .character-board{
     width:min(92vw, 640px);
@@ -869,10 +883,6 @@ img{
 
   .board-left{
     width:40%;
-  }
-
-  .board-right{
-    width:60%;
   }
 
   .character-silhouette{
@@ -982,6 +992,10 @@ img{
     height:88px;
   }
 
+  .visual-grid--single .thumb-btn img{
+    height:150px;
+  }
+
   .relation-columns{
     grid-template-columns:1fr;
   }
@@ -1006,5 +1020,12 @@ img{
     width:58px;
     height:74px;
     z-index:2;
+  }
+
+  .character-page.is-corrupted .character-silhouette{
+    left:-58%;
+    top:0%;
+    width:285%;
+    height:104%;
   }
 }
