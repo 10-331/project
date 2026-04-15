@@ -20,6 +20,7 @@ const menuStack = document.querySelector(".menu-stack");
 const floatingContent = document.getElementById("floatingContent");
 const characterPage = document.getElementById("characterPage");
 const secretTrigger = document.getElementById("secretTrigger");
+const characterSilhouette = document.getElementById("characterSilhouette");
 
 let isCorrupted = false;
 
@@ -169,6 +170,21 @@ function runGlitchBurst() {
   }, 380);
 }
 
+function updateSilhouetteFigure() {
+  if (!characterSilhouette) return;
+
+  const normalFigure = characterSilhouette.dataset.normalFigure;
+  const corruptFigure = characterSilhouette.dataset.corruptFigure;
+  const nextFigure = isCorrupted ? corruptFigure : normalFigure;
+
+  if (!nextFigure) return;
+
+  characterSilhouette.style.setProperty(
+    "--figure-url",
+    `url('${nextFigure}')`
+  );
+}
+
 function setCorruptedState(nextState) {
   isCorrupted = nextState;
 
@@ -180,6 +196,7 @@ function setCorruptedState(nextState) {
     isCorrupted ? "通常ページに戻す" : "裏ページに切り替える"
   );
 
+  updateSilhouetteFigure();
   runGlitchBurst();
 }
 
@@ -281,4 +298,5 @@ document.addEventListener("click", (event) => {
   }
 });
 
+updateSilhouetteFigure();
 renderRelationButtons();
