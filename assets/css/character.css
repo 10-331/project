@@ -1003,5 +1003,6 @@ img{
     bottom:15%;
     width:58px;
     height:74px;
+    z-index:2;
   }
 }
