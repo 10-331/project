@@ -18,74 +18,76 @@
       <div class="board-corner" aria-hidden="true"></div>
 
       <div class="board-left">
-<div
-  class="character-silhouette"
-  id="characterSilhouette"
-  style="--figure-url: url('/project/assets/images/chars/aya-home.png');"
-  data-normal-figure="/project/assets/images/chars/aya-home.png"
-  data-corrupt-figure="/project/assets/images/chars/aya-home-corrupt.png"
-  aria-hidden="true"
-></div>
+        <div
+          class="character-silhouette"
+          id="characterSilhouette"
+          style="--figure-url: url('/project/assets/images/chars/aya-home.png');"
+          data-normal-figure="/project/assets/images/chars/aya-home.png"
+          data-corrupt-figure="/project/assets/images/chars/aya-home-corrupt.png"
+          aria-hidden="true"
+        ></div>
       </div>
 
-<nav class="menu-stack" aria-label="character menu">
-  <button
-    class="menu-card menu-card--profile"
-    data-mode="image"
-    data-image="./assets/images/character/profile-book.png"
-    data-alt="プロフィール帳"
-    data-corrupt-mode="locked"
-  >
-    <span class="menu-card__deco" aria-hidden="true"></span>
-    <span class="menu-card__label" data-text="プロフィール">プロフィール</span>
-  </button>
+      <div class="board-right">
+        <nav class="menu-stack" aria-label="character menu">
+          <button
+            class="menu-card menu-card--profile"
+            data-mode="image"
+            data-image="./assets/images/character/profile-book.png"
+            data-alt="プロフィール帳"
+            data-corrupt-mode="locked"
+          >
+            <span class="menu-card__deco" aria-hidden="true"></span>
+            <span class="menu-card__label" data-text="プロフィール">プロフィール</span>
+          </button>
 
-  <button
-    class="menu-card menu-card--talk"
-    data-mode="panel"
-    data-panel="talk"
-    data-corrupt-mode="panel"
-    data-corrupt-panel="talk-corrupt"
-  >
-    <span class="menu-card__deco" aria-hidden="true"></span>
-    <span class="menu-card__label" data-text="トークサンプル">トークサンプル</span>
-  </button>
+          <button
+            class="menu-card menu-card--talk"
+            data-mode="panel"
+            data-panel="talk"
+            data-corrupt-mode="panel"
+            data-corrupt-panel="talk-corrupt"
+          >
+            <span class="menu-card__deco" aria-hidden="true"></span>
+            <span class="menu-card__label" data-text="トークサンプル">トークサンプル</span>
+          </button>
 
-  <button
-    class="menu-card menu-card--visual"
-    data-mode="panel"
-    data-panel="visual"
-    data-corrupt-mode="panel"
-    data-corrupt-panel="visual-corrupt"
-  >
-    <span class="menu-card__deco" aria-hidden="true"></span>
-    <span class="menu-card__label" data-text="ビジュアル">ビジュアル</span>
-  </button>
+          <button
+            class="menu-card menu-card--visual"
+            data-mode="panel"
+            data-panel="visual"
+            data-corrupt-mode="panel"
+            data-corrupt-panel="visual-corrupt"
+          >
+            <span class="menu-card__deco" aria-hidden="true"></span>
+            <span class="menu-card__label" data-text="ビジュアル">ビジュアル</span>
+          </button>
 
-  <button
-    class="menu-card menu-card--resume"
-    data-mode="image"
-    data-image="./assets/images/character/resume.png"
-    data-alt="履歴書"
-    data-corrupt-mode="image"
-    data-corrupt-image="./assets/images/character/resume-corrupt.png"
-    data-corrupt-alt="裏履歴書"
-  >
-    <span class="menu-card__deco" aria-hidden="true"></span>
-    <span class="menu-card__label" data-text="履歴書">履歴書</span>
-  </button>
+          <button
+            class="menu-card menu-card--resume"
+            data-mode="image"
+            data-image="./assets/images/character/resume.png"
+            data-alt="履歴書"
+            data-corrupt-mode="image"
+            data-corrupt-image="./assets/images/character/resume-corrupt.png"
+            data-corrupt-alt="裏履歴書"
+          >
+            <span class="menu-card__deco" aria-hidden="true"></span>
+            <span class="menu-card__label" data-text="履歴書">履歴書</span>
+          </button>
 
-  <button
-    class="menu-card menu-card--relation"
-    data-mode="panel"
-    data-panel="relation"
-    data-corrupt-mode="panel"
-    data-corrupt-panel="relation-corrupt"
-  >
-    <span class="menu-card__deco" aria-hidden="true"></span>
-    <span class="menu-card__label" data-text="関係性">関係性</span>
-  </button>
-</nav>
+          <button
+            class="menu-card menu-card--relation"
+            data-mode="panel"
+            data-panel="relation"
+            data-corrupt-mode="panel"
+            data-corrupt-panel="relation-corrupt"
+          >
+            <span class="menu-card__deco" aria-hidden="true"></span>
+            <span class="menu-card__label" data-text="関係性">関係性</span>
+          </button>
+        </nav>
+      </div>
 
       <div class="floating-content" id="floatingContent">
         <section class="content-panel" id="panel-talk">
@@ -132,6 +134,40 @@
           </div>
         </section>
 
+        <section class="content-panel" id="panel-talk-corrupt">
+          <div class="content-card">
+            <div class="subtabs">
+              <button class="subtab is-active" data-talk-corrupt-tab="fragment">断片</button>
+              <button class="subtab" data-talk-corrupt-tab="voice">音声記録</button>
+              <button class="subtab" data-talk-corrupt-tab="memo">備考</button>
+            </div>
+
+            <div class="subpanel is-active" id="talk-corrupt-fragment">
+              <div class="text-block">
+                <p>「……見てないで」</p>
+                <p>「違う、これは私じゃない」</p>
+                <p>「どうして、まだ残ってるの」</p>
+              </div>
+            </div>
+
+            <div class="subpanel" id="talk-corrupt-voice">
+              <div class="text-block">
+                <p>「記録状態、正常……？」</p>
+                <p>「応答なし。呼称不一致を確認」</p>
+                <p>「対象は綾を名乗っている」</p>
+              </div>
+            </div>
+
+            <div class="subpanel" id="talk-corrupt-memo">
+              <div class="text-block">
+                <p><strong>発話傾向:</strong> 否認、断絶、記憶の飛躍</p>
+                <p><strong>特徴:</strong> 一人称は維持されるが自己同一性が揺らぐ</p>
+                <p><strong>備考:</strong> 呼びかけへの反応に遅延あり</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="content-panel" id="panel-visual">
           <div class="content-card">
             <div class="subtabs">
@@ -169,6 +205,37 @@
           </div>
         </section>
 
+        <section class="content-panel" id="panel-visual-corrupt">
+          <div class="content-card">
+            <div class="subtabs">
+              <button class="subtab is-active" data-visual-corrupt-tab="full">全身</button>
+              <button class="subtab" data-visual-corrupt-tab="face">表情差分</button>
+            </div>
+
+            <div class="subpanel is-active" id="visual-corrupt-full">
+              <div class="visual-grid visual-grid--single">
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-home-corrupt-full.png" data-alt="綾 裏立ち絵 全身">
+                  <img src="./assets/images/chars/aya-home-corrupt-full.png" alt="綾 裏立ち絵 全身" />
+                </button>
+              </div>
+            </div>
+
+            <div class="subpanel" id="visual-corrupt-face">
+              <div class="visual-grid visual-grid--face">
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-corrupt-face-1.png" data-alt="綾 裏表情1">
+                  <img src="./assets/images/chars/aya-corrupt-face-1.png" alt="綾 裏表情1" />
+                </button>
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-corrupt-face-2.png" data-alt="綾 裏表情2">
+                  <img src="./assets/images/chars/aya-corrupt-face-2.png" alt="綾 裏表情2" />
+                </button>
+                <button class="thumb-btn" data-image="./assets/images/chars/aya-corrupt-face-3.png" data-alt="綾 裏表情3">
+                  <img src="./assets/images/chars/aya-corrupt-face-3.png" alt="綾 裏表情3" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section class="content-panel" id="panel-relation">
           <div class="content-card content-card--relation">
             <div class="relation-vs">
@@ -185,6 +252,26 @@
               </div>
 
               <div class="relation-selector" id="relationSelector"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-panel" id="panel-relation-corrupt">
+          <div class="content-card content-card--relation">
+            <div class="relation-vs">
+              <div class="relation-columns">
+                <div class="relation-box">
+                  <p class="relation-label">綾 → 相手</p>
+                  <p class="relation-text" id="relationFromAyaCorrupt"></p>
+                </div>
+
+                <div class="relation-box">
+                  <p class="relation-label">相手 → 綾</p>
+                  <p class="relation-text" id="relationToAyaCorrupt"></p>
+                </div>
+              </div>
+
+              <div class="relation-selector" id="relationSelectorCorrupt"></div>
             </div>
           </div>
         </section>
