@@ -125,13 +125,6 @@ img{
   height:300%;
   background:#b7b5b8;
   opacity:.96;
-  transition:
-    left .35s ease,
-    bottom .35s ease,
-    width .35s ease,
-    height .35s ease,
-    filter .35s ease,
-    opacity .35s ease;
 
   -webkit-mask-image:var(--figure-url);
   mask-image:var(--figure-url);
