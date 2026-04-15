@@ -632,6 +632,8 @@ img{
 .character-page.is-corrupted .character-silhouette{
   background:#7a0014;
   opacity:.92;
+    left:-80%;
+  bottom:4%;
   animation:
     silhouetteFlicker .22s steps(2, end) infinite,
     rgbShift 1.8s steps(2, end) infinite;
