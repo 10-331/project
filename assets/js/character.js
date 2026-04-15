@@ -4,8 +4,14 @@ const contentPanels = document.querySelectorAll(".content-panel");
 const visualTabs = document.querySelectorAll("[data-visual-tab]");
 const visualPanels = document.querySelectorAll("#panel-visual .subpanel");
 
+const visualCorruptTabs = document.querySelectorAll("[data-visual-corrupt-tab]");
+const visualCorruptPanels = document.querySelectorAll("#panel-visual-corrupt .subpanel");
+
 const talkTabs = document.querySelectorAll("[data-talk-tab]");
 const talkPanels = document.querySelectorAll("#panel-talk .subpanel");
+
+const talkCorruptTabs = document.querySelectorAll("[data-talk-corrupt-tab]");
+const talkCorruptPanels = document.querySelectorAll("#panel-talk-corrupt .subpanel");
 
 const imageModal = document.getElementById("imageModal");
 const imageModalImg = document.getElementById("imageModalImg");
@@ -15,6 +21,10 @@ const imageModalClose = document.getElementById("imageModalClose");
 const relationFromAya = document.getElementById("relationFromAya");
 const relationToAya = document.getElementById("relationToAya");
 const relationSelector = document.getElementById("relationSelector");
+
+const relationFromAyaCorrupt = document.getElementById("relationFromAyaCorrupt");
+const relationToAyaCorrupt = document.getElementById("relationToAyaCorrupt");
+const relationSelectorCorrupt = document.getElementById("relationSelectorCorrupt");
 
 const menuStack = document.querySelector(".menu-stack");
 const floatingContent = document.getElementById("floatingContent");
@@ -51,6 +61,27 @@ const relationData = [
   }
 ];
 
+const relationDataCorrupt = [
+  {
+    id: "ten",
+    name: "添",
+    fromAya: "呼びかけに反応する。\nだが、情動ではなく識別反応に近い。",
+    toAya: "綾として扱うには不整合が多い。\nそれでも見捨てきれない。"
+  },
+  {
+    id: "himawari",
+    name: "陽葵",
+    fromAya: "思い出せるはずの輪郭だけが曖昧。\n名前だけが先に残っている。",
+    toAya: "対象は綾を知っているふうに振る舞う。\nだが記録は一致しない。"
+  },
+  {
+    id: "rinon",
+    name: "燐音",
+    fromAya: "会話の断片だけ残る。\n親しさの実感が伴わない。",
+    toAya: "観察対象。\n距離の詰め方に異様な齟齬がある。"
+  }
+];
+
 function clearActiveMenu() {
   menuCards.forEach((card) => card.classList.remove("is-active"));
 }
@@ -69,8 +100,12 @@ function showPanel(panelId, cardEl) {
   clearActiveMenu();
 
   const target = document.getElementById(`panel-${panelId}`);
-  if (target) target.classList.add("is-active");
-  if (cardEl) cardEl.classList.add("is-active");
+  if (target) {
+    target.classList.add("is-active");
+  }
+  if (cardEl) {
+    cardEl.classList.add("is-active");
+  }
 }
 
 function openVisualTab(name) {
@@ -80,6 +115,16 @@ function openVisualTab(name) {
 
   visualPanels.forEach((panel) => {
     panel.classList.toggle("is-active", panel.id === `visual-${name}`);
+  });
+}
+
+function openVisualCorruptTab(name) {
+  visualCorruptTabs.forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.visualCorruptTab === name);
+  });
+
+  visualCorruptPanels.forEach((panel) => {
+    panel.classList.toggle("is-active", panel.id === `visual-corrupt-${name}`);
   });
 }
 
@@ -93,8 +138,18 @@ function openTalkTab(name) {
   });
 }
 
+function openTalkCorruptTab(name) {
+  talkCorruptTabs.forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.talkCorruptTab === name);
+  });
+
+  talkCorruptPanels.forEach((panel) => {
+    panel.classList.toggle("is-active", panel.id === `talk-corrupt-${name}`);
+  });
+}
+
 function openImageModal(src, alt) {
-  if (!imageModal || !imageModalImg) return;
+  if (!imageModal || !imageModalImg || !src) return;
 
   imageModalImg.src = src;
   imageModalImg.alt = alt || "";
@@ -117,12 +172,12 @@ function closeImageModal({ reset = true } = {}) {
   }
 }
 
-function renderRelationButtons() {
-  if (!relationSelector || !relationFromAya || !relationToAya) return;
+function renderRelationButtons(data, selectorEl, fromEl, toEl) {
+  if (!selectorEl || !fromEl || !toEl) return;
 
-  relationSelector.innerHTML = "";
+  selectorEl.innerHTML = "";
 
-  relationData.forEach((item, index) => {
+  data.forEach((item, index) => {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "relation-btn";
@@ -131,30 +186,30 @@ function renderRelationButtons() {
 
     if (index === 0) {
       button.classList.add("is-active");
-      relationFromAya.textContent = item.fromAya;
-      relationToAya.textContent = item.toAya;
+      fromEl.textContent = item.fromAya;
+      toEl.textContent = item.toAya;
     }
 
     button.addEventListener("click", (event) => {
       event.stopPropagation();
 
-      document.querySelectorAll(".relation-btn").forEach((btn) => {
+      selectorEl.querySelectorAll(".relation-btn").forEach((btn) => {
         btn.classList.remove("is-active");
       });
       button.classList.add("is-active");
 
-      relationFromAya.style.opacity = "0";
-      relationToAya.style.opacity = "0";
+      fromEl.style.opacity = "0";
+      toEl.style.opacity = "0";
 
       setTimeout(() => {
-        relationFromAya.textContent = item.fromAya;
-        relationToAya.textContent = item.toAya;
-        relationFromAya.style.opacity = "1";
-        relationToAya.style.opacity = "1";
+        fromEl.textContent = item.fromAya;
+        toEl.textContent = item.toAya;
+        fromEl.style.opacity = "1";
+        toEl.style.opacity = "1";
       }, 60);
     });
 
-    relationSelector.appendChild(button);
+    selectorEl.appendChild(button);
   });
 }
 
@@ -190,6 +245,8 @@ function setCorruptedState(nextState) {
 
   if (!characterPage || !secretTrigger) return;
 
+  resetCharacterView();
+
   characterPage.classList.toggle("is-corrupted", isCorrupted);
   secretTrigger.setAttribute(
     "aria-label",
@@ -204,99 +261,172 @@ function toggleCorruptedState() {
   setCorruptedState(!isCorrupted);
 }
 
-menuCards.forEach((card) => {
-  card.addEventListener("click", (event) => {
-    event.stopPropagation();
+function resolveCardBehavior(card) {
+  if (!isCorrupted) {
+    return {
+      mode: card.dataset.mode,
+      panel: card.dataset.panel,
+      image: card.dataset.image,
+      alt: card.dataset.alt
+    };
+  }
 
-    const mode = card.dataset.mode;
+  return {
+    mode: card.dataset.corruptMode || card.dataset.mode,
+    panel: card.dataset.corruptPanel || card.dataset.panel,
+    image: card.dataset.corruptImage || card.dataset.image,
+    alt: card.dataset.corruptAlt || card.dataset.alt
+  };
+}
 
-    if (mode === "image") {
-      hidePanels();
-      clearActiveMenu();
-      card.classList.add("is-active");
-      openImageModal(card.dataset.image, card.dataset.alt);
-      return;
+function bindMenuCards() {
+  menuCards.forEach((card) => {
+    card.addEventListener("click", (event) => {
+      event.stopPropagation();
+
+      const behavior = resolveCardBehavior(card);
+
+      if (behavior.mode === "locked") {
+        hidePanels();
+        clearActiveMenu();
+        card.classList.add("is-active");
+        runGlitchBurst();
+        return;
+      }
+
+      if (behavior.mode === "image") {
+        hidePanels();
+        clearActiveMenu();
+        card.classList.add("is-active");
+        openImageModal(behavior.image, behavior.alt);
+        return;
+      }
+
+      if (behavior.mode === "panel") {
+        showPanel(behavior.panel, card);
+      }
+    });
+  });
+}
+
+function bindTabs() {
+  visualTabs.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openVisualTab(btn.dataset.visualTab);
+    });
+  });
+
+  visualCorruptTabs.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openVisualCorruptTab(btn.dataset.visualCorruptTab);
+    });
+  });
+
+  talkTabs.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openTalkTab(btn.dataset.talkTab);
+    });
+  });
+
+  talkCorruptTabs.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openTalkCorruptTab(btn.dataset.talkCorruptTab);
+    });
+  });
+}
+
+function bindThumbButtons() {
+  document.querySelectorAll(".thumb-btn").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openImageModal(btn.dataset.image, btn.dataset.alt);
+    });
+  });
+}
+
+function bindModal() {
+  if (imageModalImg) {
+    imageModalImg.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  }
+
+  if (imageModalBackdrop) {
+    imageModalBackdrop.addEventListener("click", () => {
+      closeImageModal({ reset: true });
+    });
+  }
+
+  if (imageModalClose) {
+    imageModalClose.addEventListener("click", () => {
+      closeImageModal({ reset: true });
+    });
+  }
+}
+
+function bindGlobalEvents() {
+  if (secretTrigger) {
+    secretTrigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleCorruptedState();
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      if (imageModal?.classList.contains("is-open")) {
+        closeImageModal({ reset: true });
+        return;
+      }
+      resetCharacterView();
     }
-
-    if (mode === "panel") {
-      showPanel(card.dataset.panel, card);
-    }
   });
-});
 
-visualTabs.forEach((btn) => {
-  btn.addEventListener("click", (event) => {
-    event.stopPropagation();
-    openVisualTab(btn.dataset.visualTab);
-  });
-});
-
-talkTabs.forEach((btn) => {
-  btn.addEventListener("click", (event) => {
-    event.stopPropagation();
-    openTalkTab(btn.dataset.talkTab);
-  });
-});
-
-document.querySelectorAll(".thumb-btn").forEach((btn) => {
-  btn.addEventListener("click", (event) => {
-    event.stopPropagation();
-    openImageModal(btn.dataset.image, btn.dataset.alt);
-  });
-});
-
-if (secretTrigger) {
-  secretTrigger.addEventListener("click", (event) => {
-    event.stopPropagation();
-    toggleCorruptedState();
-  });
-}
-
-if (imageModalImg) {
-  imageModalImg.addEventListener("click", (event) => {
-    event.stopPropagation();
-  });
-}
-
-if (imageModalBackdrop) {
-  imageModalBackdrop.addEventListener("click", () => {
-    closeImageModal({ reset: true });
-  });
-}
-
-if (imageModalClose) {
-  imageModalClose.addEventListener("click", () => {
-    closeImageModal({ reset: true });
-  });
-}
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
+  document.addEventListener("click", (event) => {
     if (imageModal?.classList.contains("is-open")) {
-      closeImageModal({ reset: true });
+      const clickedDialog = event.target.closest(".image-modal-dialog");
+      if (!clickedDialog) {
+        closeImageModal({ reset: true });
+      }
       return;
     }
-    resetCharacterView();
-  }
-});
 
-document.addEventListener("click", (event) => {
-  if (imageModal?.classList.contains("is-open")) {
-    const clickedDialog = event.target.closest(".image-modal-dialog");
-    if (!clickedDialog) {
-      closeImageModal({ reset: true });
+    const clickedMenu = menuStack?.contains(event.target);
+    const clickedContent = floatingContent?.contains(event.target);
+    const clickedSecret = secretTrigger?.contains(event.target);
+
+    if (!clickedMenu && !clickedContent && !clickedSecret) {
+      resetCharacterView();
     }
-    return;
-  }
+  });
+}
 
-  const clickedMenu = menuStack?.contains(event.target);
-  const clickedContent = floatingContent?.contains(event.target);
-  const clickedSecret = secretTrigger?.contains(event.target);
+function init() {
+  updateSilhouetteFigure();
 
-  if (!clickedMenu && !clickedContent && !clickedSecret) {
-    resetCharacterView();
-  }
-});
+  renderRelationButtons(
+    relationData,
+    relationSelector,
+    relationFromAya,
+    relationToAya
+  );
 
-updateSilhouetteFigure();
-renderRelationButtons();
+  renderRelationButtons(
+    relationDataCorrupt,
+    relationSelectorCorrupt,
+    relationFromAyaCorrupt,
+    relationToAyaCorrupt
+  );
+
+  bindMenuCards();
+  bindTabs();
+  bindThumbButtons();
+  bindModal();
+  bindGlobalEvents();
+}
+
+init();
