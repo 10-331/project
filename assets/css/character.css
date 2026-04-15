@@ -1030,11 +1030,4 @@ img{
     height:74px;
     z-index:2;
   }
-
-  .character-page.is-corrupted .character-silhouette{
-    left:-58%;
-    top:0%;
-    width:285%;
-    height:104%;
-  }
 }
