@@ -90,81 +90,36 @@
       </div>
 
       <div class="floating-content" id="floatingContent">
+        <!-- 表トーク -->
         <section class="content-panel" id="panel-talk">
-          <div class="content-card">
-            <div class="subtabs">
-              <button class="subtab is-active" data-talk-tab="ten">添</button>
-              <button class="subtab" data-talk-tab="others">他者</button>
-              <button class="subtab" data-talk-tab="self">独白</button>
-              <button class="subtab" data-talk-tab="memo">話法</button>
-            </div>
-
-            <div class="subpanel is-active" id="talk-ten">
-              <div class="text-block">
-                <p>「……別に、なんでもない」</p>
-                <p>「添、それ以上はだめ」</p>
-                <p>「そういうとこ、ずるいよ」</p>
-              </div>
-            </div>
-
-            <div class="subpanel" id="talk-others">
-              <div class="text-block">
-                <p>「あ、はい……すみません」</p>
-                <p>「えっと、私は大丈夫です」</p>
-                <p>「ありがとうございます」</p>
-              </div>
-            </div>
-
-            <div class="subpanel" id="talk-self">
-              <div class="text-block">
-                <p>「……どうしてこんなことに」</p>
-                <p>「まだ、平気」</p>
-                <p>「少しだけ、考えさせて」</p>
-              </div>
-            </div>
-
-            <div class="subpanel" id="talk-memo">
-              <div class="text-block">
-                <p><strong>一人称:</strong> 私</p>
-                <p><strong>基本口調:</strong> 柔らかいが、曖昧さを含む</p>
-                <p><strong>感情が乱れる時:</strong> 語尾が短くなる、言い淀みが増える</p>
-                <p><strong>対 添:</strong> 他者より距離が近く、抑えた感情が滲みやすい</p>
-              </div>
-            </div>
+          <div class="speech-stage speech-stage--normal" aria-label="表のトークサンプル">
+            <p class="speech speech--normal speech--n1 speech--vertical">はじめまして〜笹井綾です。仲良くしてくれると嬉しいなあ</p>
+            <p class="speech speech--normal speech--n2">妹と弟がいるの。<br>本っ当に可愛いんだから！</p>
+            <p class="speech speech--normal speech--n3">あ、あれ？ここは何処……？</p>
+            <p class="speech speech--normal speech--n4">こら。罰当たりなこと言っちゃダメだよ</p>
+            <p class="speech speech--normal speech--n5 speech--vertical">恋人、は……いる、の、かなあ</p>
+            <p class="speech speech--normal speech--n6 speech--vertical">これでも身体は丈夫だよ</p>
+            <p class="speech speech--normal speech--n7">夕方は少し苦手なの。<br>どうしてだろうね、すごく怖い</p>
+            <p class="speech speech--normal speech--n8 speech--ghost">添くん待って近い</p>
+            <p class="speech speech--normal speech--n9 speech--ghost">ほ、本当にだめ</p>
+            <p class="speech speech--normal speech--n10 speech--ghost">……待ってそれは本当にだめ！</p>
           </div>
         </section>
 
+        <!-- 裏トーク -->
         <section class="content-panel" id="panel-talk-corrupt">
-          <div class="content-card">
-            <div class="subtabs">
-              <button class="subtab is-active" data-talk-corrupt-tab="fragment">断片</button>
-              <button class="subtab" data-talk-corrupt-tab="voice">音声記録</button>
-              <button class="subtab" data-talk-corrupt-tab="memo">備考</button>
-            </div>
-
-            <div class="subpanel is-active" id="talk-corrupt-fragment">
-              <div class="text-block">
-                <p>「……見てないで」</p>
-                <p>「違う、これは私じゃない」</p>
-                <p>「どうして、まだ残ってるの」</p>
-              </div>
-            </div>
-
-            <div class="subpanel" id="talk-corrupt-voice">
-              <div class="text-block">
-                <p>「記録状態、正常……？」</p>
-                <p>「応答なし。呼称不一致を確認」</p>
-                <p>「対象は綾を名乗っている」</p>
-              </div>
-            </div>
-
-            <div class="subpanel" id="talk-corrupt-memo">
-              <div class="text-block">
-                <p><strong>発話傾向:</strong> 否認、断絶、記憶の飛躍</p>
-                <p><strong>特徴:</strong> 一人称は維持されるが自己同一性が揺らぐ</p>
-                <p><strong>備考:</strong> 呼びかけへの反応に遅延あり</p>
-              </div>
-            </div>
+          <div class="speech-stage speech-stage--corrupt" aria-label="裏のトークサンプル">
+            <p class="speech speech--corrupt speech--c1">生物の定義に反しているのに、<br>どう愛着を持つっていうの？</p>
+            <p class="speech speech--corrupt speech--c2 speech--vertical">へえ、それは稼げるの？</p>
+            <p class="speech speech--corrupt speech--c3">……何も、知らないくせに</p>
+            <p class="speech speech--corrupt speech--c4 speech--vertical">対象を確認。回収します</p>
+            <p class="speech speech--corrupt speech--c5 speech--vertical">なんでお前に家族がいて、私にはいないの</p>
+            <p class="speech speech--corrupt speech--c6">返してよ私の居場所！！！！！！！</p>
+            <p class="speech speech--corrupt speech--c7">まるで私が悪者みたい</p>
+            <p class="speech speech--corrupt speech--c8 speech--vertical">……変なの</p>
+            <p class="speech speech--corrupt speech--c9">上司？あ〜、まあ……悪い人じゃないと思う</p>
+            <p class="speech speech--corrupt speech--c10">別に珈琲が好きってわけでもないけど</p>
+            <p class="speech speech--corrupt speech--c11 speech--ghost">うるさいばか！</p>
           </div>
         </section>
 
