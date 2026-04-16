@@ -26,7 +26,12 @@ const characterPage = document.getElementById("characterPage");
 const secretTrigger = document.getElementById("secretTrigger");
 const characterSilhouette = document.getElementById("characterSilhouette");
 
+const speechNoteNormal = document.getElementById("speechNoteNormal");
+const speechNoteCorrupt = document.getElementById("speechNoteCorrupt");
+
 let isCorrupted = false;
+let talkSequenceTimer = null;
+let talkNoteTimer = null;
 
 const relationData = [
   {
@@ -84,14 +89,37 @@ function hidePanels() {
   contentPanels.forEach((panel) => panel.classList.remove("is-active"));
 }
 
+function clearTalkUI() {
+  if (talkSequenceTimer) {
+    clearTimeout(talkSequenceTimer);
+    talkSequenceTimer = null;
+  }
+  if (talkNoteTimer) {
+    clearTimeout(talkNoteTimer);
+    talkNoteTimer = null;
+  }
+
+  document.querySelectorAll("#panel-talk .speech, #panel-talk-corrupt .speech").forEach((el) => {
+    el.style.animation = "none";
+    void el.offsetWidth;
+    el.style.animation = "";
+  });
+
+  speechNoteNormal?.classList.remove("is-visible");
+  speechNoteCorrupt?.classList.remove("is-visible");
+  menuStack?.classList.remove("is-hidden-for-talk");
+}
+
 function resetCharacterView() {
   hidePanels();
   clearActiveMenu();
+  clearTalkUI();
 }
 
 function showPanel(panelId, cardEl) {
   hidePanels();
   clearActiveMenu();
+  clearTalkUI();
 
   const target = document.getElementById(`panel-${panelId}`);
   if (target) {
@@ -100,6 +128,36 @@ function showPanel(panelId, cardEl) {
   if (cardEl) {
     cardEl.classList.add("is-active");
   }
+
+  if (panelId === "talk" || panelId === "talk-corrupt") {
+    startTalkSequence(panelId);
+  }
+}
+
+function startTalkSequence(panelId) {
+  menuStack?.classList.add("is-hidden-for-talk");
+
+  const noteEl = panelId === "talk" ? speechNoteNormal : speechNoteCorrupt;
+  if (noteEl) {
+    noteEl.classList.remove("is-visible");
+  }
+
+  const speeches = document.querySelectorAll(`#panel-${panelId} .speech`);
+  if (!speeches.length) return;
+
+  let maxEnd = 0;
+
+  speeches.forEach((speech) => {
+    const computed = window.getComputedStyle(speech);
+    const delay = parseFloat(computed.animationDelay || "0") * 1000;
+    const duration = parseFloat(computed.animationDuration || "0.85") * 1000;
+    const end = delay + duration;
+    if (end > maxEnd) maxEnd = end;
+  });
+
+  talkNoteTimer = window.setTimeout(() => {
+    noteEl?.classList.add("is-visible");
+  }, maxEnd + 160);
 }
 
 function openVisualTab(name) {
@@ -263,6 +321,7 @@ function bindMenuCards() {
       if (behavior.mode === "locked") {
         hidePanels();
         clearActiveMenu();
+        clearTalkUI();
         card.classList.add("is-active");
         runGlitchBurst();
         return;
@@ -271,6 +330,7 @@ function bindMenuCards() {
       if (behavior.mode === "image") {
         hidePanels();
         clearActiveMenu();
+        clearTalkUI();
         card.classList.add("is-active");
         openImageModal(behavior.image, behavior.alt);
         return;
