@@ -168,7 +168,8 @@ function startTalkSequence(panelId) {
   });
 
   talkNoteTimer = window.setTimeout(() => {
-    noteEl?.classList.add("is-visible");
+noteEl?.classList.remove("is-hidden");
+noteEl?.classList.add("is-visible");
   }, maxEnd + 160);
 }
 
@@ -408,8 +409,8 @@ function bindSpeechNoteToggles() {
       const note = button.closest(".speech-note");
       if (!note) return;
 
-      const collapsed = note.classList.toggle("is-collapsed");
-      button.setAttribute("aria-expanded", String(!collapsed));
+const hidden = note.classList.toggle("is-hidden");
+button.setAttribute("aria-expanded", String(!hidden));
     });
   });
 }
