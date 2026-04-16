@@ -442,7 +442,7 @@ document.addEventListener("click", (event) => {
     resetCharacterView();
   }
 });
-  });
+  );
 
   document.addEventListener("click", (event) => {
     if (imageModal?.classList.contains("is-open")) {
