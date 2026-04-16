@@ -422,14 +422,26 @@ function bindGlobalEvents() {
     });
   }
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      if (imageModal?.classList.contains("is-open")) {
-        closeImageModal({ reset: true });
-        return;
-      }
-      resetCharacterView();
+document.addEventListener("click", (event) => {
+  if (imageModal?.classList.contains("is-open")) {
+    const clickedDialog = event.target.closest(".image-modal-dialog");
+    if (!clickedDialog) {
+      closeImageModal({ reset: true });
     }
+    return;
+  }
+
+  const clickedMenu = menuStack?.contains(event.target);
+  const clickedContent = floatingContent?.contains(event.target);
+  const clickedSecret = secretTrigger?.contains(event.target);
+
+  /* ここ追加 */
+  const clickedCard = event.target.closest(".menu-card");
+
+  if (!clickedMenu && !clickedContent && !clickedSecret && !clickedCard) {
+    resetCharacterView();
+  }
+});
   });
 
   document.addEventListener("click", (event) => {
