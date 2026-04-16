@@ -23,6 +23,7 @@ const relationSelectorCorrupt = document.getElementById("relationSelectorCorrupt
 const menuStack = document.querySelector(".menu-stack");
 const floatingContent = document.getElementById("floatingContent");
 const characterPage = document.getElementById("characterPage");
+const characterBoard = document.querySelector(".character-board");
 const secretTrigger = document.getElementById("secretTrigger");
 const characterSilhouette = document.getElementById("characterSilhouette");
 
@@ -108,6 +109,7 @@ function clearTalkUI() {
   speechNoteNormal?.classList.remove("is-visible");
   speechNoteCorrupt?.classList.remove("is-visible");
   menuStack?.classList.remove("is-hidden-for-talk");
+  characterBoard?.classList.remove("is-talk-active");
 }
 
 function resetCharacterView() {
@@ -136,6 +138,7 @@ function showPanel(panelId, cardEl) {
 
 function startTalkSequence(panelId) {
   menuStack?.classList.add("is-hidden-for-talk");
+  characterBoard?.classList.add("is-talk-active");
 
   const noteEl = panelId === "talk" ? speechNoteNormal : speechNoteCorrupt;
   if (noteEl) {
@@ -450,20 +453,3 @@ function init() {
 }
 
 init();
-
-
-speechNoteNormal?.addEventListener("click", (e)=>{
-  e.stopPropagation();
-  speechNoteNormal.classList.remove("is-visible");
-  void speechNoteNormal.offsetWidth;
-  speechNoteNormal.classList.add("is-visible");
-  characterBoard.classList.add("is-talk-active");
-});
-
-speechNoteCorrupt?.addEventListener("click", (e)=>{
-  e.stopPropagation();
-  speechNoteCorrupt.classList.remove("is-visible");
-  void speechNoteCorrupt.offsetWidth;
-  speechNoteCorrupt.classList.add("is-visible");
-  characterBoard.classList.remove("is-talk-active");
-});
