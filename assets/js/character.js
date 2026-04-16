@@ -450,3 +450,18 @@ function init() {
 }
 
 init();
+
+
+speechNoteNormal?.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  speechNoteNormal.classList.remove("is-visible");
+  void speechNoteNormal.offsetWidth;
+  speechNoteNormal.classList.add("is-visible");
+});
+
+speechNoteCorrupt?.addEventListener("click", (e)=>{
+  e.stopPropagation();
+  speechNoteCorrupt.classList.remove("is-visible");
+  void speechNoteCorrupt.offsetWidth;
+  speechNoteCorrupt.classList.add("is-visible");
+});
