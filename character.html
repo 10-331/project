@@ -12,7 +12,6 @@
 
   <main class="character-page" id="characterPage">
     <section class="character-board">
-
       <div class="board-noise" aria-hidden="true"></div>
       <div class="board-vignette" aria-hidden="true"></div>
 
@@ -92,14 +91,16 @@
         <!-- 表トーク -->
         <section class="content-panel" id="panel-talk">
           <div class="speech-stage speech-stage--normal" aria-label="表のトークサンプル">
-<p class="speech speech--normal speech--n1 speech--vertical">
-  <span class="speech-line">はじめまして〜笹井綾です。</span><br>
-  <span class="speech-line speech-line--down">仲良くしてくれると嬉しいなあ</span>
-</p>
-<p class="speech speech--normal speech--n2">
-  妹と弟がいるの。<br>
-  <span class="speech-line speech-line--down">本っ当に可愛いんだから！</span>
-</p>
+            <p class="speech speech--normal speech--n1 speech--vertical">
+              <span class="speech-line">はじめまして〜笹井綾です。</span><br>
+              <span class="speech-line speech-line--down">仲良くしてくれると嬉しいなあ</span>
+            </p>
+
+            <p class="speech speech--normal speech--n2">
+              妹と弟がいるの。<br>
+              <span class="speech-line speech-line--down">本っ当に可愛いんだから！</span>
+            </p>
+
             <p class="speech speech--normal speech--n3">あ、あれ？ここは何処……？</p>
             <p class="speech speech--normal speech--n4">こら。罰当たりなこと言っちゃダメだよ</p>
             <p class="speech speech--normal speech--n5 speech--vertical">恋人、は……いる、の、かなあ</p>
@@ -110,17 +111,20 @@
             <p class="speech speech--normal speech--n10 speech--ghost">……待ってそれは本当にだめ！</p>
           </div>
 
-          <div class="speech-note speech-note--normal" id="speechNoteNormal">
+          <div class="speech-note-ui" id="speechNoteUiNormal">
             <button
               class="speech-note__toggle"
               type="button"
+              data-note-target="speechNoteNormal"
               aria-expanded="true"
-              aria-controls="speechNoteBodyNormal"
+              aria-controls="speechNoteNormal"
             >
               一人称・口調メモ
             </button>
+          </div>
 
-            <div class="speech-note__body" id="speechNoteBodyNormal">
+          <div class="speech-note speech-note--normal" id="speechNoteNormal">
+            <div class="speech-note__body">
               <p><strong>一人称:</strong> 私</p>
               <p><strong>口調:</strong> 柔らかく穏やか。親しい相手には少し感情が滲む。</p>
             </div>
@@ -143,17 +147,20 @@
             <p class="speech speech--corrupt speech--c11 speech--ghost">うるさいばか！</p>
           </div>
 
-          <div class="speech-note speech-note--corrupt" id="speechNoteCorrupt">
+          <div class="speech-note-ui" id="speechNoteUiCorrupt">
             <button
               class="speech-note__toggle"
               type="button"
+              data-note-target="speechNoteCorrupt"
               aria-expanded="true"
-              aria-controls="speechNoteBodyCorrupt"
+              aria-controls="speechNoteCorrupt"
             >
               一人称・口調メモ
             </button>
+          </div>
 
-            <div class="speech-note__body" id="speechNoteBodyCorrupt">
+          <div class="speech-note speech-note--corrupt" id="speechNoteCorrupt">
+            <div class="speech-note__body">
               <p><strong>一人称:</strong> 私</p>
               <p><strong>口調:</strong> 否認、断絶、刺のある観察。感情が先に漏れる。</p>
             </div>
@@ -236,13 +243,11 @@
                   <p class="relation-label">綾 → 相手</p>
                   <p class="relation-text" id="relationFromAya"></p>
                 </div>
-
                 <div class="relation-box">
                   <p class="relation-label">相手 → 綾</p>
                   <p class="relation-text" id="relationToAya"></p>
                 </div>
               </div>
-
               <div class="relation-selector" id="relationSelector"></div>
             </div>
           </div>
@@ -256,13 +261,11 @@
                   <p class="relation-label">綾 → 相手</p>
                   <p class="relation-text" id="relationFromAyaCorrupt"></p>
                 </div>
-
                 <div class="relation-box">
                   <p class="relation-label">相手 → 綾</p>
                   <p class="relation-text" id="relationToAyaCorrupt"></p>
                 </div>
               </div>
-
               <div class="relation-selector" id="relationSelectorCorrupt"></div>
             </div>
           </div>
