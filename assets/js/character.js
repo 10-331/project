@@ -7,12 +7,6 @@ const visualPanels = document.querySelectorAll("#panel-visual .subpanel");
 const visualCorruptTabs = document.querySelectorAll("[data-visual-corrupt-tab]");
 const visualCorruptPanels = document.querySelectorAll("#panel-visual-corrupt .subpanel");
 
-const talkTabs = document.querySelectorAll("[data-talk-tab]");
-const talkPanels = document.querySelectorAll("#panel-talk .subpanel");
-
-const talkCorruptTabs = document.querySelectorAll("[data-talk-corrupt-tab]");
-const talkCorruptPanels = document.querySelectorAll("#panel-talk-corrupt .subpanel");
-
 const imageModal = document.getElementById("imageModal");
 const imageModalImg = document.getElementById("imageModalImg");
 const imageModalBackdrop = document.getElementById("imageModalBackdrop");
@@ -125,26 +119,6 @@ function openVisualCorruptTab(name) {
 
   visualCorruptPanels.forEach((panel) => {
     panel.classList.toggle("is-active", panel.id === `visual-corrupt-${name}`);
-  });
-}
-
-function openTalkTab(name) {
-  talkTabs.forEach((btn) => {
-    btn.classList.toggle("is-active", btn.dataset.talkTab === name);
-  });
-
-  talkPanels.forEach((panel) => {
-    panel.classList.toggle("is-active", panel.id === `talk-${name}`);
-  });
-}
-
-function openTalkCorruptTab(name) {
-  talkCorruptTabs.forEach((btn) => {
-    btn.classList.toggle("is-active", btn.dataset.talkCorruptTab === name);
-  });
-
-  talkCorruptPanels.forEach((panel) => {
-    panel.classList.toggle("is-active", panel.id === `talk-corrupt-${name}`);
   });
 }
 
@@ -321,20 +295,6 @@ function bindTabs() {
     btn.addEventListener("click", (event) => {
       event.stopPropagation();
       openVisualCorruptTab(btn.dataset.visualCorruptTab);
-    });
-  });
-
-  talkTabs.forEach((btn) => {
-    btn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      openTalkTab(btn.dataset.talkTab);
-    });
-  });
-
-  talkCorruptTabs.forEach((btn) => {
-    btn.addEventListener("click", (event) => {
-      event.stopPropagation();
-      openTalkCorruptTab(btn.dataset.talkCorruptTab);
     });
   });
 }
