@@ -393,6 +393,116 @@ img{
   margin-bottom:0;
 }
 
+/* ===== トーク表示中のボタン退避 ===== */
+
+.menu-stack{
+  opacity:1;
+  visibility:visible;
+  transition:
+    opacity .42s ease,
+    transform .42s ease,
+    filter .42s ease,
+    visibility 0s linear 0s;
+}
+
+.menu-stack.is-hidden-for-talk{
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(8px);
+  filter:blur(2px);
+  transition:
+    opacity .42s ease,
+    transform .42s ease,
+    filter .42s ease,
+    visibility 0s linear .42s;
+}
+
+/* ===== セリフ表示後の説明 ===== */
+
+.speech-note{
+  position:absolute;
+  left:4%;
+  right:4%;
+  bottom:4%;
+  padding:10px 12px;
+  border-radius:10px;
+  opacity:0;
+  transform:translateY(10px);
+  pointer-events:none;
+  font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+}
+
+.speech-note p{
+  margin:0 0 4px;
+  font-size:.86rem;
+  line-height:1.5;
+}
+
+.speech-note p:last-child{
+  margin-bottom:0;
+}
+
+.speech-note.is-visible{
+  animation:speechNoteIn .55s ease forwards;
+}
+
+@keyframes speechNoteIn{
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.speech-note--normal{
+  background:rgba(255,255,255,.68);
+  color:#2f2b28;
+  border:1px solid rgba(120,110,98,.14);
+  box-shadow:0 6px 16px rgba(50,40,30,.08);
+}
+
+.speech-note--corrupt{
+  background:rgba(8, 8, 12, .62);
+  color:rgba(245,241,241,.96);
+  border:1px solid rgba(164, 54, 76, .18);
+  box-shadow:0 8px 18px rgba(0,0,0,.24);
+  text-shadow:0 0 6px rgba(120, 0, 0, .08);
+}
+
+/* 説明が被らないように主役文字を少し上げる */
+.speech--n3{ bottom:20%; }
+.speech--n4{ bottom:13%; }
+.speech--n7{ bottom:14%; }
+
+.speech--c7{ bottom:28%; }
+.speech--c9{ bottom:16%; }
+.speech--c11{ bottom:14%; }
+
+@media (max-width: 768px){
+  .speech-note{
+    left:3%;
+    right:3%;
+    bottom:3%;
+    padding:8px 10px;
+  }
+
+  .speech-note p{
+    font-size:.74rem;
+    line-height:1.45;
+  }
+
+  .speech--n3{ bottom:23%; }
+  .speech--n4{ bottom:15%; }
+  .speech--n7{ bottom:17%; }
+
+  .speech--c7{ bottom:31%; }
+  .speech--c9{ bottom:18%; }
+  .speech--c11{ bottom:16%; }
+}
+
 /* ===== トークサンプル発言メーカー風 ===== */
 
 .speech-stage{
