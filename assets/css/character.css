@@ -1373,7 +1373,8 @@ img{
 
   .speech{
     white-space:normal;
-    max-width:48%;
+    max-width:80%;
+    min-height:520px;
   }
 
   .speech--vertical{
@@ -1381,8 +1382,9 @@ img{
   }
 
   .speech--n1{
-    font-size:1.68rem;
-    right:2%;
+    font-size:1.6rem;
+    right:-15%;
+    top:-30%;
   }
 
   .speech--n2{
@@ -1557,7 +1559,50 @@ img{
 /* 表示順固定 */
 .center-char{ z-index:5; }
 .speech{ z-index:10; }
-.speech-note{ z-index:20; }
+.speech-note{
+  z-index:20;
+  pointer-events:auto;
+}
+
+.speech-note__toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:28px;
+  padding:4px 10px;
+  margin-bottom:8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.82);
+  color:#2f2b28;
+  border:1px solid rgba(120,110,98,.18);
+  font-family:"Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+  font-size:.72rem;
+  line-height:1;
+  cursor:pointer;
+  pointer-events:auto;
+}
+
+.speech-note--corrupt .speech-note__toggle{
+  background:rgba(18,18,24,.84);
+  color:rgba(245,241,241,.96);
+  border:1px solid rgba(164,54,76,.24);
+}
+
+.speech-note__body{
+  display:block;
+}
+
+.speech-note.is-collapsed .speech-note__body{
+  display:none;
+}
+
+.speech-note.is-collapsed{
+  padding:8px 10px;
+}
+
+.speech-note.is-collapsed .speech-note__toggle{
+  margin-bottom:0;
+}
 
 
 .character-board.is-talk-active .secret-trigger{
