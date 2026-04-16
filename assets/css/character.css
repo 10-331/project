@@ -393,6 +393,277 @@ img{
   margin-bottom:0;
 }
 
+/* ===== トークサンプル発言メーカー風 ===== */
+
+.speech-stage{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:420px;
+  overflow:hidden;
+  pointer-events:none;
+  font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+}
+
+.speech{
+  position:absolute;
+  margin:0;
+  line-height:1.42;
+  white-space:nowrap;
+  opacity:0;
+  pointer-events:none;
+}
+
+.speech br{
+  display:block;
+  content:"";
+}
+
+.speech--vertical{
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  white-space:normal;
+}
+
+.speech--ghost{
+  opacity:.56;
+}
+
+.content-panel.is-active .speech{
+  animation-duration:.9s;
+  animation-fill-mode:forwards;
+  animation-timing-function:ease-out;
+}
+
+.content-panel.is-active .speech:not(.speech--vertical){
+  animation-name:speechInHorizontal;
+}
+
+.content-panel.is-active .speech.speech--vertical{
+  animation-name:speechInVertical;
+}
+
+@keyframes speechInHorizontal{
+  from{
+    opacity:0;
+    transform:translateX(-18px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+@keyframes speechInVertical{
+  from{
+    opacity:0;
+    transform:translateY(-22px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+/* 表 */
+.speech-stage--normal .speech{
+  color:#262422;
+  text-shadow:0 0 1px rgba(255,255,255,.18);
+}
+
+.speech--n1{
+  top:4%;
+  right:4%;
+  font-size:2.1rem;
+  letter-spacing:.02em;
+  animation-delay:.18s;
+  z-index:2;
+  max-height:82%;
+}
+
+.speech--n2{
+  top:5%;
+  left:4%;
+  font-size:1.06rem;
+  animation-delay:.55s;
+  z-index:2;
+}
+
+.speech--n3{
+  bottom:9%;
+  left:15%;
+  font-size:1.1rem;
+  animation-delay:.95s;
+  z-index:2;
+}
+
+.speech--n4{
+  bottom:3%;
+  left:4%;
+  font-size:.98rem;
+  animation-delay:1.35s;
+  z-index:2;
+}
+
+.speech--n5{
+  top:44%;
+  left:2%;
+  font-size:1rem;
+  animation-delay:1.75s;
+  z-index:2;
+  max-height:34%;
+}
+
+.speech--n6{
+  top:35%;
+  left:41%;
+  font-size:.92rem;
+  animation-delay:2.1s;
+  z-index:2;
+  max-height:34%;
+}
+
+.speech--n7{
+  right:6%;
+  bottom:4%;
+  font-size:.82rem;
+  line-height:1.32;
+  animation-delay:2.45s;
+  z-index:2;
+}
+
+.speech--n8{
+  top:30%;
+  left:4%;
+  font-size:.84rem;
+  animation-delay:2.8s;
+  z-index:2;
+}
+
+.speech--n9{
+  top:34%;
+  left:12%;
+  font-size:.84rem;
+  animation-delay:3.05s;
+  z-index:2;
+}
+
+.speech--n10{
+  top:39%;
+  left:4%;
+  font-size:.86rem;
+  animation-delay:3.35s;
+  z-index:2;
+}
+
+/* 裏 */
+.speech-stage--corrupt .speech{
+  color:#f5f1f1;
+  text-shadow:
+    0 0 6px rgba(255,255,255,.08),
+    0 0 12px rgba(120, 0, 0, .14);
+}
+
+.speech--c1{
+  top:2%;
+  left:2%;
+  font-size:1rem;
+  line-height:1.25;
+  animation-delay:.18s;
+  z-index:2;
+}
+
+.speech--c2{
+  top:4%;
+  right:4%;
+  font-size:1.18rem;
+  animation-delay:.55s;
+  z-index:2;
+  max-height:46%;
+}
+
+.speech--c3{
+  top:25%;
+  left:30%;
+  font-size:.92rem;
+  opacity:.8;
+  animation-delay:.9s;
+  z-index:2;
+}
+
+.speech--c4{
+  top:33%;
+  left:45%;
+  font-size:1.22rem;
+  letter-spacing:.08em;
+  animation-delay:1.28s;
+  z-index:2;
+  max-height:40%;
+}
+
+.speech--c5{
+  top:16%;
+  left:4%;
+  font-size:1.16rem;
+  animation-delay:1.62s;
+  z-index:2;
+  max-height:66%;
+}
+
+.speech--c6{
+  left:4%;
+  bottom:1%;
+  font-size:2.3rem;
+  letter-spacing:.03em;
+  animation-delay:2s;
+  z-index:3;
+}
+
+.speech--c6::first-letter{
+  font-size:3.15rem;
+}
+
+.speech--c7{
+  right:8%;
+  bottom:7%;
+  font-size:.9rem;
+  animation-delay:2.35s;
+  z-index:2;
+}
+
+.speech--c8{
+  top:42%;
+  right:14%;
+  font-size:.94rem;
+  animation-delay:2.7s;
+  z-index:2;
+  max-height:28%;
+}
+
+.speech--c9{
+  left:24%;
+  bottom:16%;
+  font-size:.86rem;
+  animation-delay:3.05s;
+  z-index:2;
+}
+
+.speech--c10{
+  top:72%;
+  right:-4%;
+  font-size:.88rem;
+  animation-delay:3.4s;
+  z-index:2;
+}
+
+.speech--c11{
+  right:7%;
+  bottom:16%;
+  font-size:.88rem;
+  animation-delay:3.7s;
+  z-index:2;
+}
+
 .visual-grid{
   display:grid;
   grid-template-columns:repeat(2, minmax(0, 1fr));
@@ -984,10 +1255,127 @@ img{
     font-size:11px;
   }
 
-  .text-block p,
-  .relation-text{
-    font-size:12px;
-    line-height:1.65;
+  .speech-stage{
+    min-height:360px;
+  }
+
+  .speech{
+    white-space:normal;
+    max-width:48%;
+  }
+
+  .speech--vertical{
+    max-width:none;
+  }
+
+  .speech--n1{
+    font-size:1.68rem;
+    right:2%;
+  }
+
+  .speech--n2{
+    font-size:.9rem;
+    left:3%;
+    top:4%;
+    max-width:58%;
+  }
+
+  .speech--n3{
+    font-size:.86rem;
+    bottom:11%;
+    left:14%;
+    max-width:68%;
+  }
+
+  .speech--n4{
+    font-size:.82rem;
+    bottom:4%;
+    left:4%;
+    max-width:78%;
+  }
+
+  .speech--n5{
+    font-size:.9rem;
+    max-height:32%;
+  }
+
+  .speech--n6{
+    font-size:.82rem;
+    left:49%;
+  }
+
+  .speech--n7{
+    font-size:.76rem;
+    right:4%;
+    max-width:48%;
+  }
+
+  .speech--n8,
+  .speech--n9,
+  .speech--n10{
+    font-size:.72rem;
+    max-width:44%;
+  }
+
+  .speech--c1{
+    font-size:.86rem;
+    left:1%;
+    max-width:70%;
+  }
+
+  .speech--c2{
+    font-size:1.02rem;
+    right:2%;
+    max-height:44%;
+  }
+
+  .speech--c3{
+    font-size:.82rem;
+    left:28%;
+    max-width:44%;
+  }
+
+  .speech--c4{
+    font-size:1rem;
+    left:48%;
+  }
+
+  .speech--c5{
+    font-size:1.02rem;
+    max-height:62%;
+  }
+
+  .speech--c6{
+    font-size:1.92rem;
+    left:3%;
+    bottom:2%;
+    max-width:none;
+  }
+
+  .speech--c6::first-letter{
+    font-size:2.65rem;
+  }
+
+  .speech--c7{
+    font-size:.82rem;
+    right:6%;
+  }
+
+  .speech--c8{
+    font-size:.82rem;
+    right:12%;
+  }
+
+  .speech--c9{
+    font-size:.78rem;
+    left:24%;
+    max-width:62%;
+  }
+
+  .speech--c10,
+  .speech--c11{
+    font-size:.78rem;
+    max-width:42%;
   }
 
   .thumb-btn img{
