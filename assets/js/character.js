@@ -29,9 +29,10 @@ const characterSilhouette = document.getElementById("characterSilhouette");
 
 const speechNoteNormal = document.getElementById("speechNoteNormal");
 const speechNoteCorrupt = document.getElementById("speechNoteCorrupt");
+const speechNoteUiNormal = document.getElementById("speechNoteUiNormal");
+const speechNoteUiCorrupt = document.getElementById("speechNoteUiCorrupt");
 
 let isCorrupted = false;
-let talkSequenceTimer = null;
 let talkNoteTimer = null;
 
 const relationData = [
@@ -90,32 +91,36 @@ function hidePanels() {
   contentPanels.forEach((panel) => panel.classList.remove("is-active"));
 }
 
-function clearTalkUI() {
-  if (talkSequenceTimer) {
-    clearTimeout(talkSequenceTimer);
-    talkSequenceTimer = null;
-  }
-  if (talkNoteTimer) {
-    clearTimeout(talkNoteTimer);
-    talkNoteTimer = null;
-  }
-
+function resetSpeechAnimations() {
   document.querySelectorAll("#panel-talk .speech, #panel-talk-corrupt .speech").forEach((el) => {
     el.style.animation = "none";
     void el.offsetWidth;
     el.style.animation = "";
   });
+}
 
-  speechNoteNormal?.classList.remove("is-visible", "is-collapsed");
-  speechNoteCorrupt?.classList.remove("is-visible", "is-collapsed");
+function resetSpeechNotes() {
+  [speechNoteNormal, speechNoteCorrupt].forEach((note) => {
+    note?.classList.remove("is-visible");
+  });
 
-  speechNoteNormal
-    ?.querySelector(".speech-note__toggle")
-    ?.setAttribute("aria-expanded", "true");
+  [speechNoteUiNormal, speechNoteUiCorrupt].forEach((ui) => {
+    ui?.classList.remove("is-visible");
+  });
 
-  speechNoteCorrupt
-    ?.querySelector(".speech-note__toggle")
-    ?.setAttribute("aria-expanded", "true");
+  document.querySelectorAll(".speech-note__toggle").forEach((button) => {
+    button.setAttribute("aria-expanded", "true");
+  });
+}
+
+function clearTalkUI() {
+  if (talkNoteTimer) {
+    clearTimeout(talkNoteTimer);
+    talkNoteTimer = null;
+  }
+
+  resetSpeechAnimations();
+  resetSpeechNotes();
 
   menuStack?.classList.remove("is-hidden-for-talk");
   characterBoard?.classList.remove("is-talk-active");
@@ -136,6 +141,7 @@ function showPanel(panelId, cardEl) {
   if (target) {
     target.classList.add("is-active");
   }
+
   if (cardEl) {
     cardEl.classList.add("is-active");
   }
@@ -150,9 +156,7 @@ function startTalkSequence(panelId) {
   characterBoard?.classList.add("is-talk-active");
 
   const noteEl = panelId === "talk" ? speechNoteNormal : speechNoteCorrupt;
-  if (noteEl) {
-    noteEl.classList.remove("is-visible");
-  }
+  const noteUiEl = panelId === "talk" ? speechNoteUiNormal : speechNoteUiCorrupt;
 
   const speeches = document.querySelectorAll(`#panel-${panelId} .speech`);
   if (!speeches.length) return;
@@ -168,8 +172,8 @@ function startTalkSequence(panelId) {
   });
 
   talkNoteTimer = window.setTimeout(() => {
-noteEl?.classList.remove("is-hidden");
-noteEl?.classList.add("is-visible");
+    noteUiEl?.classList.add("is-visible");
+    noteEl?.classList.add("is-visible");
   }, maxEnd + 160);
 }
 
@@ -279,10 +283,7 @@ function updateSilhouetteFigure() {
 
   if (!nextFigure) return;
 
-  characterSilhouette.style.setProperty(
-    "--figure-url",
-    `url('${nextFigure}')`
-  );
+  characterSilhouette.style.setProperty("--figure-url", `url('${nextFigure}')`);
 }
 
 function setCorruptedState(nextState) {
@@ -382,23 +383,17 @@ function bindThumbButtons() {
 }
 
 function bindModal() {
-  if (imageModalImg) {
-    imageModalImg.addEventListener("click", (event) => {
-      event.stopPropagation();
-    });
-  }
+  imageModalImg?.addEventListener("click", (event) => {
+    event.stopPropagation();
+  });
 
-  if (imageModalBackdrop) {
-    imageModalBackdrop.addEventListener("click", () => {
-      closeImageModal({ reset: true });
-    });
-  }
+  imageModalBackdrop?.addEventListener("click", () => {
+    closeImageModal({ reset: true });
+  });
 
-  if (imageModalClose) {
-    imageModalClose.addEventListener("click", () => {
-      closeImageModal({ reset: true });
-    });
-  }
+  imageModalClose?.addEventListener("click", () => {
+    closeImageModal({ reset: true });
+  });
 }
 
 function bindSpeechNoteToggles() {
@@ -406,22 +401,27 @@ function bindSpeechNoteToggles() {
     button.addEventListener("click", (event) => {
       event.stopPropagation();
 
-      const note = button.closest(".speech-note");
+      const targetId = button.dataset.noteTarget;
+      const note = document.getElementById(targetId);
       if (!note) return;
 
-const hidden = note.classList.toggle("is-hidden");
-button.setAttribute("aria-expanded", String(!hidden));
+      const isVisible = note.classList.contains("is-visible");
+      if (isVisible) {
+        note.classList.remove("is-visible");
+        button.setAttribute("aria-expanded", "false");
+      } else {
+        note.classList.add("is-visible");
+        button.setAttribute("aria-expanded", "true");
+      }
     });
   });
 }
 
 function bindGlobalEvents() {
-  if (secretTrigger) {
-    secretTrigger.addEventListener("click", (event) => {
-      event.stopPropagation();
-      toggleCorruptedState();
-    });
-  }
+  secretTrigger?.addEventListener("click", (event) => {
+    event.stopPropagation();
+    toggleCorruptedState();
+  });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
