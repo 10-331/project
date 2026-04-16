@@ -457,6 +457,7 @@ speechNoteNormal?.addEventListener("click", (e)=>{
   speechNoteNormal.classList.remove("is-visible");
   void speechNoteNormal.offsetWidth;
   speechNoteNormal.classList.add("is-visible");
+  characterBoard.classList.add("is-talk-active");
 });
 
 speechNoteCorrupt?.addEventListener("click", (e)=>{
@@ -464,4 +465,5 @@ speechNoteCorrupt?.addEventListener("click", (e)=>{
   speechNoteCorrupt.classList.remove("is-visible");
   void speechNoteCorrupt.offsetWidth;
   speechNoteCorrupt.classList.add("is-visible");
+  characterBoard.classList.remove("is-talk-active");
 });
