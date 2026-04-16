@@ -1242,3 +1242,81 @@ img{
     height:74px;
   }
 }
+
+/* ===== 追加修正（ここから） ===== */
+
+/* 表示領域を広げる */
+.floating-content{
+  top:12%;
+  left:18%;
+  width:64%;
+  min-height:260px;
+}
+
+/* ===== 一人称ノートの位置（PC） ===== */
+
+.speech-note{
+  bottom:18%;
+}
+
+/* ===== モバイル修正 ===== */
+
+@media (max-width:768px){
+
+  /* 表示領域を広げる */
+  .floating-content{
+    top:16%;
+    left:10%;
+    width:80%;
+    min-height:280px;
+  }
+
+  /* ノートを中央寄せにする */
+  .speech-note{
+    left:8%;
+    right:8%;
+    bottom:32%;
+    transform:none;
+  }
+
+  /* トグルボタンも追従 */
+  .speech-note-ui{
+    right:8%;
+    bottom:26%;
+  }
+}
+
+/* ===== トグル確実化 ===== */
+
+/* 非表示状態 */
+.speech-note{
+  display:none;
+}
+
+/* 表示状態 */
+.speech-note.is-visible{
+  display:block;
+}
+
+/* UIは別管理 */
+.speech-note-ui{
+  display:none;
+}
+
+.speech-note-ui.is-visible{
+  display:block;
+}
+
+/* ===== セリフ表示中のボタン制御 ===== */
+
+/* トーク中はUI表示 */
+.character-board.is-talk-active .speech-note-ui{
+  display:block;
+}
+
+/* 非トーク時は完全非表示 */
+.character-board:not(.is-talk-active) .speech-note-ui{
+  display:none;
+}
+
+/* ===== 追加修正ここまで ===== */
