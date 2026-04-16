@@ -479,3 +479,25 @@ function init() {
 }
 
 init();
+
+function bindSpeechNoteToggles() {
+  document.querySelectorAll(".speech-note__toggle").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+
+      const targetId = button.dataset.noteTarget;
+      const note = document.getElementById(targetId);
+      if (!note) return;
+
+      const isVisible = note.classList.contains("is-visible");
+
+      if (isVisible) {
+        note.classList.remove("is-visible");
+        button.setAttribute("aria-expanded", "false");
+      } else {
+        note.classList.add("is-visible");
+        button.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+}
