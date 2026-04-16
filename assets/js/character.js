@@ -106,8 +106,17 @@ function clearTalkUI() {
     el.style.animation = "";
   });
 
-  speechNoteNormal?.classList.remove("is-visible");
-  speechNoteCorrupt?.classList.remove("is-visible");
+  speechNoteNormal?.classList.remove("is-visible", "is-collapsed");
+  speechNoteCorrupt?.classList.remove("is-visible", "is-collapsed");
+
+  speechNoteNormal
+    ?.querySelector(".speech-note__toggle")
+    ?.setAttribute("aria-expanded", "true");
+
+  speechNoteCorrupt
+    ?.querySelector(".speech-note__toggle")
+    ?.setAttribute("aria-expanded", "true");
+
   menuStack?.classList.remove("is-hidden-for-talk");
   characterBoard?.classList.remove("is-talk-active");
 }
@@ -391,14 +400,6 @@ function bindModal() {
   }
 }
 
-function bindGlobalEvents() {
-  if (secretTrigger) {
-    secretTrigger.addEventListener("click", (event) => {
-      event.stopPropagation();
-      toggleCorruptedState();
-    });
-  }
-
 function bindSpeechNoteToggles() {
   document.querySelectorAll(".speech-note__toggle").forEach((button) => {
     button.addEventListener("click", (event) => {
@@ -412,7 +413,15 @@ function bindSpeechNoteToggles() {
     });
   });
 }
-  
+
+function bindGlobalEvents() {
+  if (secretTrigger) {
+    secretTrigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleCorruptedState();
+    });
+  }
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       if (imageModal?.classList.contains("is-open")) {
@@ -463,8 +472,8 @@ function init() {
   bindTabs();
   bindThumbButtons();
   bindModal();
-  bindGlobalEvents();
   bindSpeechNoteToggles();
+  bindGlobalEvents();
 }
 
 init();
