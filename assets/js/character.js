@@ -399,6 +399,20 @@ function bindGlobalEvents() {
     });
   }
 
+function bindSpeechNoteToggles() {
+  document.querySelectorAll(".speech-note__toggle").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.stopPropagation();
+
+      const note = button.closest(".speech-note");
+      if (!note) return;
+
+      const collapsed = note.classList.toggle("is-collapsed");
+      button.setAttribute("aria-expanded", String(!collapsed));
+    });
+  });
+}
+  
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       if (imageModal?.classList.contains("is-open")) {
@@ -450,6 +464,7 @@ function init() {
   bindThumbButtons();
   bindModal();
   bindGlobalEvents();
+  bindSpeechNoteToggles();
 }
 
 init();
