@@ -1558,3 +1558,11 @@ img{
 .center-char{ z-index:5; }
 .speech{ z-index:10; }
 .speech-note{ z-index:20; }
+
+
+.character-board.is-talk-active .secret-trigger{
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(8px);
+  pointer-events:none;
+}
