@@ -426,6 +426,7 @@ img{
   bottom:4%;
   padding:10px 12px;
   border-radius:10px;
+  z-index: 20;
   opacity:0;
   transform:translateY(10px);
   pointer-events:none;
@@ -518,6 +519,7 @@ img{
 .speech{
   position:absolute;
   margin:0;
+  z-index: 10;
   line-height:1.42;
   white-space:nowrap;
   opacity:0;
