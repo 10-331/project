@@ -417,10 +417,9 @@ img{
     visibility 0s linear .42s;
 }
 
-/* ===== セリフ表示後の説明（完全非表示 → 表示時のみ出現） ===== */
+/* ===== セリフ表示後の説明（修正版） ===== */
 
 .speech-note{
-  display:none;
   position:absolute;
   left:4%;
   right:4%;
@@ -428,6 +427,10 @@ img{
   padding:10px 12px;
   border-radius:10px;
   z-index:20;
+
+  /* 初期状態：完全非表示 */
+  display:none;
+
   font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
 }
 
@@ -441,11 +444,16 @@ img{
   margin-bottom:0;
 }
 
+/* セリフ後に表示 */
 .speech-note.is-visible{
   display:block;
   animation:speechNoteIn .55s ease;
 }
 
+/* 手動で消した状態 */
+.speech-note.is-hidden{
+  display:none;
+}
 @keyframes speechNoteIn{
   from{
     opacity:0;
