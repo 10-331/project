@@ -1618,3 +1618,16 @@ img{
   transform:translateY(8px);
   pointer-events:none;
 }
+
+.speech-line{
+  display:inline-block;
+}
+
+.speech-line--down{
+  transform:translateY(6px);
+}
+
+/* 縦書き用 */
+.speech--vertical .speech-line--down{
+  transform:translateX(-6px);
+}
