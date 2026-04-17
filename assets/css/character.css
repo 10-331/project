@@ -1246,3 +1246,166 @@ img{
     height:74px;
   }
 }
+
+/* ===== 裏ページ用グリッチ追加 ===== */
+
+/* 裏ページ全体に薄い走査線 */
+.character-page.is-corrupted::before{
+  content:"";
+  position:absolute;
+  inset:52px 0 0;
+  pointer-events:none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 2px,
+      rgba(255, 0, 76, 0.04) 3px,
+      transparent 4px 7px
+    );
+  mix-blend-mode:screen;
+  opacity:.45;
+  z-index:1;
+}
+
+/* 裏ページ全体にたまに横ズレするノイズ */
+.character-page.is-corrupted::after{
+  content:"";
+  position:absolute;
+  inset:52px 0 0;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(98, 176, 255, 0.06) 20%,
+      rgba(255, 0, 76, 0.08) 50%,
+      transparent 100%
+    );
+  opacity:.22;
+  mix-blend-mode:screen;
+  animation:corruptScreenShift 2.2s steps(2, end) infinite;
+  z-index:1;
+}
+
+/* 立ち絵を常時わずかにRGBずらし */
+.character-page.is-corrupted .character-silhouette{
+  animation:
+    corruptSilhouetteFlicker .28s steps(2, end) infinite,
+    corruptRGBShift 1.8s steps(2, end) infinite;
+  filter:
+    drop-shadow(0 0 16px rgba(255,0,60,.20))
+    drop-shadow(-1px 0 0 rgba(96,179,255,.22))
+    drop-shadow(1px 0 0 rgba(255,0,76,.18));
+}
+
+/* 裏のメニュー札にも微グリッチ */
+.character-page.is-corrupted .menu-card{
+  animation:
+    corruptCardFlicker .35s steps(2, end) infinite,
+    corruptMicroJitter 2.6s steps(2, end) infinite;
+}
+
+/* ラベル文字のRGB分離 */
+.character-page.is-corrupted .menu-card__label{
+  position:relative;
+  text-shadow:
+    0 0 6px rgba(0,180,255,.24),
+    -1px 0 rgba(255,0,76,.18),
+    1px 0 rgba(99,176,255,.22);
+}
+
+.character-page.is-corrupted .menu-card__label::before,
+.character-page.is-corrupted .menu-card__label::after{
+  content:attr(data-text);
+  position:absolute;
+  left:0;
+  top:0;
+  pointer-events:none;
+  opacity:.28;
+}
+
+.character-page.is-corrupted .menu-card__label::before{
+  transform:translate(-1px, 0);
+  color:rgba(255, 0, 76, .42);
+  clip-path:polygon(0 0, 100% 0, 100% 42%, 0 50%);
+}
+
+.character-page.is-corrupted .menu-card__label::after{
+  transform:translate(1px, 0);
+  color:rgba(99, 176, 255, .42);
+  clip-path:polygon(0 55%, 100% 48%, 100% 100%, 0 100%);
+}
+
+/* トーク文字も裏だけ少しにじませる */
+.character-page.is-corrupted .speech-stage--corrupt .speech{
+  text-shadow:
+    0 0 5px rgba(255,255,255,.08),
+    -1px 0 rgba(255,0,76,.10),
+    1px 0 rgba(99,176,255,.10),
+    0 0 12px rgba(120,0,0,.14);
+}
+
+/* ===== アニメーション ===== */
+
+@keyframes corruptScreenShift{
+  0%,100%{
+    transform:translateX(0);
+    opacity:.18;
+  }
+  20%{
+    transform:translateX(-2px);
+    opacity:.24;
+  }
+  40%{
+    transform:translateX(2px);
+    opacity:.16;
+  }
+  60%{
+    transform:translateX(-1px);
+    opacity:.22;
+  }
+  80%{
+    transform:translateX(1px);
+    opacity:.18;
+  }
+}
+
+@keyframes corruptSilhouetteFlicker{
+  0%,100%{ opacity:.92; }
+  18%{ opacity:.86; }
+  19%{ opacity:.92; }
+  62%{ opacity:.82; }
+  63%{ opacity:.92; }
+}
+
+@keyframes corruptRGBShift{
+  0%,100%{
+    filter:
+      drop-shadow(0 0 16px rgba(255,0,60,.20))
+      drop-shadow(-1px 0 0 rgba(96,179,255,.22))
+      drop-shadow(1px 0 0 rgba(255,0,76,.18));
+  }
+  50%{
+    filter:
+      drop-shadow(0 0 20px rgba(255,0,60,.26))
+      drop-shadow(-2px 0 0 rgba(96,179,255,.28))
+      drop-shadow(2px 0 0 rgba(255,0,76,.22));
+  }
+}
+
+@keyframes corruptCardFlicker{
+  0%,100%{ opacity:1; }
+  10%{ opacity:.97; }
+  11%{ opacity:.91; }
+  12%{ opacity:1; }
+  46%{ opacity:.96; }
+  47%{ opacity:1; }
+  77%{ opacity:.92; }
+  78%{ opacity:1; }
+}
+
+@keyframes corruptMicroJitter{
+  0%,100%{ transform:rotate(var(--card-tilt)) translate(0,0); }
+  30%{ transform:rotate(var(--card-tilt)) translate(-1px, 0); }
+  60%{ transform:rotate(var(--card-tilt)) translate(1px, -1px); }
+}
