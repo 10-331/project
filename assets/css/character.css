@@ -285,12 +285,13 @@ img{
   transform:rotate(-15deg);
 }
 
+/* 表示領域を広げる */
 .floating-content{
   position:absolute;
-  top:20%;
-  left:26%;
-  width:52%;
-  min-height:180px;
+  top:14%;
+  left:18%;
+  width:64%;
+  min-height:260px;
   z-index:4;
   pointer-events:none;
 }
@@ -625,8 +626,8 @@ img{
 .speech-note-ui{
   display:none;
   position:absolute;
-  right:4%;
-  bottom:4%;
+  right:6%;
+  bottom:14%;
   z-index:21;
 }
 
@@ -637,9 +638,9 @@ img{
 .speech-note{
   display:none;
   position:absolute;
-  left:4%;
-  right:4%;
-  bottom:44px;
+  left:6%;
+  right:6%;
+  bottom:20%;
   padding:10px 12px;
   border-radius:10px;
   z-index:20;
@@ -1044,11 +1045,12 @@ img{
     margin-top:16px;
   }
 
+  /* モバイルでも画面をもっと使う */
   .floating-content{
-    top:28%;
-    left:20%;
-    width:64%;
-    min-height:160px;
+    top:16%;
+    left:10%;
+    width:80%;
+    min-height:280px;
   }
 
   .content-card{
@@ -1082,16 +1084,17 @@ img{
     min-height:360px;
   }
 
+  /* 一人称メモを中央寄りに上げる */
   .speech-note{
-    left:3%;
-    right:3%;
-    bottom:40px;
+    left:8%;
+    right:8%;
+    bottom:34%;
     padding:8px 10px;
   }
 
   .speech-note-ui{
-    right:3%;
-    bottom:3%;
+    right:8%;
+    bottom:26%;
   }
 
   .speech-note p{
@@ -1242,81 +1245,3 @@ img{
     height:74px;
   }
 }
-
-/* ===== 追加修正（ここから） ===== */
-
-/* 表示領域を広げる */
-.floating-content{
-  top:12%;
-  left:18%;
-  width:64%;
-  min-height:260px;
-}
-
-/* ===== 一人称ノートの位置（PC） ===== */
-
-.speech-note{
-  bottom:18%;
-}
-
-/* ===== モバイル修正 ===== */
-
-@media (max-width:768px){
-
-  /* 表示領域を広げる */
-  .floating-content{
-    top:16%;
-    left:10%;
-    width:80%;
-    min-height:280px;
-  }
-
-  /* ノートを中央寄せにする */
-  .speech-note{
-    left:8%;
-    right:8%;
-    bottom:32%;
-    transform:none;
-  }
-
-  /* トグルボタンも追従 */
-  .speech-note-ui{
-    right:8%;
-    bottom:26%;
-  }
-}
-
-/* ===== トグル確実化 ===== */
-
-/* 非表示状態 */
-.speech-note{
-  display:none;
-}
-
-/* 表示状態 */
-.speech-note.is-visible{
-  display:block;
-}
-
-/* UIは別管理 */
-.speech-note-ui{
-  display:none;
-}
-
-.speech-note-ui.is-visible{
-  display:block;
-}
-
-/* ===== セリフ表示中のボタン制御 ===== */
-
-/* トーク中はUI表示 */
-.character-board.is-talk-active .speech-note-ui{
-  display:block;
-}
-
-/* 非トーク時は完全非表示 */
-.character-board:not(.is-talk-active) .speech-note-ui{
-  display:none;
-}
-
-/* ===== 追加修正ここまで ===== */
