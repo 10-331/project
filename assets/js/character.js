@@ -33,6 +33,7 @@ const speechNoteUiNormal = document.getElementById("speechNoteUiNormal");
 const speechNoteUiCorrupt = document.getElementById("speechNoteUiCorrupt");
 
 let isCorrupted = false;
+let talkSequenceTimer = null;
 let talkNoteTimer = null;
 
 const relationData = [
@@ -101,7 +102,7 @@ function resetSpeechAnimations() {
 
 function resetSpeechNotes() {
   [speechNoteNormal, speechNoteCorrupt].forEach((note) => {
-    note?.classList.remove("is-visible");
+    note?.classList.remove("is-visible", "is-hidden", "is-collapsed");
   });
 
   [speechNoteUiNormal, speechNoteUiCorrupt].forEach((ui) => {
@@ -114,6 +115,10 @@ function resetSpeechNotes() {
 }
 
 function clearTalkUI() {
+  if (talkSequenceTimer) {
+    clearTimeout(talkSequenceTimer);
+    talkSequenceTimer = null;
+  }
   if (talkNoteTimer) {
     clearTimeout(talkNoteTimer);
     talkNoteTimer = null;
@@ -157,6 +162,9 @@ function startTalkSequence(panelId) {
 
   const noteEl = panelId === "talk" ? speechNoteNormal : speechNoteCorrupt;
   const noteUiEl = panelId === "talk" ? speechNoteUiNormal : speechNoteUiCorrupt;
+
+  noteEl?.classList.remove("is-visible", "is-hidden", "is-collapsed");
+  noteUiEl?.classList.remove("is-visible");
 
   const speeches = document.querySelectorAll(`#panel-${panelId} .speech`);
   if (!speeches.length) return;
@@ -283,7 +291,10 @@ function updateSilhouetteFigure() {
 
   if (!nextFigure) return;
 
-  characterSilhouette.style.setProperty("--figure-url", `url('${nextFigure}')`);
+  characterSilhouette.style.setProperty(
+    "--figure-url",
+    `url('${nextFigure}')`
+  );
 }
 
 function setCorruptedState(nextState) {
@@ -383,17 +394,23 @@ function bindThumbButtons() {
 }
 
 function bindModal() {
-  imageModalImg?.addEventListener("click", (event) => {
-    event.stopPropagation();
-  });
+  if (imageModalImg) {
+    imageModalImg.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  }
 
-  imageModalBackdrop?.addEventListener("click", () => {
-    closeImageModal({ reset: true });
-  });
+  if (imageModalBackdrop) {
+    imageModalBackdrop.addEventListener("click", () => {
+      closeImageModal({ reset: true });
+    });
+  }
 
-  imageModalClose?.addEventListener("click", () => {
-    closeImageModal({ reset: true });
-  });
+  if (imageModalClose) {
+    imageModalClose.addEventListener("click", () => {
+      closeImageModal({ reset: true });
+    });
+  }
 }
 
 function bindSpeechNoteToggles() {
@@ -401,15 +418,25 @@ function bindSpeechNoteToggles() {
     button.addEventListener("click", (event) => {
       event.stopPropagation();
 
+      let note = null;
+
       const targetId = button.dataset.noteTarget;
-      const note = document.getElementById(targetId);
+      if (targetId) {
+        note = document.getElementById(targetId);
+      } else {
+        note = button.closest(".speech-note");
+      }
+
       if (!note) return;
 
       const isVisible = note.classList.contains("is-visible");
+
       if (isVisible) {
         note.classList.remove("is-visible");
+        note.classList.add("is-hidden");
         button.setAttribute("aria-expanded", "false");
       } else {
+        note.classList.remove("is-hidden");
         note.classList.add("is-visible");
         button.setAttribute("aria-expanded", "true");
       }
@@ -418,10 +445,12 @@ function bindSpeechNoteToggles() {
 }
 
 function bindGlobalEvents() {
-  secretTrigger?.addEventListener("click", (event) => {
-    event.stopPropagation();
-    toggleCorruptedState();
-  });
+  if (secretTrigger) {
+    secretTrigger.addEventListener("click", (event) => {
+      event.stopPropagation();
+      toggleCorruptedState();
+    });
+  }
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
@@ -479,25 +508,3 @@ function init() {
 }
 
 init();
-
-function bindSpeechNoteToggles() {
-  document.querySelectorAll(".speech-note__toggle").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.stopPropagation();
-
-      const targetId = button.dataset.noteTarget;
-      const note = document.getElementById(targetId);
-      if (!note) return;
-
-      const isVisible = note.classList.contains("is-visible");
-
-      if (isVisible) {
-        note.classList.remove("is-visible");
-        button.setAttribute("aria-expanded", "false");
-      } else {
-        note.classList.add("is-visible");
-        button.setAttribute("aria-expanded", "true");
-      }
-    });
-  });
-}
