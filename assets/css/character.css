@@ -2015,3 +2015,263 @@ img{
   .speech--n6{ font-size:.94rem; left:53%; }
   .speech--c6{ font-size:1.75rem; }
 }
+
+/* =========================================================
+   talk layout final override
+   目的：スマホ実機で、セリフ開始位置を上げつつ、文字同士を被らせない
+   ========================================================= */
+
+@media (max-width:768px){
+  .character-page{
+    padding-top:52px;
+    overflow:hidden;
+  }
+
+  .character-board{
+    width:calc(100vw - 32px);
+    height:calc(100dvh - 112px);
+    max-height:none;
+    margin:16px auto 0;
+    overflow:hidden;
+  }
+
+  .board-left,
+  .board-right{
+    position:absolute;
+    inset:0;
+    width:100%;
+  }
+
+  .floating-content{
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    min-height:0;
+    z-index:14;
+    pointer-events:none;
+  }
+
+  .speech-stage{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    min-height:0;
+    margin:0;
+    overflow:visible;
+  }
+
+  .speech{
+    white-space:nowrap;
+    max-width:none;
+    line-height:1.42;
+    letter-spacing:.01em;
+  }
+
+  .speech--vertical{
+    line-height:1.48;
+    white-space:normal;
+  }
+
+  .speech-note,
+  .speech-note-ui{
+    display:none !important;
+  }
+
+  .character-silhouette{
+    left:5%;
+    right:auto;
+    top:auto;
+    bottom:5%;
+    width:48%;
+    height:72%;
+    opacity:.86;
+    -webkit-mask-position:center bottom;
+    mask-position:center bottom;
+    -webkit-mask-size:contain;
+    mask-size:contain;
+  }
+
+  /* ===== 表トーク：重なり回避版 ===== */
+
+  .speech--n1{
+    top:4%;
+    right:4%;
+    font-size:clamp(1.62rem, 7.1vw, 2.08rem);
+    line-height:1.43;
+    max-height:76%;
+    z-index:13;
+  }
+
+  .speech--n2{
+    top:5%;
+    left:2%;
+    font-size:clamp(.92rem, 4.3vw, 1.18rem);
+    line-height:1.48;
+    z-index:12;
+  }
+
+  .speech--n8{
+    top:24%;
+    left:3%;
+    font-size:clamp(.78rem, 3.7vw, 1rem);
+    z-index:12;
+  }
+
+  .speech--n9{
+    top:29%;
+    left:3%;
+    font-size:clamp(.76rem, 3.45vw, .96rem);
+    z-index:12;
+  }
+
+  .speech--n10{
+    top:34%;
+    left:3%;
+    font-size:clamp(.76rem, 3.5vw, .98rem);
+    z-index:12;
+  }
+
+  .speech--n5{
+    top:41%;
+    left:3%;
+    font-size:clamp(.96rem, 4.6vw, 1.24rem);
+    line-height:1.45;
+    max-height:46%;
+    z-index:12;
+  }
+
+  .speech--n6{
+    top:43%;
+    left:53%;
+    font-size:clamp(.82rem, 4vw, 1.05rem);
+    line-height:1.45;
+    max-height:36%;
+    z-index:12;
+  }
+
+  .speech--n3{
+    top:auto;
+    bottom:17%;
+    left:15%;
+    font-size:clamp(.9rem, 4.3vw, 1.12rem);
+    z-index:12;
+  }
+
+  .speech--n4{
+    top:auto;
+    bottom:11%;
+    left:3%;
+    font-size:clamp(.86rem, 4vw, 1.02rem);
+    z-index:12;
+  }
+
+  .speech--n7{
+    top:auto;
+    right:6%;
+    bottom:4%;
+    font-size:clamp(.78rem, 3.5vw, .94rem);
+    line-height:1.35;
+    z-index:12;
+  }
+
+  /* ===== 裏トーク ===== */
+
+  .character-page.is-corrupted .character-silhouette{
+    left:4%;
+    bottom:7%;
+    width:42%;
+    height:70%;
+    opacity:.92;
+    -webkit-mask-position:center bottom;
+    mask-position:center bottom;
+    -webkit-mask-size:contain;
+    mask-size:contain;
+  }
+
+  .speech--c1{
+    top:2%;
+    left:1%;
+    font-size:clamp(.9rem, 4.4vw, 1.12rem);
+    line-height:1.35;
+  }
+
+  .speech--c2{
+    top:4%;
+    right:5%;
+    font-size:clamp(1.08rem, 5.6vw, 1.42rem);
+    line-height:1.45;
+    max-height:45%;
+  }
+
+  .speech--c3{
+    top:17%;
+    left:31%;
+    font-size:clamp(.82rem, 4vw, 1rem);
+  }
+
+  .speech--c4{
+    top:34%;
+    left:52%;
+    font-size:clamp(1.08rem, 5.4vw, 1.38rem);
+    line-height:1.45;
+    max-height:40%;
+  }
+
+  .speech--c5{
+    top:10%;
+    left:5%;
+    font-size:clamp(1.02rem, 5.2vw, 1.32rem);
+    line-height:1.45;
+    max-height:65%;
+  }
+
+  .speech--c6{
+    left:2%;
+    bottom:7%;
+    font-size:clamp(1.55rem, 8.5vw, 2.25rem);
+    line-height:1.2;
+    letter-spacing:.04em;
+  }
+
+  .speech--c7{
+    right:8%;
+    bottom:5%;
+    font-size:clamp(.8rem, 4.1vw, 1rem);
+  }
+
+  .speech--c8{
+    top:35%;
+    right:16%;
+    font-size:clamp(.82rem, 4vw, 1rem);
+    max-height:30%;
+  }
+
+  .speech--c9{
+    left:28%;
+    bottom:20%;
+    font-size:clamp(.78rem, 3.9vw, .98rem);
+  }
+
+  .speech--c10{
+    top:73%;
+    right:10%;
+    font-size:clamp(.76rem, 3.6vw, .92rem);
+  }
+
+  .speech--c11{
+    right:10%;
+    bottom:29%;
+    font-size:clamp(.78rem, 3.9vw, .98rem);
+  }
+}
+
+@media (max-width:390px){
+  .speech--n1{ right:3%; font-size:1.58rem; }
+  .speech--n2{ font-size:.92rem; }
+  .speech--n5{ font-size:.96rem; }
+  .speech--n6{ left:52%; font-size:.82rem; }
+  .speech--n7{ right:4%; font-size:.76rem; }
+  .speech--c6{ font-size:1.55rem; }
+}
