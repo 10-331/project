@@ -369,9 +369,8 @@ img{
 .speech-stage{
   position:relative;
   width:100%;
-  height:100%;
-  min-height:360px;
-  margin-top:0;
+  height:115%;
+  margin-top:-10%;
   overflow:visible;
   pointer-events:none;
   font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
@@ -388,11 +387,15 @@ img{
   pointer-events:none;
 }
 
+.speech br{
+  display:block;
+  line-height:0;
+}
+
 .speech--vertical{
   writing-mode:vertical-rl;
   text-orientation:mixed;
   white-space:normal;
-  line-height:1.55;
 }
 
 .speech--ghost{
@@ -411,83 +414,129 @@ img{
   margin-left:-8px;
 }
 
-/* 表：通常 */
+.content-panel.is-active .speech{
+  animation-duration:.9s;
+  animation-fill-mode:forwards;
+  animation-timing-function:ease-out;
+}
+
+.content-panel.is-active .speech:not(.speech--vertical){
+  animation-name:speechInHorizontal;
+}
+
+.content-panel.is-active .speech.speech--vertical{
+  animation-name:speechInVertical;
+}
+
+@keyframes speechInHorizontal{
+  from{
+    opacity:0;
+    transform:translateX(-18px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+
+@keyframes speechInVertical{
+  from{
+    opacity:0;
+    transform:translateY(-22px);
+  }
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+.speech-stage--normal .speech{
+  color:#262422;
+  text-shadow:0 0 1px rgba(255,255,255,.18);
+}
+
 .speech--n1{
-  top:2%;
-  right:2%;
-  font-size:2rem;
+  top:4%;
+  right:4%;
+  font-size:2.1rem;
   letter-spacing:.02em;
   animation-delay:.18s;
-  max-height:86%;
+  max-height:82%;
 }
 
 .speech--n2{
-  top:6%;
-  left:2%;
-  font-size:1.02rem;
+  top:5%;
+  left:4%;
+  font-size:1.06rem;
   animation-delay:.55s;
 }
 
 .speech--n3{
-  top:52%;
-  left:18%;
-  font-size:1.05rem;
+  bottom:20%;
+  left:15%;
+  font-size:1.1rem;
   animation-delay:.95s;
 }
 
 .speech--n4{
-  top:66%;
+  bottom:13%;
   left:4%;
   font-size:.98rem;
   animation-delay:1.35s;
 }
 
 .speech--n5{
-  top:38%;
-  left:5%;
-  font-size:.98rem;
+  top:44%;
+  left:2%;
+  font-size:1rem;
   animation-delay:1.75s;
-  max-height:42%;
+  max-height:34%;
 }
 
 .speech--n6{
-  top:34%;
-  left:43%;
-  font-size:.9rem;
+  top:35%;
+  left:41%;
+  font-size:.92rem;
   animation-delay:2.1s;
-  max-height:40%;
+  max-height:34%;
 }
 
 .speech--n7{
-  right:5%;
-  bottom:13%;
+  right:6%;
+  bottom:14%;
   font-size:.82rem;
   line-height:1.32;
   animation-delay:2.45s;
 }
 
 .speech--n8{
-  top:31%;
-  left:3%;
-  font-size:.82rem;
+  top:30%;
+  left:4%;
+  font-size:.84rem;
   animation-delay:2.8s;
 }
 
 .speech--n9{
-  top:36%;
+  top:34%;
   left:12%;
-  font-size:.82rem;
+  font-size:.84rem;
   animation-delay:3.05s;
 }
 
 .speech--n10{
-  top:42%;
-  left:3%;
-  font-size:.84rem;
+  top:39%;
+  left:4%;
+  font-size:.86rem;
   animation-delay:3.35s;
 }
 
-/* 裏 */
+.speech-stage--corrupt .speech{
+  color:#f5f1f1;
+  text-shadow:
+    0 0 6px rgba(255,255,255,.08),
+    0 0 12px rgba(120,0,0,.14);
+}
+
 .speech--c1{
   top:2%;
   left:2%;
@@ -499,31 +548,32 @@ img{
 .speech--c2{
   top:4%;
   right:4%;
-  font-size:1.16rem;
+  font-size:1.18rem;
   animation-delay:.55s;
-  max-height:48%;
+  max-height:46%;
 }
 
 .speech--c3{
   top:25%;
   left:30%;
   font-size:.92rem;
+  opacity:.8;
   animation-delay:.9s;
 }
 
 .speech--c4{
   top:33%;
   left:45%;
-  font-size:1.18rem;
+  font-size:1.22rem;
   letter-spacing:.08em;
   animation-delay:1.28s;
-  max-height:42%;
+  max-height:40%;
 }
 
 .speech--c5{
   top:16%;
   left:4%;
-  font-size:1.14rem;
+  font-size:1.16rem;
   animation-delay:1.62s;
   max-height:66%;
 }
@@ -531,7 +581,7 @@ img{
 .speech--c6{
   left:4%;
   bottom:1%;
-  font-size:2.18rem;
+  font-size:2.3rem;
   letter-spacing:.03em;
   animation-delay:2s;
 }
@@ -548,7 +598,7 @@ img{
   right:14%;
   font-size:.94rem;
   animation-delay:2.7s;
-  max-height:30%;
+  max-height:28%;
 }
 
 .speech--c9{
@@ -560,7 +610,7 @@ img{
 
 .speech--c10{
   top:72%;
-  right:0;
+  right:-4%;
   font-size:.88rem;
   animation-delay:3.4s;
 }
@@ -1018,19 +1068,9 @@ img{
     font-size:11px;
   }
 
-   .speech-stage{
-    height:100%;
-    min-height:360px;
-    margin-top:0;
-  }
-
   .speech{
-    white-space:nowrap;
-    max-width:none;
-  }
-
-  .speech--vertical{
-    line-height:1.45;
+  white-space:nowrap;
+  max-width:none;
   }
 
   .speech-line--down{
@@ -1041,138 +1081,137 @@ img{
     margin-left:-6px;
   }
 
+  .speech-stage{
+    min-height:360px;
+  }
+
+  /* 一人称メモを中央寄りに上げる */
+  .speech-note{
+    left:8%;
+    right:8%;
+    bottom:34%;
+    padding:8px 10px;
+  }
+
+  .speech-note-ui{
+    right:8%;
+    bottom:26%;
+  }
+
+  .speech-note p{
+    font-size:.74rem;
+    line-height:1.45;
+  }
+
   .speech--n1{
-    top:-2%;
-    right:-2%;
-    font-size:1.48rem;
-    max-height:88%;
+    font-size:1.6rem;
+    right:-15%;
+    top:-30%;
   }
 
   .speech--n2{
-    top:7%;
-    left:1%;
-    font-size:.82rem;
+    font-size:.9rem;
+    left:3%;
+    top:4%;
+    max-width:58%;
   }
 
   .speech--n3{
-    top:52%;
-    left:13%;
-    font-size:.82rem;
+    font-size:.86rem;
+    bottom:23%;
+    left:14%;
+    max-width:68%;
   }
 
   .speech--n4{
-    top:66%;
-    left:1%;
-    font-size:.78rem;
+    font-size:.82rem;
+    bottom:15%;
+    left:4%;
+    max-width:78%;
   }
 
   .speech--n5{
-    top:35%;
-    left:2%;
-    font-size:.82rem;
-    max-height:42%;
+    font-size:.9rem;
+    max-height:32%;
   }
 
   .speech--n6{
-    top:34%;
-    left:48%;
-    font-size:.76rem;
-    max-height:40%;
+    font-size:.82rem;
+    left:49%;
   }
 
   .speech--n7{
-    right:1%;
-    bottom:16%;
-    font-size:.7rem;
-    line-height:1.35;
+    font-size:.76rem;
+    right:4%;
+    bottom:17%;
+    max-width:48%;
   }
 
-  .speech--n8{
-    top:28%;
-    left:1%;
-    font-size:.68rem;
-  }
-
-  .speech--n9{
-    top:34%;
-    left:10%;
-    font-size:.68rem;
-  }
-
+  .speech--n8,
+  .speech--n9,
   .speech--n10{
-    top:40%;
-    left:1%;
-    font-size:.7rem;
+    font-size:.72rem;
+    max-width:44%;
   }
 
   .speech--c1{
-    top:2%;
+    font-size:.86rem;
     left:1%;
-    font-size:.78rem;
+    max-width:70%;
   }
 
   .speech--c2{
-    top:3%;
-    right:1%;
-    font-size:.94rem;
-    max-height:46%;
+    font-size:1.02rem;
+    right:2%;
+    max-height:44%;
   }
 
   .speech--c3{
-    top:24%;
+    font-size:.82rem;
     left:28%;
-    font-size:.76rem;
+    max-width:44%;
   }
 
   .speech--c4{
-    top:32%;
+    font-size:1rem;
     left:48%;
-    font-size:.9rem;
   }
 
   .speech--c5{
-    top:15%;
-    left:2%;
-    font-size:.94rem;
+    font-size:1.02rem;
     max-height:62%;
   }
 
   .speech--c6{
-    left:2%;
+    font-size:1.92rem;
+    left:3%;
     bottom:2%;
-    font-size:1.52rem;
+    max-width:none;
   }
 
   .speech--c7{
-    right:4%;
+    font-size:.82rem;
+    right:6%;
     bottom:31%;
-    font-size:.76rem;
   }
 
   .speech--c8{
-    top:42%;
-    right:10%;
-    font-size:.76rem;
+    font-size:.82rem;
+    right:12%;
   }
 
   .speech--c9{
-    left:20%;
+    font-size:.78rem;
+    left:24%;
     bottom:18%;
-    font-size:.72rem;
+    max-width:62%;
   }
 
-  .speech--c10{
-    top:72%;
-    right:0;
-    font-size:.72rem;
-  }
-
+  .speech--c10,
   .speech--c11{
-    right:5%;
-    bottom:14%;
-    font-size:.72rem;
+    font-size:.78rem;
+    max-width:42%;
   }
-}
 
   .thumb-btn img{
     height:88px;
@@ -1369,4 +1408,380 @@ img{
   0%,100%{ transform:rotate(var(--card-tilt)) translate(0,0); }
   30%{ transform:rotate(var(--card-tilt)) translate(-1px, 0); }
   60%{ transform:rotate(var(--card-tilt)) translate(1px, -1px); }
+}
+
+/* =========================================================
+   speech layout refined override
+   セリフ配置ずれ対策：親基準を100%に統一し、端末差が出やすい負の大移動を抑える
+========================================================= */
+
+.speech-stage{
+  position:relative;
+  width:100%;
+  height:100%;
+  min-height:360px;
+  margin-top:0;
+  overflow:visible;
+  pointer-events:none;
+  font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
+}
+
+.speech{
+  position:absolute;
+  margin:0;
+  z-index:10;
+  line-height:1.45;
+  white-space:nowrap;
+  max-width:none;
+  opacity:0;
+  pointer-events:none;
+}
+
+.speech--vertical{
+  writing-mode:vertical-rl;
+  text-orientation:mixed;
+  white-space:normal;
+  line-height:1.55;
+}
+
+.speech br{
+  display:block;
+  line-height:0;
+}
+
+.speech--ghost{
+  opacity:.56;
+}
+
+.speech-line{
+  display:inline-block;
+}
+
+.speech-line--down{
+  margin-top:12px;
+}
+
+.speech--vertical .speech-line--down{
+  margin-left:-8px;
+}
+
+.speech--n1{
+  top:2%;
+  right:2%;
+  font-size:2rem;
+  letter-spacing:.02em;
+  animation-delay:.18s;
+  max-height:86%;
+}
+
+.speech--n2{
+  top:6%;
+  left:2%;
+  font-size:1.02rem;
+  animation-delay:.55s;
+}
+
+.speech--n3{
+  top:52%;
+  left:18%;
+  bottom:auto;
+  font-size:1.05rem;
+  animation-delay:.95s;
+}
+
+.speech--n4{
+  top:66%;
+  left:4%;
+  bottom:auto;
+  font-size:.98rem;
+  animation-delay:1.35s;
+}
+
+.speech--n5{
+  top:38%;
+  left:5%;
+  font-size:.98rem;
+  animation-delay:1.75s;
+  max-height:42%;
+}
+
+.speech--n6{
+  top:34%;
+  left:43%;
+  font-size:.9rem;
+  animation-delay:2.1s;
+  max-height:40%;
+}
+
+.speech--n7{
+  right:5%;
+  bottom:13%;
+  font-size:.82rem;
+  line-height:1.32;
+  animation-delay:2.45s;
+}
+
+.speech--n8{
+  top:31%;
+  left:3%;
+  font-size:.82rem;
+  animation-delay:2.8s;
+}
+
+.speech--n9{
+  top:36%;
+  left:12%;
+  font-size:.82rem;
+  animation-delay:3.05s;
+}
+
+.speech--n10{
+  top:42%;
+  left:3%;
+  font-size:.84rem;
+  animation-delay:3.35s;
+}
+
+.speech--c1{
+  top:2%;
+  left:2%;
+  font-size:1rem;
+  line-height:1.25;
+  animation-delay:.18s;
+}
+
+.speech--c2{
+  top:4%;
+  right:4%;
+  font-size:1.16rem;
+  animation-delay:.55s;
+  max-height:48%;
+}
+
+.speech--c3{
+  top:25%;
+  left:30%;
+  font-size:.92rem;
+  opacity:.8;
+  animation-delay:.9s;
+}
+
+.speech--c4{
+  top:33%;
+  left:45%;
+  font-size:1.18rem;
+  letter-spacing:.08em;
+  animation-delay:1.28s;
+  max-height:42%;
+}
+
+.speech--c5{
+  top:16%;
+  left:4%;
+  font-size:1.14rem;
+  animation-delay:1.62s;
+  max-height:66%;
+}
+
+.speech--c6{
+  left:4%;
+  bottom:1%;
+  font-size:2.18rem;
+  letter-spacing:.03em;
+  animation-delay:2s;
+}
+
+.speech--c7{
+  right:8%;
+  bottom:28%;
+  font-size:.9rem;
+  animation-delay:2.35s;
+}
+
+.speech--c8{
+  top:42%;
+  right:14%;
+  font-size:.94rem;
+  animation-delay:2.7s;
+  max-height:30%;
+}
+
+.speech--c9{
+  left:24%;
+  bottom:16%;
+  font-size:.86rem;
+  animation-delay:3.05s;
+}
+
+.speech--c10{
+  top:72%;
+  right:0;
+  font-size:.88rem;
+  animation-delay:3.4s;
+}
+
+.speech--c11{
+  right:7%;
+  bottom:14%;
+  font-size:.88rem;
+  animation-delay:3.7s;
+}
+
+@media (max-width:768px){
+  .speech-stage{
+    height:100%;
+    min-height:340px;
+    margin-top:0;
+  }
+
+  .speech{
+    white-space:nowrap;
+    max-width:none;
+  }
+
+  .speech--vertical{
+    line-height:1.45;
+  }
+
+  .speech-line--down{
+    margin-top:10px;
+  }
+
+  .speech--vertical .speech-line--down{
+    margin-left:-6px;
+  }
+
+  .speech--n1{
+    top:0;
+    right:0;
+    font-size:1.4rem;
+    max-height:88%;
+  }
+
+  .speech--n2{
+    top:8%;
+    left:1%;
+    font-size:.8rem;
+  }
+
+  .speech--n3{
+    top:54%;
+    left:12%;
+    bottom:auto;
+    font-size:.8rem;
+  }
+
+  .speech--n4{
+    top:66%;
+    left:1%;
+    bottom:auto;
+    font-size:.75rem;
+  }
+
+  .speech--n5{
+    top:35%;
+    left:2%;
+    font-size:.8rem;
+    max-height:42%;
+  }
+
+  .speech--n6{
+    top:34%;
+    left:50%;
+    font-size:.75rem;
+    max-height:40%;
+  }
+
+  .speech--n7{
+    right:1%;
+    bottom:16%;
+    font-size:.7rem;
+    line-height:1.35;
+  }
+
+  .speech--n8{
+    top:28%;
+    left:1%;
+    font-size:.68rem;
+  }
+
+  .speech--n9{
+    top:34%;
+    left:10%;
+    font-size:.68rem;
+  }
+
+  .speech--n10{
+    top:40%;
+    left:1%;
+    font-size:.7rem;
+  }
+
+  .speech--c1{
+    top:2%;
+    left:1%;
+    font-size:.78rem;
+  }
+
+  .speech--c2{
+    top:3%;
+    right:1%;
+    font-size:.94rem;
+    max-height:46%;
+  }
+
+  .speech--c3{
+    top:24%;
+    left:28%;
+    font-size:.76rem;
+  }
+
+  .speech--c4{
+    top:32%;
+    left:48%;
+    font-size:.9rem;
+  }
+
+  .speech--c5{
+    top:15%;
+    left:2%;
+    font-size:.94rem;
+    max-height:62%;
+  }
+
+  .speech--c6{
+    left:2%;
+    bottom:2%;
+    font-size:1.5rem;
+  }
+
+  .speech--c7{
+    right:4%;
+    bottom:31%;
+    font-size:.76rem;
+  }
+
+  .speech--c8{
+    top:42%;
+    right:10%;
+    font-size:.76rem;
+  }
+
+  .speech--c9{
+    left:20%;
+    bottom:18%;
+    font-size:.72rem;
+  }
+
+  .speech--c10{
+    top:72%;
+    right:0;
+    font-size:.72rem;
+  }
+
+  .speech--c11{
+    right:5%;
+    bottom:14%;
+    font-size:.72rem;
+  }
 }
