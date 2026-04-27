@@ -1785,3 +1785,233 @@ img{
     font-size:.72rem;
   }
 }
+
+/* =========================================================
+   TALK SAMPLE MOBILE LAYOUT OVERRIDE
+   目的：添付スクショ寄せ。文字開始位置を上げ、メモカード被りを消し、
+   セリフを画面全体に散らす。
+   ========================================================= */
+
+@media (max-width:768px){
+  .character-board{
+    width:calc(100vw - 32px);
+    height:min(calc(100dvh - 112px), 820px);
+    margin:30px auto 0;
+  }
+
+  .board-left,
+  .board-right{
+    width:100%;
+    inset:0;
+  }
+
+  .floating-content{
+    top:3%;
+    left:2%;
+    width:96%;
+    height:94%;
+    min-height:0;
+    z-index:14;
+  }
+
+  .speech-stage{
+    width:100%;
+    height:100%;
+    min-height:0;
+    margin-top:0;
+    overflow:visible;
+  }
+
+  .speech{
+    white-space:nowrap;
+    max-width:none;
+    line-height:1.42;
+  }
+
+  .speech--vertical{
+    line-height:1.45;
+  }
+
+  .speech-note,
+  .speech-note-ui{
+    display:none !important;
+  }
+
+  .character-silhouette{
+    left:-42%;
+    top:9%;
+    width:190%;
+    height:78%;
+    opacity:.88;
+    -webkit-mask-position:left bottom;
+    mask-position:left bottom;
+    -webkit-mask-size:100% auto;
+    mask-size:100% auto;
+  }
+
+  /* ===== 表：スクショ寄せ ===== */
+
+  .speech--n1{
+    top:1%;
+    right:2%;
+    font-size:2.05rem;
+    line-height:1.45;
+    letter-spacing:.02em;
+    max-height:82%;
+  }
+
+  .speech--n2{
+    top:3%;
+    left:2%;
+    font-size:1.18rem;
+    line-height:1.48;
+  }
+
+  .speech--n3{
+    top:74%;
+    left:16%;
+    font-size:1.12rem;
+  }
+
+  .speech--n4{
+    top:82%;
+    left:3%;
+    font-size:1.02rem;
+  }
+
+  .speech--n5{
+    top:39%;
+    left:3%;
+    font-size:1.12rem;
+    line-height:1.45;
+    max-height:45%;
+  }
+
+  .speech--n6{
+    top:39%;
+    left:54%;
+    font-size:1.02rem;
+    line-height:1.45;
+    max-height:42%;
+  }
+
+  .speech--n7{
+    right:8%;
+    bottom:2%;
+    font-size:.92rem;
+    line-height:1.35;
+  }
+
+  .speech--n8{
+    top:24%;
+    left:3%;
+    font-size:1.02rem;
+  }
+
+  .speech--n9{
+    top:30%;
+    left:3%;
+    font-size:.96rem;
+  }
+
+  .speech--n10{
+    top:35%;
+    left:3%;
+    font-size:.98rem;
+  }
+
+  /* ===== 裏：2枚目スクショ寄せ ===== */
+
+  .character-page.is-corrupted .character-silhouette{
+    left:-34%;
+    top:11%;
+    width:180%;
+    height:78%;
+    opacity:.92;
+  }
+
+  .speech--c1{
+    top:2%;
+    left:1%;
+    font-size:1.02rem;
+    line-height:1.35;
+  }
+
+  .speech--c2{
+    top:3%;
+    right:5%;
+    font-size:1.34rem;
+    line-height:1.45;
+    max-height:48%;
+  }
+
+  .speech--c3{
+    top:16%;
+    left:31%;
+    font-size:.98rem;
+  }
+
+  .speech--c4{
+    top:33%;
+    left:52%;
+    font-size:1.34rem;
+    line-height:1.45;
+    max-height:42%;
+  }
+
+  .speech--c5{
+    top:10%;
+    left:5%;
+    font-size:1.25rem;
+    line-height:1.45;
+    max-height:66%;
+  }
+
+  .speech--c6{
+    left:2%;
+    bottom:7%;
+    font-size:2rem;
+    line-height:1.2;
+    letter-spacing:.04em;
+  }
+
+  .speech--c7{
+    right:8%;
+    bottom:5%;
+    font-size:.98rem;
+  }
+
+  .speech--c8{
+    top:34%;
+    right:16%;
+    font-size:1rem;
+    max-height:32%;
+  }
+
+  .speech--c9{
+    left:28%;
+    bottom:19%;
+    font-size:.96rem;
+  }
+
+  .speech--c10{
+    top:72%;
+    right:10%;
+    font-size:.9rem;
+  }
+
+  .speech--c11{
+    right:10%;
+    bottom:28%;
+    font-size:.96rem;
+  }
+}
+
+/* かなり細い端末だけ、右の大文字がはみ出ないように少し圧縮 */
+@media (max-width:390px){
+  .speech--n1{ font-size:1.88rem; right:1%; }
+  .speech--n2{ font-size:1.06rem; }
+  .speech--n5{ font-size:1rem; }
+  .speech--n6{ font-size:.94rem; left:53%; }
+  .speech--c6{ font-size:1.75rem; }
+}
