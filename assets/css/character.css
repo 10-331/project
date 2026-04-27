@@ -1628,3 +1628,217 @@ img{
   .character-board.is-talk-active .speech--n6{ left:52%; font-size:.82rem; }
   .character-board.is-talk-active .speech--c6{ font-size:1.55rem; }
 }
+
+/* =========================================================
+   TALK LAYOUT FINAL FIX (SAFE)
+   ・メニュー時のレイアウトは一切触らない
+   ・トーク時だけレイヤーを再配置
+   ========================================================= */
+
+@media (max-width:768px){
+
+  /* ===== トーク時だけ領域を広げる ===== */
+  .character-board.is-talk-active .floating-content{
+    position:absolute;
+    top:4%;
+    left:3%;
+    width:94%;
+    height:92%;
+    min-height:0;
+    z-index:20;
+    pointer-events:none;
+  }
+
+  .character-board.is-talk-active .speech-stage{
+    position:relative;
+    width:100%;
+    height:100%;
+    min-height:0;
+    margin:0;
+    overflow:visible;
+  }
+
+  .character-board.is-talk-active .speech{
+    white-space:nowrap;
+    max-width:none;
+    line-height:1.45;
+    letter-spacing:.01em;
+  }
+
+  .character-board.is-talk-active .speech--vertical{
+    white-space:normal;
+    line-height:1.48;
+  }
+
+  /* ===== メモカードは消す ===== */
+  .character-board.is-talk-active .speech-note,
+  .character-board.is-talk-active .speech-note-ui{
+    display:none !important;
+  }
+
+  /* ===== 立ち絵はそのまま（触らない） ===== */
+  .character-board.is-talk-active .character-silhouette{
+    /* 既存を維持 */
+  }
+
+  /* =======================================================
+     表トーク（被り回避 + 上詰め）
+     ======================================================= */
+
+  .character-board.is-talk-active .speech--n1{
+    top:4%;
+    right:3%;
+    font-size:clamp(1.6rem, 7vw, 2.05rem);
+    line-height:1.45;
+    max-height:78%;
+    z-index:13;
+  }
+
+  .character-board.is-talk-active .speech--n2{
+    top:5%;
+    left:2%;
+    font-size:clamp(.95rem, 4.5vw, 1.2rem);
+    line-height:1.48;
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n8{
+    top:24%;
+    left:3%;
+    font-size:clamp(.8rem, 3.8vw, 1rem);
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n9{
+    top:29%;
+    left:3%;
+    font-size:clamp(.78rem, 3.6vw, .96rem);
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n10{
+    top:34%;
+    left:3%;
+    font-size:clamp(.78rem, 3.6vw, .98rem);
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n5{
+    top:42%;
+    left:3%;
+    font-size:clamp(1rem, 4.8vw, 1.25rem);
+    line-height:1.45;
+    max-height:46%;
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n6{
+    top:44%;
+    left:53%;
+    font-size:clamp(.85rem, 4vw, 1.05rem);
+    line-height:1.45;
+    max-height:36%;
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n3{
+    bottom:18%;
+    left:15%;
+    top:auto;
+    font-size:clamp(.95rem, 4.4vw, 1.15rem);
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n4{
+    bottom:11%;
+    left:3%;
+    top:auto;
+    font-size:clamp(.9rem, 4vw, 1.05rem);
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n7{
+    right:6%;
+    bottom:4%;
+    font-size:clamp(.8rem, 3.6vw, .95rem);
+    line-height:1.35;
+    z-index:12;
+  }
+
+  /* =======================================================
+     裏トーク（赤画面）
+     ======================================================= */
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c1{
+    top:3%;
+    left:2%;
+    font-size:clamp(.95rem, 4.4vw, 1.15rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c2{
+    top:4%;
+    right:5%;
+    font-size:clamp(1.1rem, 5.5vw, 1.45rem);
+    line-height:1.45;
+    max-height:45%;
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c3{
+    top:17%;
+    left:32%;
+    font-size:clamp(.85rem, 4vw, 1rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c4{
+    top:34%;
+    left:52%;
+    font-size:clamp(1.1rem, 5.5vw, 1.4rem);
+    line-height:1.45;
+    max-height:40%;
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c5{
+    top:10%;
+    left:5%;
+    font-size:clamp(1.05rem, 5.2vw, 1.35rem);
+    line-height:1.45;
+    max-height:65%;
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c6{
+    left:2%;
+    bottom:7%;
+    font-size:clamp(1.6rem, 8.5vw, 2.3rem);
+    line-height:1.2;
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c7{
+    right:8%;
+    bottom:5%;
+    font-size:clamp(.85rem, 4vw, 1rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c8{
+    top:35%;
+    right:16%;
+    font-size:clamp(.85rem, 4vw, 1rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c9{
+    left:28%;
+    bottom:20%;
+    font-size:clamp(.8rem, 3.8vw, 1rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c10{
+    top:73%;
+    right:10%;
+    font-size:clamp(.78rem, 3.6vw, .95rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c11{
+    right:10%;
+    bottom:29%;
+    font-size:clamp(.8rem, 3.8vw, 1rem);
+  }
+}
