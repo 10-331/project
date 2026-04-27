@@ -981,9 +981,11 @@ img{
     height:min(calc(100dvh - 84px), 84vh);
   }
 
-  .board-left{
-    width:40%;
-  }
+.board-left{
+  position:absolute;
+  inset:0 auto 0 0;
+  width:42%; /* ← PCと揃える */
+}
 
   .board-right{
     width:60%;
