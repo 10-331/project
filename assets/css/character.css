@@ -981,11 +981,9 @@ img{
     height:min(calc(100dvh - 84px), 84vh);
   }
 
-.board-left{
-  position:absolute;
-  inset:0 auto 0 0;
-  width:42%; /* ← PCと揃える */
-}
+  .board-left{
+    width:40%;
+  }
 
   .board-right{
     width:60%;
@@ -1413,638 +1411,13 @@ img{
 }
 
 /* =========================================================
-   speech layout refined override
-   セリフ配置ずれ対策：親基準を100%に統一し、端末差が出やすい負の大移動を抑える
-========================================================= */
-
-.speech-stage{
-  position:relative;
-  width:100%;
-  height:100%;
-  min-height:360px;
-  margin-top:0;
-  overflow:visible;
-  pointer-events:none;
-  font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",serif;
-}
-
-.speech{
-  position:absolute;
-  margin:0;
-  z-index:10;
-  line-height:1.45;
-  white-space:nowrap;
-  max-width:none;
-  opacity:0;
-  pointer-events:none;
-}
-
-.speech--vertical{
-  writing-mode:vertical-rl;
-  text-orientation:mixed;
-  white-space:normal;
-  line-height:1.55;
-}
-
-.speech br{
-  display:block;
-  line-height:0;
-}
-
-.speech--ghost{
-  opacity:.56;
-}
-
-.speech-line{
-  display:inline-block;
-}
-
-.speech-line--down{
-  margin-top:12px;
-}
-
-.speech--vertical .speech-line--down{
-  margin-left:-8px;
-}
-
-.speech--n1{
-  top:2%;
-  right:2%;
-  font-size:2rem;
-  letter-spacing:.02em;
-  animation-delay:.18s;
-  max-height:86%;
-}
-
-.speech--n2{
-  top:6%;
-  left:2%;
-  font-size:1.02rem;
-  animation-delay:.55s;
-}
-
-.speech--n3{
-  top:52%;
-  left:18%;
-  bottom:auto;
-  font-size:1.05rem;
-  animation-delay:.95s;
-}
-
-.speech--n4{
-  top:66%;
-  left:4%;
-  bottom:auto;
-  font-size:.98rem;
-  animation-delay:1.35s;
-}
-
-.speech--n5{
-  top:38%;
-  left:5%;
-  font-size:.98rem;
-  animation-delay:1.75s;
-  max-height:42%;
-}
-
-.speech--n6{
-  top:34%;
-  left:43%;
-  font-size:.9rem;
-  animation-delay:2.1s;
-  max-height:40%;
-}
-
-.speech--n7{
-  right:5%;
-  bottom:13%;
-  font-size:.82rem;
-  line-height:1.32;
-  animation-delay:2.45s;
-}
-
-.speech--n8{
-  top:31%;
-  left:3%;
-  font-size:.82rem;
-  animation-delay:2.8s;
-}
-
-.speech--n9{
-  top:36%;
-  left:12%;
-  font-size:.82rem;
-  animation-delay:3.05s;
-}
-
-.speech--n10{
-  top:42%;
-  left:3%;
-  font-size:.84rem;
-  animation-delay:3.35s;
-}
-
-.speech--c1{
-  top:2%;
-  left:2%;
-  font-size:1rem;
-  line-height:1.25;
-  animation-delay:.18s;
-}
-
-.speech--c2{
-  top:4%;
-  right:4%;
-  font-size:1.16rem;
-  animation-delay:.55s;
-  max-height:48%;
-}
-
-.speech--c3{
-  top:25%;
-  left:30%;
-  font-size:.92rem;
-  opacity:.8;
-  animation-delay:.9s;
-}
-
-.speech--c4{
-  top:33%;
-  left:45%;
-  font-size:1.18rem;
-  letter-spacing:.08em;
-  animation-delay:1.28s;
-  max-height:42%;
-}
-
-.speech--c5{
-  top:16%;
-  left:4%;
-  font-size:1.14rem;
-  animation-delay:1.62s;
-  max-height:66%;
-}
-
-.speech--c6{
-  left:4%;
-  bottom:1%;
-  font-size:2.18rem;
-  letter-spacing:.03em;
-  animation-delay:2s;
-}
-
-.speech--c7{
-  right:8%;
-  bottom:28%;
-  font-size:.9rem;
-  animation-delay:2.35s;
-}
-
-.speech--c8{
-  top:42%;
-  right:14%;
-  font-size:.94rem;
-  animation-delay:2.7s;
-  max-height:30%;
-}
-
-.speech--c9{
-  left:24%;
-  bottom:16%;
-  font-size:.86rem;
-  animation-delay:3.05s;
-}
-
-.speech--c10{
-  top:72%;
-  right:0;
-  font-size:.88rem;
-  animation-delay:3.4s;
-}
-
-.speech--c11{
-  right:7%;
-  bottom:14%;
-  font-size:.88rem;
-  animation-delay:3.7s;
-}
-
-@media (max-width:768px){
-  .speech-stage{
-    height:100%;
-    min-height:340px;
-    margin-top:0;
-  }
-
-  .speech{
-    white-space:nowrap;
-    max-width:none;
-  }
-
-  .speech--vertical{
-    line-height:1.45;
-  }
-
-  .speech-line--down{
-    margin-top:10px;
-  }
-
-  .speech--vertical .speech-line--down{
-    margin-left:-6px;
-  }
-
-  .speech--n1{
-    top:0;
-    right:0;
-    font-size:1.4rem;
-    max-height:88%;
-  }
-
-  .speech--n2{
-    top:8%;
-    left:1%;
-    font-size:.8rem;
-  }
-
-  .speech--n3{
-    top:54%;
-    left:12%;
-    bottom:auto;
-    font-size:.8rem;
-  }
-
-  .speech--n4{
-    top:66%;
-    left:1%;
-    bottom:auto;
-    font-size:.75rem;
-  }
-
-  .speech--n5{
-    top:35%;
-    left:2%;
-    font-size:.8rem;
-    max-height:42%;
-  }
-
-  .speech--n6{
-    top:34%;
-    left:50%;
-    font-size:.75rem;
-    max-height:40%;
-  }
-
-  .speech--n7{
-    right:1%;
-    bottom:16%;
-    font-size:.7rem;
-    line-height:1.35;
-  }
-
-  .speech--n8{
-    top:28%;
-    left:1%;
-    font-size:.68rem;
-  }
-
-  .speech--n9{
-    top:34%;
-    left:10%;
-    font-size:.68rem;
-  }
-
-  .speech--n10{
-    top:40%;
-    left:1%;
-    font-size:.7rem;
-  }
-
-  .speech--c1{
-    top:2%;
-    left:1%;
-    font-size:.78rem;
-  }
-
-  .speech--c2{
-    top:3%;
-    right:1%;
-    font-size:.94rem;
-    max-height:46%;
-  }
-
-  .speech--c3{
-    top:24%;
-    left:28%;
-    font-size:.76rem;
-  }
-
-  .speech--c4{
-    top:32%;
-    left:48%;
-    font-size:.9rem;
-  }
-
-  .speech--c5{
-    top:15%;
-    left:2%;
-    font-size:.94rem;
-    max-height:62%;
-  }
-
-  .speech--c6{
-    left:2%;
-    bottom:2%;
-    font-size:1.5rem;
-  }
-
-  .speech--c7{
-    right:4%;
-    bottom:31%;
-    font-size:.76rem;
-  }
-
-  .speech--c8{
-    top:42%;
-    right:10%;
-    font-size:.76rem;
-  }
-
-  .speech--c9{
-    left:20%;
-    bottom:18%;
-    font-size:.72rem;
-  }
-
-  .speech--c10{
-    top:72%;
-    right:0;
-    font-size:.72rem;
-  }
-
-  .speech--c11{
-    right:5%;
-    bottom:14%;
-    font-size:.72rem;
-  }
-}
-
-/* =========================================================
-   TALK SAMPLE MOBILE LAYOUT OVERRIDE
-   目的：添付スクショ寄せ。文字開始位置を上げ、メモカード被りを消し、
-   セリフを画面全体に散らす。
+   TALK SAMPLE SAFE OVERRIDE
+   ※メニュー時の画像比率・カード配置は触らない。
+   ※トーク表示中だけ、セリフレイヤーをボード全体に広げる。
    ========================================================= */
 
 @media (max-width:768px){
-  .character-board{
-    width:calc(100vw - 32px);
-    height:min(calc(100dvh - 112px), 820px);
-    margin:30px auto 0;
-  }
-
-  .board-left,
-  .board-right{
-    width:100%;
-    inset:0;
-  }
-
-  .floating-content{
-    top:3%;
-    left:2%;
-    width:96%;
-    height:94%;
-    min-height:0;
-    z-index:14;
-  }
-
-  .speech-stage{
-    width:100%;
-    height:100%;
-    min-height:0;
-    margin-top:0;
-    overflow:visible;
-  }
-
-  .speech{
-    white-space:nowrap;
-    max-width:none;
-    line-height:1.42;
-  }
-
-  .speech--vertical{
-    line-height:1.45;
-  }
-
-  .speech-note,
-  .speech-note-ui{
-    display:none !important;
-  }
-
-  .character-silhouette{
-    left:-42%;
-    top:9%;
-    width:190%;
-    height:78%;
-    opacity:.88;
-    -webkit-mask-position:left bottom;
-    mask-position:left bottom;
-    -webkit-mask-size:100% auto;
-    mask-size:100% auto;
-  }
-
-  /* ===== 表：スクショ寄せ ===== */
-
-  .speech--n1{
-    top:1%;
-    right:2%;
-    font-size:2.05rem;
-    line-height:1.45;
-    letter-spacing:.02em;
-    max-height:82%;
-  }
-
-  .speech--n2{
-    top:3%;
-    left:2%;
-    font-size:1.18rem;
-    line-height:1.48;
-  }
-
-  .speech--n3{
-    top:74%;
-    left:16%;
-    font-size:1.12rem;
-  }
-
-  .speech--n4{
-    top:82%;
-    left:3%;
-    font-size:1.02rem;
-  }
-
-  .speech--n5{
-    top:39%;
-    left:3%;
-    font-size:1.12rem;
-    line-height:1.45;
-    max-height:45%;
-  }
-
-  .speech--n6{
-    top:39%;
-    left:54%;
-    font-size:1.02rem;
-    line-height:1.45;
-    max-height:42%;
-  }
-
-  .speech--n7{
-    right:8%;
-    bottom:2%;
-    font-size:.92rem;
-    line-height:1.35;
-  }
-
-  .speech--n8{
-    top:24%;
-    left:3%;
-    font-size:1.02rem;
-  }
-
-  .speech--n9{
-    top:30%;
-    left:3%;
-    font-size:.96rem;
-  }
-
-  .speech--n10{
-    top:35%;
-    left:3%;
-    font-size:.98rem;
-  }
-
-  /* ===== 裏：2枚目スクショ寄せ ===== */
-
-  .character-page.is-corrupted .character-silhouette{
-    left:-34%;
-    top:11%;
-    width:180%;
-    height:78%;
-    opacity:.92;
-  }
-
-  .speech--c1{
-    top:2%;
-    left:1%;
-    font-size:1.02rem;
-    line-height:1.35;
-  }
-
-  .speech--c2{
-    top:3%;
-    right:5%;
-    font-size:1.34rem;
-    line-height:1.45;
-    max-height:48%;
-  }
-
-  .speech--c3{
-    top:16%;
-    left:31%;
-    font-size:.98rem;
-  }
-
-  .speech--c4{
-    top:33%;
-    left:52%;
-    font-size:1.34rem;
-    line-height:1.45;
-    max-height:42%;
-  }
-
-  .speech--c5{
-    top:10%;
-    left:5%;
-    font-size:1.25rem;
-    line-height:1.45;
-    max-height:66%;
-  }
-
-  .speech--c6{
-    left:2%;
-    bottom:7%;
-    font-size:2rem;
-    line-height:1.2;
-    letter-spacing:.04em;
-  }
-
-  .speech--c7{
-    right:8%;
-    bottom:5%;
-    font-size:.98rem;
-  }
-
-  .speech--c8{
-    top:34%;
-    right:16%;
-    font-size:1rem;
-    max-height:32%;
-  }
-
-  .speech--c9{
-    left:28%;
-    bottom:19%;
-    font-size:.96rem;
-  }
-
-  .speech--c10{
-    top:72%;
-    right:10%;
-    font-size:.9rem;
-  }
-
-  .speech--c11{
-    right:10%;
-    bottom:28%;
-    font-size:.96rem;
-  }
-}
-
-/* かなり細い端末だけ、右の大文字がはみ出ないように少し圧縮 */
-@media (max-width:390px){
-  .speech--n1{ font-size:1.88rem; right:1%; }
-  .speech--n2{ font-size:1.06rem; }
-  .speech--n5{ font-size:1rem; }
-  .speech--n6{ font-size:.94rem; left:53%; }
-  .speech--c6{ font-size:1.75rem; }
-}
-
-/* =========================================================
-   talk layout final override
-   目的：スマホ実機で、セリフ開始位置を上げつつ、文字同士を被らせない
-   ========================================================= */
-
-@media (max-width:768px){
-  .character-page{
-    padding-top:52px;
-    overflow:hidden;
-  }
-
-  .character-board{
-    width:calc(100vw - 32px);
-    height:calc(100dvh - 112px);
-    max-height:none;
-    margin:16px auto 0;
-    overflow:hidden;
-  }
-
-  .board-left,
-  .board-right{
-    position:absolute;
-    inset:0;
-    width:100%;
-  }
-
-  .floating-content{
+  .character-board.is-talk-active .floating-content{
     top:0;
     left:0;
     width:100%;
@@ -2054,7 +1427,12 @@ img{
     pointer-events:none;
   }
 
-  .speech-stage{
+  .character-board.is-talk-active .content-panel.is-active{
+    width:100%;
+    height:100%;
+  }
+
+  .character-board.is-talk-active .speech-stage{
     position:absolute;
     inset:0;
     width:100%;
@@ -2064,216 +1442,189 @@ img{
     overflow:visible;
   }
 
-  .speech{
+  .character-board.is-talk-active .speech{
     white-space:nowrap;
     max-width:none;
     line-height:1.42;
     letter-spacing:.01em;
   }
 
-  .speech--vertical{
-    line-height:1.48;
+  .character-board.is-talk-active .speech--vertical{
+    line-height:1.46;
     white-space:normal;
   }
 
-  .speech-note,
-  .speech-note-ui{
+  .character-board.is-talk-active .speech-note,
+  .character-board.is-talk-active .speech-note-ui{
     display:none !important;
   }
 
-  .character-silhouette{
-    left:5%;
-    right:auto;
-    top:auto;
-    bottom:5%;
-    width:48%;
-    height:72%;
-    opacity:.86;
-    -webkit-mask-position:center bottom;
-    mask-position:center bottom;
-    -webkit-mask-size:contain;
-    mask-size:contain;
-  }
+  /* ===== 表トーク：添付イメージ寄せ。被り回避優先 ===== */
 
-  /* ===== 表トーク：重なり回避版 ===== */
-
-  .speech--n1{
-    top:4%;
-    right:4%;
-    font-size:clamp(1.62rem, 7.1vw, 2.08rem);
-    line-height:1.43;
-    max-height:76%;
+  .character-board.is-talk-active .speech--n1{
+    top:6%;
+    right:5%;
+    font-size:clamp(1.7rem, 7.4vw, 2.25rem);
+    line-height:1.42;
+    max-height:78%;
     z-index:13;
   }
 
-  .speech--n2{
-    top:5%;
-    left:2%;
-    font-size:clamp(.92rem, 4.3vw, 1.18rem);
-    line-height:1.48;
+  .character-board.is-talk-active .speech--n2{
+    top:8%;
+    left:4%;
+    font-size:clamp(.98rem, 4.4vw, 1.28rem);
+    line-height:1.5;
     z-index:12;
   }
 
-  .speech--n8{
-    top:24%;
-    left:3%;
-    font-size:clamp(.78rem, 3.7vw, 1rem);
+  .character-board.is-talk-active .speech--n8{
+    top:28%;
+    left:4%;
+    font-size:clamp(.78rem, 3.5vw, .98rem);
     z-index:12;
   }
 
-  .speech--n9{
-    top:29%;
-    left:3%;
+  .character-board.is-talk-active .speech--n9{
+    top:33%;
+    left:4%;
+    font-size:clamp(.76rem, 3.35vw, .94rem);
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n10{
+    top:38%;
+    left:4%;
     font-size:clamp(.76rem, 3.45vw, .96rem);
     z-index:12;
   }
 
-  .speech--n10{
-    top:34%;
-    left:3%;
-    font-size:clamp(.76rem, 3.5vw, .98rem);
-    z-index:12;
-  }
-
-  .speech--n5{
-    top:41%;
-    left:3%;
-    font-size:clamp(.96rem, 4.6vw, 1.24rem);
-    line-height:1.45;
-    max-height:46%;
-    z-index:12;
-  }
-
-  .speech--n6{
+  .character-board.is-talk-active .speech--n5{
     top:43%;
-    left:53%;
-    font-size:clamp(.82rem, 4vw, 1.05rem);
-    line-height:1.45;
-    max-height:36%;
+    left:4%;
+    font-size:clamp(.95rem, 4.5vw, 1.18rem);
+    line-height:1.44;
+    max-height:43%;
     z-index:12;
   }
 
-  .speech--n3{
+  .character-board.is-talk-active .speech--n6{
+    top:42%;
+    left:53%;
+    font-size:clamp(.82rem, 3.9vw, 1.02rem);
+    line-height:1.44;
+    max-height:38%;
+    z-index:12;
+  }
+
+  .character-board.is-talk-active .speech--n3{
     top:auto;
     bottom:17%;
-    left:15%;
-    font-size:clamp(.9rem, 4.3vw, 1.12rem);
+    left:17%;
+    font-size:clamp(.88rem, 4.1vw, 1.08rem);
     z-index:12;
   }
 
-  .speech--n4{
+  .character-board.is-talk-active .speech--n4{
     top:auto;
     bottom:11%;
-    left:3%;
-    font-size:clamp(.86rem, 4vw, 1.02rem);
+    left:4%;
+    font-size:clamp(.84rem, 3.85vw, 1rem);
     z-index:12;
   }
 
-  .speech--n7{
+  .character-board.is-talk-active .speech--n7{
     top:auto;
     right:6%;
-    bottom:4%;
-    font-size:clamp(.78rem, 3.5vw, .94rem);
+    bottom:5%;
+    font-size:clamp(.76rem, 3.45vw, .92rem);
     line-height:1.35;
     z-index:12;
   }
 
   /* ===== 裏トーク ===== */
 
-  .character-page.is-corrupted .character-silhouette{
-    left:4%;
-    bottom:7%;
-    width:42%;
-    height:70%;
-    opacity:.92;
-    -webkit-mask-position:center bottom;
-    mask-position:center bottom;
-    -webkit-mask-size:contain;
-    mask-size:contain;
-  }
-
-  .speech--c1{
-    top:2%;
-    left:1%;
-    font-size:clamp(.9rem, 4.4vw, 1.12rem);
+  .character-board.is-talk-active .speech--c1{
+    top:3%;
+    left:3%;
+    font-size:clamp(.86rem, 4.2vw, 1.06rem);
     line-height:1.35;
   }
 
-  .speech--c2{
+  .character-board.is-talk-active .speech--c2{
     top:4%;
-    right:5%;
-    font-size:clamp(1.08rem, 5.6vw, 1.42rem);
+    right:6%;
+    font-size:clamp(1.1rem, 5.6vw, 1.42rem);
     line-height:1.45;
-    max-height:45%;
+    max-height:46%;
   }
 
-  .speech--c3{
-    top:17%;
-    left:31%;
-    font-size:clamp(.82rem, 4vw, 1rem);
+  .character-board.is-talk-active .speech--c3{
+    top:18%;
+    left:33%;
+    font-size:clamp(.82rem, 3.9vw, .98rem);
   }
 
-  .speech--c4{
+  .character-board.is-talk-active .speech--c4{
     top:34%;
     left:52%;
-    font-size:clamp(1.08rem, 5.4vw, 1.38rem);
+    font-size:clamp(1.08rem, 5.4vw, 1.36rem);
     line-height:1.45;
     max-height:40%;
   }
 
-  .speech--c5{
-    top:10%;
-    left:5%;
-    font-size:clamp(1.02rem, 5.2vw, 1.32rem);
+  .character-board.is-talk-active .speech--c5{
+    top:12%;
+    left:7%;
+    font-size:clamp(1.02rem, 5.1vw, 1.3rem);
     line-height:1.45;
-    max-height:65%;
+    max-height:64%;
   }
 
-  .speech--c6{
-    left:2%;
-    bottom:7%;
-    font-size:clamp(1.55rem, 8.5vw, 2.25rem);
+  .character-board.is-talk-active .speech--c6{
+    left:4%;
+    bottom:8%;
+    font-size:clamp(1.55rem, 8.2vw, 2.15rem);
     line-height:1.2;
     letter-spacing:.04em;
   }
 
-  .speech--c7{
+  .character-board.is-talk-active .speech--c7{
     right:8%;
     bottom:5%;
-    font-size:clamp(.8rem, 4.1vw, 1rem);
+    font-size:clamp(.8rem, 4vw, .98rem);
   }
 
-  .speech--c8{
-    top:35%;
+  .character-board.is-talk-active .speech--c8{
+    top:36%;
     right:16%;
-    font-size:clamp(.82rem, 4vw, 1rem);
+    font-size:clamp(.82rem, 3.9vw, .98rem);
     max-height:30%;
   }
 
-  .speech--c9{
-    left:28%;
+  .character-board.is-talk-active .speech--c9{
+    left:30%;
     bottom:20%;
-    font-size:clamp(.78rem, 3.9vw, .98rem);
+    font-size:clamp(.78rem, 3.8vw, .96rem);
   }
 
-  .speech--c10{
+  .character-board.is-talk-active .speech--c10{
     top:73%;
     right:10%;
-    font-size:clamp(.76rem, 3.6vw, .92rem);
+    font-size:clamp(.76rem, 3.5vw, .9rem);
   }
 
-  .speech--c11{
+  .character-board.is-talk-active .speech--c11{
     right:10%;
     bottom:29%;
-    font-size:clamp(.78rem, 3.9vw, .98rem);
+    font-size:clamp(.78rem, 3.8vw, .96rem);
   }
 }
 
 @media (max-width:390px){
-  .speech--n1{ right:3%; font-size:1.58rem; }
-  .speech--n2{ font-size:.92rem; }
-  .speech--n5{ font-size:.96rem; }
-  .speech--n6{ left:52%; font-size:.82rem; }
-  .speech--n7{ right:4%; font-size:.76rem; }
-  .speech--c6{ font-size:1.55rem; }
+  .character-board.is-talk-active .speech--n1{ font-size:1.62rem; right:4%; }
+  .character-board.is-talk-active .speech--n2{ font-size:.94rem; }
+  .character-board.is-talk-active .speech--n5{ font-size:.94rem; }
+  .character-board.is-talk-active .speech--n6{ left:52%; font-size:.82rem; }
+  .character-board.is-talk-active .speech--c6{ font-size:1.55rem; }
 }
