@@ -452,6 +452,17 @@ function bindGlobalEvents() {
     });
   }
 
+  if (floatingContent) {
+    floatingContent.addEventListener("click", (event) => {
+      if (!characterBoard?.classList.contains("is-talk-active")) return;
+
+      event.stopPropagation();
+      resetCharacterView();
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       if (imageModal?.classList.contains("is-open")) {
