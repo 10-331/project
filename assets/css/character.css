@@ -1883,3 +1883,40 @@ img{
     font-size:1.5rem;
   }
 }
+
+/* =========================================================
+   CORRUPT TEXT SINGLE COLUMN FIX
+   「2列→1列」に戻す
+   ========================================================= */
+
+.character-page.is-corrupted .speech--vertical{
+  max-width:none !important;   /* 折り返し禁止 */
+  height:auto !important;
+}
+
+/* 問題のやつをピンポイントで調整 */
+
+.character-page.is-corrupted .speech--c2,
+.character-page.is-corrupted .speech--c4,
+.character-page.is-corrupted .speech--c5,
+.character-page.is-corrupted .speech--c8{
+  max-width:none !important;   /* 強制1列 */
+}
+
+/* 収まらない原因なので少しだけ縮める */
+
+.character-page.is-corrupted .speech--c2{
+  font-size:clamp(1rem, 5vw, 1.25rem);
+}
+
+.character-page.is-corrupted .speech--c4{
+  font-size:clamp(0.95rem, 4.8vw, 1.2rem);
+}
+
+.character-page.is-corrupted .speech--c5{
+  font-size:clamp(0.95rem, 4.8vw, 1.2rem);
+}
+
+.character-page.is-corrupted .speech--c8{
+  font-size:clamp(0.85rem, 4vw, 1rem);
+}
