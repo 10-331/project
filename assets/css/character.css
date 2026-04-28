@@ -1544,7 +1544,12 @@ img{
 
   /* ===== 裏トーク ===== */
 
-   /* 上部横書き */
+/* =========================================================
+   CORRUPT TEXT POSITION FIX v2（立ち絵はそのまま）
+   ========================================================= */
+
+@media (max-width:768px){
+
   .character-page.is-corrupted .character-board.is-talk-active .speech--c1{
     top:2%;
     left:2%;
@@ -1552,7 +1557,6 @@ img{
     line-height:1.35;
   }
 
-  /* 右上縦「へえ、それは稼げるの？」 */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c2{
     top:4%;
     right:6%;
@@ -1561,75 +1565,72 @@ img{
     max-height:46%;
   }
 
-  /* 中央横「……何も、知らないくせに」 */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c3{
     top:18%;
-    left:28%;
+    left:31%;
     font-size:clamp(.85rem, 4vw, 1rem);
   }
 
-  /* 中央縦「対象を確認。回収します」 */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c4{
-    top:34%;
-    left:48%;
-    font-size:clamp(1.08rem, 5.4vw, 1.35rem);
+    top:33%;
+    left:49%;
+    font-size:clamp(1.05rem, 5.2vw, 1.3rem);
     line-height:1.45;
     max-height:42%;
   }
 
-  /* 左の縦「なんで君に家族がいて〜」 */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c5{
-    top:10%;
-    left:4%;
-    font-size:clamp(1.05rem, 5.2vw, 1.3rem);
+    top:9%;
+    left:6%;
+    font-size:clamp(1rem, 5vw, 1.24rem);
     line-height:1.45;
     max-height:66%;
   }
 
-  /* 下の大きい「返してよ」 */
+  /* 大文字を少し小さく・左寄せ・下げすぎ防止 */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c6{
-    left:2%;
-    bottom:6%;
-    font-size:clamp(1.8rem, 9vw, 2.6rem);
+    left:3%;
+    bottom:8%;
+    font-size:clamp(1.55rem, 7.4vw, 2.1rem);
     line-height:1.15;
-    letter-spacing:.04em;
+    letter-spacing:.02em;
   }
 
-  /* 右下小「まるで私が悪者みたい」 */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c7{
-    right:6%;
-    bottom:4%;
-    font-size:clamp(.85rem, 4vw, 1rem);
+    right:8%;
+    bottom:5%;
+    font-size:clamp(.78rem, 3.6vw, .9rem);
   }
 
-  /* 右中縦「……変なの わ、笑ってない」 */
+  /* 右中の縦書きを右へ逃がす */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c8{
-    top:36%;
-    right:14%;
-    font-size:clamp(.85rem, 4vw, 1rem);
+    top:38%;
+    right:8%;
+    font-size:clamp(.8rem, 3.8vw, .94rem);
+    max-height:36%;
   }
 
-  /* 下中央横「上司？あ〜、まぁ…」 */
+  /* 下中央横書き：上へ少し逃がす */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c9{
     left:22%;
-    bottom:18%;
-    font-size:clamp(.8rem, 3.8vw, .96rem);
+    bottom:22%;
+    font-size:clamp(.76rem, 3.55vw, .9rem);
   }
 
-  /* 右寄り小テキスト */
+  /* 珈琲の行を少し上、右寄り */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c10{
-    top:72%;
-    right:8%;
-    font-size:clamp(.78rem, 3.6vw, .92rem);
+    top:68%;
+    right:12%;
+    font-size:clamp(.72rem, 3.3vw, .84rem);
   }
 
+  /* うるさいばかを中央右へ */
   .character-page.is-corrupted .character-board.is-talk-active .speech--c11{
-    right:8%;
-    bottom:28%;
-    font-size:clamp(.8rem, 3.8vw, .96rem);
+    right:12%;
+    bottom:31%;
+    font-size:clamp(.76rem, 3.55vw, .9rem);
   }
 }
-
 @media (max-width:390px){
   .character-board.is-talk-active .speech--n1{ font-size:1.62rem; right:4%; }
   .character-board.is-talk-active .speech--n2{ font-size:.94rem; }
