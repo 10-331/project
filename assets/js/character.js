@@ -452,9 +452,9 @@ function bindGlobalEvents() {
     });
   }
 
-  if (floatingContent) {
-    floatingContent.addEventListener("click", (event) => {
-      if (!characterBoard?.classList.contains("is-talk-active")) return;
+  if (characterBoard) {
+    characterBoard.addEventListener("click", (event) => {
+      if (!characterBoard.classList.contains("is-talk-active")) return;
 
       event.stopPropagation();
       resetCharacterView();
@@ -462,13 +462,12 @@ function bindGlobalEvents() {
   }
 
   document.addEventListener("keydown", (event) => {
-
-  document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       if (imageModal?.classList.contains("is-open")) {
         closeImageModal({ reset: true });
         return;
       }
+
       resetCharacterView();
     }
   });
@@ -476,9 +475,11 @@ function bindGlobalEvents() {
   document.addEventListener("click", (event) => {
     if (imageModal?.classList.contains("is-open")) {
       const clickedDialog = event.target.closest(".image-modal-dialog");
+
       if (!clickedDialog) {
         closeImageModal({ reset: true });
       }
+
       return;
     }
 
