@@ -452,15 +452,6 @@ function bindGlobalEvents() {
     });
   }
 
-  if (characterBoard) {
-    characterBoard.addEventListener("click", (event) => {
-      if (!characterBoard.classList.contains("is-talk-active")) return;
-
-      event.stopPropagation();
-      resetCharacterView();
-    });
-  }
-
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       if (imageModal?.classList.contains("is-open")) {
@@ -480,6 +471,12 @@ function bindGlobalEvents() {
         closeImageModal({ reset: true });
       }
 
+      return;
+    }
+
+    /* トーク表示中は、どこをタップしてもメニューに戻す */
+    if (characterBoard?.classList.contains("is-talk-active")) {
+      resetCharacterView();
       return;
     }
 
