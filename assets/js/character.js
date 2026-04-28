@@ -520,15 +520,3 @@ function init() {
 }
 
 init();
-
-if (characterBoard) {
-  characterBoard.addEventListener("click", (event) => {
-    if (!characterBoard.classList.contains("is-talk-active")) return;
-
-    event.stopPropagation();
-
-    document.querySelectorAll(".speech").forEach(el => {
-      el.style.opacity = "0";
-    });
-  });
-}
