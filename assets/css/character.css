@@ -399,7 +399,7 @@ img{
 }
 
 .speech--ghost{
-  opacity:.56;
+  opacity:0;
 }
 
 .speech-line{
