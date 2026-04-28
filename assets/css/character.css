@@ -1920,3 +1920,55 @@ img{
 .character-page.is-corrupted .speech--c8{
   font-size:clamp(0.85rem, 4vw, 1rem);
 }
+
+/* =========================================================
+   CORRUPT VERTICAL SINGLE COLUMN FIX
+   裏ページ：縦書きを絶対に2列化させない
+   ========================================================= */
+
+@media (max-width:768px){
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--vertical{
+    white-space:nowrap !important;
+    max-height:none !important;
+    height:auto !important;
+    width:auto !important;
+    max-width:none !important;
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c2,
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c4,
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c5,
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c8{
+    white-space:nowrap !important;
+    max-height:none !important;
+    height:auto !important;
+    width:auto !important;
+    max-width:none !important;
+  }
+
+  /* 長くて折れやすいものだけ少し縮める */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c2{
+    top:3%;
+    right:7%;
+    font-size:clamp(1rem, 4.8vw, 1.22rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c5{
+    top:9%;
+    left:5%;
+    font-size:clamp(.9rem, 4.3vw, 1.08rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c4{
+    top:34%;
+    left:49%;
+    font-size:clamp(.95rem, 4.5vw, 1.12rem);
+  }
+
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c8{
+    top:39%;
+    right:10%;
+    font-size:clamp(.72rem, 3.3vw, .84rem);
+  }
+}
