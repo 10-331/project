@@ -1544,80 +1544,89 @@ img{
 
   /* ===== 裏トーク ===== */
 
-  .character-board.is-talk-active .speech--c1{
-    top:3%;
-    left:3%;
-    font-size:clamp(.86rem, 4.2vw, 1.06rem);
+   /* 上部横書き */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c1{
+    top:2%;
+    left:2%;
+    font-size:clamp(.95rem, 4.4vw, 1.1rem);
     line-height:1.35;
   }
 
-  .character-board.is-talk-active .speech--c2{
+  /* 右上縦「へえ、それは稼げるの？」 */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c2{
     top:4%;
     right:6%;
-    font-size:clamp(1.1rem, 5.6vw, 1.42rem);
+    font-size:clamp(1.15rem, 5.6vw, 1.4rem);
     line-height:1.45;
     max-height:46%;
   }
 
-  .character-board.is-talk-active .speech--c3{
+  /* 中央横「……何も、知らないくせに」 */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c3{
     top:18%;
-    left:33%;
-    font-size:clamp(.82rem, 3.9vw, .98rem);
+    left:28%;
+    font-size:clamp(.85rem, 4vw, 1rem);
   }
 
-  .character-board.is-talk-active .speech--c4{
+  /* 中央縦「対象を確認。回収します」 */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c4{
     top:34%;
-    left:52%;
-    font-size:clamp(1.08rem, 5.4vw, 1.36rem);
+    left:48%;
+    font-size:clamp(1.08rem, 5.4vw, 1.35rem);
     line-height:1.45;
-    max-height:40%;
+    max-height:42%;
   }
 
-  .character-board.is-talk-active .speech--c5{
-    top:12%;
-    left:7%;
-    font-size:clamp(1.02rem, 5.1vw, 1.3rem);
-    line-height:1.45;
-    max-height:64%;
-  }
-
-  .character-board.is-talk-active .speech--c6{
+  /* 左の縦「なんで君に家族がいて〜」 */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c5{
+    top:10%;
     left:4%;
-    bottom:8%;
-    font-size:clamp(1.55rem, 8.2vw, 2.15rem);
-    line-height:1.2;
+    font-size:clamp(1.05rem, 5.2vw, 1.3rem);
+    line-height:1.45;
+    max-height:66%;
+  }
+
+  /* 下の大きい「返してよ」 */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c6{
+    left:2%;
+    bottom:6%;
+    font-size:clamp(1.8rem, 9vw, 2.6rem);
+    line-height:1.15;
     letter-spacing:.04em;
   }
 
-  .character-board.is-talk-active .speech--c7{
-    right:8%;
-    bottom:5%;
-    font-size:clamp(.8rem, 4vw, .98rem);
+  /* 右下小「まるで私が悪者みたい」 */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c7{
+    right:6%;
+    bottom:4%;
+    font-size:clamp(.85rem, 4vw, 1rem);
   }
 
-  .character-board.is-talk-active .speech--c8{
+  /* 右中縦「……変なの わ、笑ってない」 */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c8{
     top:36%;
-    right:16%;
-    font-size:clamp(.82rem, 3.9vw, .98rem);
-    max-height:30%;
+    right:14%;
+    font-size:clamp(.85rem, 4vw, 1rem);
   }
 
-  .character-board.is-talk-active .speech--c9{
-    left:30%;
-    bottom:20%;
-    font-size:clamp(.78rem, 3.8vw, .96rem);
+  /* 下中央横「上司？あ〜、まぁ…」 */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c9{
+    left:22%;
+    bottom:18%;
+    font-size:clamp(.8rem, 3.8vw, .96rem);
   }
 
-  .character-board.is-talk-active .speech--c10{
-    top:73%;
-    right:10%;
-    font-size:clamp(.76rem, 3.5vw, .9rem);
+  /* 右寄り小テキスト */
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c10{
+    top:72%;
+    right:8%;
+    font-size:clamp(.78rem, 3.6vw, .92rem);
   }
 
-  .character-board.is-talk-active .speech--c11{
-    right:10%;
-    bottom:29%;
-    font-size:clamp(.78rem, 3.8vw, .96rem);
+  .character-page.is-corrupted .character-board.is-talk-active .speech--c11{
+    right:8%;
+    bottom:28%;
+    font-size:clamp(.8rem, 3.8vw, .96rem);
   }
 }
 
