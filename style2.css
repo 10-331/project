@@ -429,10 +429,10 @@ button{
 
   .character-layer img{
     left:43%;
-    bottom:-22%;
+    bottom:-95%;
     transform:translateX(-50%);
     width:auto;
-    height:122%;
+    height:180%;
     max-width:none;
     max-height:none;
     object-fit:contain;
