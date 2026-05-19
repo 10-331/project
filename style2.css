@@ -181,7 +181,7 @@ button{
 
 .barcode{
   width:126px;
-  height:14px;
+  height:30px;
   background:
     repeating-linear-gradient(
       to right,
@@ -195,6 +195,7 @@ button{
 /* キャラ */
 .character-layer{
   position:absolute;
+  left:2%;
   inset:0;
   z-index:4;
   pointer-events:none;
@@ -240,19 +241,19 @@ button{
 .ui-btn-world{
   top:1%;
   right:0%;
-  width:45%;
+  width:20%;
 }
 
 .ui-btn-character{
   top:21.5%;
   right:12.5%;
-  width:30%;
+  width:20%;
 }
 
 .ui-btn-illust{
   top:34%;
   right:-2%;
-  width:27%;
+  width:20%;
 }
 
 .ui-btn-gallery{
@@ -264,13 +265,13 @@ button{
 .ui-btn-story{
   right:0%;
   bottom:31%;
-  width:34%;
+  width:20%;
 }
 
 .ui-btn-main{
   right:-0.5%;
   bottom:3%;
-  width:58%;
+  width:20%;
 }
 
 /* セリフ */
