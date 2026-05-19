@@ -65,7 +65,7 @@ button{
   justify-content:center;
   align-items:center;
   overflow:hidden;
-  padding-top:52px; /* 共通ヘッダー分 */
+  padding-top:52px;
 }
 
 .screen-frame{
@@ -95,10 +95,7 @@ button{
   transition:opacity .35s ease;
 }
 
-.bg-image.is-ready{
-  opacity:1;
-}
-
+.bg-image.is-ready,
 .bg-image.is-active{
   opacity:1;
 }
@@ -135,7 +132,7 @@ button{
   padding-bottom:45px;
 }
 
-/* 左下IDカード本体 */
+/* 左下IDカード */
 .left-id-card{
   width:126px;
   margin-left:16px;
@@ -181,7 +178,7 @@ button{
 
 .barcode{
   width:126px;
-  height:30px;
+  height:14px;
   background:
     repeating-linear-gradient(
       to right,
@@ -195,7 +192,6 @@ button{
 /* キャラ */
 .character-layer{
   position:absolute;
-  left:2%;
   inset:0;
   z-index:4;
   pointer-events:none;
@@ -237,23 +233,23 @@ button{
   opacity:1;
 }
 
-/* 個別配置 */
+/* 縦画面：モバイル基準 */
 .ui-btn-world{
   top:1%;
   right:0%;
-  width:20%;
+  width:45%;
 }
 
 .ui-btn-character{
   top:21.5%;
   right:12.5%;
-  width:20%;
+  width:30%;
 }
 
 .ui-btn-illust{
   top:34%;
   right:-2%;
-  width:20%;
+  width:27%;
 }
 
 .ui-btn-gallery{
@@ -265,13 +261,13 @@ button{
 .ui-btn-story{
   right:0%;
   bottom:31%;
-  width:20%;
+  width:34%;
 }
 
 .ui-btn-main{
   right:-0.5%;
   bottom:3%;
-  width:20%;
+  width:58%;
 }
 
 /* セリフ */
@@ -333,7 +329,7 @@ button{
   text-shadow:0 1px 2px rgba(0,0,0,.18);
 }
 
-/* 小さめ端末 */
+/* 小さめ縦端末 */
 @media (max-width: 430px){
   .home-screen{
     padding-top:52px;
@@ -345,24 +341,13 @@ button{
   }
 
   .left-strip-inner{
-    position:relative;
-    width:100%;
-    height:100%;
-    overflow:visible;
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
     padding-bottom:44px;
   }
 
   .left-id-card{
     width:126px;
     margin-left:16px;
-    color:#111;
-    line-height:0.88;
     transform:rotate(-90deg) translateY(-8px);
-    transform-origin:center center;
-    flex:0 0 auto;
   }
 
   .left-id-main{
@@ -388,7 +373,6 @@ button{
   .talk-box{
     width:60%;
     margin-left:10%;
-    min-height:auto;
     padding:25px 20px 15px 20px;
   }
 
@@ -404,11 +388,11 @@ button{
   }
 }
 
-/* 横向き */
+/* 横画面：安全領域方式 */
 @media (orientation: landscape){
   :root{
     --topbar-h: 44px;
-    --left-strip-w: 10%;
+    --left-strip-w: 14%;
   }
 
   .home-screen{
@@ -416,72 +400,160 @@ button{
   }
 
   .screen-frame{
-    width:min(100vw, calc(100dvh * (844 / 390)));
-    height:min(100dvh, calc(100vw * (390 / 844)));
-    aspect-ratio:844 / 390;
+    width:100%;
+    height:100%;
+    aspect-ratio:auto;
   }
 
+  /* 左バー：PC横では広めに見せる */
   .left-strip{
-    min-width:72px;
-    max-width:96px;
+    width:14%;
+    min-width:140px;
+    max-width:220px;
   }
 
   .left-strip-inner{
-    padding-bottom:18px;
+    padding-bottom:34px;
+    justify-content:center;
   }
 
   .left-id-card{
-    width:112px;
-    margin-left:6px;
-    transform:rotate(-90deg) translateY(-8px);
+    width:150px;
+    margin-left:22px;
+    transform:rotate(-90deg) translateY(-10px);
+  }
+
+  .left-id-title{
+    font-size:12px;
   }
 
   .left-id-main{
-    font-size:13px;
-    margin-bottom:3px;
+    font-size:18px;
+    margin-bottom:5px;
+  }
+
+  .left-id-sub{
+    font-size:12px;
   }
 
   .left-id-time{
-    font-size:8px;
-    line-height:1.05;
-    margin-bottom:3px;
+    font-size:10px;
+    line-height:1.08;
+    margin-bottom:5px;
   }
 
   .barcode{
-    width:112px;
-    height:12px;
+    width:150px;
+    height:16px;
   }
 
+  /* キャラ：大きく、下げる。腰あたりまで見せる */
   .character-layer img{
-    left:46%;
-    width:34%;
-    height:auto;
-    bottom:auto;
-    max-height:92%;
+    left:43.5%;
+    bottom:-10%;
+    transform:translateX(-50%);
+    width:auto;
+    height:105%;
+    max-width:none;
+    max-height:none;
+    object-fit:contain;
   }
 
+  /* セリフ：下に沈みすぎない位置へ */
   .talk-layer{
-    bottom:10%;
+    bottom:21%;
   }
 
   .talk-box{
-    width:40%;
+    width:41%;
     margin-left:15%;
-    min-height:84px;
-    padding:28px 20px 16px 38px;
+    min-height:78px;
+    padding:26px 28px 18px 34px;
   }
 
   #talkName{
-    top:-10px;
-    left:20px;
-    min-width:78px;
+    top:-11px;
+    left:22px;
+    min-width:82px;
     height:30px;
     font-size:14px;
   }
 
   #talkText{
-    font-size:13px;
-    line-height:1.4;
+    font-size:15px;
+    line-height:1.38;
+  }
+
+  /* 右アイコン群：PCで巨大化しすぎないように調整 */
+  .ui-btn-world{
+    top:2%;
+    right:3%;
+    width:24%;
+  }
+
+  .ui-btn-character{
+    top:23%;
+    right:12%;
+    width:14%;
+  }
+
+  .ui-btn-illust{
+    top:39%;
+    right:3%;
+    width:15%;
+  }
+
+  .ui-btn-gallery{
+    top:73%;
+    right:6%;
+    width:8%;
+  }
+
+  .ui-btn-story{
+    right:4%;
+    bottom:27%;
+    width:18%;
+  }
+
+  .ui-btn-main{
+    right:3%;
+    bottom:3%;
+    width:29%;
   }
 }
 
+/* 横画面でも高さが低い端末向け */
+@media (orientation: landscape) and (max-height: 520px){
+  .character-layer img{
+    height:100%;
+    bottom:-9%;
+  }
+
+  .talk-layer{
+    bottom:17%;
+  }
+
+  .talk-box{
+    width:40%;
+    min-height:68px;
+    padding:22px 24px 14px 30px;
+  }
+
+  #talkText{
+    font-size:13px;
+    line-height:1.3;
+  }
+
+  .left-strip{
+    min-width:110px;
+    max-width:170px;
+  }
+
+  .left-id-card{
+    width:126px;
+  }
+
+  .barcode{
+    width:126px;
+  }
+}
