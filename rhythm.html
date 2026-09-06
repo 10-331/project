@@ -3,22 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Physical Rhythm Profile v5</title>
+<title>Physical Rhythm Profile v6</title>
 
 <style>
-* { box-sizing:border-box; }
+*{
+  box-sizing:border-box;
+}
 
 body{
   margin:0;
   min-height:100vh;
   background:#050505;
   color:#eee;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  padding:22px 14px 50px;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  padding:22px 12px 50px;
 }
 
 .app{
-  width:min(1100px,100%);
+  width:min(1080px,100%);
   margin:auto;
 }
 
@@ -26,7 +32,7 @@ h1{
   margin:0;
   text-align:center;
   font-size:16px;
-  letter-spacing:.1em;
+  letter-spacing:.10em;
 }
 
 .subtitle{
@@ -39,98 +45,65 @@ h1{
 
 .panel{
   background:#101010;
-  border:1px solid #292929;
-  border-radius:18px;
+  border:1px solid #2a2a2a;
+  border-radius:20px;
   padding:14px;
   margin-bottom:14px;
 }
 
-.filters{
+/* ===========================
+   PERSON CHIPS
+=========================== */
+
+.person-panel{
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:9px 15px;
-  align-items:center;
+  gap:9px;
 }
 
-label{
-  font-size:12px;
-  color:#ddd;
-}
-
-.check{
-  display:flex;
-  gap:5px;
-  align-items:center;
-  cursor:pointer;
-}
-
-input[type=checkbox]{
-  accent-color:#eee8df;
-}
-
-button{
-  border:0;
+.person-chip,
+#toggleAll{
+  border:1px solid #444;
+  background:#242424;
+  color:#eee;
+  padding:8px 14px;
   border-radius:18px;
-  padding:8px 16px;
-  font-weight:700;
+  font-size:12px;
   cursor:pointer;
+  user-select:none;
+  transition:
+    background .15s ease,
+    color .15s ease,
+    border-color .15s ease;
+}
+
+.person-chip.active{
   background:#eee8df;
   color:#111;
+  border-color:#eee8df;
 }
 
-button.secondary{
-  background:#242424;
-  color:#eee;
-  border:1px solid #444;
+#toggleAll{
+  font-weight:700;
 }
 
-button.record{
-  background:#242424;
-  color:#eee;
-  border:1px solid #555;
-}
-
-button.recording{
+#toggleAll.active{
   background:#eee8df;
   color:#111;
+  border-color:#eee8df;
 }
 
-button:disabled{
-  opacity:.4;
-  cursor:not-allowed;
-}
 
-.controls{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  align-items:center;
-  gap:11px;
-}
-
-input[type=number]{
-  width:70px;
-  padding:6px 7px;
-  border-radius:8px;
-  border:1px solid #444;
-  background:#181818;
-  color:white;
-}
-
-select{
-  padding:6px 9px;
-  border-radius:8px;
-  border:1px solid #444;
-  background:#181818;
-  color:white;
-}
+/* ===========================
+   CANVAS
+=========================== */
 
 .canvas-wrap{
   width:100%;
   background:#000;
   border:1px solid #222;
-  border-radius:18px;
+  border-radius:20px;
   overflow:hidden;
 }
 
@@ -140,25 +113,135 @@ canvas{
   height:auto;
 }
 
+
+/* ===========================
+   TIMELINE
+=========================== */
+
 .timeline-panel{
-  margin-top:14px;
+  padding:13px 14px 16px;
 }
 
-.timeline-labels{
-  display:flex;
-  justify-content:space-between;
-  color:#777;
+.timeline-track{
+  position:relative;
+  height:34px;
+  margin-bottom:4px;
+}
+
+.timeline-band{
+  position:absolute;
+  top:10px;
+  height:8px;
+  border-radius:999px;
+}
+
+.band-start{
+  left:0;
+  width:8%;
+  background:#333;
+}
+
+.band-active{
+  left:8%;
+  width:78%;
+  background:#4a4a4a;
+}
+
+.band-wind{
+  left:86%;
+  width:14%;
+  background:#303030;
+}
+
+.timeline-text{
+  position:absolute;
+  top:22px;
   font-size:9px;
-  margin-bottom:5px;
+  color:#777;
 }
 
-input[type=range]{
+.timeline-text.start{
+  left:0;
+}
+
+.timeline-text.active{
+  left:45%;
+  transform:translateX(-50%);
+}
+
+.timeline-text.wind{
+  right:0;
+}
+
+#timeline{
   width:100%;
   accent-color:#eee8df;
 }
 
+
+/* ===========================
+   CONTROLS
+=========================== */
+
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:11px;
+}
+
+button{
+  border:none;
+  border-radius:18px;
+  padding:8px 16px;
+  font-weight:700;
+  cursor:pointer;
+  background:#eee8df;
+  color:#111;
+}
+
+button.secondary,
+button.record{
+  background:#242424;
+  color:#eee;
+  border:1px solid #444;
+}
+
+button.recording{
+  background:#eee8df;
+  color:#111;
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+label{
+  font-size:12px;
+  color:#ddd;
+}
+
+input[type=number]{
+  width:72px;
+  padding:6px 8px;
+  border-radius:9px;
+  border:1px solid #444;
+  background:#181818;
+  color:white;
+}
+
+select{
+  padding:6px 9px;
+  border-radius:9px;
+  border:1px solid #444;
+  background:#181818;
+  color:white;
+}
+
 .status{
-  margin-top:9px;
+  margin-top:10px;
   min-height:18px;
   color:#aaa;
   font-size:11px;
@@ -174,8 +257,20 @@ input[type=range]{
 }
 
 @media(max-width:600px){
-  body{padding-left:8px;padding-right:8px;}
-  .panel{padding:11px;}
+  body{
+    padding-left:8px;
+    padding-right:8px;
+  }
+
+  .panel{
+    padding:11px;
+  }
+
+  .person-chip,
+  #toggleAll{
+    padding:8px 12px;
+    font-size:13px;
+  }
 }
 </style>
 </head>
@@ -184,71 +279,77 @@ input[type=range]{
 
 <div class="app">
 
-<h1>PHYSICAL RHYTHM PROFILE v5</h1>
+<h1>PHYSICAL RHYTHM PROFILE v6</h1>
 
 <div class="subtitle">
 Tempo × Intensity × Rhythm × Sustain × Session Variation
 </div>
 
 
-<div class="panel filters">
+<div class="panel person-panel">
 
-<button id="toggleAll" class="secondary">
+<button id="toggleAll">
 全員
 </button>
 
-<label class="check">
-<input type="checkbox" class="personCheck" value="naoto" checked>
+<button class="person-chip active" data-person="naoto">
 直人
-</label>
+</button>
 
-<label class="check">
-<input type="checkbox" class="personCheck" value="kei" checked>
+<button class="person-chip active" data-person="kei">
 慧
-</label>
+</button>
 
-<label class="check">
-<input type="checkbox" class="personCheck" value="shoma" checked>
+<button class="person-chip active" data-person="shoma">
 翔馬
-</label>
+</button>
 
-<label class="check">
-<input type="checkbox" class="personCheck" value="minato" checked>
+<button class="person-chip active" data-person="minato">
 湊
-</label>
+</button>
 
-<label class="check">
-<input type="checkbox" class="personCheck" value="haruki" checked>
+<button class="person-chip active" data-person="haruki">
 晴輝
-</label>
+</button>
 
-<label class="check">
-<input type="checkbox" class="personCheck" value="hyunwoo" checked>
+<button class="person-chip active" data-person="hyunwoo">
 ヒョヌ
-</label>
+</button>
 
 </div>
 
 
 <div class="canvas-wrap">
-
 <canvas
   id="canvas"
   width="1200"
-  height="650">
+  height="700">
 </canvas>
-
 </div>
 
 
 <div class="panel timeline-panel">
 
-<div class="timeline-labels">
-<span>Warmup</span>
-<span>Cruise</span>
-<span>Rise</span>
-<span>Peak</span>
-<span>Cooldown</span>
+<div class="timeline-track">
+
+  <div class="timeline-band band-start"></div>
+
+  <div class="timeline-band band-active"></div>
+
+  <div class="timeline-band band-wind"></div>
+
+  <div class="timeline-text start">
+    Start
+  </div>
+
+  <div class="timeline-text active">
+    Active
+  </div>
+
+  <div class="timeline-text wind">
+    Wind-down
+  </div>
+
 </div>
 
 <input
@@ -256,8 +357,7 @@ Tempo × Intensity × Rhythm × Sustain × Session Variation
   type="range"
   min="0"
   max="1000"
-  value="0"
->
+  value="0">
 
 </div>
 
@@ -274,19 +374,17 @@ Play
 Reset
 </button>
 
-
 <label>
 総時間
 <input
   id="duration"
   type="number"
-  min="15"
+  min="20"
   max="300"
   step="5"
   value="60">
 秒
 </label>
-
 
 <label>
 Session
@@ -305,7 +403,6 @@ Natural
 </select>
 </label>
 
-
 <label>
 Seed
 <input
@@ -315,13 +412,11 @@ Seed
   style="width:90px">
 </label>
 
-
 <button
   id="newSession"
   class="secondary">
 New Session
 </button>
-
 
 <button
   id="record"
@@ -341,8 +436,8 @@ Ready
 
 <div class="legend">
 
-白いカプセル：
-下端固定・上端のみ伸縮
+白いカプセルは下端固定で、
+上端だけが伸縮します。
 
 <br>
 
@@ -356,13 +451,12 @@ Ready
 
 <br>
 
-Natural Sessionでは人物ごとの安定性を保ったまま、
-その回固有の微細な揺らぎが入ります。
+長時間設定ではCooldownを引き伸ばさず、
+中盤のフレーズ数と持続時間が増えます。
 
 </div>
 
 </div>
-
 
 
 <script>
@@ -378,7 +472,6 @@ const ctx =
 canvas.getContext("2d");
 
 
-
 /* =========================================================
    PROFILE
 ========================================================= */
@@ -386,79 +479,78 @@ canvas.getContext("2d");
 const profiles = [
 
 {
- id:"naoto",
- name:"直人",
- type:"安定制御",
- baseT:3.7,
- peakT:5.0,
- baseI:4.7,
- peakI:6.0,
- variation:.16,
- rhythm:"steady"
+  id:"naoto",
+  name:"直人",
+  type:"安定制御",
+  baseT:3.7,
+  peakT:5.0,
+  baseI:4.7,
+  peakI:6.0,
+  variation:.14,
+  rhythm:"steady"
 },
 
 {
- id:"kei",
- name:"慧",
- type:"高強度持続",
- baseT:4.6,
- peakT:6.0,
- baseI:6.7,
- peakI:9.0,
- variation:.20,
- rhythm:"hold"
+  id:"kei",
+  name:"慧",
+  type:"高強度持続",
+  baseT:4.6,
+  peakT:6.0,
+  baseI:6.7,
+  peakI:9.0,
+  variation:.18,
+  rhythm:"hold"
 },
 
 {
- id:"shoma",
- name:"翔馬",
- type:"急加速ピーク",
- baseT:4.6,
- peakT:7.0,
- baseI:6.6,
- peakI:8.0,
- variation:.42,
- rhythm:"burst"
+  id:"shoma",
+  name:"翔馬",
+  type:"急加速ピーク",
+  baseT:4.6,
+  peakT:7.0,
+  baseI:6.6,
+  peakI:8.0,
+  variation:.40,
+  rhythm:"burst"
 },
 
 {
- id:"minato",
- name:"湊",
- type:"反応追従",
- baseT:3.8,
- peakT:5.8,
- baseI:5.5,
- peakI:7.0,
- variation:.34,
- rhythm:"responsive"
+  id:"minato",
+  name:"湊",
+  type:"反応追従",
+  baseT:3.8,
+  peakT:5.8,
+  baseI:5.5,
+  peakI:7.0,
+  variation:.32,
+  rhythm:"responsive"
 },
 
 {
- id:"haruki",
- name:"晴輝",
- type:"状態変動",
- baseT:3.7,
- peakT:6.0,
- baseI:5.5,
- peakI:8.0,
- variation:.52,
- rhythm:"variable"
+  id:"haruki",
+  name:"晴輝",
+  type:"状態変動",
+  baseT:3.7,
+  peakT:6.0,
+  baseI:5.5,
+  peakI:8.0,
+  variation:.48,
+  rhythm:"variable"
 },
 
 {
- id:"hyunwoo",
- name:"ヒョヌ",
- type:"高密度制御",
- baseT:3.6,
- peakT:5.6,
- baseI:6.6,
- peakI:8.0,
- variation:.18,
- rhythm:"controlled"
+  id:"hyunwoo",
+  name:"ヒョヌ",
+  type:"高密度制御",
+  baseT:3.6,
+  peakT:5.6,
+  baseI:6.6,
+  peakI:8.0,
+  variation:.16,
+  rhythm:"controlled"
 }
 
 ];
-
 
 
 /* =========================================================
@@ -495,11 +587,10 @@ document.getElementById("newSession");
 const status =
 document.getElementById("status");
 
-const checks =
+const chips =
 Array.from(
- document.querySelectorAll(".personCheck")
+ document.querySelectorAll(".person-chip")
 );
-
 
 
 /* =========================================================
@@ -524,73 +615,63 @@ let recordedChunks = [];
 
 let recording = false;
 
-let autoRecording = false;
-
-
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
 function clamp(v,a,b){
-
- return Math.max(
-  a,
-  Math.min(b,v)
- );
-
+  return Math.max(
+    a,
+    Math.min(b,v)
+  );
 }
 
 
 function lerp(a,b,t){
-
- return a+(b-a)*t;
-
+  return a+(b-a)*t;
 }
 
 
 function smooth(a,b,x){
 
- const t =
- clamp(
-  (x-a)/(b-a),
-  0,
-  1
- );
+  const t =
+  clamp(
+    (x-a)/(b-a),
+    0,
+    1
+  );
 
- return t*t*(3-2*t);
-
+  return t*t*(3-2*t);
 }
 
 
 function roundRect(
- context,
- x,
- y,
- width,
- height,
- radius
-){
-
- const r =
- Math.min(
-  radius,
-  width/2,
-  height/2
- );
-
- context.beginPath();
-
- context.roundRect(
+  context,
   x,
   y,
   width,
   height,
-  r
- );
+  radius
+){
 
+  const r =
+  Math.min(
+    radius,
+    width/2,
+    height/2
+  );
+
+  context.beginPath();
+
+  context.roundRect(
+    x,
+    y,
+    width,
+    height,
+    r
+  );
 }
-
 
 
 /* =========================================================
@@ -599,65 +680,61 @@ function roundRect(
 
 function hashString(str){
 
- let h =
- 2166136261;
+  let h =
+  2166136261;
 
- for(
-  let i=0;
-  i<str.length;
-  i++
- ){
+  for(
+    let i=0;
+    i<str.length;
+    i++
+  ){
 
-  h ^=
-  str.charCodeAt(i);
+    h ^=
+    str.charCodeAt(i);
 
-  h =
-  Math.imul(
-   h,
-   16777619
-  );
+    h =
+    Math.imul(
+      h,
+      16777619
+    );
+  }
 
- }
-
- return h>>>0;
-
+  return h>>>0;
 }
 
 
 function seededRandom(
- seed,
- key
+  seed,
+  key
 ){
 
- let x =
- hashString(
-  seed+"-"+key
- );
+  let x =
+  hashString(
+    seed+"-"+key
+  );
 
- x +=
- 0x6D2B79F5;
+  x +=
+  0x6D2B79F5;
 
- x =
- Math.imul(
-  x^(x>>>15),
-  x|1
- );
+  x =
+  Math.imul(
+    x^(x>>>15),
+    x|1
+  );
 
- x ^=
- x+
- Math.imul(
-  x^(x>>>7),
-  x|61
- );
+  x ^=
+  x+
+  Math.imul(
+    x^(x>>>7),
+    x|61
+  );
 
- return (
-  (
-   x^(x>>>14)
-  )>>>0
- ) / 4294967296;
-
+  return (
+    (
+      x^(x>>>14)
+    )>>>0
+  ) / 4294967296;
 }
-
 
 
 /* =========================================================
@@ -665,63 +742,290 @@ function seededRandom(
 ========================================================= */
 
 function sessionNoise(
- profile,
- progress,
- channel
+  profile,
+  progress,
+  channel
 ){
 
- if(
-  sessionMode.value ===
-  "fixed"
- ){
+  if(
+    sessionMode.value==="fixed"
+  ){
+    return 0;
+  }
 
-  return 0;
+  const seed =
+  parseInt(
+    seedInput.value
+  ) || 1;
 
- }
+  const a =
+  seededRandom(
+    seed,
+    profile.id+
+    channel+
+    "A"
+  ) * Math.PI*2;
 
- const seed =
- parseInt(seedInput.value)||1;
+  const b =
+  seededRandom(
+    seed,
+    profile.id+
+    channel+
+    "B"
+  ) * Math.PI*2;
 
+  const wave1 =
+  Math.sin(
+    progress*Math.PI*5+a
+  );
 
- const a =
- seededRandom(
-  seed,
-  profile.id+
-  channel+
-  "A"
- ) * Math.PI*2;
+  const wave2 =
+  Math.sin(
+    progress*Math.PI*11+b
+  )*.30;
 
-
- const b =
- seededRandom(
-  seed,
-  profile.id+
-  channel+
-  "B"
- ) * Math.PI*2;
-
-
- const wave1 =
- Math.sin(
-  progress*Math.PI*5+a
- );
-
-
- const wave2 =
- Math.sin(
-  progress*Math.PI*11+b
- )*.35;
-
-
- return (
-  wave1+
-  wave2
- )
- *
- profile.variation;
-
+  return (
+    wave1+
+    wave2
+  )
+  *
+  profile.variation;
 }
 
+
+/* =========================================================
+   SESSION TIMING
+
+   Wind-down is mostly fixed in real seconds.
+========================================================= */
+
+function getTiming(){
+
+  /*
+    Short session:
+      ~6s wind-down
+
+    Long session:
+      max ~10s wind-down
+
+    So 180 sec never becomes
+    36 sec of cooldown.
+  */
+
+  const windDownSeconds =
+  clamp(
+    5+
+    duration*.025,
+    6,
+    10
+  );
+
+  const startSeconds =
+  clamp(
+    duration*.10,
+    4,
+    12
+  );
+
+  const activeStart =
+  startSeconds /
+  duration;
+
+  const windStart =
+  (
+    duration-
+    windDownSeconds
+  ) / duration;
+
+  return {
+    activeStart,
+    windStart,
+    windDownSeconds
+  };
+}
+
+
+/* =========================================================
+   PHRASE GENERATOR
+
+   Longer sessions = more mid-session waves.
+========================================================= */
+
+function phraseWave(
+  profile,
+  progress
+){
+
+  const timing =
+  getTiming();
+
+  const activeStart =
+  timing.activeStart;
+
+  const windStart =
+  timing.windStart;
+
+
+  if(
+    progress<
+    activeStart
+  ){
+    return 0;
+  }
+
+  if(
+    progress>
+    windStart
+  ){
+    return 0;
+  }
+
+
+  const activeProgress =
+
+  (
+    progress-
+    activeStart
+  )
+
+  /
+
+  (
+    windStart-
+    activeStart
+  );
+
+
+  /*
+    Longer duration means
+    more phrases.
+  */
+
+  const phraseCount =
+  clamp(
+    Math.round(
+      duration/28
+    ),
+    2,
+    9
+  );
+
+
+  const x =
+  activeProgress *
+  phraseCount *
+  Math.PI *
+  2;
+
+
+  if(
+    profile.rhythm==="steady"
+  ){
+
+    return (
+      .42+
+      .18*
+      Math.sin(
+        x*.45
+      )
+    );
+
+  }
+
+
+  if(
+    profile.rhythm==="hold"
+  ){
+
+    return (
+      .50+
+      .28*
+      Math.max(
+        0,
+        Math.sin(
+          x*.30-.8
+        )
+      )
+    );
+
+  }
+
+
+  if(
+    profile.rhythm==="burst"
+  ){
+
+    return (
+      .30+
+      .55*
+      Math.max(
+        0,
+        Math.sin(
+          x*.78
+        )
+      )
+    );
+
+  }
+
+
+  if(
+    profile.rhythm==="responsive"
+  ){
+
+    return (
+      .35+
+      .28*
+      Math.sin(
+        x*.52
+      )
+      +
+      .12*
+      Math.sin(
+        x*1.14
+      )
+    );
+
+  }
+
+
+  if(
+    profile.rhythm==="variable"
+  ){
+
+    return (
+      .32+
+      .34*
+      Math.sin(
+        x*.41+1.3
+      )
+    );
+
+  }
+
+
+  if(
+    profile.rhythm==="controlled"
+  ){
+
+    return (
+      .45+
+      .22*
+      Math.sin(
+        x*.34
+      )
+      +
+      .10*
+      Math.sin(
+        x*.12+1
+      )
+    );
+
+  }
+
+
+  return .4;
+}
 
 
 /* =========================================================
@@ -729,405 +1033,388 @@ function sessionNoise(
 ========================================================= */
 
 function getState(
- profile,
- progress
+  profile,
+  progress
 ){
 
- const warm =
- smooth(
-  0,
-  .14,
-  progress
- );
+  const timing =
+  getTiming();
+
+  const activeStart =
+  timing.activeStart;
+
+  const windStart =
+  timing.windStart;
 
 
- const rise =
- smooth(
-  .16,
-  .54,
-  progress
- );
+  /*
+    START
+  */
 
-
- const peakWindow =
-
- smooth(
-  .50,
-  .64,
-  progress
- )
-
- *
-
- (
-  1-
+  const warm =
   smooth(
-   .80,
-   .92,
-   progress
-  )
- );
+    0,
+    activeStart,
+    progress
+  );
 
 
- const cooldown =
- smooth(
-  .80,
-  1,
-  progress
- );
+  let tempo =
+  lerp(
+    Math.max(
+      1,
+      profile.baseT-.8
+    ),
+    profile.baseT,
+    warm
+  );
 
 
- let tempo =
- lerp(
-  Math.max(
-   1,
-   profile.baseT-.7
-  ),
-  profile.baseT,
-  warm
- );
+  let intensity =
+  lerp(
+    Math.max(
+      1,
+      profile.baseI-1.2
+    ),
+    profile.baseI,
+    warm
+  );
 
 
- let intensity =
- lerp(
-  Math.max(
-   1,
-   profile.baseI-1
-  ),
-  profile.baseI,
-  warm
- );
+  /*
+    ACTIVE REGION
+  */
 
-
-
- /* NAOTO */
-
- if(
-  profile.rhythm==="steady"
- ){
-
-  tempo +=
-  rise*.45+
-  peakWindow*.4;
-
-  intensity +=
-  rise*.35+
-  peakWindow*.55;
-
- }
-
-
-
- /* KEI */
-
- if(
-  profile.rhythm==="hold"
- ){
-
-  const hold =
+  const active =
 
   smooth(
-   .40,
-   .56,
-   progress
+    activeStart,
+    activeStart+.12,
+    progress
   )
 
   *
 
   (
-   1-
-   smooth(
-    .88,
-    1,
+    1-
+    smooth(
+      windStart-.05,
+      windStart,
+      progress
+    )
+  );
+
+
+  const phrase =
+  phraseWave(
+    profile,
     progress
-   )
   );
 
 
+  /* NAOTO */
+
+  if(
+    profile.rhythm==="steady"
+  ){
+
+    tempo +=
+    active*
+    (
+      .25+
+      phrase*.55
+    );
+
+    intensity +=
+    active*
+    (
+      .20+
+      phrase*.75
+    );
+  }
+
+
+  /* KEI */
+
+  if(
+    profile.rhythm==="hold"
+  ){
+
+    tempo +=
+    active*
+    (
+      .40+
+      phrase*.70
+    );
+
+    intensity +=
+    active*
+    (
+      .70+
+      phrase*1.65
+    );
+  }
+
+
+  /* SHOMA */
+
+  if(
+    profile.rhythm==="burst"
+  ){
+
+    tempo +=
+    active*
+    (
+      .35+
+      phrase*1.55
+    );
+
+    intensity +=
+    active*
+    (
+      .40+
+      phrase*.95
+    );
+  }
+
+
+  /* MINATO */
+
+  if(
+    profile.rhythm==="responsive"
+  ){
+
+    tempo +=
+    active*
+    (
+      .25+
+      phrase*.85
+    );
+
+    intensity +=
+    active*
+    (
+      .25+
+      phrase*.75
+    );
+  }
+
+
+  /* HARUKI */
+
+  if(
+    profile.rhythm==="variable"
+  ){
+
+    tempo +=
+    active*
+    (
+      .22+
+      phrase*.95
+    );
+
+    intensity +=
+    active*
+    (
+      .25+
+      phrase*1.05
+    );
+  }
+
+
+  /* HYUNWOO */
+
+  if(
+    profile.rhythm==="controlled"
+  ){
+
+    tempo +=
+    active*
+    (
+      .25+
+      phrase*.60
+    );
+
+    intensity +=
+    active*
+    (
+      .60+
+      phrase*.95
+    );
+  }
+
+
+  /*
+    NATURAL SESSION
+  */
+
   tempo +=
-  rise*.65+
-  hold*.55;
-
-
-  intensity +=
-  rise*1.1+
-  hold*1.3;
-
- }
-
-
-
- /* SHOMA */
-
- if(
-  profile.rhythm==="burst"
- ){
-
-  const burst =
-
-  Math.max(
-   0,
-   Math.sin(
-    progress*
-    Math.PI*
-    9
-   )
+  sessionNoise(
+    profile,
+    progress,
+    "T"
   );
 
 
-  tempo +=
-  rise*.45+
-  burst*
-  1.2*
-  rise;
-
-
   intensity +=
-  rise*.4+
-  burst*
-  .6*
-  rise;
+  sessionNoise(
+    profile,
+    progress,
+    "I"
+  );
+
+
+  /*
+    WIND-DOWN
+
+    Actual movement shrinks quickly.
+  */
+
+  let movementScale =
+  1;
 
 
   if(
-   progress>.52 &&
-   progress<.8
+    progress>=
+    windStart
   ){
 
-   const secondBurst =
+    const windProgress =
 
-   Math.max(
-    0,
-    Math.sin(
-     (
-      progress-.52
-     )
-     *
-     Math.PI*
-     20
+    (
+      progress-
+      windStart
     )
-   );
+
+    /
+
+    (
+      1-
+      windStart
+    );
 
 
-   tempo +=
-   secondBurst*1.3;
+    /*
+      Strongly compress motion
+      near the end.
+    */
 
-   intensity +=
-   secondBurst*.65;
+    movementScale =
+    1-
+    smooth(
+      0,
+      .78,
+      windProgress
+    );
 
+
+    tempo =
+    lerp(
+      tempo,
+      1.3,
+      smooth(
+        0,
+        .75,
+        windProgress
+      )
+    );
+
+
+    intensity =
+    lerp(
+      intensity,
+      1.5,
+      smooth(
+        0,
+        .72,
+        windProgress
+      )
+    );
+
+
+    /*
+      Last ~15% of wind-down:
+      effectively stopped.
+    */
+
+    if(
+      windProgress>.85
+    ){
+
+      movementScale =
+      0;
+
+    }
   }
 
- }
-
-
-
- /* MINATO */
-
- if(
-  profile.rhythm==="responsive"
- ){
-
-  tempo +=
-  rise*.35+
-  peakWindow*.45;
-
-
-  intensity +=
-  rise*.3+
-  peakWindow*.5;
-
-
-  tempo +=
-  Math.sin(
-   progress*
-   Math.PI*
-   7
-  )*.3;
-
-
-  intensity +=
-  Math.sin(
-   progress*
-   Math.PI*
-   6
-  )*.24;
-
- }
-
-
-
- /* HARUKI */
-
- if(
-  profile.rhythm==="variable"
- ){
-
-  const condition =
-
-  .5+
-  .5*
-  Math.sin(
-   progress*
-   Math.PI*
-   3+
-   2
-  );
-
-
-  tempo +=
-  rise*
-  (
-   .25+
-   condition*.55
-  );
-
-
-  intensity +=
-  rise*
-  (
-   .25+
-   condition*.65
-  );
-
-
-  tempo +=
-  peakWindow*
-  (
-   .3+
-   condition*.55
-  );
-
-
-  intensity +=
-  peakWindow*
-  (
-   .35+
-   condition*.7
-  );
-
- }
-
-
-
- /* HYUNWOO */
-
- if(
-  profile.rhythm==="controlled"
- ){
-
-  tempo +=
-  rise*.35+
-  peakWindow*.55;
-
-
-  intensity +=
-  rise*.65+
-  peakWindow*.65;
-
-
-  tempo +=
-  Math.sin(
-   progress*
-   Math.PI*
-   4
-  )*.2;
-
- }
-
-
-
- /* SESSION VARIATION */
-
- tempo +=
- sessionNoise(
-  profile,
-  progress,
-  "T"
- );
-
-
- intensity +=
- sessionNoise(
-  profile,
-  progress,
-  "I"
- );
-
-
-
- /* COOLDOWN */
-
- if(
-  cooldown>0
- ){
 
   tempo =
-  lerp(
-   tempo,
-   Math.max(
+  clamp(
+    tempo,
     1,
-    profile.baseT-.8
-   ),
-   cooldown
+    profile.peakT
   );
 
 
   intensity =
-  lerp(
-   intensity,
-   Math.max(
-    2,
-    profile.baseI*.65
-   ),
-   cooldown
+  clamp(
+    intensity,
+    1,
+    profile.peakI
   );
 
- }
+
+  let stage;
 
 
- tempo =
- clamp(
-  tempo,
-  1,
-  profile.peakT
- );
+  if(
+    progress<
+    activeStart
+  ){
+
+    stage =
+    "START";
+
+  }
+
+  else if(
+    progress<
+    windStart
+  ){
+
+    if(
+      phrase>.70
+    ){
+      stage="PEAK";
+    }
+
+    else if(
+      phrase>.48
+    ){
+      stage="RISE";
+    }
+
+    else{
+      stage="CRUISE";
+    }
+
+  }
+
+  else{
+
+    stage =
+    "WIND-DOWN";
+
+  }
 
 
- intensity =
- clamp(
-  intensity,
-  1,
-  profile.peakI
- );
-
-
- let stage;
-
-
- if(progress<.14)
-  stage="WARMUP";
-
- else if(progress<.43)
-  stage="CRUISE";
-
- else if(progress<.55)
-  stage="RISE";
-
- else if(progress<.80)
-  stage="PEAK";
-
- else
-  stage="COOLDOWN";
-
-
- return {
-  tempo,
-  intensity,
-  stage
- };
-
+  return {
+    tempo,
+    intensity,
+    stage,
+    movementScale
+  };
 }
-
 
 
 /* =========================================================
@@ -1135,115 +1422,112 @@ function getState(
 ========================================================= */
 
 function motionWave(
- profile,
- phase
+  profile,
+  phase
 ){
 
- const s =
- Math.sin(phase);
+  const s =
+  Math.sin(
+    phase
+  );
 
 
- if(
-  profile.rhythm==="steady"
- ){
+  if(
+    profile.rhythm==="steady"
+  ){
+
+    return s;
+  }
+
+
+  if(
+    profile.rhythm==="hold"
+  ){
+
+    return (
+      Math.sign(s)*
+      Math.pow(
+        Math.abs(s),
+        .82
+      )
+    );
+  }
+
+
+  if(
+    profile.rhythm==="burst"
+  ){
+
+    return (
+      Math.sign(s)*
+      Math.pow(
+        Math.abs(s),
+        .50
+      )
+    );
+  }
+
+
+  if(
+    profile.rhythm==="responsive"
+  ){
+
+    return clamp(
+
+      s*.78
+
+      +
+
+      Math.sin(
+        phase*1.7
+      )*.22,
+
+      -1,
+      1
+    );
+  }
+
+
+  if(
+    profile.rhythm==="variable"
+  ){
+
+    return clamp(
+
+      s*.82
+
+      +
+
+      Math.sin(
+        phase*.47
+      )*.18,
+
+      -1,
+      1
+    );
+  }
+
+
+  if(
+    profile.rhythm==="controlled"
+  ){
+
+    return Math.sin(
+
+      phase
+
+      +
+
+      .28*
+      Math.sin(
+        phase*.5
+      )
+    );
+  }
+
 
   return s;
-
- }
-
-
- if(
-  profile.rhythm==="hold"
- ){
-
-  return (
-   Math.sign(s)*
-   Math.pow(
-    Math.abs(s),
-    .82
-   )
-  );
-
- }
-
-
- if(
-  profile.rhythm==="burst"
- ){
-
-  return (
-   Math.sign(s)*
-   Math.pow(
-    Math.abs(s),
-    .52
-   )
-  );
-
- }
-
-
- if(
-  profile.rhythm==="responsive"
- ){
-
-  return clamp(
-
-   s*.78+
-
-   Math.sin(
-    phase*1.7
-   )*.22,
-
-   -1,
-   1
-
-  );
-
- }
-
-
- if(
-  profile.rhythm==="variable"
- ){
-
-  return clamp(
-
-   s*.82+
-
-   Math.sin(
-    phase*.47
-   )*.18,
-
-   -1,
-   1
-
-  );
-
- }
-
-
- if(
-  profile.rhythm==="controlled"
- ){
-
-  return Math.sin(
-
-   phase+
-
-   .28*
-   Math.sin(
-    phase*.5
-   )
-
-  );
-
- }
-
-
- return s;
-
 }
-
 
 
 /* =========================================================
@@ -1252,24 +1536,218 @@ function motionWave(
 
 function selectedProfiles(){
 
- return profiles.filter(
-  profile => {
+  const ids =
 
-   const box =
-   checks.find(
-    c =>
-    c.value===
-    profile.id
-   );
+  chips
+  .filter(
+    chip =>
+    chip.classList.contains(
+      "active"
+    )
+  )
+  .map(
+    chip =>
+    chip.dataset.person
+  );
 
-   return box &&
-   box.checked;
 
-  }
- );
-
+  return profiles.filter(
+    profile =>
+    ids.includes(
+      profile.id
+    )
+  );
 }
 
+
+/* =========================================================
+   CHIP CONTROLS
+========================================================= */
+
+function updateAllButton(){
+
+  const allActive =
+  chips.every(
+    chip =>
+    chip.classList.contains(
+      "active"
+    )
+  );
+
+
+  toggleAllButton
+  .classList
+  .toggle(
+    "active",
+    allActive
+  );
+}
+
+
+chips.forEach(
+  chip=>{
+
+    chip.addEventListener(
+      "click",
+      ()=>{
+
+        chip
+        .classList
+        .toggle(
+          "active"
+        );
+
+        updateAllButton();
+
+        draw();
+      }
+    );
+
+  }
+);
+
+
+toggleAllButton.addEventListener(
+  "click",
+  ()=>{
+
+    const allActive =
+    chips.every(
+      chip =>
+      chip.classList.contains(
+        "active"
+      )
+    );
+
+
+    chips.forEach(
+      chip=>{
+
+        chip
+        .classList
+        .toggle(
+          "active",
+          !allActive
+        );
+
+      }
+    );
+
+
+    updateAllButton();
+
+    draw();
+  }
+);
+
+
+updateAllButton();
+
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+
+function getLayout(
+  count,
+  width
+){
+
+  /*
+    Avoid huge gaps when
+    only 1–3 people are selected.
+  */
+
+  let maxSpan;
+
+
+  if(count===1){
+
+    maxSpan =
+    240;
+  }
+
+  else if(count===2){
+
+    maxSpan =
+    430;
+  }
+
+  else if(count===3){
+
+    maxSpan =
+    620;
+  }
+
+  else if(count===4){
+
+    maxSpan =
+    760;
+  }
+
+  else{
+
+    maxSpan =
+    width-110;
+  }
+
+
+  const span =
+  Math.min(
+    maxSpan,
+    width-80
+  );
+
+
+  let trackWidth;
+
+
+  if(count===1){
+
+    trackWidth=108;
+  }
+
+  else if(count===2){
+
+    trackWidth=94;
+  }
+
+  else if(count===3){
+
+    trackWidth=86;
+  }
+
+  else{
+
+    trackWidth=74;
+  }
+
+
+  let trackHeight;
+
+
+  if(count===1){
+
+    trackHeight=390;
+  }
+
+  else if(count===2){
+
+    trackHeight=370;
+  }
+
+  else{
+
+    trackHeight=340;
+  }
+
+
+  return {
+    span,
+    trackWidth,
+    trackHeight
+  };
+}
 
 
 /* =========================================================
@@ -1278,655 +1756,721 @@ function selectedProfiles(){
 
 function draw(){
 
- const W =
- canvas.width;
+  const W =
+  canvas.width;
 
- const H =
- canvas.height;
-
-
- ctx.fillStyle="#000";
-
- ctx.fillRect(
-  0,
-  0,
-  W,
-  H
- );
+  const H =
+  canvas.height;
 
 
- const selected =
- selectedProfiles();
+  ctx.fillStyle="#000";
+
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
 
 
- /* TITLE */
-
- ctx.textAlign="center";
-
- ctx.fillStyle="#eee";
-
- ctx.font=
- "700 24px -apple-system, sans-serif";
-
- ctx.fillText(
-  "PHYSICAL RHYTHM PROFILE",
-  W/2,
-  38
- );
+  const selected =
+  selectedProfiles();
 
 
- ctx.fillStyle="#777";
+  /* TITLE */
 
- ctx.font=
- "14px -apple-system, sans-serif";
+  ctx.textAlign="center";
 
- ctx.fillText(
-  "Tempo × Intensity × Rhythm × Sustain",
-  W/2,
-  62
- );
+  ctx.fillStyle="#eee";
 
+  ctx.font=
+  "700 27px -apple-system, sans-serif";
 
+  ctx.fillText(
+    "PHYSICAL RHYTHM PROFILE",
+    W/2,
+    42
+  );
 
- if(
-  selected.length===0
- ){
 
   ctx.fillStyle="#777";
 
   ctx.font=
-  "18px -apple-system, sans-serif";
+  "14px -apple-system, sans-serif";
 
   ctx.fillText(
-   "人物を選択してください",
-   W/2,
-   H/2
+    "Tempo × Intensity × Rhythm × Sustain",
+    W/2,
+    66
   );
 
-  return;
 
- }
+  if(
+    selected.length===0
+  ){
 
+    ctx.fillStyle="#777";
 
- const progress =
- clamp(
-  elapsed/duration,
-  0,
-  1
- );
+    ctx.font=
+    "20px -apple-system, sans-serif";
 
+    ctx.fillText(
+      "人物を選択してください",
+      W/2,
+      H/2
+    );
 
- const marginX =
- 45;
-
-
- const usableWidth =
- W-marginX*2;
-
-
- const slot =
- usableWidth/
- selected.length;
-
-
- const trackHeight =
- 350;
-
-
- const trackWidth =
- Math.min(
-  78,
-  slot*.45
- );
-
-
- const trackBottom =
- 510;
-
-
- selected.forEach(
-  (profile,index)=>{
-
-
-   const state =
-   getState(
-    profile,
-    progress
-   );
-
-
-   const centerX =
-
-   marginX+
-
-   slot*
-   (
-    index+.5
-   );
-
-
-   /* NAME */
-
-   ctx.fillStyle="#eee";
-
-   ctx.font=
-   "700 18px -apple-system, sans-serif";
-
-   ctx.textAlign="center";
-
-   ctx.fillText(
-    profile.name,
-    centerX,
-    102
-   );
-
-
-   ctx.fillStyle="#888";
-
-   ctx.font=
-   "12px -apple-system, sans-serif";
-
-   ctx.fillText(
-    profile.type,
-    centerX,
-    122
-   );
-
-
-   /* VALUES */
-
-   ctx.fillStyle="#ddd";
-
-   ctx.font=
-   "13px monospace";
-
-   ctx.fillText(
-
-    "T "+
-    state.tempo.toFixed(1)+
-    " / I "+
-    state.intensity.toFixed(1),
-
-    centerX,
-    148
-
-   );
-
-
-   ctx.fillStyle="#777";
-
-   ctx.font=
-   "11px monospace";
-
-   ctx.fillText(
-    state.stage,
-    centerX,
-    166
-   );
-
-
-
-   /* TRACK */
-
-   const x =
-   centerX-
-   trackWidth/2;
-
-
-   const y =
-   trackBottom-
-   trackHeight;
-
-
-   ctx.fillStyle="#29211e";
-
-   roundRect(
-    ctx,
-    x,
-    y,
-    trackWidth,
-    trackHeight,
-    trackWidth/2
-   );
-
-   ctx.fill();
-
-
-   ctx.strokeStyle="#4a3b35";
-
-   ctx.lineWidth=2;
-
-   ctx.stroke();
-
-
-
-   /* CENTER GUIDE */
-
-   ctx.strokeStyle=
-   "rgba(255,255,255,.10)";
-
-   ctx.lineWidth=1;
-
-   ctx.beginPath();
-
-   ctx.moveTo(
-    x+9,
-    y+
-    trackHeight/2
-   );
-
-   ctx.lineTo(
-    x+
-    trackWidth-
-    9,
-    y+
-    trackHeight/2
-   );
-
-   ctx.stroke();
-
-
-
-   /* WAVE */
-
-   const wave =
-   motionWave(
-    profile,
-    phases[
-     profile.id
-    ]
-   );
-
-
-   const normalized =
-   (
-    wave+1
-   )/2;
-
-
-
-   /*
-     Intensity determines
-     extension range.
-   */
-
-   const minimum =
-   34;
-
-
-   const extension =
-
-   25+
-
-   state.intensity*
-   25;
-
-
-   let fillHeight =
-
-   minimum+
-
-   normalized*
-   extension;
-
-
-   fillHeight =
-   Math.min(
-    fillHeight,
-    trackHeight-12
-   );
-
-
-
-   /* PEAK GLOW */
-
-   const ownPeakRatio =
-
-   state.intensity/
-   profile.peakI;
-
-
-   if(
-    ownPeakRatio>.88
-   ){
-
-    ctx.shadowColor=
-    "rgba(255,255,255,.55)";
-
-    ctx.shadowBlur=
-    18;
-
-   }
-
-   else{
-
-    ctx.shadowBlur=0;
-
-   }
-
-
-
-   /* FILL */
-
-   ctx.fillStyle="#eee8df";
-
-
-   roundRect(
-
-    ctx,
-
-    x+7,
-
-    trackBottom-
-    7-
-    fillHeight,
-
-    trackWidth-14,
-
-    fillHeight,
-
-    (
-     trackWidth-14
-    )/2
-
-   );
-
-
-   ctx.fill();
-
-
-   ctx.shadowBlur=0;
-
-
-
-   /* RANGE MARKERS */
-
-   ctx.fillStyle="#777";
-
-   ctx.font=
-   "10px monospace";
-
-
-   ctx.fillText(
-
-    "T"+
-    profile.baseT+
-    "–"+
-    profile.peakT,
-
-    centerX,
-    535
-
-   );
-
-
-   ctx.fillText(
-
-    "I"+
-    profile.baseI+
-    "–"+
-    profile.peakI,
-
-    centerX,
-    551
-
-   );
-
- });
-
-
- /* TIMELINE */
-
- const lineY =
- 594;
-
-
- const lineStart =
- 80;
-
-
- const lineEnd =
- W-80;
-
-
- const sections = [
-
-  [0,.14,"#333"],
-
-  [.14,.43,"#3a3a3a"],
-
-  [.43,.55,"#454545"],
-
-  [.55,.80,"#555"],
-
-  [.80,1,"#333"]
-
- ];
-
-
- sections.forEach(
-  section=>{
-
-   const x1 =
-   lerp(
-    lineStart,
-    lineEnd,
-    section[0]
-   );
-
-
-   const x2 =
-   lerp(
-    lineStart,
-    lineEnd,
-    section[1]
-   );
-
-
-   ctx.strokeStyle=
-   section[2];
-
-   ctx.lineWidth=6;
-
-   ctx.beginPath();
-
-   ctx.moveTo(
-    x1,
-    lineY
-   );
-
-   ctx.lineTo(
-    x2,
-    lineY
-   );
-
-   ctx.stroke();
-
+    return;
   }
- );
 
 
- const markerX =
-
- lerp(
-  lineStart,
-  lineEnd,
-  progress
- );
-
-
- ctx.fillStyle="#eee8df";
-
- ctx.beginPath();
-
- ctx.arc(
-  markerX,
-  lineY,
-  7,
-  0,
-  Math.PI*2
- );
-
- ctx.fill();
+  const progress =
+  clamp(
+    elapsed/duration,
+    0,
+    1
+  );
 
 
- ctx.fillStyle="#aaa";
+  const layout =
+  getLayout(
+    selected.length,
+    W
+  );
 
- ctx.font=
- "12px monospace";
 
- ctx.textAlign="center";
+  const center =
+  W/2;
 
- ctx.fillText(
 
-  elapsed.toFixed(1)+
-  " / "+
-  duration+
-  " sec",
+  const span =
+  layout.span;
 
-  W/2,
-  626
 
- );
+  const slot =
+
+  selected.length===1
+  ?
+  0
+  :
+  span/
+  (
+    selected.length-1
+  );
+
+
+  const trackWidth =
+  layout.trackWidth;
+
+
+  const trackHeight =
+  layout.trackHeight;
+
+
+  const trackBottom =
+  555;
+
+
+  selected.forEach(
+    (profile,index)=>{
+
+
+      const state =
+      getState(
+        profile,
+        progress
+      );
+
+
+      let centerX;
+
+
+      if(
+        selected.length===1
+      ){
+
+        centerX =
+        center;
+
+      }
+
+      else{
+
+        centerX =
+
+        center
+
+        -
+
+        span/2
+
+        +
+
+        slot*
+        index;
+      }
+
+
+      /* NAME */
+
+      ctx.fillStyle="#eee";
+
+      ctx.font=
+      selected.length<=2
+      ?
+      "700 24px -apple-system, sans-serif"
+      :
+      "700 19px -apple-system, sans-serif";
+
+      ctx.textAlign="center";
+
+      ctx.fillText(
+        profile.name,
+        centerX,
+        115
+      );
+
+
+      ctx.fillStyle="#999";
+
+      ctx.font=
+      selected.length<=2
+      ?
+      "14px -apple-system, sans-serif"
+      :
+      "12px -apple-system, sans-serif";
+
+      ctx.fillText(
+        profile.type,
+        centerX,
+        138
+      );
+
+
+      ctx.fillStyle="#ddd";
+
+      ctx.font=
+      selected.length<=2
+      ?
+      "16px monospace"
+      :
+      "13px monospace";
+
+      ctx.fillText(
+
+        "T "+
+        state.tempo.toFixed(1)+
+        " / I "+
+        state.intensity.toFixed(1),
+
+        centerX,
+        166
+      );
+
+
+      ctx.fillStyle="#777";
+
+      ctx.font=
+      "12px monospace";
+
+      ctx.fillText(
+        state.stage,
+        centerX,
+        187
+      );
+
+
+      /* TRACK */
+
+      const x =
+      centerX-
+      trackWidth/2;
+
+
+      const y =
+      trackBottom-
+      trackHeight;
+
+
+      ctx.fillStyle="#29211e";
+
+      roundRect(
+        ctx,
+        x,
+        y,
+        trackWidth,
+        trackHeight,
+        trackWidth/2
+      );
+
+      ctx.fill();
+
+
+      ctx.strokeStyle="#4a3b35";
+
+      ctx.lineWidth=2;
+
+      ctx.stroke();
+
+
+      /* CENTER GUIDE */
+
+      ctx.strokeStyle=
+      "rgba(255,255,255,.09)";
+
+      ctx.lineWidth=1;
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        x+10,
+        y+
+        trackHeight/2
+      );
+
+      ctx.lineTo(
+        x+
+        trackWidth-
+        10,
+        y+
+        trackHeight/2
+      );
+
+      ctx.stroke();
+
+
+      /* WAVE */
+
+      const wave =
+      motionWave(
+        profile,
+        phases[
+          profile.id
+        ]
+      );
+
+
+      const normalized =
+      (
+        wave+1
+      )/2;
+
+
+      const minimum =
+      34;
+
+
+      const extension =
+
+      (
+        28+
+        state.intensity*
+        29
+      )
+
+      *
+
+      state.movementScale;
+
+
+      let fillHeight =
+
+      minimum
+
+      +
+
+      normalized*
+      extension;
+
+
+      fillHeight =
+      Math.min(
+        fillHeight,
+        trackHeight-12
+      );
+
+
+      /*
+        Last wind-down:
+        settle near base.
+      */
+
+      if(
+        state.movementScale===0
+      ){
+
+        fillHeight=
+        minimum;
+      }
+
+
+      /* PEAK GLOW */
+
+      const peakRatio =
+
+      state.intensity/
+      profile.peakI;
+
+
+      if(
+        peakRatio>.88 &&
+        state.movementScale>.25
+      ){
+
+        ctx.shadowColor=
+        "rgba(255,255,255,.48)";
+
+        ctx.shadowBlur=
+        17;
+      }
+
+      else{
+
+        ctx.shadowBlur=0;
+      }
+
+
+      ctx.fillStyle="#eee8df";
+
+
+      roundRect(
+
+        ctx,
+
+        x+7,
+
+        trackBottom-
+        7-
+        fillHeight,
+
+        trackWidth-14,
+
+        fillHeight,
+
+        (
+          trackWidth-14
+        )/2
+      );
+
+
+      ctx.fill();
+
+      ctx.shadowBlur=0;
+
+
+      /* RANGE */
+
+      ctx.fillStyle="#777";
+
+      ctx.font=
+      selected.length<=2
+      ?
+      "12px monospace"
+      :
+      "10px monospace";
+
+
+      ctx.fillText(
+
+        "T"+
+        profile.baseT+
+        "–"+
+        profile.peakT,
+
+        centerX,
+        580
+      );
+
+
+      ctx.fillText(
+
+        "I"+
+        profile.baseI+
+        "–"+
+        profile.peakI,
+
+        centerX,
+        598
+      );
+
+  });
+
+
+  /* TIMELINE */
+
+  const timing =
+  getTiming();
+
+
+  const lineY =
+  646;
+
+
+  const lineStart =
+  90;
+
+
+  const lineEnd =
+  W-90;
+
+
+  const xStart =
+  lerp(
+    lineStart,
+    lineEnd,
+    timing.activeStart
+  );
+
+
+  const xWind =
+  lerp(
+    lineStart,
+    lineEnd,
+    timing.windStart
+  );
+
+
+  /* Start */
+
+  ctx.strokeStyle="#323232";
+
+  ctx.lineWidth=7;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    lineStart,
+    lineY
+  );
+
+  ctx.lineTo(
+    xStart,
+    lineY
+  );
+
+  ctx.stroke();
+
+
+  /* Active */
+
+  ctx.strokeStyle="#555";
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    xStart,
+    lineY
+  );
+
+  ctx.lineTo(
+    xWind,
+    lineY
+  );
+
+  ctx.stroke();
+
+
+  /* Wind-down */
+
+  ctx.strokeStyle="#303030";
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    xWind,
+    lineY
+  );
+
+  ctx.lineTo(
+    lineEnd,
+    lineY
+  );
+
+  ctx.stroke();
+
+
+  const markerX =
+
+  lerp(
+    lineStart,
+    lineEnd,
+    progress
+  );
+
+
+  ctx.fillStyle="#eee8df";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    markerX,
+    lineY,
+    7,
+    0,
+    Math.PI*2
+  );
+
+  ctx.fill();
+
+
+  ctx.fillStyle="#aaa";
+
+  ctx.font=
+  "13px monospace";
+
+  ctx.textAlign="center";
+
+  ctx.fillText(
+
+    elapsed.toFixed(1)+
+    " / "+
+    duration+
+    " sec",
+
+    W/2,
+    676
+  );
 
 }
-
 
 
 /* =========================================================
    ANIMATION
 ========================================================= */
 
-function animate(timestamp){
+function animate(
+  timestamp
+){
 
- if(!playing)
-  return;
+  if(!playing){
+    return;
+  }
 
 
- if(
-  previousTimestamp===0
- ){
+  if(
+    previousTimestamp===0
+  ){
+
+    previousTimestamp=
+    timestamp;
+  }
+
+
+  const delta =
+
+  (
+    timestamp-
+    previousTimestamp
+  )/1000;
+
 
   previousTimestamp=
   timestamp;
 
- }
 
-
- const delta =
-
- (
-  timestamp-
-  previousTimestamp
- )/1000;
-
-
- previousTimestamp=
- timestamp;
-
-
- elapsed +=
- delta;
-
-
- if(
-  elapsed>
-  duration
- ){
-
-  elapsed=
-  duration;
-
- }
-
-
- const progress =
-
- clamp(
-  elapsed/duration,
-  0,
-  1
- );
-
-
- profiles.forEach(
-  profile=>{
-
-
-   const state =
-   getState(
-    profile,
-    progress
-   );
-
-
-   /*
-     Visual frequency.
-   */
-
-   const frequency =
-
-   .25+
-
-   state.tempo*
-   .20;
-
-
-   phases[
-    profile.id
-   ] +=
-
-   Math.PI*
-   2*
-   frequency*
-   delta;
-
-  }
- );
-
-
- timeline.value =
- Math.round(
-  progress*1000
- );
-
-
- draw();
-
-
- if(
-  elapsed>=duration
- ){
-
-  playing=false;
-
-  previousTimestamp=0;
-
-  playButton.textContent=
-  "Replay";
+  elapsed +=
+  delta;
 
 
   if(
-   recording
+    elapsed>
+    duration
   ){
 
-   stopRecording();
-
+    elapsed=
+    duration;
   }
 
 
-  return;
+  const progress =
 
- }
+  clamp(
+    elapsed/duration,
+    0,
+    1
+  );
 
 
- animationID =
- requestAnimationFrame(
-  animate
- );
+  profiles.forEach(
+    profile=>{
 
+
+      const state =
+      getState(
+        profile,
+        progress
+      );
+
+
+      /*
+        As wind-down approaches,
+        actual animation also slows.
+      */
+
+      const frequency =
+
+      (
+        .24+
+        state.tempo*.20
+      )
+
+      *
+
+      Math.max(
+        .08,
+        state.movementScale
+      );
+
+
+      phases[
+        profile.id
+      ] +=
+
+      Math.PI*
+      2*
+      frequency*
+      delta;
+  });
+
+
+  timeline.value =
+  Math.round(
+    progress*1000
+  );
+
+
+  draw();
+
+
+  if(
+    elapsed>=
+    duration
+  ){
+
+    playing=false;
+
+    previousTimestamp=0;
+
+    playButton.textContent=
+    "Replay";
+
+
+    if(
+      recording
+    ){
+
+      stopRecording();
+    }
+
+    return;
+  }
+
+
+  animationID =
+  requestAnimationFrame(
+    animate
+  );
 }
-
 
 
 /* =========================================================
@@ -1935,60 +2479,58 @@ function animate(timestamp){
 
 function startPlayback(){
 
- if(
-  elapsed>=duration
- ){
+  if(
+    elapsed>=
+    duration
+  ){
 
-  resetPlayback();
-
- }
-
-
- playing=true;
-
- previousTimestamp=0;
-
- playButton.textContent=
- "Pause";
+    resetPlayback();
+  }
 
 
- animationID =
- requestAnimationFrame(
-  animate
- );
+  playing=true;
 
+  previousTimestamp=0;
+
+  playButton.textContent=
+  "Pause";
+
+
+  animationID =
+  requestAnimationFrame(
+    animate
+  );
 }
 
 
 function pausePlayback(){
 
- playing=false;
+  playing=false;
 
- previousTimestamp=0;
+  previousTimestamp=0;
 
- cancelAnimationFrame(
-  animationID
- );
+  cancelAnimationFrame(
+    animationID
+  );
 
- playButton.textContent=
- "Play";
-
+  playButton.textContent=
+  "Play";
 }
 
 
 playButton.addEventListener(
- "click",
- ()=>{
+  "click",
+  ()=>{
 
-  if(playing)
-   pausePlayback();
+    if(playing){
+      pausePlayback();
+    }
 
-  else
-   startPlayback();
-
- }
+    else{
+      startPlayback();
+    }
+  }
 );
-
 
 
 /* =========================================================
@@ -1997,100 +2539,102 @@ playButton.addEventListener(
 
 function resetPlayback(){
 
- playing=false;
+  playing=false;
 
- cancelAnimationFrame(
-  animationID
- );
+  cancelAnimationFrame(
+    animationID
+  );
 
- elapsed=0;
+  elapsed=0;
 
- previousTimestamp=0;
-
-
- profiles.forEach(
-  p=>{
-   phases[p.id]=0;
-  }
- );
+  previousTimestamp=0;
 
 
- timeline.value=0;
+  profiles.forEach(
+    profile=>{
 
- playButton.textContent=
- "Play";
+      phases[
+        profile.id
+      ]=0;
+    }
+  );
 
- draw();
 
+  timeline.value=0;
+
+  playButton.textContent=
+  "Play";
+
+  draw();
 }
 
 
 resetButton.addEventListener(
- "click",
- resetPlayback
+  "click",
+  resetPlayback
 );
-
 
 
 /* =========================================================
-   TIMELINE SEEK
+   SEEK
 ========================================================= */
 
 timeline.addEventListener(
- "input",
- ()=>{
+  "input",
+  ()=>{
 
-  const p =
-  parseInt(
-   timeline.value
-  )/1000;
+    const p =
 
-
-  elapsed =
-  p*
-  duration;
+    parseInt(
+      timeline.value
+    )/1000;
 
 
-  /*
-    Reconstruct approximate phase
-    so seek works predictably.
-  */
-
-  profiles.forEach(
-   profile=>{
-
-    const state =
-    getState(
-     profile,
-     p
-    );
+    elapsed =
+    p*
+    duration;
 
 
-    const frequency =
-
-    .25+
-
-    state.tempo*.20;
+    profiles.forEach(
+      profile=>{
 
 
-    phases[
-     profile.id
-    ] =
-
-    elapsed*
-    frequency*
-    Math.PI*
-    2;
-
-   }
-  );
+        const state =
+        getState(
+          profile,
+          p
+        );
 
 
-  draw();
+        const frequency =
 
- }
+        (
+          .24+
+          state.tempo*.20
+        )
+
+        *
+
+        Math.max(
+          .08,
+          state.movementScale
+        );
+
+
+        phases[
+          profile.id
+        ] =
+
+        elapsed*
+        frequency*
+        Math.PI*
+        2;
+    });
+
+
+    draw();
+  }
 );
-
 
 
 /* =========================================================
@@ -2098,76 +2642,33 @@ timeline.addEventListener(
 ========================================================= */
 
 durationInput.addEventListener(
- "change",
- ()=>{
+  "change",
+  ()=>{
 
-  duration =
-  clamp(
-   parseFloat(
-    durationInput.value
-   )||60,
-   15,
-   300
-  );
-
-
-  durationInput.value=
-  duration;
+    duration =
+    clamp(
+      parseFloat(
+        durationInput.value
+      ) || 60,
+      20,
+      300
+    );
 
 
-  elapsed =
-  Math.min(
-   elapsed,
-   duration
-  );
+    durationInput.value=
+    duration;
 
 
-  draw();
+    elapsed =
+    Math.min(
+      elapsed,
+      duration
+    );
 
- }
+
+    draw();
+  }
 );
-
-
-
-/* =========================================================
-   CHECKBOXES
-========================================================= */
-
-checks.forEach(
- box=>{
-
-  box.addEventListener(
-   "change",
-   draw
-  );
-
- }
-);
-
-
-toggleAllButton.addEventListener(
- "click",
- ()=>{
-
-  const allChecked =
-  checks.every(
-   c=>c.checked
-  );
-
-
-  checks.forEach(
-   c=>{
-    c.checked=
-    !allChecked;
-   }
-  );
-
-
-  draw();
-
- }
-);
-
 
 
 /* =========================================================
@@ -2176,39 +2677,37 @@ toggleAllButton.addEventListener(
 
 function newSeed(){
 
- seedInput.value =
- Math.floor(
-  10000+
-  Math.random()*
-  89999
- );
+  seedInput.value =
+  Math.floor(
+    10000+
+    Math.random()*
+    89999
+  );
 
- resetPlayback();
-
+  resetPlayback();
 }
 
 
 newSessionButton.addEventListener(
- "click",
- newSeed
+  "click",
+  newSeed
 );
 
 
 sessionMode.addEventListener(
- "change",
- ()=>{
-  resetPlayback();
- }
+  "change",
+  ()=>{
+    resetPlayback();
+  }
 );
 
 
 seedInput.addEventListener(
- "change",
- ()=>{
-  resetPlayback();
- }
+  "change",
+  ()=>{
+    resetPlayback();
+  }
 );
-
 
 
 /* =========================================================
@@ -2217,276 +2716,250 @@ seedInput.addEventListener(
 
 function getRecorderMimeType(){
 
- const candidates = [
+  const candidates = [
 
-  "video/webm;codecs=vp9",
+    "video/webm;codecs=vp9",
 
-  "video/webm;codecs=vp8",
+    "video/webm;codecs=vp8",
 
-  "video/webm"
+    "video/webm"
+  ];
 
- ];
 
-
- for(
-  const type
-  of candidates
- ){
-
-  if(
-   MediaRecorder
-   .isTypeSupported(type)
+  for(
+    const type
+    of candidates
   ){
 
-   return type;
+    if(
+      window.MediaRecorder &&
+      MediaRecorder.isTypeSupported(
+        type
+      )
+    ){
 
+      return type;
+    }
   }
 
- }
 
-
- return "";
-
+  return "";
 }
-
 
 
 function startRecording(){
 
- if(
-  !window.MediaRecorder ||
-  !canvas.captureStream
- ){
-
-  status.textContent =
-  "このブラウザでは動画録画に対応していません。";
-
-  return;
-
- }
-
-
- resetPlayback();
-
-
- const stream =
- canvas.captureStream(60);
-
-
- const mimeType =
- getRecorderMimeType();
-
-
- const options =
- mimeType
- ?
- {mimeType}
- :
- {};
-
-
- try{
-
-  recorder =
-  new MediaRecorder(
-   stream,
-   options
-  );
-
- }
-
- catch(error){
-
-  status.textContent =
-  "録画を開始できませんでした。";
-
-  return;
-
- }
-
-
- recordedChunks=[];
-
-
- recorder.ondataavailable =
- event=>{
-
   if(
-   event.data &&
-   event.data.size>0
+    !window.MediaRecorder ||
+    !canvas.captureStream
   ){
 
-   recordedChunks.push(
-    event.data
-   );
+    status.textContent =
+    "このブラウザでは動画録画に対応していません。";
+
+    return;
+  }
+
+
+  resetPlayback();
+
+
+  const stream =
+  canvas.captureStream(
+    60
+  );
+
+
+  const mimeType =
+  getRecorderMimeType();
+
+
+  const options =
+  mimeType
+  ?
+  {mimeType}
+  :
+  {};
+
+
+  try{
+
+    recorder =
+    new MediaRecorder(
+      stream,
+      options
+    );
 
   }
 
- };
+  catch(error){
+
+    status.textContent =
+    "録画を開始できませんでした。";
+
+    return;
+  }
 
 
- recorder.onstop =
- ()=>{
+  recordedChunks=[];
 
 
-  const blob =
+  recorder.ondataavailable =
+  event=>{
 
-  new Blob(
+    if(
+      event.data &&
+      event.data.size>0
+    ){
 
-   recordedChunks,
-
-   {
-    type:
-    recorder.mimeType ||
-    "video/webm"
-   }
-
-  );
-
-
-  const url =
-  URL.createObjectURL(
-   blob
-  );
+      recordedChunks.push(
+        event.data
+      );
+    }
+  };
 
 
-  const link =
-  document.createElement(
-   "a"
-  );
+  recorder.onstop =
+  ()=>{
 
+    const blob =
 
-  const seed =
-  seedInput.value;
-
-
-  link.href=
-  url;
-
-
-  link.download=
-
-  "physical-rhythm-"+
-  seed+
-  ".webm";
-
-
-  document.body.appendChild(
-   link
-  );
-
-
-  link.click();
-
-
-  link.remove();
-
-
-  setTimeout(
-   ()=>{
-    URL.revokeObjectURL(
-     url
+    new Blob(
+      recordedChunks,
+      {
+        type:
+        recorder.mimeType ||
+        "video/webm"
+      }
     );
-   },
-   2000
+
+
+    const url =
+    URL.createObjectURL(
+      blob
+    );
+
+
+    const link =
+    document.createElement(
+      "a"
+    );
+
+
+    link.href=
+    url;
+
+
+    link.download=
+
+    "physical-rhythm-v6-"+
+    seedInput.value+
+    ".webm";
+
+
+    document.body.appendChild(
+      link
+    );
+
+
+    link.click();
+
+    link.remove();
+
+
+    setTimeout(
+      ()=>{
+        URL.revokeObjectURL(
+          url
+        );
+      },
+      2000
+    );
+
+
+    recording=false;
+
+
+    recordButton
+    .classList
+    .remove(
+      "recording"
+    );
+
+
+    recordButton.textContent=
+    "● Record";
+
+
+    status.textContent=
+    "録画完了";
+  };
+
+
+  recorder.start();
+
+
+  recording=true;
+
+
+  recordButton
+  .classList
+  .add(
+    "recording"
   );
+
+
+  recordButton.textContent=
+  "■ Recording";
+
+
+  status.textContent=
+  "Recording…";
+
+
+  startPlayback();
+}
+
+
+function stopRecording(){
+
+  if(
+    recorder &&
+    recorder.state!=="inactive"
+  ){
+
+    recorder.stop();
+  }
 
 
   recording=false;
 
-  autoRecording=false;
 
-
-  recordButton.classList.remove(
-   "recording"
+  recordButton
+  .classList
+  .remove(
+    "recording"
   );
 
 
   recordButton.textContent=
   "● Record";
-
-
-  status.textContent=
-  "録画完了";
-
- };
-
-
- recorder.start();
-
-
- recording=true;
-
- autoRecording=true;
-
-
- recordButton.classList.add(
-  "recording"
- );
-
-
- recordButton.textContent=
- "■ Recording";
-
-
- status.textContent=
- "Recording…";
-
-
- startPlayback();
-
 }
-
-
-
-function stopRecording(){
-
- if(
-  recorder &&
-  recorder.state!=="inactive"
- ){
-
-  recorder.stop();
-
- }
-
-
- recording=false;
-
- autoRecording=false;
-
-
- recordButton.classList.remove(
-  "recording"
- );
-
-
- recordButton.textContent=
- "● Record";
-
-}
-
 
 
 recordButton.addEventListener(
- "click",
- ()=>{
+  "click",
+  ()=>{
 
-  if(recording){
+    if(recording){
+      stopRecording();
+    }
 
-   stopRecording();
-
+    else{
+      startRecording();
+    }
   }
-
-  else{
-
-   startRecording();
-
-  }
-
- }
 );
-
 
 
 /* =========================================================
@@ -2495,18 +2968,17 @@ recordButton.addEventListener(
 
 duration =
 parseFloat(
- durationInput.value
+  durationInput.value
 );
 
 
 profiles.forEach(
- profile=>{
+  profile=>{
 
-  phases[
-   profile.id
-  ]=0;
-
- }
+    phases[
+      profile.id
+    ]=0;
+  }
 );
 
 
