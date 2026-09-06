@@ -65,6 +65,7 @@ const ayaneVoiceLibrary={
   suppressed:["っは……ぁ、♡","ふ、……んん"],
   low:["ん、ん……♡","……ぁ、それ……ッひ♡"],
   normal:["あっあっ♡♡","きもちい♡","ひッ♡♡"],
+  fast:["あっあっ♡♡","ひッ♡♡","ぁえ゛ッ♡♡ぁ♡♡","ま゛ッ、んぅ゛、んんん゛♡♡"],
   peak:["っ、イ、〜～♡♡","あっあっ♡すき♡♡しょれしゅき♡♡","ちゅうして、んん♡"],
   rough:["ぁえ゛ッ♡♡ぁ♡♡","ま゛ッ、んぅ゛、んんん゛♡♡","はげし、ッ、ぁ〜～♡♡"]
 };
@@ -74,7 +75,7 @@ const ayaneVoiceMeta={
   "ちゅうして、んん♡":{verbal:true,knowledge:"kissRequest"},
   "はげし、ッ、ぁ〜～♡♡":{verbal:true,knowledge:"roughNow"}
 };
-let sessionActive=false,previousCondition=null,currentCondition=null,voiceTimer=0,voiceVisibleTimer=null;
+let sessionActive=false,previousCondition=null,currentCondition=null,voiceTimer=0,voiceVisibleTimer=null,peakVoiceLatched=false;
 let ayaneBody={stamina:1,sensitivity:.72,recovery:.55,breakdown:.65,arousal:.18,composure:.88,voiceControl:.84,load:0,peak:.05,lastVoiceAt:-99,lastPeakAt:-99};
 let transitionLog={composure:null,voice:null,desire:null,peak:false,output:null};
 let peakMotion={active:false,start:0,until:0,recoverUntil:0};
@@ -112,7 +113,7 @@ function makeCondition(){
 }
 function renderCondition(c){currentCondition=c;scoreStamina.textContent=c.stamina;scoreSensitivity.textContent=c.sensitivity;scoreBreakdown.textContent=c.breakdown;scoreRecovery.textContent=c.recovery;descStamina.textContent=scoreDesc(c.stamina,"stamina");descSensitivity.textContent=scoreDesc(c.sensitivity,"sensitivity");descBreakdown.textContent=scoreDesc(c.breakdown,"breakdown");descRecovery.textContent=scoreDesc(c.recovery,"recovery");conditionSeed.textContent=`condition #${c.seed}`;reuseCondition.disabled=!previousCondition}
 function openPreflight(){sessionActive=false;stage.classList.add("session-idle");preflightMask.classList.remove("hidden");renderCondition(makeCondition())}
-function startSession(){previousCondition={...currentCondition};try{localStorage.setItem("dyadV4Condition",JSON.stringify(previousCondition))}catch(e){};const c=currentCondition;ayaneBody={stamina:c.stamina/100,sensitivity:c.sensitivity/100,recovery:c.recovery/100,breakdown:c.breakdown/100,arousal:.14,composure:c.baseComposure/100,voiceControl:clamp(.62+c.baseComposure/230,0,1),load:0,peak:.03,lastVoiceAt:-99,lastPeakAt:-99};transitionLog={composure:null,voice:null,desire:null,peak:false,output:null};peakMotion={active:false,start:0,until:0,recoverUntil:0};lastBackstageText="";lastBackstageAt=-99;sessionActive=true;sessionStart=performance.now();voiceTimer=rand(2.1,4.2);stage.classList.remove("session-idle");preflightMask.classList.add("hidden");bodyCue.textContent="";ayaneVoiceBubble.classList.remove("show");showEvent(`${profiles[partnerId].name}とのReal-time Link start`);addBackstage(`開始条件は非公開へ移行。\n\nここからは彩音の身体状態そのものではなく、外へ出た反応だけを彼が知覚する。`)}
+function startSession(){previousCondition={...currentCondition};try{localStorage.setItem("dyadV4Condition",JSON.stringify(previousCondition))}catch(e){};const c=currentCondition;ayaneBody={stamina:c.stamina/100,sensitivity:c.sensitivity/100,recovery:c.recovery/100,breakdown:c.breakdown/100,arousal:.14,composure:c.baseComposure/100,voiceControl:clamp(.62+c.baseComposure/230,0,1),load:0,peak:.03,lastVoiceAt:-99,lastPeakAt:-99};transitionLog={composure:null,voice:null,desire:null,peak:false,output:null};peakMotion={active:false,start:0,until:0,recoverUntil:0};peakVoiceLatched=false;lastBackstageText="";lastBackstageAt=-99;sessionActive=true;sessionStart=performance.now();voiceTimer=rand(2.1,4.2);stage.classList.remove("session-idle");preflightMask.classList.add("hidden");bodyCue.textContent="";ayaneVoiceBubble.classList.remove("show");showEvent(`${profiles[partnerId].name}とのReal-time Link start`);addBackstage(`開始条件は非公開へ移行。\n\nここからは彩音の身体状態そのものではなく、外へ出た反応だけを彼が知覚する。`)}
 rerollCondition.onclick=()=>renderCondition(makeCondition());reuseCondition.onclick=()=>{if(previousCondition)renderCondition({...previousCondition})};startSessionBtn.onclick=startSession;try{const saved=localStorage.getItem("dyadV4Condition");if(saved)previousCondition=JSON.parse(saved)}catch(e){}
 function renderStates(){activeStates.innerHTML="";Object.entries(states).forEach(([k,on])=>{if(!on)return;const p=document.createElement("div");p.className="state-pill";p.textContent="● "+stateLabels[k];activeStates.appendChild(p)})}
 function renderDistance(){const labels=["離れている","会話距離","近い","かなり近い","接触している"];distanceLine.textContent="距離："+labels[world.distance]}
@@ -137,15 +138,32 @@ function logMeaningfulTransitions(target){
   const db=band(mind.desire,[.35,.58,.78]);
   if(transitionLog.desire===null)transitionLog.desire=db;
   else if(db!==transitionLog.desire){const up=db>transitionLog.desire;transitionLog.desire=db;if(up)addBackstage(db===3?`${profiles[partnerId].name}自身の余裕もかなり削れている。欲求を整えて眺める段階から、反応が先に出やすい状態へ変わった。`:`${profiles[partnerId].name}の欲求が一段強まった。`,true);else addBackstage(`${profiles[partnerId].name}の高まりが少し落ち着いた。`,true)}
-  const peakNow=ayaneBody.peak>=.58&&ayaneBody.arousal>=.76;
-  if(peakNow&&!transitionLog.peak){transitionLog.peak=true;beginPeakMotion();addBackstage("彩音側の高まりがピーク域へ入った。運動のリズムも通常フェーズから切り替わる。",true)}
-  else if(!peakNow&&transitionLog.peak){transitionLog.peak=false;addBackstage("ピーク域を抜け、運動が回復フェーズへ移る。",true)}
+  const peakNow=ayaneBody.peak>=.52&&ayaneBody.arousal>=.72;
+  if(peakNow&&!transitionLog.peak){
+    transitionLog.peak=true;
+    peakVoiceLatched=false;
+    beginPeakMotion();
+    addBackstage("彩音側の高まりがピーク域へ入った。運動のリズムも通常フェーズから切り替わる。",true);
+    // Peak voice is part of the peak event itself, not left entirely to the ordinary voice timer.
+    setTimeout(()=>{
+      if(sessionActive&&transitionLog.peak&&!peakVoiceLatched){
+        peakVoiceLatched=true;
+        emitAutomaticVoice("peak");
+        voiceTimer=rand(1.2,2.0);
+      }
+    },rand(180,520));
+  }
+  else if(!peakNow&&transitionLog.peak){
+    transitionLog.peak=false;
+    peakVoiceLatched=false;
+    addBackstage("ピーク域を抜け、運動が回復フェーズへ移る。",true)
+  }
 }
 function beginPeakMotion(){const now=sec();peakMotion={active:true,start:now,until:now+rand(4.8,7.2),recoverUntil:now+rand(8.0,11.0)}}
 function feelCues(type){let cues=[];const hidden=states.shy&&!states.overwhelmed,leaking=states.overwhelmed;if(type==="like"){if(hidden){cues.push({channel:"gaze",power:.56,text:"一度、目を逸らす",positive:true});if(chance(.42))cues.push({channel:"face",power:.40,text:"表情に少しだけ柔らかさが漏れる",positive:true})}else if(leaking){cues.push({channel:"face",power:.92,text:"表情が大きく柔らぐ",positive:true});cues.push({channel:"gaze",power:.80,text:"相手を見る目が隠しきれなくなる",positive:true})}else cues.push({channel:"face",power:.62,text:"一瞬、表情が柔らかくなる",positive:true})}if(type==="more")cues.push({channel:"face",power:leaking?.90:.63,text:leaking?"まだ離れたくなさそうな表情が強く出る":"まだ終わりたくなさそうな様子が少し出る",positive:true});if(type==="wantKiss")cues.push({channel:"gaze",power:leaking?.89:.67,text:leaking?"視線が相手の顔から離れにくくなる":"相手の顔を見る回数が少し増える",positive:true});if(type==="wantClose"&&chance(leaking?.9:.48))cues.push({channel:"distance",power:leaking?.82:.58,text:"わずかに相手側へ重心が寄る",positive:true});if(type==="happy")cues.push({channel:"face",power:.86,text:"嬉しさがそのまま表情に出る",positive:true});return cues}
 function actionCues(action){if(action==="kiss")return[{channel:"action",power:1,text:"彩音からキスをする",positive:true,action:"kiss"}];if(action==="hug")return[{channel:"action",power:1,text:"彩音から抱きつく",positive:true,action:"hug"},{channel:"distance",power:1,text:"身体の距離が一気に近づく",positive:true}];if(action==="lean")return[{channel:"action",power:.96,text:"彩音から顔を寄せる",positive:true,action:"lean"}];if(action==="stay")return[{channel:"distance",power:.80,text:"彩音が近くに残る",positive:true,action:"stay"}];if(action==="leave")return[{channel:"distance",power:.95,text:"彩音が少し距離を取る",negative:true,action:"leave"}];if(action==="shyEscape")return[{channel:"face",power:.85,text:"彩音がふっと顔を逸らす",pattern:"avert"},{channel:"distance",power:.96,text:"そのまま距離を取ろうとする",action:"shyEscape"}];if(action==="sayMore"){let text="彩音が『もっと』と伝える",quality="plain";if(states.sweetVoice&&!states.holdVoice){text+="。声が普段より甘い";quality="sweet"}if(states.holdVoice){text+="。声を抑えようとしている";quality=states.sweetVoice?"sweet-held":"held"}return[{channel:"voice",power:1,text,positive:true,quality,action:"sayMore"}]}return[]}
 function processCues(cues,source){const p=profiles[partnerId];if(!cues.length){ayaneVisible.textContent="大きな変化は表に出なかった";ayaneSub.textContent="彼に新しい情報は届いていない";return}const strongest=[...cues].sort((a,b)=>b.power-a.power)[0];ayaneVisible.textContent=strongest.text;ayaneSub.textContent=cues.length>1?cues.filter(x=>x!==strongest).map(x=>x.text).join("・"):"彼が気づくかはまだ分からない";const noticed=[];cues.forEach(c=>{const base=p.notice[c.channel]??.65,prob=clamp(base*(.56+c.power*.52),.05,.995);if(chance(prob))noticed.push(c)});cues.forEach(c=>signal(c.channel==="face"?"表情":c.channel==="gaze"?"視線":c.channel==="voice"?"声":c.channel==="distance"?"距離":"行動",noticed.includes(c)));setTimeout(()=>interpret(source,cues,noticed),rand(p.noticeDelay[0],p.noticeDelay[1]))}
-function interpret(source,cues,noticed){const p=profiles[partnerId];if(!noticed.length){return}const strength=noticed.reduce((s,x)=>s+x.power,0)/noticed.length;mind.attention=clamp(mind.attention+strength*.20,0,1);const it=interpretMeaning(source,noticed,strength);mind.desire=clamp(mind.desire+it.desire*p.desireGain,0,1);mind.pursuit=clamp(mind.pursuit+it.pursuit,0,1);mind.cuteAgg=clamp(mind.cuteAgg+(it.cute||0)*p.cute,0,1);mind.uncertainty=clamp(mind.uncertainty+(it.uncertainty||0),0,1);remember("noticed",{source,meaning:it.meaning,positive:noticed.some(x=>x.positive),channels:noticed.map(x=>x.channel),qualities:noticed.map(x=>x.quality).filter(Boolean)});const heardVoice=noticed.find(x=>x.autoVoice);if(heardVoice){interpretAutoVoiceKnowledge(heardVoice);const highVoice=!!(heardVoice.quality&&(heardVoice.quality.startsWith("peak")||heardVoice.quality.startsWith("rough")));mind.desire=clamp(mind.desire+(heardVoice.quality&&heardVoice.quality.startsWith("peak")?.10:heardVoice.quality&&heardVoice.quality.startsWith("rough")?.09:.045),0,1);mind.pursuit=clamp(mind.pursuit+(heardVoice.quality&&heardVoice.quality.startsWith("peak")?.08:.035),0,1);mind.restraint=clamp(mind.restraint-(highVoice?.07:.025),.12,1)}if(source==="shyEscape"||source==="kiss"||source==="hug"||source==="sayMore")addBackstage(it.inner);if(it.status)partnerStatus.textContent=it.status;if(it.public)showEvent(it.public);if(it.dialogue)say(it.dialogue);if(it.response)partnerResponse(it.response);seedPhraseFromInterpretation(it)}
+function interpret(source,cues,noticed){const p=profiles[partnerId];if(!noticed.length){return}const strength=noticed.reduce((s,x)=>s+x.power,0)/noticed.length;mind.attention=clamp(mind.attention+strength*.20,0,1);const it=interpretMeaning(source,noticed,strength);mind.desire=clamp(mind.desire+it.desire*p.desireGain,0,1);mind.pursuit=clamp(mind.pursuit+it.pursuit,0,1);mind.cuteAgg=clamp(mind.cuteAgg+(it.cute||0)*p.cute,0,1);mind.uncertainty=clamp(mind.uncertainty+(it.uncertainty||0),0,1);remember("noticed",{source,meaning:it.meaning,positive:noticed.some(x=>x.positive),channels:noticed.map(x=>x.channel),qualities:noticed.map(x=>x.quality).filter(Boolean)});const heardVoice=noticed.find(x=>x.autoVoice);if(heardVoice){interpretAutoVoiceKnowledge(heardVoice);const highVoice=!!(heardVoice.quality&&(heardVoice.quality.startsWith("peak")||heardVoice.quality.startsWith("rough")||heardVoice.quality.startsWith("fast")));mind.desire=clamp(mind.desire+(heardVoice.quality&&heardVoice.quality.startsWith("peak")?.10:heardVoice.quality&&heardVoice.quality.startsWith("rough")?.09:heardVoice.quality&&heardVoice.quality.startsWith("fast")?.075:.045),0,1);mind.pursuit=clamp(mind.pursuit+(heardVoice.quality&&heardVoice.quality.startsWith("peak")?.08:.035),0,1);mind.restraint=clamp(mind.restraint-(highVoice?.07:.025),.12,1)}if(source==="shyEscape"||source==="kiss"||source==="hug"||source==="sayMore")addBackstage(it.inner);if(it.status)partnerStatus.textContent=it.status;if(it.public)showEvent(it.public);if(it.dialogue)say(it.dialogue);if(it.response)partnerResponse(it.response);seedPhraseFromInterpretation(it)}
 function interpretMeaning(source,noticed,strength){const p=partnerId,hasAction=noticed.some(x=>x.channel==="action"),hasDistance=noticed.some(x=>x.channel==="distance"),hasFace=noticed.some(x=>x.channel==="face"),voiceCue=noticed.find(x=>x.channel==="voice");if(source==="shyEscape"){const recentPositive=recentNoticedPositive(18)||recentAny(["noticedApproach","partnerPursuit"],18);const likelyEmbarrassment=hasFace&&hasDistance&&!!recentPositive;if(likelyEmbarrassment){if(p==="kei")return{meaning:"羞恥による逃避らしい",desire:.13,pursuit:.28,cute:.17,inner:"――逃げた。\n\nでも、直前までの流れと今の顔を見る限り、嫌になって離れた感じとは違う。\n\n恥ずかしくなっただけなら、そのまま行かせる気にはならない。",status:"逃げようとした彩音を追う",public:"慧が彩音の動きを見て、すぐ距離を詰め直す。",dialogue:pick(["どこ行くの。","……逃げんの？","今さら？"]),response:"pullBack"};if(p==="shoma")return{meaning:"恥ずかしくて逃げたように見える",desire:.16,pursuit:.32,cute:.15,inner:"あ、逃げた。\n\nでも今のは拒絶じゃなさそうだ。直前の流れと顔がそう見せる。\n\n分かった瞬間、追う方が早かった。",status:"反射的に追いかける",public:"翔馬がほとんど間を置かずに追う。",dialogue:pick(["いや待って、今それで逃げる？","ちょ、どこ行くの。","それはずるいって。"]),response:"follow"};if(p==="minato")return{meaning:"照れて逃げた可能性が高い",desire:.12,pursuit:.22,cute:.20,inner:"え、逃げるんだ。\n\n顔を見ると、嫌そうというより照れているように見える。\n\nそう思った途端、ちょっと笑いそうになる。",status:"笑いながら距離を詰める",public:"湊が少し笑って、そのまま彩音との距離を詰める。",dialogue:pick(["え、逃げるの？","ちょっと待ってよ。","今さら恥ずかしくなった？"]),response:"follow"};if(p==="hyunwoo")return{meaning:"恥ずかしさで離れたようには見える",desire:.09,pursuit:.15,cute:.10,inner:"離れようとした。\n\n顔と直前の流れを合わせると、嫌になったようには見えにくい。\n\n追いたい気持ちはある。でも理由まで決めつけて引き戻すより、一度止まれる余地を残す。",status:"追いたいまま、一度確かめる",public:"ヒョヌが手を伸ばす。強く引くより先に、彩音を見る。",dialogue:pick(["……どこ行くの？","待って。","恥ずかしくなった？"]),response:"offerHand"};if(p==="naoto")return{meaning:"羞恥かもしれないが断定しない",desire:.05,pursuit:.07,uncertainty:-.04,inner:"離れた。\n\n拒絶には見えにくい。ただ、推測だけで引き戻すには情報が足りない。\n\n一度声をかける。",status:"追わずに一度確認する",public:"直人は追いかけるより先に彩音を見る。",dialogue:pick(["……どうした？","もう離れる？","大丈夫？"]),response:null};if(p==="haruki")return{meaning:"照れなのか別の意味なのか一瞬考える",desire:.07,pursuit:.11,cute:.09,uncertainty:.04,inner:"今の離れ方、たぶん照れてる。\n\n……とは思う。\n\nでも自分がそう思いたいだけだったら嫌だ。一拍だけ迷って、もう一度顔を見る。",status:"意味を確かめながら追う",public:"晴輝が一拍だけ迷ってから、彩音の方へ手を伸ばす。",dialogue:pick(["……逃げる？","待って、どうしたの。","恥ずかしいだけ？"]),response:"offerHand"}}return{meaning:"離れたい意図として受け取る",desire:-.06,pursuit:-.16,cute:-.05,uncertainty:.08,inner:"離れようとした。\n\n理由までは分からない。今ここで追うより、一度距離を戻した方がいい。",status:"彩音が取った距離をそのまま受け入れる",public:`${profiles[p].name}は追わず、その場で彩音を見る。`,dialogue:chance(.55)?"大丈夫？":"",response:null}}
 if(hasAction)return directActionReaction(p,source);if(voiceCue)return voiceReaction(p,voiceCue);return subtleReaction(p,hasFace,hasDistance,strength)}
 function directActionReaction(p,source){const m={naoto:{desire:.10,pursuit:.08,cute:.05,inner:"彩音の方から来た。\n\n意図はかなり分かりやすい。ただ、その先まで全部同じ意味だとは決めない。\n\nそれでも、さっきよりこちらへ意識が向く。",status:"彩音の行動を受け止める",public:"直人は一度彩音の顔を見てから応じる。",dialogue:chance(.45)?pick(["……そう来るんだ。","大丈夫？","まだ近くにいる？"]):""},kei:{desire:.20,pursuit:.22,cute:.13,inner:"彩音から来た。\n\n距離が一気に近くなったせいで、意識もそっちへ持っていかれる。\n\n自分から来たなら、今すぐ離す理由はない。",status:"彩音の動きに強く注意が向く",public:"慧がそのまま彩音との距離を詰め返す。",dialogue:chance(.60)?pick(["……自分から来たんだ。","なに。","まだいる？"]):""},shoma:{desire:.23,pursuit:.26,cute:.14,inner:"――来た。\n\n考えるより先に反応した。彩音から距離を縮められると、一気に持っていかれる。",status:"反応がすぐ返る",public:"翔馬の反応がほとんど間を置かず返る。",dialogue:chance(.70)?pick(["……それ反則。","自分から来たくせに。","まだやる？"]):""},minato:{desire:.17,pursuit:.17,cute:.18,inner:"自分から来た。\n\nその事実だけで、さっきまで見ていた表情の意味まで少し変わって見える。\n\n嬉しい。それが顔に出そうになる。",status:"彩音の行動を楽しんでいる",public:"湊が嬉しそうに笑って、彩音を見る。",dialogue:chance(.72)?pick(["え、自分から来るんだ。","なに、かわいい。","もう一回？"]):""},haruki:{desire:.15,pursuit:.14,cute:.14,inner:"彩音の方から来た。\n\n一瞬びっくりした。でも嫌じゃない。むしろ嬉しい。",status:"驚きながらも応じる",public:"晴輝が一瞬目を見開いてから、彩音へ向き直る。",dialogue:chance(.60)?pick(["……急だね。","今のずるい。","もう一回する？"]):""},hyunwoo:{desire:.17,pursuit:.13,cute:.09,inner:"彩音から来た。\n\nこれはかなり分かりやすい。だからこそ、今の行動をそのまま受け取ればいい。",status:"彩音の意思を受け取って応じる",public:"ヒョヌは彩音の動きを受け入れ、そのまま距離を保つ。",dialogue:chance(.55)?pick(["……うん。","こっち来る？","このままでいい？"]):""}};return{meaning:"彩音からの明確な行動",...m[p],response:null}}
@@ -154,11 +172,92 @@ function subtleReaction(p,hasFace,hasDistance,strength){const data={naoto:{inner
 function seedPhraseFromInterpretation(it){if((it.cute||0)>.12){phrase.kind="cute";phrase.until=sec()+rand(3.5,6.5);phrase.boost=.20;return}if((it.pursuit||0)>.22){phrase.kind=partnerId==="shoma"?"surge":"pursuit";phrase.until=sec()+rand(3,6);phrase.boost=.22;return}if((it.desire||0)>.15){phrase.kind="rise";phrase.until=sec()+rand(2.8,5.2);phrase.boost=.16}}
 function partnerResponse(type){if(type==="pullBack")setTimeout(()=>{showEvent("慧が離れかけた距離を詰め直す。");remember("partnerPursuit");world.distance=Math.max(world.distance,3);renderDistance();mind.attention=clamp(mind.attention+.13,0,1);mind.pursuit=clamp(mind.pursuit+.12,0,1);openPartnerPrompt("慧が離れかけた距離を詰め直した。",["stay","hug","shyEscape","leave"])},520);if(type==="follow")setTimeout(()=>{showEvent(`${profiles[partnerId].name}がそのまま追って距離を戻す。`);remember("partnerPursuit");world.distance=Math.max(world.distance,3);renderDistance();mind.pursuit=clamp(mind.pursuit+.10,0,1);openPartnerPrompt(`${profiles[partnerId].name}が追って距離を戻した。`,["stay","hug","shyEscape","leave"])},420);if(type==="offerHand")setTimeout(()=>{showEvent(`${profiles[partnerId].name}が追い切らず、彩音へ手を伸ばす。`);remember("partnerOffer");openPartnerPrompt(`${profiles[partnerId].name}が手を伸ばして待っている。`,["stay","hug","lean","leave"])},500)}
 function missedText(p){const o={naoto:["何かあった気はした。\n\nただ、確信できるほどではない。今は意味を足さない。","その瞬間は拾わなかった。別のところに注意が向いていた。"],kei:["その変化は拾わなかった。\n\n距離や動きにもう少し大きな変化があれば、たぶんそこで気づく。","今のところ特別な意味は取っていない。"],shoma:["普通に見逃した。\n\n同じ変化がもう一度あれば、次は気づくかもしれない。","一瞬のことだった。今はまだ引っかかっていない。"],minato:["顔は見ていたけれど、そこまでは拾わなかった。\n\nあとから同じ顔をされたら気づくかもしれない。","一瞬だけ何か違った気もした。でも、そのまま流れた。"],haruki:["少し気になった気もする。\n\nただ、それが何なのかまでは分からない。","今回は拾えなかった。特に意味もつけていない。"],hyunwoo:["小さな変化はあったかもしれない。\n\n今の情報だけで意味を決めるほどではない。","その瞬間は気づかなかった。もう少し分かりやすい変化なら拾うだろう。"]};return pick(o[p])}
-function showAyaneVoice(text,kind){clearTimeout(voiceVisibleTimer);ayaneVoiceBubble.textContent=`「${text}」`;ayaneVoiceBubble.classList.add("show");voiceVisibleTimer=setTimeout(()=>ayaneVoiceBubble.classList.remove("show"),2100);const desc=kind==="suppressed"?"一度、声を抑えようとする":kind==="rough"?"外側の出力がかなり強い局面で声が崩れる":kind==="peak"?"高まりがピーク域へ入って、素直な声が漏れる":"声が漏れる";bodyCue.textContent=desc;setTimeout(()=>{if(bodyCue.textContent===desc)bodyCue.textContent=""},2600)}
+function showAyaneVoice(text,kind){clearTimeout(voiceVisibleTimer);ayaneVoiceBubble.textContent=`「${text}」`;ayaneVoiceBubble.classList.add("show");voiceVisibleTimer=setTimeout(()=>ayaneVoiceBubble.classList.remove("show"),2100);const desc=kind==="suppressed"
+  ?"一度、声を抑えようとする"
+  :kind==="rough"
+    ?"外側の出力がかなり強い局面で声が崩れる"
+    :kind==="fast"
+      ?"速度が上がり、声が細かく途切れて漏れる"
+      :kind==="peak"
+        ?"高まりがピーク域へ入って、素直な声が漏れる"
+        :"声が漏れる";bodyCue.textContent=desc;setTimeout(()=>{if(bodyCue.textContent===desc)bodyCue.textContent=""},2600)}
 function voiceCueFromText(text,kind){const meta=ayaneVoiceMeta[text]||{};let quality=kind;if(states.sweetVoice)quality+="-sweet";return{channel:"voice",power:kind==="suppressed"?.62:kind==="low"?.68:kind==="normal"?.82:.98,text:"彩音の声が漏れる",positive:true,quality,autoVoice:true,verbal:!!meta.verbal,knowledge:meta.knowledge||null,raw:text}}
 function emitAutomaticVoice(kind){const pool=ayaneVoiceLibrary[kind]||ayaneVoiceLibrary.normal,text=pick(pool);showAyaneVoice(text,kind);ayaneBody.lastVoiceAt=sec();remember("ayaneAutoVoice",{kind,text});processCues([voiceCueFromText(text,kind)],"autoVoice:"+kind)}
 function updateAyaneBody(dt,target){if(!sessionActive)return;const contact=clamp(world.distance/4,0,1);const external=target.external||0;const intensityN=clamp((rendered.intensity-3.2)/6,0,1);const tempoN=clamp((rendered.tempo-3)/4,0,1);const stimulation=contact*(.18+external*.42+intensityN*.30+tempoN*.10);const sensitivity=ayaneBody.sensitivity;const fatigue=1-ayaneBody.stamina;const rise=stimulation*(.18+.34*sensitivity)*dt;const settle=(1-stimulation)*(.035+.06*ayaneBody.recovery)*dt;ayaneBody.arousal=clamp(ayaneBody.arousal+rise-settle,0,1);ayaneBody.load=clamp(ayaneBody.load+stimulation*(.045+.05*sensitivity)*dt-(1-stimulation)*.035*dt,0,1);ayaneBody.stamina=clamp(ayaneBody.stamina-stimulation*(.0045+.004*intensityN)*dt+(1-stimulation)*.0018*ayaneBody.recovery*dt,.08,1);const composurePressure=ayaneBody.arousal*.46+ayaneBody.load*.26+fatigue*.16+stimulation*.18;const desiredComposure=clamp(.96-composurePressure*(.72+.42*ayaneBody.breakdown),.08,.96);ayaneBody.composure=lerp(ayaneBody.composure,desiredComposure,1-Math.exp(-dt*(.30+.45*stimulation)));const controlBase=.35+ayaneBody.composure*.54+ayaneBody.stamina*.18;const holdBoost=states.holdVoice?.18:0;ayaneBody.voiceControl=clamp(controlBase+holdBoost-ayaneBody.arousal*.24-ayaneBody.load*.12,0,1);const peakTarget=clamp((ayaneBody.arousal-.68)*2.25+ayaneBody.load*.22,0,1);ayaneBody.peak=lerp(ayaneBody.peak,peakTarget,1-Math.exp(-dt*.62));const derivedOverwhelmed=ayaneBody.composure<.38||ayaneBody.peak>.58;if(derivedOverwhelmed){ayaneVisible.textContent="余裕がかなり削れて、反応を隠しにくくなっている";ayaneSub.textContent="身体側の蓄積から自然に崩れている"}else if(ayaneBody.composure<.58){ayaneVisible.textContent="呼吸や反応に少しずつ余裕のなさが混じる";ayaneSub.textContent="操作しなくても現在の流れが継続している"}}
-function updateVoiceEngine(dt,target){if(!sessionActive)return;voiceTimer-=dt;if(voiceTimer>0)return;const active=target.external>.28&&world.distance>=2;if(!active){voiceTimer=rand(2.2,4.1);return}const pressure=clamp(ayaneBody.arousal*.46+ayaneBody.load*.23+(1-ayaneBody.composure)*.26+(1-ayaneBody.stamina)*.10,0,1);const roughNow=rendered.intensity>=8.05&&target.external>=.66;const peakNow=ayaneBody.peak>=.58&&ayaneBody.arousal>=.76;let kind="low";if(states.holdVoice){const success=chance(clamp(ayaneBody.voiceControl-pressure*.22,.08,.94));if(success)kind="suppressed";else if(peakNow)kind="peak";else if(roughNow)kind="rough";else kind=pressure>.58?"normal":"low"}else if(peakNow){kind="peak"}else if(roughNow){kind="rough"}else if(pressure>.52){kind="normal"}else kind="low";emitAutomaticVoice(kind);const frequencyFactor=.8+pressure*.9+target.external*.55;voiceTimer=rand(2.5,4.5)/frequencyFactor}
+function updateVoiceEngine(dt,target){
+  if(!sessionActive)return;
+  voiceTimer-=dt;
+  if(voiceTimer>0)return;
+
+  const active=target.external>.28&&world.distance>=2;
+  if(!active){
+    voiceTimer=rand(2.2,4.1);
+    return;
+  }
+
+  const p=profiles[partnerId];
+  const pressure=clamp(
+    ayaneBody.arousal*.46+
+    ayaneBody.load*.23+
+    (1-ayaneBody.composure)*.26+
+    (1-ayaneBody.stamina)*.10,
+    0,1
+  );
+
+  // Separate axes:
+  // peakNow = Ayane's own peak state
+  // fastNow = partner output tempo is near that person's fast range
+  // roughNow = physical intensity itself is very high
+  const tempoSpan=Math.max(.01,p.maxTempo-p.baseTempo);
+  const tempoRatio=clamp((rendered.tempo-p.baseTempo)/tempoSpan,0,1);
+  const fastNow=tempoRatio>=.72 && target.external>=.50;
+  const roughNow=rendered.intensity>=8.05&&target.external>=.66;
+  const peakNow=ayaneBody.peak>=.52&&ayaneBody.arousal>=.72;
+
+  let kind="low";
+
+  if(states.holdVoice){
+    // Faster tempo makes repeated suppression harder even when intensity is not "rough".
+    const fastPenalty=fastNow ? .16*tempoRatio : 0;
+    const success=chance(clamp(
+      ayaneBody.voiceControl-pressure*.22-fastPenalty,
+      .06,.94
+    ));
+
+    if(peakNow&&!peakVoiceLatched){
+      kind="peak";
+      peakVoiceLatched=true;
+    }else if(success){
+      kind="suppressed";
+    }else if(peakNow){
+      kind=chance(.68)?"peak":(fastNow?"fast":"normal");
+    }else if(roughNow){
+      kind="rough";
+    }else if(fastNow){
+      kind="fast";
+    }else{
+      kind=pressure>.58?"normal":"low";
+    }
+  }else if(peakNow){
+    kind="peak";
+    peakVoiceLatched=true;
+  }else if(roughNow){
+    kind="rough";
+  }else if(fastNow){
+    kind="fast";
+  }else if(pressure>.52){
+    kind="normal";
+  }else{
+    kind="low";
+  }
+
+  emitAutomaticVoice(kind);
+
+  // Fast tempo also shortens the interval between spontaneous voice events.
+  const tempoFrequency=fastNow ? .25+.35*tempoRatio : 0;
+  const frequencyFactor=.8+pressure*.9+target.external*.55+tempoFrequency;
+  voiceTimer=rand(2.5,4.5)/frequencyFactor;
+}
 function interpretAutoVoiceKnowledge(cue){if(!cue||!cue.knowledge)return;if(cue.knowledge==="affection")remember("heardAffection",{time:sec()});if(cue.knowledge==="kissRequest")remember("heardKissRequest",{time:sec()});if(cue.knowledge==="roughNow")remember("heardRoughComment",{time:sec()})}
 function triggerFeel(type){cancelPendingIntent("彩音の新しい反応が入った");const labels={like:"すき",more:"もっと",wantKiss:"キスしたい",wantClose:"くっつきたい",happy:"嬉しい"};showEvent(`彩音：［${labels[type]}］`);remember("internalFeel",{type});world.lastUserActionAt=sec();processCues(feelCues(type),"feel:"+type)}
 function triggerAction(type){cancelPendingIntent("彩音が先に動いた");resolvePartnerPrompt();const labels={kiss:"彩音からキスする",hug:"彩音から抱きつく",lean:"彩音から顔を寄せる",stay:"彩音がそのまま近くにいる",leave:"彩音が少し離れる",shyEscape:"彩音が恥ずかしくなって逃げようとする",sayMore:"彩音が『もっと』と伝える"};showEvent(labels[type]);world.lastUserActionAt=sec();if(type==="kiss"){remember("ayaneKiss");world.distance=4}if(type==="hug"){remember("ayaneHug");world.distance=4}if(type==="lean"){remember("ayaneLean");world.distance=Math.max(world.distance,3)}if(type==="stay"){remember("ayaneStay");world.distance=Math.max(world.distance,2)}if(type==="leave"){mind.pursuit=clamp(mind.pursuit-.07,0,1);remember("ayaneLeave");world.distance=Math.max(0,world.distance-1)}if(type==="shyEscape"){remember("ayaneEscape");world.distance=Math.max(0,world.distance-1)}renderDistance();processCues(actionCues(type),type)}
