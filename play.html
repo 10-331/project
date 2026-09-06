@@ -3,11 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Dyad Interaction Simulator v2</title>
+<title>Dyad Interaction Simulator v3</title>
 
 <style>
 *{box-sizing:border-box}
-
 :root{
   --bg:#050505;
   --panel:#101010;
@@ -16,8 +15,8 @@
   --text:#eee;
   --muted:#8e8e8e;
   --cream:#eee8df;
+  --danger:#b99b9b;
 }
-
 html,body{
   margin:0;
   min-height:100%;
@@ -25,28 +24,10 @@ html,body{
   color:var(--text);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-
-body{
-  padding-bottom:96px;
-}
-
-button,select{
-  font:inherit;
-}
-
-button{
-  -webkit-tap-highlight-color:transparent;
-}
-
-.app{
-  width:min(760px,100%);
-  margin:auto;
-  padding:10px 8px 40px;
-}
-
-/* =========================
-   TOP
-========================= */
+body{padding-bottom:104px}
+button,select{font:inherit}
+button{-webkit-tap-highlight-color:transparent}
+.app{width:min(760px,100%);margin:auto;padding:10px 8px 44px}
 
 .top{
   position:sticky;
@@ -56,13 +37,7 @@ button{
   backdrop-filter:blur(14px);
   padding:7px 0 9px;
 }
-
-.top-row{
-  display:flex;
-  gap:7px;
-  align-items:center;
-}
-
+.top-row{display:flex;gap:7px;align-items:center}
 .partner-select{
   flex:1;
   min-width:0;
@@ -73,7 +48,6 @@ button{
   padding:9px 10px;
   font-weight:700;
 }
-
 .icon-btn{
   border:1px solid #333;
   background:#171717;
@@ -82,19 +56,12 @@ button{
   padding:9px 11px;
   white-space:nowrap;
 }
-
 .icon-btn.active{
   background:var(--cream);
   color:#111;
   border-color:var(--cream);
 }
-
-.mode-row{
-  display:flex;
-  gap:6px;
-  margin-top:7px;
-}
-
+.mode-row{display:flex;gap:6px;margin-top:7px}
 .mode-btn{
   flex:1;
   border:1px solid #333;
@@ -104,7 +71,6 @@ button{
   padding:7px;
   font-size:12px;
 }
-
 .mode-btn.active{
   background:var(--cream);
   color:#111;
@@ -112,52 +78,42 @@ button{
   font-weight:700;
 }
 
-/* =========================
-   MAIN STAGE
-========================= */
-
 .stage{
   position:relative;
-  min-height:570px;
+  min-height:590px;
   border:1px solid #242424;
   border-radius:24px;
   overflow:hidden;
   background:
     radial-gradient(circle at 50% 35%,#171717 0,#090909 48%,#050505 78%);
 }
-
 .partner{
   position:absolute;
-  top:30px;
+  top:28px;
   left:50%;
   width:100%;
   transform:translateX(-50%);
   text-align:center;
 }
-
-.partner-name{
-  font-size:23px;
-  font-weight:750;
-}
-
+.partner-name{font-size:23px;font-weight:750}
 .partner-status{
   min-height:20px;
   color:#8e8e8e;
   font-size:12px;
   margin-top:4px;
 }
-
-/* =========================
-   CAPSULE
-========================= */
+.distance-line{
+  margin-top:5px;
+  color:#676767;
+  font-size:10px;
+}
 
 .capsule-zone{
   position:relative;
-  width:112px;
-  height:220px;
-  margin:14px auto 0;
+  width:118px;
+  height:228px;
+  margin:10px auto 0;
 }
-
 .inner-shell{
   position:absolute;
   left:50%;
@@ -169,31 +125,25 @@ button{
   border:2px solid rgba(238,232,223,0);
   background:rgba(238,232,223,0);
   filter:drop-shadow(0 0 0 rgba(255,255,255,0));
-  transition:
-    border-color .3s,
-    background .3s,
-    filter .3s;
+  transition:border-color .3s,background .3s,filter .3s;
 }
-
 .stage.backstage-on .inner-shell{
   border-color:rgba(238,232,223,.23);
   background:rgba(238,232,223,.025);
   filter:drop-shadow(0 0 8px rgba(255,255,255,.12));
 }
-
 .track{
   position:absolute;
   left:50%;
   bottom:5px;
   width:64px;
-  height:210px;
+  height:216px;
   transform:translateX(-50%);
   border-radius:38px;
   background:#211c1a;
   border:1px solid #493d38;
   overflow:hidden;
 }
-
 .fill{
   position:absolute;
   left:7px;
@@ -202,28 +152,22 @@ button{
   height:58px;
   border-radius:30px;
   background:var(--cream);
-  will-change:height;
+  will-change:height,transform;
   box-shadow:0 0 0 rgba(255,255,255,0);
 }
-
 .fill.hot{
   box-shadow:0 0 15px rgba(255,255,255,.28);
 }
 
-/* =========================
-   SPEECH
-========================= */
-
 .speech{
   position:absolute;
-  top:300px;
+  top:312px;
   left:50%;
   width:min(88%,430px);
   transform:translateX(-50%);
   text-align:center;
   pointer-events:none;
 }
-
 .speech-bubble{
   display:inline-block;
   min-height:30px;
@@ -238,26 +182,20 @@ button{
   transform:translateY(5px);
   transition:.25s;
 }
-
 .speech-bubble.show{
   opacity:1;
   transform:translateY(0);
 }
 
-/* =========================
-   SIGNAL
-========================= */
-
 .signal-lane{
   position:absolute;
-  top:365px;
-  bottom:145px;
+  top:372px;
+  bottom:155px;
   left:50%;
   width:160px;
   transform:translateX(-50%);
   pointer-events:none;
 }
-
 .signal{
   position:absolute;
   left:50%;
@@ -272,14 +210,8 @@ button{
   white-space:nowrap;
   opacity:0;
 }
-
-.signal.fly{
-  animation:signalFly 1.15s ease-out forwards;
-}
-
-.signal.missed{
-  animation:signalMiss 1.15s ease-out forwards;
-}
+.signal.fly{animation:signalFly 1.15s ease-out forwards}
+.signal.missed{animation:signalMiss 1.15s ease-out forwards}
 
 @keyframes signalFly{
   0%{bottom:0;opacity:0;transform:translateX(-50%) scale(.9)}
@@ -287,32 +219,26 @@ button{
   80%{opacity:1}
   100%{bottom:118px;opacity:0;transform:translateX(-50%) scale(1.03)}
 }
-
 @keyframes signalMiss{
   0%{bottom:0;opacity:0}
   15%{opacity:1}
   65%{opacity:.55}
-  100%{bottom:70px;opacity:0;transform:translateX(-50%) translateX(30px)}
+  100%{
+    bottom:70px;
+    opacity:0;
+    transform:translateX(-50%) translateX(30px)
+  }
 }
-
-/* =========================
-   AYANE
-========================= */
 
 .ayane{
   position:absolute;
-  bottom:35px;
+  bottom:36px;
   left:50%;
   width:92%;
   transform:translateX(-50%);
   text-align:center;
 }
-
-.ayane-name{
-  font-size:18px;
-  font-weight:700;
-}
-
+.ayane-name{font-size:18px;font-weight:700}
 .ayane-visible{
   min-height:44px;
   margin-top:8px;
@@ -320,14 +246,12 @@ button{
   font-size:14px;
   line-height:1.55;
 }
-
 .ayane-sub{
   min-height:18px;
   color:#777;
   font-size:11px;
   margin-top:3px;
 }
-
 .active-states{
   display:flex;
   flex-wrap:wrap;
@@ -336,7 +260,6 @@ button{
   margin-top:9px;
   min-height:27px;
 }
-
 .state-pill{
   border-radius:14px;
   padding:5px 9px;
@@ -344,10 +267,6 @@ button{
   color:#d8d8d8;
   font-size:11px;
 }
-
-/* =========================
-   EVENT STRIP
-========================= */
 
 .event-strip{
   margin-top:8px;
@@ -357,21 +276,35 @@ button{
   border-radius:17px;
   background:#0e0e0e;
 }
+.event-time{font-size:10px;color:#666}
+.event-text{margin-top:3px;font-size:13px;line-height:1.5}
 
-.event-time{
-  font-size:10px;
-  color:#666;
+.partner-prompt{
+  display:none;
+  margin-top:8px;
+  border:1px solid #3a3632;
+  border-radius:18px;
+  background:#151310;
+  padding:12px;
 }
-
-.event-text{
-  margin-top:3px;
-  font-size:13px;
-  line-height:1.5;
+.partner-prompt.show{display:block}
+.prompt-kicker{font-size:10px;color:#8d8176}
+.prompt-text{font-size:14px;line-height:1.55;margin-top:4px}
+.prompt-wait{font-size:10px;color:#6e6a66;margin-top:6px}
+.prompt-buttons{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:7px;
+  margin-top:10px;
 }
-
-/* =========================
-   BOTTOM NAV
-========================= */
+.prompt-btn{
+  border:1px solid #3b3936;
+  background:#1d1a18;
+  color:#eee;
+  border-radius:14px;
+  padding:10px 7px;
+  min-height:44px;
+}
 
 .bottom-nav{
   position:fixed;
@@ -388,7 +321,6 @@ button{
   border-top:1px solid #292929;
   backdrop-filter:blur(16px);
 }
-
 .bottom-inner{
   width:min(760px,100%);
   margin:auto;
@@ -396,7 +328,6 @@ button{
   grid-template-columns:repeat(3,1fr);
   gap:7px;
 }
-
 .tab{
   border:1px solid #333;
   border-radius:15px;
@@ -405,16 +336,11 @@ button{
   padding:10px 4px;
   font-weight:700;
 }
-
 .tab.active{
   background:var(--cream);
   color:#111;
   border-color:var(--cream);
 }
-
-/* =========================
-   BOTTOM SHEET
-========================= */
 
 .sheet{
   position:fixed;
@@ -434,16 +360,8 @@ button{
   border-radius:22px 22px 0 0;
   box-shadow:0 -12px 40px rgba(0,0,0,.5);
 }
-
-.sheet.open{
-  transform:translateY(0);
-}
-
-.sheet-inner{
-  width:min(760px,100%);
-  margin:auto;
-}
-
+.sheet.open{transform:translateY(0)}
+.sheet-inner{width:min(760px,100%);margin:auto}
 .sheet-title{
   display:flex;
   align-items:center;
@@ -452,20 +370,17 @@ button{
   font-size:13px;
   font-weight:700;
 }
-
 .close-sheet{
   border:none;
   background:none;
   color:#888;
   font-size:20px;
 }
-
 .button-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:8px;
 }
-
 .action-button{
   min-height:48px;
   border:1px solid #363636;
@@ -474,21 +389,13 @@ button{
   color:#eee;
   padding:9px;
 }
-
-.action-button:active{
-  transform:scale(.97);
-}
-
+.action-button:active{transform:scale(.97)}
 .action-button.state-active{
   background:var(--cream);
   color:#111;
   border-color:var(--cream);
   font-weight:700;
 }
-
-/* =========================
-   BACKSTAGE DRAWER
-========================= */
 
 .drawer-mask{
   position:fixed;
@@ -499,12 +406,10 @@ button{
   pointer-events:none;
   transition:.22s;
 }
-
 .drawer-mask.show{
   opacity:1;
   pointer-events:auto;
 }
-
 .drawer{
   position:fixed;
   z-index:80;
@@ -522,11 +427,7 @@ button{
     calc(20px + env(safe-area-inset-bottom));
   overflow:auto;
 }
-
-.drawer.show{
-  transform:translateX(0);
-}
-
+.drawer.show{transform:translateX(0)}
 .drawer-head{
   position:sticky;
   top:0;
@@ -537,32 +438,22 @@ button{
   padding-bottom:12px;
   border-bottom:1px solid #292929;
 }
-
-.drawer-title{
-  font-weight:750;
-}
-
+.drawer-title{font-weight:750}
 .log-entry{
   padding:14px 1px;
   border-bottom:1px solid #292929;
 }
-
 .log-meta{
   color:#777;
   font-size:10px;
   margin-bottom:5px;
 }
-
 .log-body{
   color:#ddd;
   font-size:13px;
   line-height:1.75;
   white-space:pre-line;
 }
-
-/* =========================
-   AUTO BANNER
-========================= */
 
 .auto-banner{
   display:none;
@@ -574,17 +465,14 @@ button{
   font-size:11px;
   text-align:center;
 }
-
-.auto-banner.show{
-  display:block;
-}
+.auto-banner.show{display:block}
 
 @media(max-width:390px){
-  .stage{min-height:550px}
-  .capsule-zone{height:205px}
-  .track{height:195px}
-  .speech{top:284px}
-  .signal-lane{top:347px}
+  .stage{min-height:570px}
+  .capsule-zone{height:214px}
+  .track{height:202px}
+  .speech{top:296px}
+  .signal-lane{top:356px}
 }
 </style>
 </head>
@@ -617,15 +505,19 @@ button{
     </div>
 
     <div class="mode-row">
+
       <button id="manualBtn" class="mode-btn active">
         操作する
       </button>
+
       <button id="autoBtn" class="mode-btn">
         AUTOに任せる
       </button>
+
       <button id="resetBtn" class="mode-btn">
         Reset
       </button>
+
     </div>
 
   </div>
@@ -641,6 +533,10 @@ button{
 
       <div id="partnerStatus" class="partner-status">
         彩音の様子を見ている
+      </div>
+
+      <div id="distanceLine" class="distance-line">
+        距離：近い
       </div>
 
       <div class="capsule-zone">
@@ -690,35 +586,61 @@ button{
   </div>
 
 
+  <div id="partnerPrompt" class="partner-prompt">
+
+    <div class="prompt-kicker">
+      彼からのACTION
+    </div>
+
+    <div id="promptText" class="prompt-text"></div>
+
+    <div id="promptWait" class="prompt-wait"></div>
+
+    <div id="promptButtons" class="prompt-buttons"></div>
+
+  </div>
+
+
   <div class="event-strip">
-    <div id="eventTime" class="event-time">00:00</div>
+
+    <div id="eventTime" class="event-time">
+      00:00
+    </div>
+
     <div id="eventText" class="event-text">
       Session start
     </div>
+
   </div>
 
 </div>
 
 
-<!-- BOTTOM SHEET -->
-
 <div id="sheet" class="sheet">
+
   <div class="sheet-inner">
 
     <div class="sheet-title">
-      <span id="sheetTitle">気持ち</span>
-      <button id="closeSheet" class="close-sheet">×</button>
+
+      <span id="sheetTitle">
+        気持ち
+      </span>
+
+      <button id="closeSheet" class="close-sheet">
+        ×
+      </button>
+
     </div>
 
     <div id="sheetButtons" class="button-grid"></div>
 
   </div>
+
 </div>
 
 
-<!-- BOTTOM NAV -->
-
 <div class="bottom-nav">
+
   <div class="bottom-inner">
 
     <button class="tab" data-tab="feel">
@@ -734,28 +656,32 @@ button{
     </button>
 
   </div>
+
 </div>
 
-
-<!-- BACKSTAGE -->
 
 <div id="drawerMask" class="drawer-mask"></div>
 
 <div id="drawer" class="drawer">
 
   <div class="drawer-head">
+
     <div>
+
       <div class="drawer-title">
         彼ログ
       </div>
+
       <div style="font-size:10px;color:#777;margin-top:3px">
         BACKSTAGE
       </div>
+
     </div>
 
     <button id="closeDrawer" class="icon-btn">
       閉じる
     </button>
+
   </div>
 
   <div id="backstageLog"></div>
@@ -773,19 +699,14 @@ const profiles={
 
   naoto:{
     name:"直人",
-
     baseTempo:3.7,
     maxTempo:5.0,
-
     baseIntensity:4.7,
     maxIntensity:6.0,
-
     desireGain:.74,
     expressionGain:.50,
-
     impulse:.42,
     regulation:.90,
-
     notice:{
       face:.78,
       gaze:.74,
@@ -793,30 +714,25 @@ const profiles={
       distance:.74,
       action:.97
     },
-
     noticeDelay:[700,1650],
-
     decay:.020,
-
-    motion:"steady"
+    motion:"steady",
+    initiative:.42,
+    decisionDelay:[2800,5200],
+    cute:.42
   },
 
 
   kei:{
     name:"慧",
-
     baseTempo:4.6,
     maxTempo:6.0,
-
     baseIntensity:6.7,
     maxIntensity:9.0,
-
     desireGain:.95,
     expressionGain:.82,
-
     impulse:.76,
     regulation:.72,
-
     notice:{
       face:.82,
       gaze:.77,
@@ -824,30 +740,25 @@ const profiles={
       distance:.96,
       action:.99
     },
-
     noticeDelay:[300,920],
-
     decay:.012,
-
-    motion:"hold"
+    motion:"hold",
+    initiative:.78,
+    decisionDelay:[1700,3500],
+    cute:.86
   },
 
 
   shoma:{
     name:"翔馬",
-
     baseTempo:4.6,
     maxTempo:7.0,
-
     baseIntensity:6.6,
     maxIntensity:8.0,
-
     desireGain:1.00,
     expressionGain:.92,
-
     impulse:.90,
     regulation:.60,
-
     notice:{
       face:.90,
       gaze:.84,
@@ -855,30 +766,25 @@ const profiles={
       distance:.85,
       action:.99
     },
-
     noticeDelay:[220,720],
-
     decay:.019,
-
-    motion:"burst"
+    motion:"burst",
+    initiative:.88,
+    decisionDelay:[1100,2500],
+    cute:.90
   },
 
 
   minato:{
     name:"湊",
-
     baseTempo:3.8,
     maxTempo:5.8,
-
     baseIntensity:5.5,
     maxIntensity:7.0,
-
     desireGain:.84,
     expressionGain:.76,
-
     impulse:.74,
     regulation:.66,
-
     notice:{
       face:.97,
       gaze:.93,
@@ -886,30 +792,25 @@ const profiles={
       distance:.82,
       action:.98
     },
-
     noticeDelay:[240,800],
-
     decay:.017,
-
-    motion:"responsive"
+    motion:"responsive",
+    initiative:.72,
+    decisionDelay:[1700,3600],
+    cute:.88
   },
 
 
   haruki:{
     name:"晴輝",
-
     baseTempo:3.7,
     maxTempo:6.0,
-
     baseIntensity:5.5,
     maxIntensity:8.0,
-
     desireGain:.79,
     expressionGain:.69,
-
     impulse:.72,
     regulation:.66,
-
     notice:{
       face:.86,
       gaze:.84,
@@ -917,30 +818,25 @@ const profiles={
       distance:.86,
       action:.98
     },
-
     noticeDelay:[360,1100],
-
     decay:.021,
-
-    motion:"variable"
+    motion:"variable",
+    initiative:.61,
+    decisionDelay:[2100,4300],
+    cute:.78
   },
 
 
   hyunwoo:{
     name:"ヒョヌ",
-
     baseTempo:3.6,
     maxTempo:5.6,
-
     baseIntensity:6.6,
     maxIntensity:8.0,
-
     desireGain:.86,
     expressionGain:.66,
-
     impulse:.61,
     regulation:.87,
-
     notice:{
       face:.93,
       gaze:.91,
@@ -948,13 +844,14 @@ const profiles={
       distance:.93,
       action:.99
     },
-
     noticeDelay:[500,1350],
-
     decay:.011,
-
-    motion:"controlled"
+    motion:"controlled",
+    initiative:.57,
+    decisionDelay:[2600,5000],
+    cute:.72
   }
+
 };
 
 
@@ -975,6 +872,7 @@ const sheets={
     ]
   },
 
+
   state:{
     title:"現在のSTATE",
     items:[
@@ -984,6 +882,7 @@ const sheets={
       ["holdVoice","声を我慢する"]
     ]
   },
+
 
   action:{
     title:"彩音のACTION",
@@ -997,6 +896,7 @@ const sheets={
       ["sayMore","「もっと」と言う"]
     ]
   }
+
 };
 
 
@@ -1005,11 +905,15 @@ const sheets={
 ========================================================= */
 
 let partnerId="kei";
+
 let mode="manual";
+
 let dialogueEnabled=true;
+
 let backstageOpen=false;
 
 let sessionStart=performance.now();
+
 
 let states={
   shy:false,
@@ -1018,33 +922,34 @@ let states={
   holdVoice:false
 };
 
-/*
-  Internal partner state.
-
-  desire:
-  内側の高まり
-
-  attention:
-  彩音への注意集中
-
-  pursuit:
-  自分から追いたい方向
-
-  restraint:
-  行動として抑えている量
-*/
 
 let mind={
   desire:.28,
   attention:.30,
   pursuit:.18,
-  restraint:.55
+  restraint:.55,
+  cuteAgg:.08,
+  uncertainty:.18
 };
 
 
-/*
-  rendered values are smoothed.
-*/
+let world={
+  distance:2,
+  pendingPartnerAction:null,
+  lastUserActionAt:0,
+  lastPartnerActionAt:0,
+  waitingSince:0
+};
+
+
+let intent={
+  kind:null,
+  strength:0,
+  created:0,
+  due:0,
+  reason:""
+};
+
 
 let rendered={
   tempo:0,
@@ -1052,97 +957,102 @@ let rendered={
   inner:0
 };
 
+
 let phase=0;
+
 let lastFrame=performance.now();
 
 let memory=[];
+
 let dialogueTimer=null;
+
 let autoTimer=null;
+
+let initiativeTimer=null;
+
+let waitTimer=null;
+
+
+let phrase={
+  kind:"normal",
+  until:0,
+  pauseUntil:0,
+  boost:0,
+  hold:0
+};
 
 
 /* =========================================================
    DOM
 ========================================================= */
 
-const stage=document.getElementById("stage");
+const $=
+id=>document.getElementById(id);
 
-const partnerSelect=
-document.getElementById("partnerSelect");
 
-const partnerName=
-document.getElementById("partnerName");
+const stage=$("stage");
 
-const partnerStatus=
-document.getElementById("partnerStatus");
+const partnerSelect=$("partnerSelect");
 
-const fill=
-document.getElementById("fill");
+const partnerName=$("partnerName");
 
-const innerShell=
-document.getElementById("innerShell");
+const partnerStatus=$("partnerStatus");
 
-const speechBubble=
-document.getElementById("speechBubble");
+const distanceLine=$("distanceLine");
 
-const signalLane=
-document.getElementById("signalLane");
+const fill=$("fill");
 
-const ayaneVisible=
-document.getElementById("ayaneVisible");
+const innerShell=$("innerShell");
 
-const ayaneSub=
-document.getElementById("ayaneSub");
+const speechBubble=$("speechBubble");
 
-const activeStates=
-document.getElementById("activeStates");
+const signalLane=$("signalLane");
 
-const eventTime=
-document.getElementById("eventTime");
+const ayaneVisible=$("ayaneVisible");
 
-const eventText=
-document.getElementById("eventText");
+const ayaneSub=$("ayaneSub");
 
-const manualBtn=
-document.getElementById("manualBtn");
+const activeStates=$("activeStates");
 
-const autoBtn=
-document.getElementById("autoBtn");
+const eventTime=$("eventTime");
 
-const resetBtn=
-document.getElementById("resetBtn");
+const eventText=$("eventText");
 
-const autoBanner=
-document.getElementById("autoBanner");
+const manualBtn=$("manualBtn");
 
-const dialogueBtn=
-document.getElementById("dialogueBtn");
+const autoBtn=$("autoBtn");
 
-const backstageBtn=
-document.getElementById("backstageBtn");
+const resetBtn=$("resetBtn");
 
-const sheet=
-document.getElementById("sheet");
+const autoBanner=$("autoBanner");
 
-const sheetTitle=
-document.getElementById("sheetTitle");
+const dialogueBtn=$("dialogueBtn");
 
-const sheetButtons=
-document.getElementById("sheetButtons");
+const backstageBtn=$("backstageBtn");
 
-const closeSheet=
-document.getElementById("closeSheet");
+const sheet=$("sheet");
 
-const drawer=
-document.getElementById("drawer");
+const sheetTitle=$("sheetTitle");
 
-const drawerMask=
-document.getElementById("drawerMask");
+const sheetButtons=$("sheetButtons");
 
-const closeDrawer=
-document.getElementById("closeDrawer");
+const closeSheet=$("closeSheet");
 
-const backstageLog=
-document.getElementById("backstageLog");
+const drawer=$("drawer");
+
+const drawerMask=$("drawerMask");
+
+const closeDrawer=$("closeDrawer");
+
+const backstageLog=$("backstageLog");
+
+const partnerPrompt=$("partnerPrompt");
+
+const promptText=$("promptText");
+
+const promptWait=$("promptWait");
+
+const promptButtons=$("promptButtons");
 
 
 /* =========================================================
@@ -1153,31 +1063,45 @@ function clamp(v,a,b){
   return Math.max(a,Math.min(b,v));
 }
 
+
 function lerp(a,b,t){
   return a+(b-a)*t;
 }
+
 
 function chance(p){
   return Math.random()<p;
 }
 
+
 function rand(a,b){
   return a+Math.random()*(b-a);
 }
+
 
 function pick(arr){
   return arr[Math.floor(Math.random()*arr.length)];
 }
 
+
 function sec(){
-  return (performance.now()-sessionStart)/1000;
+  return(
+    performance.now()-
+    sessionStart
+  )/1000;
 }
 
+
 function timeString(){
-  const total=Math.floor(sec());
-  const m=String(Math.floor(total/60)).padStart(2,"0");
-  const s=String(total%60).padStart(2,"0");
-  return `${m}:${s}`;
+
+  const t=
+    Math.floor(sec());
+
+  return(
+    `${String(Math.floor(t/60)).padStart(2,"0")}:`+
+    `${String(t%60).padStart(2,"0")}`
+  );
+
 }
 
 
@@ -1187,8 +1111,11 @@ function timeString(){
 
 function showEvent(text){
 
-  eventTime.textContent=timeString();
-  eventText.textContent=text;
+  eventTime.textContent=
+    timeString();
+
+  eventText.textContent=
+    text;
 
 }
 
@@ -1205,39 +1132,59 @@ function remember(type,data={}){
     ...data
   });
 
-  if(memory.length>40){
+  if(memory.length>80){
     memory.shift();
   }
+
 }
 
 
 function recent(type,within=14){
 
-  const now=sec();
+  const n=sec();
 
   return memory
-  .slice()
-  .reverse()
-  .find(
-    x=>
-    x.type===type &&
-    now-x.time<=within
-  );
+    .slice()
+    .reverse()
+    .find(
+      x=>
+      x.type===type &&
+      n-x.time<=within
+    );
+
 }
 
 
 function recentAny(types,within=14){
 
-  const now=sec();
+  const n=sec();
 
   return memory
-  .slice()
-  .reverse()
-  .find(
-    x=>
-    types.includes(x.type) &&
-    now-x.time<=within
-  );
+    .slice()
+    .reverse()
+    .find(
+      x=>
+      types.includes(x.type) &&
+      n-x.time<=within
+    );
+
+}
+
+
+function recentNoticedPositive(within=18){
+
+  const n=sec();
+
+  return memory
+    .slice()
+    .reverse()
+    .find(
+      x=>
+      x.type==="noticed" &&
+      x.positive &&
+      n-x.time<=within
+    );
+
 }
 
 
@@ -1258,17 +1205,20 @@ function renderStates(){
   activeStates.innerHTML="";
 
   Object.entries(states)
-  .forEach(([key,on])=>{
+  .forEach(([k,on])=>{
 
     if(!on)return;
 
-    const pill=
-    document.createElement("div");
+    const p=
+      document.createElement("div");
 
-    pill.className="state-pill";
-    pill.textContent="● "+stateLabels[key];
+    p.className=
+      "state-pill";
 
-    activeStates.appendChild(pill);
+    p.textContent=
+      "● "+stateLabels[k];
+
+    activeStates.appendChild(p);
 
   });
 
@@ -1276,20 +1226,40 @@ function renderStates(){
 
 
 /* =========================================================
-   SIGNAL ANIMATION
+   DISTANCE
+========================================================= */
+
+function renderDistance(){
+
+  const labels=[
+    "離れている",
+    "会話距離",
+    "近い",
+    "かなり近い",
+    "接触している"
+  ];
+
+  distanceLine.textContent=
+    "距離："+labels[world.distance];
+
+}
+
+
+/* =========================================================
+   SIGNAL
 ========================================================= */
 
 function signal(text,noticed=true){
 
   const el=
-  document.createElement("div");
+    document.createElement("div");
 
   el.className=
-  "signal "+(
-    noticed
-    ? "fly"
-    : "missed"
-  );
+    "signal "+(
+      noticed
+      ? "fly"
+      : "missed"
+    );
 
   el.textContent=text;
 
@@ -1299,6 +1269,7 @@ function signal(text,noticed=true){
     ()=>el.remove(),
     1300
   );
+
 }
 
 
@@ -1308,22 +1279,27 @@ function signal(text,noticed=true){
 
 function say(text){
 
-  if(!dialogueEnabled || !text)return;
+  if(!dialogueEnabled||!text)return;
 
   clearTimeout(dialogueTimer);
 
   speechBubble.textContent=
-  `「${text}」`;
+    `「${text}」`;
 
-  speechBubble.classList.add("show");
+  speechBubble.classList.add(
+    "show"
+  );
 
   dialogueTimer=
-  setTimeout(
-    ()=>{
-      speechBubble.classList.remove("show");
-    },
-    3300
-  );
+    setTimeout(
+      ()=>{
+        speechBubble.classList.remove(
+          "show"
+        );
+      },
+      3300
+    );
+
 }
 
 
@@ -1333,35 +1309,33 @@ function say(text){
 
 function addBackstage(text){
 
-  const profile=
-  profiles[partnerId];
+  const e=
+    document.createElement("div");
 
-  const entry=
-  document.createElement("div");
+  e.className=
+    "log-entry";
 
-  entry.className="log-entry";
-
-  entry.innerHTML=`
+  e.innerHTML=`
     <div class="log-meta">
-      ${timeString()}　${profile.name}
+      ${timeString()}　${profiles[partnerId].name}
     </div>
-
     <div class="log-body"></div>
   `;
 
-  entry
+  e
   .querySelector(".log-body")
   .textContent=text;
 
-  backstageLog.appendChild(entry);
+  backstageLog.appendChild(e);
 
   backstageLog.scrollTop=
-  backstageLog.scrollHeight;
+    backstageLog.scrollHeight;
+
 }
 
 
 /* =========================================================
-   AYANE EXPRESSION
+   FEEL CUES
 ========================================================= */
 
 function feelCues(type){
@@ -1383,15 +1357,19 @@ function feelCues(type){
       cues.push({
         channel:"gaze",
         power:.56,
-        text:"一度、目を逸らす"
+        text:"一度、目を逸らす",
+        positive:true
       });
 
       if(chance(.42)){
+
         cues.push({
           channel:"face",
           power:.40,
-          text:"表情に少しだけ柔らかさが漏れる"
+          text:"表情に少しだけ柔らかさが漏れる",
+          positive:true
         });
+
       }
 
     }
@@ -1401,13 +1379,15 @@ function feelCues(type){
       cues.push({
         channel:"face",
         power:.92,
-        text:"すき、が表情にかなり漏れる"
+        text:"表情が大きく柔らぐ",
+        positive:true
       });
 
       cues.push({
         channel:"gaze",
         power:.80,
-        text:"相手を見る目が隠しきれなくなる"
+        text:"相手を見る目が隠しきれなくなる",
+        positive:true
       });
 
     }
@@ -1417,9 +1397,12 @@ function feelCues(type){
       cues.push({
         channel:"face",
         power:.62,
-        text:"一瞬、表情が柔らかくなる"
+        text:"一瞬、表情が柔らかくなる",
+        positive:true
       });
+
     }
+
   }
 
 
@@ -1433,9 +1416,11 @@ function feelCues(type){
         : .63,
       text:
         leaking
-        ? "まだ足りない気持ちが顔にかなり出る"
-        : "まだ終わりたくなさそうな様子が少し出る"
+        ? "まだ離れたくなさそうな表情が強く出る"
+        : "まだ終わりたくなさそうな様子が少し出る",
+      positive:true
     });
+
   }
 
 
@@ -1450,18 +1435,32 @@ function feelCues(type){
       text:
         leaking
         ? "視線が相手の顔から離れにくくなる"
-        : "相手の顔を見る回数が少し増える"
+        : "相手の顔を見る回数が少し増える",
+      positive:true
     });
+
   }
 
 
-  if(type==="wantClose"){
+  if(
+    type==="wantClose" &&
+    chance(
+      leaking
+      ? .9
+      : .48
+    )
+  ){
 
     cues.push({
       channel:"distance",
-      power:.75,
-      text:"自分から距離を開けようとしなくなる"
+      power:
+        leaking
+        ? .82
+        : .58,
+      text:"わずかに相手側へ重心が寄る",
+      positive:true
     });
+
   }
 
 
@@ -1470,116 +1469,177 @@ function feelCues(type){
     cues.push({
       channel:"face",
       power:.86,
-      text:"嬉しさがそのまま表情に出る"
+      text:"嬉しさがそのまま表情に出る",
+      positive:true
     });
+
   }
 
 
   return cues;
+
 }
 
 
 /* =========================================================
-   ACTION
+   ACTION CUES
 ========================================================= */
 
 function actionCues(action){
 
   if(action==="kiss"){
 
-    return [{
-      channel:"action",
-      power:1,
-      text:"彩音からキスをする"
-    }];
+    return[
+      {
+        channel:"action",
+        power:1,
+        text:"彩音からキスをする",
+        positive:true,
+        action:"kiss"
+      }
+    ];
+
   }
 
 
   if(action==="hug"){
 
-    return [
+    return[
       {
         channel:"action",
         power:1,
-        text:"彩音から抱きつく"
+        text:"彩音から抱きつく",
+        positive:true,
+        action:"hug"
       },
       {
         channel:"distance",
         power:1,
-        text:"身体の距離が一気に近づく"
+        text:"身体の距離が一気に近づく",
+        positive:true
       }
     ];
+
   }
 
 
   if(action==="lean"){
 
-    return [{
-      channel:"action",
-      power:.96,
-      text:"彩音から顔を寄せる"
-    }];
+    return[
+      {
+        channel:"action",
+        power:.96,
+        text:"彩音から顔を寄せる",
+        positive:true,
+        action:"lean"
+      }
+    ];
+
   }
 
 
   if(action==="stay"){
 
-    return [{
-      channel:"distance",
-      power:.80,
-      text:"彩音が近くに残る"
-    }];
+    return[
+      {
+        channel:"distance",
+        power:.80,
+        text:"彩音が近くに残る",
+        positive:true,
+        action:"stay"
+      }
+    ];
+
   }
 
 
   if(action==="leave"){
 
-    return [{
-      channel:"distance",
-      power:.95,
-      text:"彩音が少し距離を取る"
-    }];
+    return[
+      {
+        channel:"distance",
+        power:.95,
+        text:"彩音が少し距離を取る",
+        negative:true,
+        action:"leave"
+      }
+    ];
+
   }
 
 
   if(action==="shyEscape"){
 
-    return [
+    return[
       {
         channel:"face",
         power:.85,
-        text:"彩音がふっと顔を逸らす"
+        text:"彩音がふっと顔を逸らす",
+        pattern:"avert"
       },
       {
         channel:"distance",
         power:.96,
-        text:"そのまま距離を取ろうとする"
+        text:"そのまま距離を取ろうとする",
+        action:"shyEscape"
       }
     ];
+
   }
 
 
   if(action==="sayMore"){
 
-    let text="彩音が「もっと」と伝える";
+    let text=
+      "彩音が『もっと』と伝える";
 
-    if(states.sweetVoice && !states.holdVoice){
-      text+="。声が普段より甘い";
+    let quality=
+      "plain";
+
+
+    if(
+      states.sweetVoice &&
+      !states.holdVoice
+    ){
+
+      text+=
+        "。声が普段より甘い";
+
+      quality=
+        "sweet";
+
     }
+
 
     if(states.holdVoice){
-      text+="。声を抑えようとしている";
+
+      text+=
+        "。声を抑えようとしている";
+
+      quality=
+        states.sweetVoice
+        ? "sweet-held"
+        : "held";
+
     }
 
-    return [{
-      channel:"voice",
-      power:1,
-      text
-    }];
+
+    return[
+      {
+        channel:"voice",
+        power:1,
+        text,
+        positive:true,
+        quality,
+        action:"sayMore"
+      }
+    ];
+
   }
 
 
-  return [];
+  return[];
+
 }
 
 
@@ -1590,31 +1650,34 @@ function actionCues(action){
 function processCues(cues,source){
 
   const p=
-  profiles[partnerId];
+    profiles[partnerId];
 
-  if(cues.length===0){
+
+  if(!cues.length){
 
     ayaneVisible.textContent=
-    "大きな変化は表に出なかった";
+      "大きな変化は表に出なかった";
 
     ayaneSub.textContent=
-    "彼に新しい情報は届いていない";
+      "彼に新しい情報は届いていない";
 
     return;
+
   }
 
 
   const strongest=
-  [...cues].sort(
-    (a,b)=>b.power-a.power
-  )[0];
+    [...cues].sort(
+      (a,b)=>b.power-a.power
+    )[0];
 
 
   ayaneVisible.textContent=
-  strongest.text;
+    strongest.text;
+
 
   ayaneSub.textContent=
-  cues.length>1
+    cues.length>1
     ? cues
         .filter(x=>x!==strongest)
         .map(x=>x.text)
@@ -1625,54 +1688,55 @@ function processCues(cues,source){
   const noticed=[];
 
 
-  cues.forEach(cue=>{
+  cues.forEach(c=>{
 
     const base=
-      p.notice[cue.channel] ?? .65;
+      p.notice[c.channel] ??
+      .65;
 
-    const probability=
+
+    const prob=
       clamp(
         base *
-        (.56 + cue.power*.52),
+        (
+          .56+
+          c.power*.52
+        ),
         .05,
         .995
       );
 
-    if(chance(probability)){
-      noticed.push(cue);
+
+    if(chance(prob)){
+      noticed.push(c);
     }
+
   });
 
 
-  /*
-    signal visuals immediately show
-    whether external cue reaches attention.
-  */
-
-  cues.forEach(cue=>{
+  cues.forEach(c=>{
 
     signal(
-      cue.channel==="face"
-        ? "表情"
-        : cue.channel==="gaze"
-        ? "視線"
-        : cue.channel==="voice"
-        ? "声"
-        : cue.channel==="distance"
-        ? "距離"
-        : "行動",
 
-      noticed.includes(cue)
+      c.channel==="face"
+      ? "表情"
+
+      : c.channel==="gaze"
+      ? "視線"
+
+      : c.channel==="voice"
+      ? "声"
+
+      : c.channel==="distance"
+      ? "距離"
+
+      : "行動",
+
+      noticed.includes(c)
+
     );
 
   });
-
-
-  const delay=
-    rand(
-      p.noticeDelay[0],
-      p.noticeDelay[1]
-    );
 
 
   setTimeout(
@@ -1683,8 +1747,12 @@ function processCues(cues,source){
         noticed
       );
     },
-    delay
+    rand(
+      p.noticeDelay[0],
+      p.noticeDelay[1]
+    )
   );
+
 }
 
 
@@ -1695,65 +1763,51 @@ function processCues(cues,source){
 function interpret(source,cues,noticed){
 
   const p=
-  profiles[partnerId];
+    profiles[partnerId];
 
 
-  if(noticed.length===0){
+  if(!noticed.length){
 
     if(chance(.55)){
-
       addBackstage(
         missedText(partnerId)
       );
     }
 
     return;
+
   }
 
 
-  const strongest=
-  [...noticed].sort(
-    (a,b)=>b.power-a.power
-  )[0];
-
-
-  const signalStrength=
+  const strength=
     noticed.reduce(
-      (sum,x)=>sum+x.power,
+      (s,x)=>s+x.power,
       0
-    ) / noticed.length;
+    )/
+    noticed.length;
 
-
-  /*
-    Attention moves first.
-    Desire may or may not follow.
-  */
 
   mind.attention=
     clamp(
-      mind.attention +
-      signalStrength*.20,
+      mind.attention+
+      strength*.20,
       0,
       1
     );
 
 
-  const interpretation=
+  const it=
     interpretMeaning(
       source,
-      noticed
+      noticed,
+      strength
     );
 
 
-  /*
-    Internal desire change depends on
-    what he thinks the cue means.
-  */
-
   mind.desire=
     clamp(
-      mind.desire +
-      interpretation.desire *
+      mind.desire+
+      it.desire*
       p.desireGain,
       0,
       1
@@ -1762,8 +1816,27 @@ function interpret(source,cues,noticed){
 
   mind.pursuit=
     clamp(
-      mind.pursuit +
-      interpretation.pursuit,
+      mind.pursuit+
+      it.pursuit,
+      0,
+      1
+    );
+
+
+  mind.cuteAgg=
+    clamp(
+      mind.cuteAgg+
+      (it.cute||0)*
+      p.cute,
+      0,
+      1
+    );
+
+
+  mind.uncertainty=
+    clamp(
+      mind.uncertainty+
+      (it.uncertainty||0),
       0,
       1
     );
@@ -1773,73 +1846,104 @@ function interpret(source,cues,noticed){
     "noticed",
     {
       source,
-      meaning:interpretation.meaning
+      meaning:it.meaning,
+      positive:
+        noticed.some(
+          x=>x.positive
+        ),
+      channels:
+        noticed.map(
+          x=>x.channel
+        ),
+      qualities:
+        noticed
+        .map(x=>x.quality)
+        .filter(Boolean)
     }
   );
 
 
   addBackstage(
-    interpretation.inner
+    it.inner
   );
 
 
-  if(interpretation.status){
+  if(it.status){
+
     partnerStatus.textContent=
-      interpretation.status;
+      it.status;
+
   }
 
 
-  if(interpretation.public){
+  if(it.public){
+
     showEvent(
-      interpretation.public
+      it.public
     );
+
   }
 
 
-  if(interpretation.dialogue){
+  if(it.dialogue){
+
     say(
-      interpretation.dialogue
+      it.dialogue
     );
+
   }
 
 
-  /*
-    Some responses create a second event.
-  */
+  if(it.response){
 
-  if(interpretation.response){
     partnerResponse(
-      interpretation.response
+      it.response
     );
+
   }
+
+
+  seedPhraseFromInterpretation(
+    it
+  );
+
 }
 
 
 /* =========================================================
-   MEANING
+   INTERPRET MEANING
 ========================================================= */
 
-function interpretMeaning(source,noticed){
+function interpretMeaning(
+  source,
+  noticed,
+  strength
+){
 
-  const p=partnerId;
+  const p=
+    partnerId;
+
 
   const hasAction=
     noticed.some(
       x=>x.channel==="action"
     );
 
+
   const hasDistance=
     noticed.some(
       x=>x.channel==="distance"
     );
+
 
   const hasFace=
     noticed.some(
       x=>x.channel==="face"
     );
 
-  const hasVoice=
-    noticed.some(
+
+  const voiceCue=
+    noticed.find(
       x=>x.channel==="voice"
     );
 
@@ -1850,263 +1954,294 @@ function interpretMeaning(source,noticed){
 
   if(source==="shyEscape"){
 
-    const recentApproach=
+    const recentPositive=
+      recentNoticedPositive(18) ||
       recentAny(
         [
-          "ayaneKiss",
-          "ayaneHug",
-          "ayaneLean",
-          "ayaneStay",
-          "positiveCue"
+          "noticedApproach",
+          "partnerPursuit"
         ],
-        16
+        18
       );
 
-
-    /*
-      He does not know the reason.
-      History changes his interpretation.
-    */
 
     const likelyEmbarrassment=
-      (
-        hasFace &&
-        hasDistance &&
-        (
-          states.shy ||
-          recentApproach
-        )
-      );
+      hasFace &&
+      hasDistance &&
+      !!recentPositive;
 
 
     if(likelyEmbarrassment){
 
+
       if(p==="kei"){
 
         return{
-          meaning:"羞恥による逃避らしい",
+          meaning:
+            "羞恥による逃避らしい",
+
           desire:.13,
+
           pursuit:.28,
+
+          cute:.17,
 
           inner:
 `――逃げた。
 
-でも、嫌になって離れた感じとは少し違う。
-直前まで自分から近くにいたし、今は顔まで逸らしている。
+でも、直前までの流れと今の顔を見る限り、嫌になって離れた感じとは違う。
 
-……恥ずかしくなっただけか。
+恥ずかしくなっただけなら、そのまま行かせる気にはならない。`,
 
-それなら、そのまま行かせる気にはならない。`,
-
-          status:"逃げようとした彩音を追う",
+          status:
+            "逃げようとした彩音を追う",
 
           public:
-          "慧が彩音の動きを見て、すぐ距離を詰め直す。",
+            "慧が彩音の動きを見て、すぐ距離を詰め直す。",
 
           dialogue:
-          pick([
-            "どこ行くの。",
-            "……逃げんの？",
-            "今さら？"
-          ]),
+            pick([
+              "どこ行くの。",
+              "……逃げんの？",
+              "今さら？"
+            ]),
 
-          response:"pullBack"
+          response:
+            "pullBack"
         };
+
       }
 
 
       if(p==="shoma"){
 
         return{
-          meaning:"恥ずかしくて逃げたように見える",
+          meaning:
+            "恥ずかしくて逃げたように見える",
+
           desire:.16,
+
           pursuit:.32,
+
+          cute:.15,
 
           inner:
 `あ、逃げた。
 
-でも今のは「嫌だから」じゃない。
-さっきまでの流れと顔を見れば、たぶん恥ずかしくなっただけ。
+でも今のは拒絶じゃなさそうだ。直前の流れと顔がそう見せる。
 
-そこまで分かった瞬間、追う方が早かった。`,
+分かった瞬間、追う方が早かった。`,
 
-          status:"反射的に追いかける",
+          status:
+            "反射的に追いかける",
 
           public:
-          "翔馬がほとんど間を置かずに追う。",
+            "翔馬がほとんど間を置かずに追う。",
 
           dialogue:
-          pick([
-            "いや待って、今それで逃げる？",
-            "ちょ、どこ行くの。",
-            "それはずるいって。"
-          ]),
+            pick([
+              "いや待って、今それで逃げる？",
+              "ちょ、どこ行くの。",
+              "それはずるいって。"
+            ]),
 
-          response:"follow"
+          response:
+            "follow"
         };
+
       }
 
 
       if(p==="minato"){
 
         return{
-          meaning:"照れて逃げた可能性が高い",
+          meaning:
+            "照れて逃げた可能性が高い",
+
           desire:.12,
+
           pursuit:.22,
+
+          cute:.20,
 
           inner:
 `え、逃げるんだ。
 
-顔を見たら、嫌そうというより完全に照れている。
-そう見えた途端、ちょっと笑いそうになる。
+顔を見ると、嫌そうというより照れているように見える。
 
-逃がしてもいいけど――たぶん、追った方が今は自然だ。`,
+そう思った途端、ちょっと笑いそうになる。`,
 
-          status:"笑いながら距離を詰める",
+          status:
+            "笑いながら距離を詰める",
 
           public:
-          "湊が少し笑って、そのまま彩音との距離を詰める。",
+            "湊が少し笑って、そのまま彩音との距離を詰める。",
 
           dialogue:
-          pick([
-            "え、逃げるの？",
-            "ちょっと待ってよ。",
-            "今さら恥ずかしくなった？"
-          ]),
+            pick([
+              "え、逃げるの？",
+              "ちょっと待ってよ。",
+              "今さら恥ずかしくなった？"
+            ]),
 
-          response:"follow"
+          response:
+            "follow"
         };
+
       }
 
 
       if(p==="hyunwoo"){
 
         return{
-          meaning:"恥ずかしさで離れたようには見える",
+          meaning:
+            "恥ずかしさで離れたようには見える",
+
           desire:.09,
+
           pursuit:.15,
+
+          cute:.10,
 
           inner:
 `離れようとした。
 
-顔を見る限り、嫌になったようには見えない。
-たぶん恥ずかしくなったんだと思う。
+顔と直前の流れを合わせると、嫌になったようには見えにくい。
 
-追いたい気持ちはある。
-でも理由まで勝手に決めて引き戻すより、一度止まれる余地を残したい。
+追いたい気持ちはある。でも理由まで決めつけて引き戻すより、一度止まれる余地を残す。`,
 
-手だけ伸ばす。`,
-
-          status:"追いたいまま、一度確かめる",
+          status:
+            "追いたいまま、一度確かめる",
 
           public:
-          "ヒョヌが手を伸ばす。強く引くより先に、彩音を見る。",
+            "ヒョヌが手を伸ばす。強く引くより先に、彩音を見る。",
 
           dialogue:
-          pick([
-            "……どこ行くの？",
-            "待って。",
-            "恥ずかしくなった？"
-          ]),
+            pick([
+              "……どこ行くの？",
+              "待って。",
+              "恥ずかしくなった？"
+            ]),
 
-          response:"offerHand"
+          response:
+            "offerHand"
         };
+
       }
 
 
       if(p==="naoto"){
 
         return{
-          meaning:"羞恥かもしれないが断定しない",
+          meaning:
+            "羞恥かもしれないが断定しない",
+
           desire:.05,
+
           pursuit:.07,
+
+          uncertainty:-.04,
 
           inner:
 `離れた。
 
-ただ、直前までの様子と比べると拒絶には見えにくい。
-恥ずかしくなった可能性はある。
+拒絶には見えにくい。ただ、推測だけで引き戻すには情報が足りない。
 
-それでも、推測だけで引き戻すのは早い。
 一度声をかける。`,
 
-          status:"追わずに一度確認する",
+          status:
+            "追わずに一度確認する",
 
           public:
-          "直人は追いかけるより先に彩音を見る。",
+            "直人は追いかけるより先に彩音を見る。",
 
           dialogue:
-          pick([
-            "……どうした？",
-            "もう離れる？",
-            "大丈夫？"
-          ]),
+            pick([
+              "……どうした？",
+              "もう離れる？",
+              "大丈夫？"
+            ]),
 
           response:null
         };
+
       }
 
 
       if(p==="haruki"){
 
         return{
-          meaning:"照れなのか別の意味なのか一瞬考える",
+          meaning:
+            "照れなのか別の意味なのか一瞬考える",
+
           desire:.07,
+
           pursuit:.11,
+
+          cute:.09,
+
+          uncertainty:.04,
 
           inner:
 `今の離れ方、たぶん照れてる。
 
 ……とは思う。
 
-でも自分がそう思いたいだけだったら嫌だ。
-一拍だけ迷って、彩音の顔をもう一度見る。`,
+でも自分がそう思いたいだけだったら嫌だ。一拍だけ迷って、もう一度顔を見る。`,
 
-          status:"意味を確かめながら追う",
+          status:
+            "意味を確かめながら追う",
 
           public:
-          "晴輝が一拍だけ迷ってから、彩音の方へ手を伸ばす。",
+            "晴輝が一拍だけ迷ってから、彩音の方へ手を伸ばす。",
 
           dialogue:
-          pick([
-            "……逃げる？",
-            "待って、どうしたの。",
-            "恥ずかしいだけ？"
-          ]),
+            pick([
+              "……逃げる？",
+              "待って、どうしたの。",
+              "恥ずかしいだけ？"
+            ]),
 
-          response:"offerHand"
+          response:
+            "offerHand"
         };
+
       }
+
     }
 
 
-    /*
-      If embarrassment reading fails.
-    */
-
     return{
-      meaning:"離れたい意図として受け取る",
+      meaning:
+        "離れたい意図として受け取る",
+
       desire:-.06,
-      pursuit:-.10,
+
+      pursuit:-.16,
+
+      cute:-.05,
+
+      uncertainty:.08,
 
       inner:
 `離れようとした。
 
-理由までは分からない。
-今ここで追うより、一度距離を戻した方がいい。`,
+理由までは分からない。今ここで追うより、一度距離を戻した方がいい。`,
 
-      status:"彩音が取った距離をそのまま受け入れる",
+      status:
+        "彩音が取った距離をそのまま受け入れる",
 
       public:
-      `${profiles[p].name}は追わず、その場で彩音を見る。`,
+        `${profiles[p].name}は追わず、その場で彩音を見る。`,
 
       dialogue:
-      chance(.55)
-      ? "大丈夫？"
-      : "",
+        chance(.55)
+        ? "大丈夫？"
+        : "",
 
       response:null
     };
+
   }
 
 
@@ -2116,7 +2251,11 @@ function interpretMeaning(source,noticed){
 
   if(hasAction){
 
-    return directActionReaction(p,source);
+    return directActionReaction(
+      p,
+      source
+    );
+
   }
 
 
@@ -2124,21 +2263,23 @@ function interpretMeaning(source,noticed){
      VOICE
   ================================== */
 
-  if(hasVoice){
+  if(voiceCue){
 
-    return voiceReaction(p);
+    return voiceReaction(
+      p,
+      voiceCue
+    );
+
   }
 
-
-  /* ==================================
-     FACE / GAZE / DISTANCE
-  ================================== */
 
   return subtleReaction(
     p,
     hasFace,
-    hasDistance
+    hasDistance,
+    strength
   );
+
 }
 
 
@@ -2146,178 +2287,204 @@ function interpretMeaning(source,noticed){
    DIRECT ACTION
 ========================================================= */
 
-function directActionReaction(p,source){
+function directActionReaction(
+  p,
+  source
+){
 
-  const mappings={
+  const m={
 
     naoto:{
+
       desire:.10,
       pursuit:.08,
+      cute:.05,
 
       inner:
 `彩音の方から来た。
 
-意図はかなり分かりやすい。
-それでも、その先まで全部同じ意味だとは決めない。
+意図はかなり分かりやすい。ただ、その先まで全部同じ意味だとは決めない。
 
-ただ、さっきよりこちらへ意識が向く。`,
+それでも、さっきよりこちらへ意識が向く。`,
 
-      status:"彩音の行動を受け止める",
+      status:
+        "彩音の行動を受け止める",
 
-      public:"直人は一度彩音の顔を見てから応じる。",
+      public:
+        "直人は一度彩音の顔を見てから応じる。",
 
       dialogue:
-      chance(.45)
-      ? pick([
-          "……そう来るんだ。",
-          "大丈夫？",
-          "まだ近くにいる？"
-        ])
-      : ""
+        chance(.45)
+        ? pick([
+            "……そう来るんだ。",
+            "大丈夫？",
+            "まだ近くにいる？"
+          ])
+        : ""
+
     },
 
 
     kei:{
+
       desire:.20,
       pursuit:.22,
+      cute:.13,
 
       inner:
 `彩音から来た。
 
-こういう時は分かりやすい。
 距離が一気に近くなったせいで、意識もそっちへ持っていかれる。
 
-自分から来たなら――今すぐ離す理由はない。`,
+自分から来たなら、今すぐ離す理由はない。`,
 
-      status:"彩音の動きに強く注意が向く",
+      status:
+        "彩音の動きに強く注意が向く",
 
-      public:"慧がそのまま彩音との距離を詰め返す。",
+      public:
+        "慧がそのまま彩音との距離を詰め返す。",
 
       dialogue:
-      chance(.60)
-      ? pick([
-          "……自分から来たんだ。",
-          "なに。",
-          "まだいる？"
-        ])
-      : ""
+        chance(.60)
+        ? pick([
+            "……自分から来たんだ。",
+            "なに。",
+            "まだいる？"
+          ])
+        : ""
+
     },
 
 
     shoma:{
+
       desire:.23,
       pursuit:.26,
+      cute:.14,
 
       inner:
 `――来た。
 
-考えるより先に反応した。
-彩音から距離を縮められると、やっぱり一気に持っていかれる。
+考えるより先に反応した。彩音から距離を縮められると、一気に持っていかれる。`,
 
-さっきまでより明らかに余裕が減った。`,
+      status:
+        "反応がすぐ返る",
 
-      status:"反応がすぐ返る",
-
-      public:"翔馬の反応がほとんど間を置かず返る。",
+      public:
+        "翔馬の反応がほとんど間を置かず返る。",
 
       dialogue:
-      chance(.70)
-      ? pick([
-          "……それ反則。",
-          "自分から来たくせに。",
-          "まだやる？"
-        ])
-      : ""
+        chance(.70)
+        ? pick([
+            "……それ反則。",
+            "自分から来たくせに。",
+            "まだやる？"
+          ])
+        : ""
+
     },
 
 
     minato:{
+
       desire:.17,
       pursuit:.17,
+      cute:.18,
 
       inner:
 `自分から来た。
 
 その事実だけで、さっきまで見ていた表情の意味まで少し変わって見える。
 
-嬉しい。
-それが顔に出そうになる。`,
+嬉しい。それが顔に出そうになる。`,
 
-      status:"彩音の行動を楽しんでいる",
+      status:
+        "彩音の行動を楽しんでいる",
 
-      public:"湊が嬉しそうに笑って、彩音を見る。",
+      public:
+        "湊が嬉しそうに笑って、彩音を見る。",
 
       dialogue:
-      chance(.72)
-      ? pick([
-          "え、自分から来るんだ。",
-          "なに、かわいい。",
-          "もう一回？"
-        ])
-      : ""
+        chance(.72)
+        ? pick([
+            "え、自分から来るんだ。",
+            "なに、かわいい。",
+            "もう一回？"
+          ])
+        : ""
+
     },
 
 
     haruki:{
+
       desire:.15,
       pursuit:.14,
+      cute:.14,
 
       inner:
 `彩音の方から来た。
 
-一瞬びっくりした。
-でも嫌じゃない。むしろ嬉しい。
+一瞬びっくりした。でも嫌じゃない。むしろ嬉しい。`,
 
-さっきまで考えていたことが、少しどうでもよくなる。`,
+      status:
+        "驚きながらも応じる",
 
-      status:"驚きながらも応じる",
-
-      public:"晴輝が一瞬目を見開いてから、彩音へ向き直る。",
+      public:
+        "晴輝が一瞬目を見開いてから、彩音へ向き直る。",
 
       dialogue:
-      chance(.60)
-      ? pick([
-          "……急だね。",
-          "今のずるい。",
-          "もう一回する？"
-        ])
-      : ""
+        chance(.60)
+        ? pick([
+            "……急だね。",
+            "今のずるい。",
+            "もう一回する？"
+          ])
+        : ""
+
     },
 
 
     hyunwoo:{
+
       desire:.17,
       pursuit:.13,
+      cute:.09,
 
       inner:
 `彩音から来た。
 
-これはかなり分かりやすい。
-だからこそ、今の行動をそのまま受け取ればいい。
+これはかなり分かりやすい。だからこそ、今の行動をそのまま受け取ればいい。`,
 
-必要以上に意味を足さず、距離を受け入れる。`,
+      status:
+        "彩音の意思を受け取って応じる",
 
-      status:"彩音の意思を受け取って応じる",
-
-      public:"ヒョヌは彩音の動きを受け入れ、そのまま距離を保つ。",
+      public:
+        "ヒョヌは彩音の動きを受け入れ、そのまま距離を保つ。",
 
       dialogue:
-      chance(.55)
-      ? pick([
-          "……うん。",
-          "こっち来る？",
-          "このままでいい？"
-        ])
-      : ""
+        chance(.55)
+        ? pick([
+            "……うん。",
+            "こっち来る？",
+            "このままでいい？"
+          ])
+        : ""
+
     }
 
   };
 
+
   return{
-    meaning:"彩音からの明確な行動",
-    ...mappings[p],
+    meaning:
+      "彩音からの明確な行動",
+
+    ...m[p],
+
     response:null
   };
+
 }
 
 
@@ -2325,17 +2492,18 @@ function directActionReaction(p,source){
    VOICE
 ========================================================= */
 
-function voiceReaction(p){
+function voiceReaction(
+  p,
+  cue
+){
 
-  const sweet=
-    states.sweetVoice;
-
-  const holding=
-    states.holdVoice;
+  const q=
+    cue.quality ||
+    "plain";
 
 
-  const especiallyStrong=
-    sweet || holding;
+  const strong=
+    q!=="plain";
 
 
   const inner={
@@ -2343,118 +2511,137 @@ function voiceReaction(p){
     naoto:
 `声がいつもと少し違う。
 
-言葉そのものより、言い方の方が引っかかった。
-今の状態なら、聞き流すより一度きちんと見た方がいい。`,
+言葉そのものより、言い方の方が引っかかった。今の状態なら、聞き流すより一度きちんと見た方がいい。`,
+
 
     kei:
 `声、変わった。
 
-言葉よりそっちの方が先に耳に残る。
-抑えようとしているなら、それも含めて余計に分かりやすい。`,
+言葉よりそっちの方が先に耳に残る。抑えようとしているなら、それも含めて余計に分かりやすい。`,
+
 
     shoma:
 `その声はだめだろ。
 
 聞いた瞬間、さっきまでより明らかに意識が持っていかれた。`,
 
+
     minato:
 `今の言い方。
 
-同じ言葉でも、さっきまでと全然違って聞こえる。
-ちょっと面白いくらい顔まで見たくなる。`,
+同じ言葉でも、さっきまでと全然違って聞こえる。顔まで見たくなる。`,
+
 
     haruki:
 `声が変わった。
 
 自分のせいなのかと思うと、嬉しいような、少し落ち着かないような感じがする。`,
 
+
     hyunwoo:
 `声に余裕がなくなっている。
 
-言葉と声が同じ方向を向いている。
-今はかなり分かりやすい。`
+言葉と声が同じ方向を向いている。今はかなり分かりやすい。`
+
   };
 
 
   const dialogue={
 
     naoto:
-    chance(.38)
-    ? "……声、変わった？"
-    : "",
+      chance(.38)
+      ? "……声、変わった？"
+      : "",
+
 
     kei:
-    chance(.62)
-    ? pick([
-        "……その声。",
-        "我慢してる？",
-        "今のもう一回言って。"
-      ])
-    : "",
+      chance(.62)
+      ? pick([
+          "……その声。",
+          "我慢してる？",
+          "今のもう一回言って。"
+        ])
+      : "",
+
 
     shoma:
-    chance(.73)
-    ? pick([
-        "ちょっと、その声やばい。",
-        "それで言うのずるい。",
-        "……もう一回。"
-      ])
-    : "",
+      chance(.73)
+      ? pick([
+          "ちょっと、その声やばい。",
+          "それで言うのずるい。",
+          "……もう一回。"
+        ])
+      : "",
+
 
     minato:
-    chance(.78)
-    ? pick([
-        "今の言い方なに。",
-        "声かわいくなってない？",
-        "それもう一回言って。"
-      ])
-    : "",
+      chance(.78)
+      ? pick([
+          "今の言い方なに。",
+          "声かわいくなってない？",
+          "それもう一回言って。"
+        ])
+      : "",
+
 
     haruki:
-    chance(.58)
-    ? pick([
-        "……声違くない？",
-        "今のちょっとずるい。",
-        "我慢してる？"
-      ])
-    : "",
+      chance(.58)
+      ? pick([
+          "……声違くない？",
+          "今のちょっとずるい。",
+          "我慢してる？"
+        ])
+      : "",
+
 
     hyunwoo:
-    chance(.48)
-    ? pick([
-        "……声、我慢してる？",
-        "괜찮아？",
-        "そのままでいいよ。"
-      ])
-    : ""
+      chance(.48)
+      ? pick([
+          "……声、我慢してる？",
+          "大丈夫？",
+          "そのままでいいよ。"
+        ])
+      : ""
 
   };
 
 
   return{
-    meaning:"声の変化に気づく",
+
+    meaning:
+      "声の変化に気づく",
 
     desire:
-      especiallyStrong
+      strong
       ? .16
       : .10,
 
     pursuit:
-      especiallyStrong
+      strong
       ? .12
       : .07,
 
-    inner:inner[p],
+    cute:
+      strong
+      ? .08
+      : .03,
 
-    status:"声の変化に注意が向く",
+    inner:
+      inner[p],
+
+    status:
+      "声の変化に注意が向く",
 
     public:
-    `${profiles[p].name}が彩音の声に反応して顔を見る。`,
+      `${profiles[p].name}が彩音の声に反応して顔を見る。`,
 
-    dialogue:dialogue[p],
+    dialogue:
+      dialogue[p],
 
     response:null
+
   };
+
 }
 
 
@@ -2462,171 +2649,290 @@ function voiceReaction(p){
    SUBTLE
 ========================================================= */
 
-function subtleReaction(p,hasFace,hasDistance){
-
-  const strongLeak=
-    states.overwhelmed;
-
+function subtleReaction(
+  p,
+  hasFace,
+  hasDistance,
+  strength
+){
 
   const data={
 
     naoto:{
+
       inner:
 `少し様子が違う。
 
-自分に向けられたものかもしれない。
-ただ、まだ一つの意味に決めるほどではない。
+自分に向けられたものかもしれない。ただ、まだ一つの意味に決めるほどではない。
 
 もう少し見る。`,
 
       dialogue:
-      chance(.22)
-      ? "……どうした？"
-      : "",
+        chance(.22)
+        ? "……どうした？"
+        : "",
 
-      status:"変化に気づいたが、まだ様子を見る"
+      status:
+        "変化に気づいたが、まだ様子を見る"
+
     },
 
 
     kei:{
+
       inner:
 `今の顔。
 
 本人が思っているより隠れていない気がする。
 
-聞いたら引っ込むかもしれない。
-……今は言わずに見ておく。`,
+聞いたら引っ込むかもしれない。今は言わずに見ておく。`,
 
       dialogue:
-      chance(.40)
-      ? pick([
-          "……なに、その顔。",
-          "なんか言いたい？",
-          "こっち見て。"
-        ])
-      : "",
+        chance(.40)
+        ? pick([
+            "……なに、その顔。",
+            "なんか言いたい？",
+            "こっち見て。"
+          ])
+        : "",
 
-      status:"表情の変化が引っかかっている"
+      status:
+        "表情の変化が引っかかっている"
+
     },
 
 
     shoma:{
+
       inner:
 `――今の。
 
-一瞬だけど分かった。
-こういう反応をされると、どうしてもそっちへ意識が持っていかれる。`,
+一瞬だけど分かった。こういう反応をされると、どうしてもそっちへ意識が持っていかれる。`,
 
       dialogue:
-      chance(.55)
-      ? pick([
-          "今のなに。",
-          "その顔ずるい。",
-          "……隠せてないよ。"
-        ])
-      : "",
+        chance(.55)
+        ? pick([
+            "今のなに。",
+            "その顔ずるい。",
+            "……隠せてないよ。"
+          ])
+        : "",
 
-      status:"反応を拾って注意が一気に向く"
+      status:
+        "反応を拾って注意が一気に向く"
+
     },
 
 
     minato:{
+
       inner:
 `一瞬、顔が変わった。
 
-見間違いかなと思ってもう一度見る。
-やっぱり少し違う。
+見間違いかなと思ってもう一度見る。やっぱり少し違う。
 
-何を考えたかまでは分からない。
-でも、その違い自体が気になる。`,
+何を考えたかまでは分からない。でも、その違い自体が気になる。`,
 
       dialogue:
-      chance(.68)
-      ? pick([
-          "今なんか思ったでしょ。",
-          "なに、その顔。",
-          "さっきと顔違う。"
-        ])
-      : "",
+        chance(.68)
+        ? pick([
+            "今なんか思ったでしょ。",
+            "なに、その顔。",
+            "さっきと顔違う。"
+          ])
+        : "",
 
-      status:"小さな表情差を追っている"
+      status:
+        "小さな表情差を追っている"
+
     },
 
 
     haruki:{
+
       inner:
 `何か変わった。
 
-自分に向けられたものなら嬉しい。
-ただ、そう思いたいだけかもしれない。
+自分に向けられたものなら嬉しい。ただ、そう思いたいだけかもしれない。
 
 一度だけ、もう少し様子を見る。`,
 
       dialogue:
-      chance(.42)
-      ? pick([
-          "……なに？",
-          "なんか言いたい？",
-          "今ちょっと顔違った。"
-        ])
-      : "",
+        chance(.42)
+        ? pick([
+            "……なに？",
+            "なんか言いたい？",
+            "今ちょっと顔違った。"
+          ])
+        : "",
 
-      status:"変化の意味を探っている"
+      status:
+        "変化の意味を探っている"
+
     },
 
 
     hyunwoo:{
+
       inner:
 `表情と視線が少し変わった。
 
-一つだけなら気のせいかもしれない。
-でも重なるなら、さっきより意味はありそうだ。
+一つだけなら気のせいかもしれない。でも重なるなら、さっきより意味はありそうだ。
 
 少し待つ。`,
 
       dialogue:
-      chance(.28)
-      ? pick([
-          "……왜？",
-          "どうしたの。",
-          "何か言いたい？"
-        ])
-      : "",
+        chance(.28)
+        ? pick([
+            "……どうしたの。",
+            "何か言いたい？"
+          ])
+        : "",
 
-      status:"複数の変化を合わせて見ている"
+      status:
+        "複数の変化を合わせて見ている"
+
     }
 
   };
 
 
   let desire=
-    strongLeak
-    ? .13
-    : .07;
+    .05+
+    strength*.09;
 
 
-  if(p==="shoma")desire+=.04;
-  if(p==="kei")desire+=.03;
-  if(p==="minato" && hasFace)desire+=.03;
+  if(p==="shoma"){
+    desire+=.03;
+  }
+
+
+  if(p==="kei"){
+    desire+=.02;
+  }
+
+
+  if(
+    p==="minato" &&
+    hasFace
+  ){
+    desire+=.03;
+  }
 
 
   return{
-    meaning:"小さな反応の変化",
+
+    meaning:
+      "小さな反応の変化",
 
     desire,
-    pursuit:desire*.70,
 
-    inner:data[p].inner,
+    pursuit:
+      desire*.70,
 
-    status:data[p].status,
+    cute:
+      hasFace
+      ? desire*.8
+      : desire*.35,
+
+    uncertainty:
+      hasDistance
+      ? .01
+      : .03,
+
+    inner:
+      data[p].inner,
+
+    status:
+      data[p].status,
 
     public:
-    `${profiles[p].name}が一瞬、彩音の様子を見る。`,
+      `${profiles[p].name}が一瞬、彩音の様子を見る。`,
 
-    dialogue:data[p].dialogue,
+    dialogue:
+      data[p].dialogue,
 
     response:null
+
   };
+
+}
+
+
+/* =========================================================
+   PHRASE FROM INTERPRETATION
+========================================================= */
+
+function seedPhraseFromInterpretation(it){
+
+  if(
+    (it.cute||0)>
+    .12
+  ){
+
+    phrase.kind=
+      "cute";
+
+    phrase.until=
+      sec()+
+      rand(
+        3.5,
+        6.5
+      );
+
+    phrase.boost=
+      .20;
+
+    return;
+
+  }
+
+
+  if(
+    (it.pursuit||0)>
+    .22
+  ){
+
+    phrase.kind=
+      partnerId==="shoma"
+      ? "surge"
+      : "pursuit";
+
+    phrase.until=
+      sec()+
+      rand(
+        3,
+        6
+      );
+
+    phrase.boost=
+      .22;
+
+    return;
+
+  }
+
+
+  if(
+    (it.desire||0)>
+    .15
+  ){
+
+    phrase.kind=
+      "rise";
+
+    phrase.until=
+      sec()+
+      rand(
+        2.8,
+        5.2
+      );
+
+    phrase.boost=
+      .16;
+
+  }
+
 }
 
 
@@ -2640,6 +2946,7 @@ function partnerResponse(type){
 
     setTimeout(
       ()=>{
+
         showEvent(
           "慧が離れかけた距離を詰め直す。"
         );
@@ -2648,21 +2955,47 @@ function partnerResponse(type){
           "partnerPursuit"
         );
 
+        world.distance=
+          Math.max(
+            world.distance,
+            3
+          );
+
+        renderDistance();
+
+
         mind.attention=
           clamp(
-            mind.attention+.13,
-            0,1
+            mind.attention+
+            .13,
+            0,
+            1
           );
+
 
         mind.pursuit=
           clamp(
-            mind.pursuit+.12,
-            0,1
+            mind.pursuit+
+            .12,
+            0,
+            1
           );
+
+
+        openPartnerPrompt(
+          "慧が離れかけた距離を詰め直した。",
+          [
+            "stay",
+            "hug",
+            "shyEscape",
+            "leave"
+          ]
+        );
 
       },
       520
     );
+
   }
 
 
@@ -2670,6 +3003,7 @@ function partnerResponse(type){
 
     setTimeout(
       ()=>{
+
         showEvent(
           `${profiles[partnerId].name}がそのまま追って距離を戻す。`
         );
@@ -2678,15 +3012,38 @@ function partnerResponse(type){
           "partnerPursuit"
         );
 
+        world.distance=
+          Math.max(
+            world.distance,
+            3
+          );
+
+        renderDistance();
+
+
         mind.pursuit=
           clamp(
-            mind.pursuit+.10,
-            0,1
+            mind.pursuit+
+            .10,
+            0,
+            1
           );
+
+
+        openPartnerPrompt(
+          `${profiles[partnerId].name}が追って距離を戻した。`,
+          [
+            "stay",
+            "hug",
+            "shyEscape",
+            "leave"
+          ]
+        );
 
       },
       420
     );
+
   }
 
 
@@ -2694,6 +3051,7 @@ function partnerResponse(type){
 
     setTimeout(
       ()=>{
+
         showEvent(
           `${profiles[partnerId].name}が追い切らず、彩音へ手を伸ばす。`
         );
@@ -2702,10 +3060,23 @@ function partnerResponse(type){
           "partnerOffer"
         );
 
+
+        openPartnerPrompt(
+          `${profiles[partnerId].name}が手を伸ばして待っている。`,
+          [
+            "stay",
+            "hug",
+            "lean",
+            "leave"
+          ]
+        );
+
       },
       500
     );
+
   }
+
 }
 
 
@@ -2715,16 +3086,14 @@ function partnerResponse(type){
 
 function missedText(p){
 
-  const options={
+  const o={
 
     naoto:[
 `何かあった気はした。
 
-ただ、確信できるほどではない。
-今は意味を足さない。`,
+ただ、確信できるほどではない。今は意味を足さない。`,
 
-`その瞬間は拾わなかった。
-別のところに注意が向いていた。`
+`その瞬間は拾わなかった。別のところに注意が向いていた。`
     ],
 
 
@@ -2742,8 +3111,7 @@ function missedText(p){
 
 同じ変化がもう一度あれば、次は気づくかもしれない。`,
 
-`一瞬のことだった。
-今はまだ引っかかっていない。`
+`一瞬のことだった。今はまだ引っかかっていない。`
     ],
 
 
@@ -2752,8 +3120,7 @@ function missedText(p){
 
 あとから同じ顔をされたら気づくかもしれない。`,
 
-`一瞬だけ何か違った気もした。
-でも、そのまま流れた。`
+`一瞬だけ何か違った気もした。でも、そのまま流れた。`
     ],
 
 
@@ -2762,8 +3129,7 @@ function missedText(p){
 
 ただ、それが何なのかまでは分からない。`,
 
-`今回は拾えなかった。
-特に意味もつけていない。`
+`今回は拾えなかった。特に意味もつけていない。`
     ],
 
 
@@ -2772,21 +3138,29 @@ function missedText(p){
 
 今の情報だけで意味を決めるほどではない。`,
 
-`その瞬間は気づかなかった。
-もう少し分かりやすい変化なら拾うだろう。`
+`その瞬間は気づかなかった。もう少し分かりやすい変化なら拾うだろう。`
     ]
 
   };
 
-  return pick(options[p]);
+
+  return pick(
+    o[p]
+  );
+
 }
 
 
 /* =========================================================
-   INPUT HANDLER
+   FEEL HANDLER
 ========================================================= */
 
 function triggerFeel(type){
+
+  cancelPendingIntent(
+    "彩音の新しい反応が入った"
+  );
+
 
   const labels={
     like:"すき",
@@ -2808,25 +3182,15 @@ function triggerFeel(type){
   );
 
 
-  const cues=
-    feelCues(type);
-
-
-  if(
-    type==="like" ||
-    type==="more" ||
-    type==="happy"
-  ){
-    remember(
-      "positiveCue"
-    );
-  }
+  world.lastUserActionAt=
+    sec();
 
 
   processCues(
-    cues,
+    feelCues(type),
     "feel:"+type
   );
+
 }
 
 
@@ -2836,6 +3200,14 @@ function triggerFeel(type){
 
 function triggerAction(type){
 
+  cancelPendingIntent(
+    "彩音が先に動いた"
+  );
+
+
+  resolvePartnerPrompt();
+
+
   const labels={
     kiss:"彩音からキスする",
     hug:"彩音から抱きつく",
@@ -2843,27 +3215,70 @@ function triggerAction(type){
     stay:"彩音がそのまま近くにいる",
     leave:"彩音が少し離れる",
     shyEscape:"彩音が恥ずかしくなって逃げようとする",
-    sayMore:"彩音が「もっと」と伝える"
+    sayMore:"彩音が『もっと』と伝える"
   };
 
 
-  showEvent(labels[type]);
+  showEvent(
+    labels[type]
+  );
+
+
+  world.lastUserActionAt=
+    sec();
 
 
   if(type==="kiss"){
-    remember("ayaneKiss");
+
+    remember(
+      "ayaneKiss"
+    );
+
+    world.distance=
+      4;
+
   }
+
 
   if(type==="hug"){
-    remember("ayaneHug");
+
+    remember(
+      "ayaneHug"
+    );
+
+    world.distance=
+      4;
+
   }
+
 
   if(type==="lean"){
-    remember("ayaneLean");
+
+    remember(
+      "ayaneLean"
+    );
+
+    world.distance=
+      Math.max(
+        world.distance,
+        3
+      );
+
   }
 
+
   if(type==="stay"){
-    remember("ayaneStay");
+
+    remember(
+      "ayaneStay"
+    );
+
+    world.distance=
+      Math.max(
+        world.distance,
+        2
+      );
+
   }
 
 
@@ -2871,24 +3286,50 @@ function triggerAction(type){
 
     mind.pursuit=
       clamp(
-        mind.pursuit-.07,
-        0,1
+        mind.pursuit-
+        .07,
+        0,
+        1
       );
 
-    remember("ayaneLeave");
+    remember(
+      "ayaneLeave"
+    );
+
+    world.distance=
+      Math.max(
+        0,
+        world.distance-
+        1
+      );
+
   }
 
 
   if(type==="shyEscape"){
 
-    remember("ayaneEscape");
+    remember(
+      "ayaneEscape"
+    );
+
+    world.distance=
+      Math.max(
+        0,
+        world.distance-
+        1
+      );
+
   }
+
+
+  renderDistance();
 
 
   processCues(
     actionCues(type),
     type
   );
+
 }
 
 
@@ -2901,9 +3342,12 @@ function toggleState(key){
   states[key]=
     !states[key];
 
+
   renderStates();
 
-  renderSheet("state");
+  renderSheet(
+    "state"
+  );
 
 
   if(states[key]){
@@ -2912,6 +3356,7 @@ function toggleState(key){
       `彩音STATE：${stateLabels[key]}`
     );
 
+
     if(key==="shy"){
 
       ayaneVisible.textContent=
@@ -2919,6 +3364,7 @@ function toggleState(key){
 
       ayaneSub.textContent=
         "次の気持ちは隠そうとしやすい";
+
     }
 
 
@@ -2929,6 +3375,7 @@ function toggleState(key){
 
       ayaneSub.textContent=
         "次の気持ちが表へ漏れやすくなる";
+
     }
 
 
@@ -2939,6 +3386,7 @@ function toggleState(key){
 
       ayaneSub.textContent=
         "黙っている間は彼には分からない";
+
     }
 
 
@@ -2949,9 +3397,11 @@ function toggleState(key){
 
       ayaneSub.textContent=
         "実際に声を出した時に初めて情報になる";
+
     }
 
   }
+
 
   else{
 
@@ -2959,13 +3409,16 @@ function toggleState(key){
       `彩音STATE：${stateLabels[key]}が落ち着く`
     );
 
+
     ayaneVisible.textContent=
       `${stateLabels[key]}が落ち着いた`;
+
 
     ayaneSub.textContent=
       "次の反応は現在のSTATEから処理される";
 
   }
+
 }
 
 
@@ -2978,68 +3431,84 @@ function renderSheet(tab){
   document
   .querySelectorAll(".tab")
   .forEach(
-    btn=>
-    btn.classList.toggle(
+    b=>
+    b.classList.toggle(
       "active",
-      btn.dataset.tab===tab
+      b.dataset.tab===tab
     )
   );
 
 
-  const data=sheets[tab];
+  const d=
+    sheets[tab];
 
-  sheetTitle.textContent=data.title;
+
+  sheetTitle.textContent=
+    d.title;
+
 
   sheetButtons.innerHTML="";
 
 
-  data.items.forEach(
-    ([key,label])=>{
+  d.items.forEach(
+    ([k,l])=>{
 
-      const button=
+      const b=
         document.createElement("button");
 
-      button.className=
-        "action-button";
 
-
-      if(
-        tab==="state" &&
-        states[key]
-      ){
-        button.classList.add(
-          "state-active"
+      b.className=
+        "action-button"+
+        (
+          tab==="state" &&
+          states[k]
+          ? " state-active"
+          : ""
         );
-      }
 
 
-      button.textContent=
-        tab==="state" && states[key]
-        ? "● "+label
-        : label;
+      b.textContent=
+        tab==="state" &&
+        states[k]
+        ? "● "+l
+        : l;
 
 
-      button.onclick=()=>{
+      b.onclick=()=>{
 
         if(tab==="feel"){
-          triggerFeel(key);
-          sheet.classList.remove("open");
+
+          triggerFeel(k);
+
+          sheet.classList.remove(
+            "open"
+          );
+
         }
+
 
         if(tab==="state"){
-          toggleState(key);
+
+          toggleState(k);
+
         }
 
+
         if(tab==="action"){
-          triggerAction(key);
-          sheet.classList.remove("open");
+
+          triggerAction(k);
+
+          sheet.classList.remove(
+            "open"
+          );
+
         }
 
       };
 
 
       sheetButtons.appendChild(
-        button
+        b
       );
 
     }
@@ -3050,36 +3519,46 @@ function renderSheet(tab){
 
 document
 .querySelectorAll(".tab")
-.forEach(btn=>{
-
-  btn.addEventListener(
+.forEach(
+  b=>
+  b.addEventListener(
     "click",
     ()=>{
 
       if(mode!=="manual"){
-        setMode("manual");
+        setMode(
+          "manual"
+        );
       }
 
+
       renderSheet(
-        btn.dataset.tab
+        b.dataset.tab
       );
 
-      sheet.classList.add("open");
+
+      sheet.classList.add(
+        "open"
+      );
 
     }
-  );
-
-});
+  )
+);
 
 
 closeSheet.onclick=()=>{
 
-  sheet.classList.remove("open");
+  sheet.classList.remove(
+    "open"
+  );
 
   document
   .querySelectorAll(".tab")
   .forEach(
-    x=>x.classList.remove("active")
+    x=>
+    x.classList.remove(
+      "active"
+    )
   );
 
 };
@@ -3108,6 +3587,7 @@ function openDrawer(){
   drawerMask.classList.add(
     "show"
   );
+
 }
 
 
@@ -3130,6 +3610,7 @@ function hideDrawer(){
   drawerMask.classList.remove(
     "show"
   );
+
 }
 
 
@@ -3143,10 +3624,11 @@ backstageBtn.onclick=()=>{
 
 
 closeDrawer.onclick=
-hideDrawer;
+  hideDrawer;
+
 
 drawerMask.onclick=
-hideDrawer;
+  hideDrawer;
 
 
 /* =========================================================
@@ -3158,15 +3640,19 @@ dialogueBtn.onclick=()=>{
   dialogueEnabled=
     !dialogueEnabled;
 
+
   dialogueBtn.classList.toggle(
     "active",
     dialogueEnabled
   );
 
+
   if(!dialogueEnabled){
+
     speechBubble.classList.remove(
       "show"
     );
+
   }
 
 };
@@ -3178,17 +3664,21 @@ dialogueBtn.onclick=()=>{
 
 function setMode(newMode){
 
-  mode=newMode;
+  mode=
+    newMode;
+
 
   manualBtn.classList.toggle(
     "active",
     mode==="manual"
   );
 
+
   autoBtn.classList.toggle(
     "active",
     mode==="auto"
   );
+
 
   autoBanner.classList.toggle(
     "show",
@@ -3206,33 +3696,36 @@ function setMode(newMode){
 
   }
 
+
   else{
 
     sheet.classList.remove(
       "open"
     );
 
+
     startAuto();
+
 
     showEvent(
       "AUTOへ切り替えた"
     );
 
   }
+
 }
 
 
 manualBtn.onclick=
-()=>setMode("manual");
+  ()=>setMode("manual");
+
 
 autoBtn.onclick=
-()=>setMode("auto");
+  ()=>setMode("auto");
 
 
 /* =========================================================
    AUTO
-
-   LAB-only generated Ayane actions.
 ========================================================= */
 
 function autoStep(){
@@ -3240,16 +3733,19 @@ function autoStep(){
   if(mode!=="auto")return;
 
 
-  const r=Math.random();
+  const r=
+    Math.random();
 
 
-  if(r<.18){
+  if(r<.16){
 
     const candidates=[
       "shy",
       "overwhelmed",
-      "sweetVoice"
+      "sweetVoice",
+      "holdVoice"
     ];
+
 
     toggleState(
       pick(candidates)
@@ -3257,7 +3753,8 @@ function autoStep(){
 
   }
 
-  else if(r<.66){
+
+  else if(r<.62){
 
     triggerFeel(
       pick([
@@ -3271,6 +3768,7 @@ function autoStep(){
 
   }
 
+
   else{
 
     let actions=[
@@ -3281,8 +3779,27 @@ function autoStep(){
     ];
 
 
-    if(states.shy && chance(.26)){
-      actions.push("shyEscape");
+    if(
+      states.shy &&
+      chance(.28)
+    ){
+
+      actions.push(
+        "shyEscape"
+      );
+
+    }
+
+
+    if(
+      states.overwhelmed &&
+      chance(.25)
+    ){
+
+      actions.push(
+        "sayMore"
+      );
+
     }
 
 
@@ -3297,10 +3814,11 @@ function autoStep(){
     setTimeout(
       autoStep,
       rand(
-        4300,
-        8500
+        4700,
+        9200
       )
     );
+
 }
 
 
@@ -3311,22 +3829,1217 @@ function startAuto(){
   autoTimer=
     setTimeout(
       autoStep,
-      1300
+      1500
     );
+
 }
 
 
 function stopAuto(){
 
   if(autoTimer){
-    clearTimeout(autoTimer);
+
+    clearTimeout(
+      autoTimer
+    );
+
     autoTimer=null;
+
   }
+
 }
 
 
 /* =========================================================
-   CONTINUOUS MIND ENGINE
+   INTENT
+========================================================= */
+
+function cancelPendingIntent(reason){
+
+  if(!intent.kind)return;
+
+
+  addBackstage(
+    `さっきまで考えていた「${intentLabel(intent.kind)}」は、${reason}のでいったん消えた。`
+  );
+
+
+  intent={
+    kind:null,
+    strength:0,
+    created:0,
+    due:0,
+    reason:""
+  };
+
+}
+
+
+function intentLabel(k){
+
+  return(
+    {
+      approach:"もう少し近づく",
+      watch:"もう少し見る",
+      speak:"声をかける",
+      tease:"少し構う",
+      embrace:"抱き込む",
+      kiss:"キスを返す",
+      offer:"手を差し出す"
+    }
+  )[k]||k;
+
+}
+
+
+/* =========================================================
+   SELF-INITIATED ACTION
+========================================================= */
+
+function maybeFormIntent(){
+
+  if(
+    world.pendingPartnerAction ||
+    intent.kind
+  )return;
+
+
+  const p=
+    profiles[partnerId];
+
+
+  const sinceUser=
+    sec()-
+    world.lastUserActionAt;
+
+
+  const sincePartner=
+    sec()-
+    world.lastPartnerActionAt;
+
+
+  if(
+    sincePartner<2.2 ||
+    sinceUser<1.0
+  )return;
+
+
+  const activation=
+
+    mind.desire*.42+
+
+    mind.attention*.30+
+
+    mind.pursuit*.20+
+
+    mind.cuteAgg*.22-
+
+    mind.restraint*.22;
+
+
+  if(activation<.28)return;
+
+
+  let candidates=[];
+
+
+  if(mind.cuteAgg>.48){
+
+    candidates.push({
+      k:"embrace",
+      w:
+        mind.cuteAgg*
+        (
+          partnerId==="naoto"
+          ? .55
+          : 1
+        )
+    });
+
+
+    candidates.push({
+      k:"tease",
+      w:
+        mind.cuteAgg*
+        (
+          partnerId==="minato" ||
+          partnerId==="shoma"
+          ? 1.15
+          : .8
+        )
+    });
+
+  }
+
+
+  if(
+    mind.pursuit>.38 &&
+    world.distance<4
+  ){
+
+    candidates.push({
+      k:"approach",
+      w:
+        mind.pursuit*
+        1.15
+    });
+
+  }
+
+
+  if(mind.attention>.55){
+
+    candidates.push({
+      k:"watch",
+      w:
+        mind.attention*
+        (
+          partnerId==="naoto" ||
+          partnerId==="hyunwoo"
+          ? 1.2
+          : .75
+        )
+    });
+
+  }
+
+
+  if(
+    mind.desire>.56 &&
+    world.distance>=3
+  ){
+
+    candidates.push({
+      k:"kiss",
+      w:
+        mind.desire*
+        (
+          partnerId==="kei" ||
+          partnerId==="shoma"
+          ? 1.0
+          : .65
+        )
+    });
+
+  }
+
+
+  candidates.push({
+    k:"speak",
+    w:
+      .26+
+      mind.attention*.35
+  });
+
+
+  if(
+    partnerId==="hyunwoo" ||
+    partnerId==="haruki"
+  ){
+
+    candidates.push({
+      k:"offer",
+      w:
+        .22+
+        mind.pursuit*.45
+    });
+
+  }
+
+
+  if(!candidates.length)return;
+
+
+  const total=
+    candidates.reduce(
+      (s,x)=>s+x.w,
+      0
+    );
+
+
+  const r=
+    Math.random()*
+    total;
+
+
+  let acc=0;
+
+  let chosen=
+    candidates[0].k;
+
+
+  for(const c of candidates){
+
+    acc+=
+      c.w;
+
+    if(r<=acc){
+
+      chosen=
+        c.k;
+
+      break;
+
+    }
+
+  }
+
+
+  if(
+    !chance(
+      p.initiative*
+      (
+        .58+
+        activation*.62
+      )
+    )
+  )return;
+
+
+  const d=
+    rand(
+      p.decisionDelay[0],
+      p.decisionDelay[1]
+    );
+
+
+  intent={
+    kind:chosen,
+    strength:activation,
+    created:sec(),
+    due:
+      sec()+
+      d/1000,
+    reason:
+      "今の流れが頭に残っている"
+  };
+
+
+  if(chance(.55)){
+
+    addBackstage(
+`まだ何もしていない。
+
+でも、${intentLabel(chosen)}方へ少し傾いている。
+今の彩音がこのままなら、たぶん次に動く。`
+    );
+
+  }
+
+
+  partnerStatus.textContent=
+    chosen==="watch"
+    ? "まだ彩音から注意が外れない"
+    : "何かしようか迷っている";
+
+}
+
+
+/* =========================================================
+   REVALIDATE INTENT
+========================================================= */
+
+function revalidateIntent(){
+
+  if(
+    !intent.kind ||
+    world.pendingPartnerAction
+  )return;
+
+
+  if(sec()<intent.due)return;
+
+
+  const p=
+    profiles[partnerId];
+
+
+  if(
+    sec()-
+    world.lastUserActionAt<
+    .75
+  ){
+
+    cancelPendingIntent(
+      "直前に彩音が動いた"
+    );
+
+    return;
+
+  }
+
+
+  if(
+    intent.kind==="kiss" &&
+    world.distance<3
+  ){
+
+    intent.kind=
+      "approach";
+
+  }
+
+
+  if(
+    intent.kind==="embrace" &&
+    world.distance<2
+  ){
+
+    intent.kind=
+      "approach";
+
+  }
+
+
+  const safety=
+    recentAny(
+      [
+        "ayaneLeave",
+        "ayaneEscape"
+      ],
+      6
+    );
+
+
+  if(
+    safety &&
+    (
+      intent.kind==="approach" ||
+      intent.kind==="embrace" ||
+      intent.kind==="kiss"
+    )
+  ){
+
+    cancelPendingIntent(
+      "彩音が距離を取った直後だった"
+    );
+
+    return;
+
+  }
+
+
+  executePartnerIntent(
+    intent.kind,
+    p
+  );
+
+
+  intent={
+    kind:null,
+    strength:0,
+    created:0,
+    due:0,
+    reason:""
+  };
+
+}
+
+
+/* =========================================================
+   EXECUTE PARTNER INTENT
+========================================================= */
+
+function executePartnerIntent(
+  kind,
+  p
+){
+
+  world.lastPartnerActionAt=
+    sec();
+
+
+  if(kind==="watch"){
+
+    showEvent(
+      `${p.name}がまだ彩音を見ている。`
+    );
+
+
+    partnerStatus.textContent=
+      "まだ彩音から注意が外れない";
+
+
+    addBackstage(
+
+      partnerId==="naoto"
+
+      ? `もう少し見ておく。
+
+一度だけなら流せる。でも、さっきの変化がまだ頭に残っている。`
+
+      : partnerId==="minato"
+
+      ? `さっきと今の顔を比べている。
+
+今日の違いが少し気になる。`
+
+      : `まだ視線を外す気になれない。
+
+何かを待っているというより、単純に気になっている。`
+
+    );
+
+
+    phrase.kind=
+      "pause";
+
+    phrase.pauseUntil=
+      sec()+
+      rand(
+        .5,
+        1.2
+      );
+
+    phrase.until=
+      sec()+
+      2.5;
+
+    return;
+
+  }
+
+
+  if(kind==="speak"){
+
+    const lines={
+
+      naoto:[
+        "……どうした？",
+        "何か言いたい？"
+      ],
+
+      kei:[
+        "……なに。",
+        "こっち見て。"
+      ],
+
+      shoma:[
+        "さっきから何？",
+        "……その顔なに。"
+      ],
+
+      minato:[
+        "今なんか考えてる？",
+        "今日ちょっと顔違うね。"
+      ],
+
+      haruki:[
+        "……なに？",
+        "なんか言いたい？"
+      ],
+
+      hyunwoo:[
+        "どうしたの？",
+        "何か言いたい？"
+      ]
+
+    };
+
+
+    say(
+      pick(
+        lines[partnerId]
+      )
+    );
+
+
+    showEvent(
+      `${p.name}が自分から声をかける。`
+    );
+
+
+    partnerStatus.textContent=
+      "彩音の返事を待っている";
+
+
+    openPartnerPrompt(
+      `${p.name}がこちらを見て返事を待っている。`,
+      [
+        "stay",
+        "lean",
+        "leave",
+        "sayMore"
+      ]
+    );
+
+    return;
+
+  }
+
+
+  if(kind==="approach"){
+
+    world.distance=
+      Math.min(
+        4,
+        world.distance+
+        1
+      );
+
+
+    renderDistance();
+
+
+    showEvent(
+      `${p.name}が自分から距離を詰める。`
+    );
+
+
+    partnerStatus.textContent=
+      "自分から距離を詰めた";
+
+
+    addBackstage(
+`もう少し近くにいたい。
+
+そう思ったまま待っていたけれど、結局自分から動いた。`
+    );
+
+
+    mind.pursuit=
+      clamp(
+        mind.pursuit+
+        .08,
+        0,
+        1
+      );
+
+
+    phrase.kind=
+      "pursuit";
+
+    phrase.until=
+      sec()+
+      4.5;
+
+
+    openPartnerPrompt(
+      `${p.name}が自分から距離を詰めてきた。`,
+      [
+        "stay",
+        "hug",
+        "shyEscape",
+        "leave"
+      ]
+    );
+
+    return;
+
+  }
+
+
+  if(kind==="offer"){
+
+    showEvent(
+      `${p.name}が彩音へ手を差し出す。`
+    );
+
+
+    partnerStatus.textContent=
+      "彩音が来るか待っている";
+
+
+    addBackstage(
+`自分から全部詰めるより、来るかどうかを見たい。
+
+手だけ出して待つ。`
+    );
+
+
+    openPartnerPrompt(
+      `${p.name}が手を差し出して待っている。`,
+      [
+        "stay",
+        "hug",
+        "lean",
+        "leave"
+      ]
+    );
+
+    return;
+
+  }
+
+
+  if(kind==="tease"){
+
+    const lines={
+
+      naoto:[
+        "……そんな顔するんだ。"
+      ],
+
+      kei:[
+        "なにそれ。",
+        "……今日どうしたの。"
+      ],
+
+      shoma:[
+        "あーもう、なにそれ。",
+        "それずるいって。"
+      ],
+
+      minato:[
+        "待って、今の顔もう一回。",
+        "なんで隠すの。"
+      ],
+
+      haruki:[
+        "……それ、ずる。",
+        "なにそれ、かわいい。"
+      ],
+
+      hyunwoo:[
+        "……かわいい。",
+        "その顔、反則。"
+      ]
+
+    };
+
+
+    say(
+      pick(
+        lines[partnerId]
+      )
+    );
+
+
+    showEvent(
+      `${p.name}が少し構うように反応する。`
+    );
+
+
+    partnerStatus.textContent=
+      "可愛さに少し処理が追いついていない";
+
+
+    addBackstage(
+      cuteInnerText(
+        partnerId,
+        "tease"
+      )
+    );
+
+
+    mind.cuteAgg=
+      clamp(
+        mind.cuteAgg-
+        .08,
+        0,
+        1
+      );
+
+
+    phrase.kind=
+      "cute";
+
+    phrase.until=
+      sec()+
+      5;
+
+
+    openPartnerPrompt(
+      `${p.name}が少し構うようにこちらを見ている。`,
+      [
+        "stay",
+        "hug",
+        "shyEscape",
+        "leave"
+      ]
+    );
+
+    return;
+
+  }
+
+
+  if(kind==="embrace"){
+
+    world.distance=
+      4;
+
+
+    renderDistance();
+
+
+    showEvent(
+      `${p.name}が彩音を抱き込む。`
+    );
+
+
+    partnerStatus.textContent=
+      "抱き込んだまま離さない";
+
+
+    say(
+
+      partnerId==="kei"
+      ? pick([
+          "……もう逃げんなよ。",
+          "あーもう。"
+        ])
+
+      : partnerId==="shoma"
+      ? pick([
+          "もう無理、かわい。",
+          "ちょっとこっち。"
+        ])
+
+      : partnerId==="minato"
+      ? pick([
+          "ちょっと、かわいすぎ。",
+          "はい、逃げない。"
+        ])
+
+      : partnerId==="haruki"
+      ? pick([
+          "……もう、こっち。",
+          "なにそれ、ずる。"
+        ])
+
+      : partnerId==="hyunwoo"
+      ? pick([
+          "……かわいい。",
+          "少しだけ、このまま。"
+        ])
+
+      : "……こっち。"
+
+    );
+
+
+    addBackstage(
+      cuteInnerText(
+        partnerId,
+        "embrace"
+      )
+    );
+
+
+    mind.cuteAgg=
+      clamp(
+        mind.cuteAgg-
+        .15,
+        0,
+        1
+      );
+
+
+    mind.attention=
+      clamp(
+        mind.attention+
+        .08,
+        0,
+        1
+      );
+
+
+    phrase.kind=
+      "hold";
+
+    phrase.hold=
+      .26;
+
+    phrase.until=
+      sec()+
+      6;
+
+
+    openPartnerPrompt(
+      `${p.name}が彩音を抱き込んだ。`,
+      [
+        "stay",
+        "hug",
+        "shyEscape",
+        "leave"
+      ]
+    );
+
+    return;
+
+  }
+
+
+  if(kind==="kiss"){
+
+    showEvent(
+      `${p.name}が彩音の顔を見て、さらに距離を詰める。`
+    );
+
+
+    partnerStatus.textContent=
+      "キスを返そうとしている";
+
+
+    addBackstage(
+`さっきから近い。
+
+この距離なら、自分から返したい気持ちが勝つ。`
+    );
+
+
+    phrase.kind=
+      partnerId==="shoma"
+      ? "surge"
+      : "rise";
+
+
+    phrase.until=
+      sec()+
+      4.5;
+
+
+    openPartnerPrompt(
+      `${p.name}がキスを返そうと顔を寄せてくる。`,
+      [
+        "stay",
+        "kiss",
+        "shyEscape",
+        "leave"
+      ]
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CUTE AGGRESSION
+========================================================= */
+
+function cuteInnerText(
+  p,
+  kind
+){
+
+  const t={
+
+    naoto:
+`さっきから少しずつ積み上がっていた。
+
+可愛いと思った回数が多すぎる。普段なら流すところまで、今日は引っかかる。`,
+
+
+    kei:
+`さっきからいちいち可愛い。
+
+自分で逃げたくせに戻ってくるし、隠そうとしても隠れてない。
+
+なんかもう、ぎゅっとしてしまいたい。`,
+
+
+    shoma:
+`あー、無理。
+
+今の反応、普通にかわいすぎる。見た瞬間に構いたくなる。`,
+
+
+    minato:
+`またその顔。
+
+見つけるたびにもう一回見たくなる。隠されたら余計に気になる。`,
+
+
+    haruki:
+`なんでそんな反応するの。
+
+かわいいと思うほど、ちょっと意地悪に構いたくなる。`,
+
+
+    hyunwoo:
+`かわいい。
+
+そう思ったまま抑えていたけれど、近くに置いておきたい気持ちが少し強くなった。`
+
+  };
+
+
+  return t[p];
+
+}
+
+
+/* =========================================================
+   PARTNER PROMPT
+========================================================= */
+
+function openPartnerPrompt(
+  text,
+  actions
+){
+
+  resolvePartnerPrompt();
+
+
+  world.pendingPartnerAction={
+    text,
+    started:sec()
+  };
+
+
+  world.waitingSince=
+    sec();
+
+
+  promptText.textContent=
+    text;
+
+
+  promptWait.textContent=
+    "彩音の反応待ち。時間は止まっていません。";
+
+
+  promptButtons.innerHTML="";
+
+
+  const labels={
+
+    stay:"そのまま",
+
+    hug:"抱きつく",
+
+    lean:"顔を寄せる",
+
+    leave:"少し離れる",
+
+    shyEscape:"恥ずかしくて逃げる",
+
+    sayMore:"『もっと』と言う",
+
+    kiss:"キスする"
+
+  };
+
+
+  actions.forEach(
+    a=>{
+
+      const b=
+        document.createElement("button");
+
+
+      b.className=
+        "prompt-btn";
+
+
+      b.textContent=
+        labels[a];
+
+
+      b.onclick=
+        ()=>triggerAction(a);
+
+
+      promptButtons.appendChild(
+        b
+      );
+
+    }
+  );
+
+
+  partnerPrompt.classList.add(
+    "show"
+  );
+
+
+  waitTimer=
+    setTimeout(
+      ()=>{
+        waitingFollowup();
+      },
+      3200
+    );
+
+}
+
+
+/* =========================================================
+   RESOLVE PROMPT
+========================================================= */
+
+function resolvePartnerPrompt(){
+
+  if(waitTimer){
+
+    clearTimeout(
+      waitTimer
+    );
+
+    waitTimer=null;
+
+  }
+
+
+  world.pendingPartnerAction=
+    null;
+
+
+  partnerPrompt.classList.remove(
+    "show"
+  );
+
+}
+
+
+/* =========================================================
+   USER DOES NOTHING
+========================================================= */
+
+function waitingFollowup(){
+
+  if(
+    !world.pendingPartnerAction
+  )return;
+
+
+  const waited=
+    sec()-
+    world.waitingSince;
+
+
+  if(waited<3)return;
+
+
+  const p=
+    profiles[partnerId];
+
+
+  if(
+    partnerId==="naoto" ||
+    partnerId==="hyunwoo"
+  ){
+
+    say(
+      "……大丈夫？"
+    );
+
+
+    showEvent(
+      `${p.name}が反応のない彩音を見て、一度確認する。`
+    );
+
+
+    addBackstage(
+`返事がすぐに来ない。
+
+ここは進めるより、一度状態を確かめたい。`
+    );
+
+  }
+
+
+  else if(partnerId==="shoma"){
+
+    say(
+      "え、固まった？"
+    );
+
+
+    showEvent(
+      "翔馬が彩音の反応を待ちながら覗き込む。"
+    );
+
+  }
+
+
+  else if(partnerId==="minato"){
+
+    say(
+      "……どうした？"
+    );
+
+
+    showEvent(
+      "湊が彩音の顔をもう一度見る。"
+    );
+
+  }
+
+
+  else if(partnerId==="haruki"){
+
+    say(
+      "……大丈夫？"
+    );
+
+
+    showEvent(
+      "晴輝が少し不安そうに彩音の様子を見る。"
+    );
+
+  }
+
+
+  else{
+
+    say(
+      "……どうした？"
+    );
+
+
+    showEvent(
+      "慧が彩音の反応を待ちながら顔を見る。"
+    );
+
+  }
+
+
+  promptWait.textContent=
+    "反応がないこと自体を彼が観測しました。";
+
+
+  waitTimer=
+    setTimeout(
+      ()=>{
+
+        if(
+          world.pendingPartnerAction
+        ){
+
+          partnerStatus.textContent=
+            "これ以上は押さず、彩音を待っている";
+
+
+          addBackstage(
+`返事がないままなら、ここでさらに押すのは違う。
+
+いったん待つ。`
+          );
+
+        }
+
+      },
+      3200
+    );
+
+}
+
+
+/* =========================================================
+   INITIATIVE LOOP
+========================================================= */
+
+function initiativeLoop(){
+
+  maybeFormIntent();
+
+  revalidateIntent();
+
+
+  initiativeTimer=
+    setTimeout(
+      initiativeLoop,
+      650
+    );
+
+}
+
+
+/* =========================================================
+   MIND ENGINE
 ========================================================= */
 
 function updateMind(dt){
@@ -3335,25 +5048,19 @@ function updateMind(dt){
     profiles[partnerId];
 
 
-  /*
-    attention gradually relaxes
-  */
-
   mind.attention=
     lerp(
       mind.attention,
       .28,
-      1-Math.exp(-dt*.11)
+      1-
+      Math.exp(
+        -dt*.11
+      )
     );
 
 
-  /*
-    desire decays slowly,
-    but not instantly after input.
-  */
-
   const desireTarget=
-    .26 +
+    .26+
     mind.attention*.12;
 
 
@@ -3361,32 +5068,52 @@ function updateMind(dt){
     lerp(
       mind.desire,
       desireTarget,
-      1-Math.exp(
-        -dt*p.decay*2.2
+      1-
+      Math.exp(
+        -dt*
+        p.decay*
+        2.2
       )
     );
 
-
-  /*
-    pursuit also settles.
-  */
 
   mind.pursuit=
     lerp(
       mind.pursuit,
       .16,
-      1-Math.exp(-dt*.09)
+      1-
+      Math.exp(
+        -dt*.09
+      )
     );
 
 
-  /*
-    restraint is person-specific,
-    but heightened pursuit can reduce
-    how much stays hidden.
-  */
+  mind.cuteAgg=
+    lerp(
+      mind.cuteAgg,
+      .06,
+      1-
+      Math.exp(
+        -dt*.055
+      )
+    );
+
+
+  mind.uncertainty=
+    lerp(
+      mind.uncertainty,
+      .16,
+      1-
+      Math.exp(
+        -dt*.08
+      )
+    );
+
 
   const naturalRestraint=
-    p.regulation *
+
+    p.regulation*
+
     (
       1-
       mind.pursuit*.30
@@ -3397,7 +5124,10 @@ function updateMind(dt){
     lerp(
       mind.restraint,
       naturalRestraint,
-      1-Math.exp(-dt*.65)
+      1-
+      Math.exp(
+        -dt*.65
+      )
     );
 
 }
@@ -3413,50 +5143,72 @@ function targetValues(){
     profiles[partnerId];
 
 
-  /*
-    Inner level = mind itself.
-  */
-
   const inner=
     clamp(
-      .18 +
-      mind.desire*.58 +
-      mind.attention*.18 +
-      mind.pursuit*.16,
+
+      .18+
+
+      mind.desire*.52+
+
+      mind.attention*.16+
+
+      mind.pursuit*.14+
+
+      mind.cuteAgg*.16,
+
       .12,
+
       1
+
     );
 
 
-  /*
-    What becomes externally visible.
-
-    impulse / restraint determine
-    how much of inner state reaches motion.
-  */
-
   const leakage=
     clamp(
-      p.impulse *
+
+      p.impulse*
+
       (
         1-
         mind.restraint*.58
       ),
+
       .12,
+
       .90
+
     );
 
 
-  const external=
+  let external=
     clamp(
-      .18 +
-      mind.desire *
-      leakage *
-      p.expressionGain +
-      mind.pursuit*.18,
-      .16,
+
+      .16+
+
+      mind.desire*
+      leakage*
+      p.expressionGain+
+
+      mind.pursuit*.17+
+
+      mind.cuteAgg*.08,
+
+      .14,
+
       1
+
     );
+
+
+  if(
+    phrase.kind==="pause" &&
+    sec()<phrase.pauseUntil
+  ){
+
+    external*=
+      .62;
+
+  }
 
 
   const tempo=
@@ -3481,16 +5233,21 @@ function targetValues(){
     tempo,
     intensity
   };
+
 }
 
 
 /* =========================================================
-   MOTION WAVE
+   BASE WAVE
 ========================================================= */
 
-function waveShape(type,x){
+function waveShape(
+  type,
+  x
+){
 
-  const s=Math.sin(x);
+  const s=
+    Math.sin(x);
 
 
   if(type==="steady"){
@@ -3500,58 +5257,203 @@ function waveShape(type,x){
 
   if(type==="hold"){
 
-    return Math.sign(s) *
+    return(
+      Math.sign(s)*
       Math.pow(
         Math.abs(s),
         .78
-      );
+      )
+    );
+
   }
 
 
   if(type==="burst"){
 
-    return Math.sign(s) *
+    return(
+      Math.sign(s)*
       Math.pow(
         Math.abs(s),
         .48
-      );
+      )
+    );
+
   }
 
 
   if(type==="responsive"){
 
     return clamp(
-      s*.78 +
-      Math.sin(x*1.72)*.22,
+
+      s*.78+
+
+      Math.sin(
+        x*1.72
+      )*.22,
+
       -1,
+
       1
+
     );
+
   }
 
 
   if(type==="variable"){
 
     return clamp(
-      s*.76 +
-      Math.sin(x*.46)*.17 +
-      Math.sin(x*1.31)*.07,
+
+      s*.76+
+
+      Math.sin(
+        x*.46
+      )*.17+
+
+      Math.sin(
+        x*1.31
+      )*.07,
+
       -1,
+
       1
+
     );
+
   }
 
 
   if(type==="controlled"){
 
     return Math.sin(
-      x +
+
+      x+
+
       .24*
-      Math.sin(x*.48)
+      Math.sin(
+        x*.48
+      )
+
     );
+
   }
 
 
   return s;
+
+}
+
+
+/* =========================================================
+   PHRASE WAVE
+========================================================= */
+
+function phraseWave(base){
+
+  if(sec()>phrase.until){
+
+    phrase={
+      kind:"normal",
+      until:0,
+      pauseUntil:0,
+      boost:0,
+      hold:0
+    };
+
+    return base;
+
+  }
+
+
+  if(
+    phrase.kind==="pause" &&
+    sec()<phrase.pauseUntil
+  ){
+
+    return lerp(
+      base,
+      0,
+      .55
+    );
+
+  }
+
+
+  if(phrase.kind==="surge"){
+
+    return clamp(
+
+      base*1.1+
+
+      Math.sin(
+        phase*2.05
+      )*.18,
+
+      -1,
+
+      1
+
+    );
+
+  }
+
+
+  if(phrase.kind==="pursuit"){
+
+    return clamp(
+      base*.90+.18,
+      -1,
+      1
+    );
+
+  }
+
+
+  if(phrase.kind==="hold"){
+
+    return clamp(
+      base*.72+.28,
+      -1,
+      1
+    );
+
+  }
+
+
+  if(phrase.kind==="cute"){
+
+    return clamp(
+
+      base*.82+
+
+      Math.sin(
+        phase*.52
+      )*.16+
+
+      .08,
+
+      -1,
+
+      1
+
+    );
+
+  }
+
+
+  if(phrase.kind==="rise"){
+
+    return clamp(
+      base*.95+.10,
+      -1,
+      1
+    );
+
+  }
+
+
+  return base;
+
 }
 
 
@@ -3563,59 +5465,93 @@ function frame(now){
 
   const dt=
     Math.min(
-      (now-lastFrame)/1000,
+      (
+        now-
+        lastFrame
+      )/1000,
       .05
     );
 
-  lastFrame=now;
+
+  lastFrame=
+    now;
 
 
-  updateMind(dt);
+  updateMind(
+    dt
+  );
 
 
   const target=
     targetValues();
 
 
-  /*
-    Smooth target transitions.
-  */
-
   rendered.tempo=
     lerp(
-      rendered.tempo || target.tempo,
+      rendered.tempo ||
       target.tempo,
-      1-Math.exp(-dt*1.55)
+      target.tempo,
+      1-
+      Math.exp(
+        -dt*1.55
+      )
     );
 
 
   rendered.intensity=
     lerp(
-      rendered.intensity || target.intensity,
+      rendered.intensity ||
       target.intensity,
-      1-Math.exp(-dt*1.45)
+      target.intensity,
+      1-
+      Math.exp(
+        -dt*1.45
+      )
     );
 
 
   rendered.inner=
     lerp(
-      rendered.inner || target.inner,
+      rendered.inner ||
       target.inner,
-      1-Math.exp(-dt*1.25)
+      target.inner,
+      1-
+      Math.exp(
+        -dt*1.25
+      )
     );
 
 
-  /*
-    Tempo controls continuous frequency.
-  */
-
-  const frequency=
-    .24 +
+  let frequency=
+    .24+
     rendered.tempo*.18;
 
 
-  phase +=
-    Math.PI*2*
+  if(
+    phrase.kind==="surge"
+  ){
+
+    frequency*=
+      1.18;
+
+  }
+
+
+  if(
+    phrase.kind==="pause" &&
+    sec()<phrase.pauseUntil
+  ){
+
+    frequency*=
+      .35;
+
+  }
+
+
+  phase+=
+
+    Math.PI*
+    2*
     frequency*
     dt;
 
@@ -3624,37 +5560,47 @@ function frame(now){
     profiles[partnerId];
 
 
-  const wave=
+  let wave=
     (
-      waveShape(
-        p.motion,
-        phase
-      ) + 1
-    ) / 2;
+      phraseWave(
+        waveShape(
+          p.motion,
+          phase
+        )
+      )+
+      1
+    )/2;
 
 
-  /*
-    White capsule = external output.
-  */
-
-  const intensityNormalized=
+  const n=
     clamp(
-      rendered.intensity/10,
+      rendered.intensity/
+      10,
       0,
       1
     );
 
 
-  const minHeight=34;
+  const minHeight=
+    34;
+
 
   const amplitude=
-    46 +
-    intensityNormalized*108;
+
+    46+
+
+    n*108+
+
+    (
+      phrase.boost||
+      0
+    )*30;
 
 
   const height=
-    minHeight +
-    wave*amplitude;
+    minHeight+
+    wave*
+    amplitude;
 
 
   fill.style.height=
@@ -3662,34 +5608,39 @@ function frame(now){
 
 
   fill.classList.toggle(
+
     "hot",
-    target.external>.68
+
+    target.external>.68 ||
+    mind.cuteAgg>.62
+
   );
 
 
-  /*
-    Inner shell = mental desire.
-    Only visually revealed in backstage.
-  */
-
   const shellHeight=
-    52 +
-    rendered.inner*150;
+    52+
+    rendered.inner*
+    150;
 
 
   const shellWidth=
-    68 +
-    rendered.inner*30;
+    68+
+    rendered.inner*
+    30;
 
 
   innerShell.style.height=
     shellHeight+"px";
 
+
   innerShell.style.width=
     shellWidth+"px";
 
 
-  requestAnimationFrame(frame);
+  requestAnimationFrame(
+    frame
+  );
+
 }
 
 
@@ -3702,42 +5653,84 @@ function updatePartner(){
   partnerId=
     partnerSelect.value;
 
+
   partnerName.textContent=
     profiles[partnerId].name;
+
 
   partnerStatus.textContent=
     "彩音の様子を見ている";
 
-  /*
-    new person = new isolated session state
-  */
 
   mind={
     desire:.28,
     attention:.30,
     pursuit:.18,
     restraint:
-      profiles[partnerId].regulation
+      profiles[partnerId].regulation,
+    cuteAgg:.08,
+    uncertainty:.18
   };
 
-  phase=0;
+
+  world={
+    distance:2,
+    pendingPartnerAction:null,
+    lastUserActionAt:0,
+    lastPartnerActionAt:0,
+    waitingSince:0
+  };
+
+
+  intent={
+    kind:null,
+    strength:0,
+    created:0,
+    due:0,
+    reason:""
+  };
+
+
+  phase=
+    0;
+
+
+  phrase={
+    kind:"normal",
+    until:0,
+    pauseUntil:0,
+    boost:0,
+    hold:0
+  };
+
 
   memory=[];
 
-  backstageLog.innerHTML="";
+
+  backstageLog.innerHTML=
+    "";
+
 
   speechBubble.classList.remove(
     "show"
   );
 
+
+  resolvePartnerPrompt();
+
+
+  renderDistance();
+
+
   showEvent(
     `${profiles[partnerId].name}とのSession`
   );
+
 }
 
 
 partnerSelect.onchange=
-updatePartner;
+  updatePartner;
 
 
 /* =========================================================
@@ -3748,15 +5741,20 @@ function reset(){
 
   stopAuto();
 
-  mode="manual";
+
+  mode=
+    "manual";
+
 
   manualBtn.classList.add(
     "active"
   );
 
+
   autoBtn.classList.remove(
     "active"
   );
+
 
   autoBanner.classList.remove(
     "show"
@@ -3779,44 +5777,91 @@ function reset(){
     attention:.30,
     pursuit:.18,
     restraint:
-      profiles[partnerId].regulation
+      profiles[partnerId].regulation,
+    cuteAgg:.08,
+    uncertainty:.18
   };
 
 
-  phase=0;
+  world={
+    distance:2,
+    pendingPartnerAction:null,
+    lastUserActionAt:0,
+    lastPartnerActionAt:0,
+    waitingSince:0
+  };
+
+
+  intent={
+    kind:null,
+    strength:0,
+    created:0,
+    due:0,
+    reason:""
+  };
+
+
+  phase=
+    0;
+
+
+  phrase={
+    kind:"normal",
+    until:0,
+    pauseUntil:0,
+    boost:0,
+    hold:0
+  };
+
 
   memory=[];
+
 
   sessionStart=
     performance.now();
 
-  backstageLog.innerHTML="";
+
+  backstageLog.innerHTML=
+    "";
+
 
   ayaneVisible.textContent=
     "大きな変化はまだ表に出ていない";
 
+
   ayaneSub.textContent=
     "操作は下のタブから";
+
 
   partnerStatus.textContent=
     "彩音の様子を見ている";
 
+
   speechBubble.classList.remove(
     "show"
   );
+
 
   sheet.classList.remove(
     "open"
   );
 
 
+  resolvePartnerPrompt();
+
+
+  renderDistance();
+
+
   showEvent(
     "Session start"
   );
+
 }
 
 
-resetBtn.onclick=reset;
+resetBtn.onclick=
+  reset;
 
 
 /* =========================================================
@@ -3824,13 +5869,19 @@ resetBtn.onclick=reset;
 ========================================================= */
 
 renderStates();
+
 updatePartner();
 
 lastFrame=
-performance.now();
+  performance.now();
 
-requestAnimationFrame(frame);
+requestAnimationFrame(
+  frame
+);
+
+initiativeLoop();
 
 </script>
+
 </body>
 </html>
