@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Physical Rhythm Visualizer v3</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+Physical Rhythm Visualizer v4
+</title>
+
 
 <style>
 
@@ -12,12 +20,37 @@
   box-sizing: border-box;
 }
 
+
+:root {
+
+  --background: #000;
+
+  --panel: #111;
+
+  --track: #362a26;
+
+  --track-border: #4a3b35;
+
+  --fill: #ece5db;
+
+  --text-muted: #aaa;
+
+}
+
+
+/* ===============================
+   BODY
+=============================== */
+
 body {
+
   margin: 0;
+
   min-height: 100vh;
 
-  background: #000;
-  color: #fff;
+  background: var(--background);
+
+  color: white;
 
   font-family:
     -apple-system,
@@ -26,60 +59,196 @@ body {
     sans-serif;
 
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
 
-  padding: 30px 15px;
+  padding:
+
+    28px
+    16px
+    50px;
+
 }
+
 
 h1 {
+
+  margin:
+
+    0
+    0
+    6px;
+
   font-size: 15px;
+
   letter-spacing: .08em;
-  margin: 0 0 6px;
+
 }
+
 
 .subtitle {
-  color: #aaa;
+
+  margin-bottom: 22px;
+
+  color: var(--text-muted);
+
   font-size: 11px;
+
+  line-height: 1.6;
+
   text-align: center;
-  margin-bottom: 28px;
+
 }
 
 
-/* =========================
+
+/* ===============================
+   PERSON FILTER
+=============================== */
+
+.filter-panel {
+
+  width:
+
+    min(
+      1000px,
+      100%
+    );
+
+  margin-bottom: 28px;
+
+  padding: 13px 17px;
+
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 10px 16px;
+
+  justify-content: center;
+
+  align-items: center;
+
+  background: #0d0d0d;
+
+  border:
+
+    1px solid
+    #292929;
+
+  border-radius: 18px;
+
+}
+
+
+.person-check {
+
+  display: flex;
+
+  gap: 5px;
+
+  align-items: center;
+
+  font-size: 12px;
+
+  cursor: pointer;
+
+}
+
+
+.person-check input {
+
+  accent-color: #ece5db;
+
+}
+
+
+#toggleAll {
+
+  padding:
+
+    6px
+    13px;
+
+  background: #222;
+
+  color: white;
+
+  border:
+
+    1px solid
+    #444;
+
+  border-radius: 15px;
+
+  font-size: 11px;
+
+  cursor: pointer;
+
+}
+
+
+
+/* ===============================
    VISUALIZER
-========================= */
+=============================== */
 
 .visualizer {
 
-  width: min(1000px, 100%);
+  width:
 
-  display: grid;
+    min(
+      1000px,
+      100%
+    );
 
-  grid-template-columns:
-    repeat(6, minmax(90px, 1fr));
+  display: flex;
 
-  gap: 18px;
+  flex-wrap: wrap;
 
-  align-items: end;
+  justify-content: center;
+
+  align-items: flex-end;
+
+  gap: 22px;
+
 }
 
 
 .person {
 
+  width: 130px;
+
   display: flex;
+
   flex-direction: column;
+
   align-items: center;
+
+  transition:
+
+    opacity
+    .15s ease;
+
+}
+
+
+.person.hidden {
+
+  display: none;
 
 }
 
 
 .name {
 
-  font-size: 14px;
-  font-weight: 700;
-
   margin-bottom: 3px;
+
+  font-size: 14px;
+
+  font-weight: 700;
 
 }
 
@@ -88,22 +257,27 @@ h1 {
 
   height: 30px;
 
-  color: #aaa;
-
   font-size: 10px;
+
+  line-height: 1.4;
 
   text-align: center;
 
-  line-height: 1.4;
+  color: var(--text-muted);
 
 }
 
 
 .values {
 
-  height: 35px;
+  height: 38px;
 
-  margin: 8px 0;
+  margin:
+
+    7px
+    0;
+
+  color: #ddd;
 
   font-size: 10px;
 
@@ -111,37 +285,44 @@ h1 {
 
   text-align: center;
 
-  color: #ddd;
-
   font-variant-numeric:
     tabular-nums;
 
 }
 
 
-/* =========================
-   TRACK
-========================= */
+
+/* ===============================
+   CAPSULE TRACK
+=============================== */
 
 .track {
 
   position: relative;
 
-  width: 62px;
-  height: 240px;
+  width: 60px;
 
-  background: #241d1a;
-
-  border: 1px solid #4a3b35;
-
-  border-radius: 999px;
+  height: 245px;
 
   overflow: hidden;
+
+  background:
+
+    var(--track);
+
+  border:
+
+    1px solid
+    var(--track-border);
+
+  border-radius: 999px;
 
 }
 
 
-/* 中央の薄い基準線 */
+/*
+  50% guideline
+*/
 
 .track::after {
 
@@ -149,7 +330,10 @@ h1 {
 
   position: absolute;
 
+  z-index: 3;
+
   left: 8px;
+
   right: 8px;
 
   top: 50%;
@@ -157,61 +341,81 @@ h1 {
   height: 1px;
 
   background:
-    rgba(255,255,255,.12);
+
+    rgba(
+      255,
+      255,
+      255,
+      .11
+    );
 
 }
 
 
-/* =========================
-   MOVING CAPSULE
-========================= */
+/* ===============================
+   STRETCHING WHITE CAPSULE
+=============================== */
 
-.mover {
+.fill {
 
   position: absolute;
 
-  left: 50%;
+  left: 6px;
 
-  bottom: 12px;
+  right: 6px;
 
-  width: 48px;
-  height: 68px;
+  bottom: 6px;
 
-  margin-left: -24px;
+  height: 30px;
+
+  background:
+
+    var(--fill);
 
   border-radius: 999px;
 
-  background: #ece5db;
+  /*
+    bottom stays fixed.
+    Only height changes.
+  */
 
-  will-change:
-    transform;
+  will-change: height;
 
 }
 
 
-/* =========================
+
+/* ===============================
    CONTROLS
-========================= */
+=============================== */
 
 .controls {
 
   margin-top: 28px;
 
+  padding:
+
+    14px
+    20px;
+
   display: flex;
 
   flex-wrap: wrap;
 
-  align-items: center;
   justify-content: center;
 
-  gap: 12px;
+  align-items: center;
 
-  padding: 14px 20px;
+  gap: 13px;
 
-  background: #111;
+  background:
+
+    var(--panel);
 
   border:
-    1px solid #333;
+
+    1px solid
+    #333;
 
   border-radius: 28px;
 
@@ -220,15 +424,20 @@ h1 {
 
 button {
 
-  padding: 8px 20px;
+  padding:
+
+    8px
+    19px;
 
   border: none;
 
   border-radius: 20px;
 
-  background: #ece5db;
+  background:
 
-  color: #000;
+    #ece5db;
+
+  color: black;
 
   font-weight: 700;
 
@@ -241,15 +450,17 @@ button.secondary {
 
   background: #222;
 
-  color: #fff;
+  color: white;
 
   border:
-    1px solid #444;
+
+    1px solid
+    #444;
 
 }
 
 
-label {
+.duration-control {
 
   display: flex;
 
@@ -264,24 +475,40 @@ label {
 }
 
 
-input[type="range"] {
+#duration {
 
-  width: 130px;
+  width: 68px;
 
-  accent-color: #ece5db;
+  padding:
+
+    5px
+    7px;
+
+  border:
+
+    1px solid
+    #444;
+
+  border-radius: 8px;
+
+  background: #181818;
+
+  color: white;
+
+  text-align: right;
 
 }
 
 
 .time {
 
-  width: 90px;
+  width: 100px;
 
-  text-align: center;
+  color: #ccc;
 
   font-size: 11px;
 
-  color: #ccc;
+  text-align: center;
 
   font-variant-numeric:
     tabular-nums;
@@ -289,21 +516,33 @@ input[type="range"] {
 }
 
 
-/* =========================
+
+/* ===============================
    LEGEND
-========================= */
+=============================== */
 
 .legend {
 
-  width: min(900px,100%);
+  width:
 
-  margin-top: 20px;
+    min(
+      900px,
+      100%
+    );
 
-  padding: 14px 18px;
+  margin-top: 18px;
+
+  padding:
+
+    13px
+    18px;
 
   background: #0b0b0b;
 
-  border: 1px solid #222;
+  border:
+
+    1px solid
+    #222;
 
   border-radius: 16px;
 
@@ -318,20 +557,22 @@ input[type="range"] {
 }
 
 
-@media(max-width:760px) {
+@media (
+  max-width: 650px
+) {
 
-  .visualizer {
+  .person {
 
-    grid-template-columns:
-      repeat(3,1fr);
-
-    row-gap: 30px;
+    width: 95px;
 
   }
 
+
   .track {
 
-    height: 200px;
+    width: 54px;
+
+    height: 205px;
 
   }
 
@@ -341,32 +582,66 @@ input[type="range"] {
 </head>
 
 
+
 <body>
 
 
 <h1>
-PHYSICAL RHYTHM PROFILE v3
+PHYSICAL RHYTHM PROFILE v4
 </h1>
 
 
 <div class="subtitle">
 
-白いカプセルの上下速度 = Tempo　
+伸縮速度 = Tempo　
+
 ／　
-上下幅 = Intensity　
+
+伸縮幅 = Intensity　
+
 ／　
-動き方 = Rhythm
+
+変化パターン = Rhythm
 
 </div>
 
+
+
+<!-- ===============================
+     FILTER
+================================ -->
+
+<div
+  class="filter-panel"
+  id="filterPanel"
+>
+
+<button id="toggleAll">
+全員
+</button>
+
+</div>
+
+
+
+<!-- ===============================
+     VISUALIZER
+================================ -->
 
 <div
   class="visualizer"
-  id="visualizer">
+  id="visualizer"
+>
 </div>
 
 
+
+<!-- ===============================
+     CONTROLS
+================================ -->
+
 <div class="controls">
+
 
 <button id="play">
 Play
@@ -375,54 +650,60 @@ Play
 
 <button
   id="reset"
-  class="secondary">
-
+  class="secondary"
+>
 Reset
-
 </button>
 
 
-<label>
+<div class="duration-control">
 
-再生速度
+総時間
 
 <input
-  id="speed"
-  type="range"
-  min=".5"
-  max="3"
-  step=".25"
-  value="1">
+  id="duration"
+  type="number"
+  min="20"
+  max="180"
+  step="5"
+  value="60"
+>
 
-<span id="speedText">
-1×
-</span>
+秒
 
-</label>
+</div>
 
 
 <div
   class="time"
-  id="time">
+  id="time"
+>
 
 0.0 / 60s
 
 </div>
 
+
 </div>
+
 
 
 <div class="legend">
 
-T = Tempo（T1〜T7）　
+T = Tempo（1〜7）　
 ／　
-I = Intensity（I1〜I10）
+I = Intensity（1〜10）
 
 <br>
 
-全員同じ60秒を
-「立ち上がり → 巡航 → 昂進 → Peak → Cooldown」
-として再生します。
+白いカプセルの下端は固定され、
+上端だけが伸び縮みします。
+
+<br>
+
+総時間を変更しても、
+立ち上がり・巡航・Peak・Cooldownの
+相対的な構成は維持されます。
 
 </div>
 
@@ -430,1279 +711,1871 @@ I = Intensity（I1〜I10）
 
 <script>
 
-/* ========================================
+
+/* ======================================
    PROFILE
-======================================== */
+====================================== */
 
 const profiles = [
 
-{
-  id:"naoto",
-  name:"直人",
-  type:"安定制御",
-  baseT:3.7,
-  peakT:5.0,
-  baseI:4.7,
-  peakI:6.0,
-  rhythm:"steady"
-},
 
 {
-  id:"kei",
-  name:"慧",
-  type:"高強度持続",
-  baseT:4.6,
-  peakT:6.0,
-  baseI:6.7,
-  peakI:9.0,
-  rhythm:"hold"
+  id: "naoto",
+
+  name: "直人",
+
+  type: "安定制御",
+
+  baseT: 3.7,
+
+  peakT: 5.0,
+
+  baseI: 4.7,
+
+  peakI: 6.0,
+
+  rhythm: "steady"
 },
 
-{
-  id:"shoma",
-  name:"翔馬",
-  type:"急加速ピーク",
-  baseT:4.6,
-  peakT:7.0,
-  baseI:6.6,
-  peakI:8.0,
-  rhythm:"burst"
-},
 
 {
-  id:"minato",
-  name:"湊",
-  type:"反応追従",
-  baseT:3.8,
-  peakT:5.8,
-  baseI:5.5,
-  peakI:7.0,
-  rhythm:"responsive"
+  id: "kei",
+
+  name: "慧",
+
+  type: "高強度持続",
+
+  baseT: 4.6,
+
+  peakT: 6.0,
+
+  baseI: 6.7,
+
+  peakI: 9.0,
+
+  rhythm: "hold"
 },
 
-{
-  id:"haruki",
-  name:"晴輝",
-  type:"状態変動",
-  baseT:3.7,
-  peakT:6.0,
-  baseI:5.5,
-  peakI:8.0,
-  rhythm:"variable"
-},
 
 {
-  id:"hyunwoo",
-  name:"ヒョヌ",
-  type:"高密度制御",
-  baseT:3.6,
-  peakT:5.6,
-  baseI:6.6,
-  peakI:8.0,
-  rhythm:"controlled"
+  id: "shoma",
+
+  name: "翔馬",
+
+  type: "急加速ピーク",
+
+  baseT: 4.6,
+
+  peakT: 7.0,
+
+  baseI: 6.6,
+
+  peakI: 8.0,
+
+  rhythm: "burst"
+},
+
+
+{
+  id: "minato",
+
+  name: "湊",
+
+  type: "反応追従",
+
+  baseT: 3.8,
+
+  peakT: 5.8,
+
+  baseI: 5.5,
+
+  peakI: 7.0,
+
+  rhythm: "responsive"
+},
+
+
+{
+  id: "haruki",
+
+  name: "晴輝",
+
+  type: "状態変動",
+
+  baseT: 3.7,
+
+  peakT: 6.0,
+
+  baseI: 5.5,
+
+  peakI: 8.0,
+
+  rhythm: "variable"
+},
+
+
+{
+  id: "hyunwoo",
+
+  name: "ヒョヌ",
+
+  type: "高密度制御",
+
+  baseT: 3.6,
+
+  peakT: 5.6,
+
+  baseI: 6.6,
+
+  peakI: 8.0,
+
+  rhythm: "controlled"
 }
 
 ];
 
 
 
-/* ========================================
+/* ======================================
    CREATE UI
-======================================== */
+====================================== */
 
 const visualizer =
-document.getElementById("visualizer");
+  document.getElementById(
+    "visualizer"
+  );
 
 
-profiles.forEach(p => {
-
-const person =
-document.createElement("div");
-
-person.className =
-"person";
+const filterPanel =
+  document.getElementById(
+    "filterPanel"
+  );
 
 
-person.innerHTML = `
-
-<div class="name">
-${p.name}
-</div>
-
-<div class="type">
-${p.type}
-</div>
-
-<div
-  class="values"
-  id="${p.id}-values">
-
-T ${p.baseT.toFixed(1)}
-/
-I ${p.baseI.toFixed(1)}
-
-<br>
-
-待機
-
-</div>
-
-<div class="track">
-
-<div
-  class="mover"
-  id="${p.id}-mover">
-</div>
-
-</div>
-
-`;
+profiles.forEach(
+  profile => {
 
 
-visualizer.appendChild(
-person
-);
+    /* PERSON */
+
+    const person =
+      document.createElement(
+        "div"
+      );
+
+
+    person.className =
+      "person";
+
+
+    person.id =
+      profile.id +
+      "-person";
+
+
+    person.innerHTML = `
+
+      <div class="name">
+
+        ${profile.name}
+
+      </div>
+
+
+      <div class="type">
+
+        ${profile.type}
+
+      </div>
+
+
+      <div
+        class="values"
+        id="${profile.id}-values"
+      >
+
+        T ${profile.baseT.toFixed(1)}
+
+        /
+
+        I ${profile.baseI.toFixed(1)}
+
+        <br>
+
+        待機
+
+      </div>
+
+
+      <div class="track">
+
+
+        <div
+          class="fill"
+          id="${profile.id}-fill"
+        >
+        </div>
+
+
+      </div>
+
+    `;
+
+
+    visualizer.appendChild(
+      person
+    );
+
+
+
+    /* CHECKBOX */
+
+    const label =
+      document.createElement(
+        "label"
+      );
+
+
+    label.className =
+      "person-check";
+
+
+    label.innerHTML = `
+
+      <input
+        type="checkbox"
+        class="person-checkbox"
+        data-person="${profile.id}"
+        checked
+      >
+
+      ${profile.name}
+
+    `;
+
+
+    filterPanel.appendChild(
+      label
+    );
 
 });
 
 
+/* ======================================
+   FILTER
+====================================== */
 
-/* ========================================
+const checkboxes =
+
+  Array.from(
+
+    document.querySelectorAll(
+      ".person-checkbox"
+    )
+
+  );
+
+
+function updateVisibility() {
+
+
+  checkboxes.forEach(
+    checkbox => {
+
+
+      const id =
+        checkbox.dataset.person;
+
+
+      const person =
+        document.getElementById(
+          id + "-person"
+        );
+
+
+      person.classList.toggle(
+        "hidden",
+        !checkbox.checked
+      );
+
+    }
+  );
+
+}
+
+
+checkboxes.forEach(
+  checkbox => {
+
+
+    checkbox.addEventListener(
+      "change",
+      updateVisibility
+    );
+
+});
+
+
+const toggleAll =
+  document.getElementById(
+    "toggleAll"
+  );
+
+
+toggleAll.addEventListener(
+  "click",
+  () => {
+
+
+    /*
+      If all are checked:
+      → uncheck everything.
+
+      Otherwise:
+      → check everything.
+    */
+
+    const allChecked =
+
+      checkboxes.every(
+        checkbox =>
+          checkbox.checked
+      );
+
+
+    checkboxes.forEach(
+      checkbox => {
+
+
+        checkbox.checked =
+          !allChecked;
+
+      }
+    );
+
+
+    updateVisibility();
+
+});
+
+
+updateVisibility();
+
+
+
+/* ======================================
    HELPERS
-======================================== */
+====================================== */
 
 function clamp(
-value,
-min,
-max
-){
+  value,
+  min,
+  max
+) {
 
-return Math.max(
-min,
-Math.min(max,value)
-);
+  return Math.max(
+
+    min,
+
+    Math.min(
+      max,
+      value
+    )
+
+  );
 
 }
 
 
 function lerp(
-a,
-b,
-t
-){
+  a,
+  b,
+  t
+) {
 
-return (
-a +
-(b-a)*t
-);
+  return (
+
+    a +
+
+    (
+      b -
+      a
+    )
+
+    *
+
+    t
+
+  );
 
 }
 
 
 function smooth(
-a,
-b,
-x
-){
+  a,
+  b,
+  x
+) {
 
-let t =
-clamp(
-(x-a)/(b-a),
-0,
-1
-);
+  const t =
 
-return (
-t*t*(3-2*t)
-);
+    clamp(
+
+      (
+        x -
+        a
+      )
+
+      /
+
+      (
+        b -
+        a
+      ),
+
+      0,
+
+      1
+
+    );
+
+
+  return (
+
+    t *
+
+    t *
+
+    (
+      3 -
+      2 *
+      t
+    )
+
+  );
 
 }
 
 
 
-/* ========================================
+/* ======================================
    PROFILE STATE
-======================================== */
+
+   Here we use progress 0–1 instead
+   of fixed seconds.
+====================================== */
 
 function getState(
-p,
-time
-){
-
-let tempo =
-p.baseT;
-
-let intensity =
-p.baseI;
+  profile,
+  progress
+) {
 
 
-/*
-  0–10
-  warm up
+  let tempo;
 
-  10–32
-  cruise / rise
-
-  32–48
-  peak
-
-  48–60
-  cooldown
-*/
-
-
-const warm =
-smooth(
-0,
-10,
-time
-);
-
-
-const rise =
-smooth(
-10,
-32,
-time
-);
-
-
-const peak =
-
-smooth(
-30,
-38,
-time
-)
-
-*
-
-(
-1 -
-smooth(
-48,
-56,
-time
-)
-);
-
-
-const cooldown =
-smooth(
-48,
-60,
-time
-);
-
-
-/* initial */
-
-tempo =
-lerp(
-Math.max(
-1,
-p.baseT-.7
-),
-p.baseT,
-warm
-);
-
-
-intensity =
-lerp(
-Math.max(
-1,
-p.baseI-1
-),
-p.baseI,
-warm
-);
+  let intensity;
 
 
 
-/* ========================================
-   PERSON DIFFERENCES
-======================================== */
+  /*
+    Timeline
+
+    0–15%
+      warmup
+
+    15–50%
+      cruise / rise
+
+    50–80%
+      peak
+
+    80–100%
+      cooldown
+  */
 
 
-/* ---------- NAOTO ---------- */
+  const warm =
 
-if(
-p.rhythm ===
-"steady"
-){
+    smooth(
 
-tempo +=
-rise*.45;
+      0,
 
-intensity +=
-rise*.35;
+      .15,
 
-tempo +=
-peak*.45;
+      progress
 
-intensity +=
-peak*.55;
-
-}
+    );
 
 
-/* ---------- KEI ---------- */
+  const rise =
 
-if(
-p.rhythm ===
-"hold"
-){
+    smooth(
 
-/*
-  徐々に上がって
-  高い状態へ
-*/
+      .15,
 
-tempo +=
-rise*.7;
+      .52,
 
-intensity +=
-rise*1.15;
+      progress
+
+    );
 
 
-const hold =
+  const peak =
 
-smooth(
-25,
-34,
-time
-)
+    smooth(
 
-*
+      .48,
 
-(
-1 -
-smooth(
-52,
-60,
-time
-)
-);
+      .62,
+
+      progress
+
+    )
+
+    *
+
+    (
+
+      1 -
+
+      smooth(
+
+        .80,
+
+        .92,
+
+        progress
+
+      )
+
+    );
 
 
-tempo +=
-hold*.55;
+  const cooldown =
 
-intensity +=
-hold*1.25;
+    smooth(
+
+      .80,
+
+      1,
+
+      progress
+
+    );
+
+
+
+  tempo =
+
+    lerp(
+
+      Math.max(
+        1,
+        profile.baseT - .7
+      ),
+
+      profile.baseT,
+
+      warm
+
+    );
+
+
+  intensity =
+
+    lerp(
+
+      Math.max(
+        1,
+        profile.baseI - 1
+      ),
+
+      profile.baseI,
+
+      warm
+
+    );
+
+
+
+/* ======================================
+   NAOTO
+====================================== */
+
+if (
+  profile.rhythm ===
+  "steady"
+) {
+
+  tempo +=
+    rise *
+    .45;
+
+
+  intensity +=
+    rise *
+    .35;
+
+
+  tempo +=
+    peak *
+    .45;
+
+
+  intensity +=
+    peak *
+    .55;
 
 }
 
 
-/* ---------- SHOMA ---------- */
 
-if(
-p.rhythm ===
-"burst"
-){
+/* ======================================
+   KEI
+====================================== */
 
-tempo +=
-rise*.5;
+if (
+  profile.rhythm ===
+  "hold"
+) {
 
-intensity +=
-rise*.45;
 
+  tempo +=
+    rise *
+    .7;
 
-const burst =
 
-Math.max(
-0,
-Math.sin(
-(time-13)*.65
-)
-);
+  intensity +=
+    rise *
+    1.15;
 
 
-tempo +=
-burst*1.25;
+  const hold =
 
-intensity +=
-burst*.65;
+    smooth(
 
+      .42,
 
-if(
-time>32 &&
-time<47
-){
+      .56,
 
-const peakBurst =
+      progress
 
-Math.max(
-0,
-Math.sin(
-(time-32)*1.15
-)
-);
+    )
 
+    *
 
-tempo +=
-peakBurst*1.25;
+    (
 
-intensity +=
-peakBurst*.65;
+      1 -
 
-}
+      smooth(
 
-}
+        .87,
 
+        1,
 
-/* ---------- MINATO ---------- */
+        progress
 
-if(
-p.rhythm ===
-"responsive"
-){
+      )
 
-tempo +=
-rise*.35;
+    );
 
-intensity +=
-rise*.3;
 
+  tempo +=
+    hold *
+    .55;
 
-tempo +=
 
-Math.sin(
-time*.45
-)*.35
-
-+
-
-Math.sin(
-time*1.05
-)*.18;
-
-
-intensity +=
-
-Math.sin(
-time*.38
-)*.28;
-
-
-tempo +=
-peak*.45;
-
-intensity +=
-peak*.5;
-
-}
-
-
-/* ---------- HARUKI ---------- */
-
-if(
-p.rhythm ===
-"variable"
-){
-
-const condition =
-
-.5 +
-
-.5 *
-Math.sin(
-time*.16 + 2
-);
-
-
-tempo +=
-
-rise *
-(
-.25 +
-condition*.55
-);
-
-
-intensity +=
-
-rise *
-(
-.25 +
-condition*.65
-);
-
-
-tempo +=
-peak *
-(
-.3 +
-condition*.55
-);
-
-
-intensity +=
-peak *
-(
-.35 +
-condition*.7
-);
-
-}
-
-
-/* ---------- HYUNWOO ---------- */
-
-if(
-p.rhythm ===
-"controlled"
-){
-
-tempo +=
-rise*.35;
-
-intensity +=
-rise*.65;
-
-
-tempo +=
-peak*.55;
-
-intensity +=
-peak*.65;
-
-
-/*
-  少し緩急
-*/
-
-tempo +=
-
-Math.sin(
-time*.24
-)*.22;
+  intensity +=
+    hold *
+    1.25;
 
 }
 
 
 
-/* ========================================
+/* ======================================
+   SHOMA
+====================================== */
+
+if (
+  profile.rhythm ===
+  "burst"
+) {
+
+
+  tempo +=
+    rise *
+    .5;
+
+
+  intensity +=
+    rise *
+    .45;
+
+
+  const burst =
+
+    Math.max(
+
+      0,
+
+      Math.sin(
+
+        progress *
+        Math.PI *
+        8
+
+      )
+
+    );
+
+
+  tempo +=
+    burst *
+    1.1 *
+    rise;
+
+
+  intensity +=
+    burst *
+    .55 *
+    rise;
+
+
+  if (
+    progress >
+    .52
+    &&
+    progress <
+    .8
+  ) {
+
+
+    const peakBurst =
+
+      Math.max(
+
+        0,
+
+        Math.sin(
+
+          (
+            progress -
+            .52
+          )
+
+          *
+
+          Math.PI *
+
+          19
+
+        )
+
+      );
+
+
+    tempo +=
+      peakBurst *
+      1.25;
+
+
+    intensity +=
+      peakBurst *
+      .65;
+
+  }
+
+}
+
+
+
+/* ======================================
+   MINATO
+====================================== */
+
+if (
+  profile.rhythm ===
+  "responsive"
+) {
+
+
+  tempo +=
+    rise *
+    .35;
+
+
+  intensity +=
+    rise *
+    .3;
+
+
+  tempo +=
+
+    Math.sin(
+
+      progress *
+      Math.PI *
+      7
+
+    )
+
+    *
+
+    .32;
+
+
+  tempo +=
+
+    Math.sin(
+
+      progress *
+      Math.PI *
+      16
+
+    )
+
+    *
+
+    .15;
+
+
+  intensity +=
+
+    Math.sin(
+
+      progress *
+      Math.PI *
+      6
+
+    )
+
+    *
+
+    .25;
+
+
+  tempo +=
+    peak *
+    .45;
+
+
+  intensity +=
+    peak *
+    .5;
+
+}
+
+
+
+/* ======================================
+   HARUKI
+====================================== */
+
+if (
+  profile.rhythm ===
+  "variable"
+) {
+
+
+  const condition =
+
+    .5
+
+    +
+
+    .5 *
+
+    Math.sin(
+
+      progress *
+      Math.PI *
+      3
+
+      +
+
+      2
+
+    );
+
+
+  tempo +=
+
+    rise *
+
+    (
+      .25 +
+      condition *
+      .55
+    );
+
+
+  intensity +=
+
+    rise *
+
+    (
+      .25 +
+      condition *
+      .65
+    );
+
+
+  tempo +=
+
+    peak *
+
+    (
+      .3 +
+      condition *
+      .55
+    );
+
+
+  intensity +=
+
+    peak *
+
+    (
+      .35 +
+      condition *
+      .7
+    );
+
+}
+
+
+
+/* ======================================
+   HYUNWOO
+====================================== */
+
+if (
+  profile.rhythm ===
+  "controlled"
+) {
+
+
+  tempo +=
+    rise *
+    .35;
+
+
+  intensity +=
+    rise *
+    .65;
+
+
+  tempo +=
+    peak *
+    .55;
+
+
+  intensity +=
+    peak *
+    .65;
+
+
+  tempo +=
+
+    Math.sin(
+
+      progress *
+      Math.PI *
+      4
+
+    )
+
+    *
+
+    .2;
+
+}
+
+
+
+/* ======================================
    COOLDOWN
-======================================== */
+====================================== */
 
-if(
-cooldown>0
-){
-
-tempo =
-lerp(
-tempo,
-Math.max(
-1,
-p.baseT-.8
-),
-cooldown
-);
+if (
+  cooldown >
+  0
+) {
 
 
-intensity =
-lerp(
-intensity,
-Math.max(
-2,
-p.baseI*.65
-),
-cooldown
-);
+  tempo =
+
+    lerp(
+
+      tempo,
+
+      Math.max(
+        1,
+        profile.baseT -
+        .8
+      ),
+
+      cooldown
+
+    );
+
+
+  intensity =
+
+    lerp(
+
+      intensity,
+
+      Math.max(
+        2,
+        profile.baseI *
+        .65
+      ),
+
+      cooldown
+
+    );
 
 }
 
 
-/* LIMIT */
+/* limits */
 
 tempo =
-clamp(
-tempo,
-1,
-p.peakT
-);
+
+  clamp(
+
+    tempo,
+
+    1,
+
+    profile.peakT
+
+  );
 
 
 intensity =
-clamp(
-intensity,
-1,
-p.peakI
-);
 
+  clamp(
+
+    intensity,
+
+    1,
+
+    profile.peakI
+
+  );
 
 
 let stage;
 
 
-if(time<10){
+if (
+  progress <
+  .15
+) {
 
-stage =
-"立ち上がり";
-
-}
-
-else if(time<30){
-
-stage =
-"巡航";
+  stage =
+    "立ち上がり";
 
 }
 
-else if(time<48){
+else if (
+  progress <
+  .5
+) {
 
-stage =
-"Peak帯";
+  stage =
+    "巡航";
 
 }
 
-else{
+else if (
+  progress <
+  .8
+) {
 
-stage =
-"Cooldown";
+  stage =
+    "Peak帯";
+
+}
+
+else {
+
+  stage =
+    "Cooldown";
 
 }
 
 
 return {
-tempo,
-intensity,
-stage
+
+  tempo,
+
+  intensity,
+
+  stage
+
 };
 
 }
 
 
 
-/* ========================================
-   RHYTHM SHAPE
-======================================== */
+/* ======================================
+   RHYTHM WAVE
+====================================== */
 
 function getWave(
-profile,
-phase
-){
-
-const sine =
-Math.sin(phase);
+  profile,
+  phase
+) {
 
 
-/*
-  直人
+  const sine =
+    Math.sin(
+      phase
+    );
 
-  滑らかで一定
-*/
 
-if(
-profile.rhythm ===
-"steady"
-){
+/* Naoto */
+
+if (
+  profile.rhythm ===
+  "steady"
+) {
+
+  return sine;
+
+}
+
+
+/* Kei */
+
+if (
+  profile.rhythm ===
+  "hold"
+) {
+
+  return (
+
+    Math.sign(
+      sine
+    )
+
+    *
+
+    Math.pow(
+
+      Math.abs(
+        sine
+      ),
+
+      .82
+
+    )
+
+  );
+
+}
+
+
+/* Shoma */
+
+if (
+  profile.rhythm ===
+  "burst"
+) {
+
+  return (
+
+    Math.sign(
+      sine
+    )
+
+    *
+
+    Math.pow(
+
+      Math.abs(
+        sine
+      ),
+
+      .52
+
+    )
+
+  );
+
+}
+
+
+/* Minato */
+
+if (
+  profile.rhythm ===
+  "responsive"
+) {
+
+  return clamp(
+
+    sine *
+    .78
+
+    +
+
+    Math.sin(
+
+      phase *
+      1.7
+
+    )
+
+    *
+    .22,
+
+    -1,
+
+    1
+
+  );
+
+}
+
+
+/* Haruki */
+
+if (
+  profile.rhythm ===
+  "variable"
+) {
+
+  return clamp(
+
+    sine *
+    .82
+
+    +
+
+    Math.sin(
+
+      phase *
+      .47
+
+    )
+
+    *
+    .18,
+
+    -1,
+
+    1
+
+  );
+
+}
+
+
+/* Hyunwoo */
+
+if (
+  profile.rhythm ===
+  "controlled"
+) {
+
+  return (
+
+    Math.sin(
+
+      phase
+
+      +
+
+      .28 *
+
+      Math.sin(
+
+        phase *
+        .5
+
+      )
+
+    )
+
+  );
+
+}
+
 
 return sine;
 
 }
 
 
-/*
-  慧
 
-  大きく滑らか。
-  切り返しを少し重くする。
-*/
-
-if(
-profile.rhythm ===
-"hold"
-){
-
-return (
-
-Math.sign(sine)
-
-*
-
-Math.pow(
-Math.abs(sine),
-.82
-)
-
-);
-
-}
-
-
-/*
-  翔馬
-
-  切り返しが速い。
-*/
-
-if(
-profile.rhythm ===
-"burst"
-){
-
-return (
-
-Math.sign(sine)
-
-*
-
-Math.pow(
-Math.abs(sine),
-.52
-)
-
-);
-
-}
-
-
-/*
-  湊
-
-  小さな変化が混ざる。
-*/
-
-if(
-profile.rhythm ===
-"responsive"
-){
-
-return clamp(
-
-sine*.78
-
-+
-
-Math.sin(
-phase*1.7
-)*.22,
-
--1,
-1
-
-);
-
-}
-
-
-/*
-  晴輝
-
-  一定になりきらない。
-*/
-
-if(
-profile.rhythm ===
-"variable"
-){
-
-return clamp(
-
-sine*.82
-
-+
-
-Math.sin(
-phase*.47
-)*.18,
-
--1,
-1
-
-);
-
-}
-
-
-/*
-  ヒョヌ
-
-  意図的な緩急。
-*/
-
-if(
-profile.rhythm ===
-"controlled"
-){
-
-return (
-
-Math.sin(
-
-phase
-
-+
-
-.28 *
-Math.sin(
-phase*.5
-)
-
-)
-
-);
-
-}
-
-
-return sine;
-
-}
-
-
-
-/* ========================================
-   ANIMATION
-======================================== */
+/* ======================================
+   PLAYBACK
+====================================== */
 
 let playing =
-false;
+  false;
+
 
 let animationID =
-null;
+  null;
 
-let startTime =
-0;
 
-let previousTime =
-0;
+let previousRealTime =
+  0;
+
 
 let elapsed =
-0;
-
-let speed =
-1;
+  0;
 
 
-const duration =
-60;
+let duration =
+  60;
 
-
-/*
-  人物ごとに位相を保持。
-
-  Tempoが途中で変化しても
-  動きが飛ばないようにする。
-*/
 
 const phases = {};
 
+
 profiles.forEach(
-p => {
+  profile => {
 
-phases[p.id] =
-0;
+    phases[
+      profile.id
+    ] = 0;
 
-});
+  }
+);
+
 
 
 const playButton =
-document.getElementById(
-"play"
-);
+
+  document.getElementById(
+    "play"
+  );
 
 
 const resetButton =
-document.getElementById(
-"reset"
+
+  document.getElementById(
+    "reset"
+  );
+
+
+const durationInput =
+
+  document.getElementById(
+    "duration"
+  );
+
+
+const timeDisplay =
+
+  document.getElementById(
+    "time"
+  );
+
+
+
+durationInput.addEventListener(
+  "change",
+  () => {
+
+
+    let value =
+
+      parseFloat(
+        durationInput.value
+      );
+
+
+    value =
+
+      clamp(
+        value,
+        20,
+        180
+      );
+
+
+    duration =
+      value;
+
+
+    durationInput.value =
+      duration;
+
+
+    if (
+      elapsed >
+      duration
+    ) {
+
+      elapsed =
+        duration;
+
+    }
+
+
+    updateTimeDisplay();
+
+  }
 );
 
 
-const speedSlider =
-document.getElementById(
-"speed"
-);
+
+function updateTimeDisplay() {
 
 
-const speedText =
-document.getElementById(
-"speedText"
-);
+  timeDisplay.textContent =
 
+    elapsed.toFixed(1)
 
-const timeText =
-document.getElementById(
-"time"
-);
+    +
 
+    " / "
 
+    +
 
-speedSlider.addEventListener(
-"input",
-() => {
+    duration
 
-speed =
-parseFloat(
-speedSlider.value
-);
+    +
 
-speedText.textContent =
-speed + "×";
+    "s";
 
 }
-);
 
 
+
+/* ======================================
+   ANIMATION
+====================================== */
 
 function animate(
-now
-){
+  now
+) {
 
-if(
-!playing
-){
 
-return;
+  if (
+    !playing
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    previousRealTime ===
+    0
+  ) {
+
+    previousRealTime =
+      now;
+
+  }
+
+
+  const delta =
+
+    (
+      now -
+      previousRealTime
+    )
+
+    /
+
+    1000;
+
+
+  previousRealTime =
+    now;
+
+
+  elapsed +=
+    delta;
+
+
+  if (
+    elapsed >
+    duration
+  ) {
+
+    elapsed =
+      duration;
+
+  }
+
+
+
+  const progress =
+
+    clamp(
+
+      elapsed /
+      duration,
+
+      0,
+
+      1
+
+    );
+
+
+
+  profiles.forEach(
+    profile => {
+
+
+      const state =
+
+        getState(
+
+          profile,
+
+          progress
+
+        );
+
+
+      /*
+        Tempo → actual visual frequency.
+
+        This does NOT depend on
+        total movie length.
+      */
+
+      const frequency =
+
+        .25
+
+        +
+
+        state.tempo *
+        .20;
+
+
+      phases[
+        profile.id
+      ] +=
+
+        Math.PI
+
+        *
+
+        2
+
+        *
+
+        frequency
+
+        *
+
+        delta;
+
+
+
+      const wave =
+
+        getWave(
+
+          profile,
+
+          phases[
+            profile.id
+          ]
+
+        );
+
+
+
+      /*
+        Convert -1..1
+        to 0..1
+      */
+
+      const position =
+
+        (
+          wave +
+          1
+        )
+
+        /
+
+        2;
+
+
+
+      /*
+        Intensity determines
+        MAX extension range.
+      */
+
+      const minimumHeight =
+        30;
+
+
+      const maximumExtension =
+
+        18
+
+        +
+
+        state.intensity *
+        18;
+
+
+
+      const currentHeight =
+
+        minimumHeight
+
+        +
+
+        position
+
+        *
+
+        maximumExtension;
+
+
+
+      const fill =
+
+        document.getElementById(
+
+          profile.id +
+          "-fill"
+
+        );
+
+
+      fill.style.height =
+
+        currentHeight +
+        "px";
+
+
+
+      const values =
+
+        document.getElementById(
+
+          profile.id +
+          "-values"
+
+        );
+
+
+      values.innerHTML =
+
+        `T ${state.tempo.toFixed(1)}
+         /
+         I ${state.intensity.toFixed(1)}
+
+         <br>
+
+         ${state.stage}`;
+
+    }
+  );
+
+
+  updateTimeDisplay();
+
+
+
+  if (
+    elapsed >=
+    duration
+  ) {
+
+
+    playing =
+      false;
+
+
+    previousRealTime =
+      0;
+
+
+    playButton.textContent =
+      "Replay";
+
+
+    return;
+
+  }
+
+
+  animationID =
+
+    requestAnimationFrame(
+      animate
+    );
 
 }
 
 
-if(
-previousTime === 0
-){
 
-previousTime =
-now;
-
-}
-
-
-const realDelta =
-
-(now-previousTime)
-/1000;
-
-
-previousTime =
-now;
-
-
-const delta =
-
-realDelta *
-speed;
-
-
-elapsed +=
-delta;
-
-
-if(
-elapsed >
-duration
-){
-
-elapsed =
-duration;
-
-}
-
-
-/* EACH PERSON */
-
-profiles.forEach(
-p => {
-
-const state =
-getState(
-p,
-elapsed
-);
-
-
-/*
-  Tempo → cycles/sec
-
-  T1 ≈ 0.45 Hz
-  T4 ≈ 1.05 Hz
-  T7 ≈ 1.65 Hz
-
-  数字自体は表示用の
-  視覚変換。
-*/
-
-const frequency =
-
-.25
-
-+
-
-state.tempo *
-.20;
-
-
-/*
-  位相を積分するので
-  Tempo変化時も
-  動きが連続する。
-*/
-
-phases[p.id] +=
-
-Math.PI *
-2 *
-frequency *
-delta;
-
-
-/*
-  人物別の波形
-*/
-
-const wave =
-getWave(
-p,
-phases[p.id]
-);
-
-
-/*
-  -1〜1
-  ↓
-  0〜1
-*/
-
-const position =
-(wave+1)/2;
-
-
-/*
-  Intensity → 上下幅
-
-  I5なら約70px
-  I9なら約118px程度
-*/
-
-const amplitude =
-
-10
-
-+
-
-state.intensity *
-12;
-
-
-/*
-  position 0 = 下
-  position 1 = 上
-*/
-
-const y =
-
-position *
-amplitude;
-
-
-const mover =
-
-document.getElementById(
-p.id+"-mover"
-);
-
-
-mover.style.transform =
-
-`translateY(${-y}px)`;
-
-
-
-const values =
-
-document.getElementById(
-p.id+"-values"
-);
-
-
-values.innerHTML =
-
-`T ${state.tempo.toFixed(1)}
- /
- I ${state.intensity.toFixed(1)}
-
-<br>
-
-${state.stage}`;
-
-});
-
-
-timeText.textContent =
-
-elapsed.toFixed(1)
-+
-" / "
-+
-duration
-+
-"s";
-
-
-if(
-elapsed >=
-duration
-){
-
-playing =
-false;
-
-playButton.textContent =
-"Replay";
-
-previousTime =
-0;
-
-return;
-
-}
-
-
-animationID =
-requestAnimationFrame(
-animate
-);
-
-}
-
-
-
-/* ========================================
-   PLAY
-======================================== */
+/* ======================================
+   PLAY / PAUSE
+====================================== */
 
 playButton.addEventListener(
-"click",
-() => {
+  "click",
+  () => {
 
 
-/* replay */
+    if (
+      elapsed >=
+      duration
+    ) {
 
-if(
-elapsed >= duration
-){
+      resetAll();
 
-resetAll();
-
-}
-
-
-playing =
-!playing;
+    }
 
 
-if(
-playing
-){
+    playing =
+      !playing;
 
-playButton.textContent =
-"Pause";
 
-previousTime =
-0;
+    if (
+      playing
+    ) {
 
-animationID =
-requestAnimationFrame(
-animate
+
+      playButton.textContent =
+        "Pause";
+
+
+      previousRealTime =
+        0;
+
+
+      animationID =
+
+        requestAnimationFrame(
+          animate
+        );
+
+    }
+
+
+    else {
+
+
+      playButton.textContent =
+        "Play";
+
+
+      cancelAnimationFrame(
+        animationID
+      );
+
+
+      previousRealTime =
+        0;
+
+    }
+
+  }
 );
 
-}
-
-else{
-
-playButton.textContent =
-"Play";
-
-cancelAnimationFrame(
-animationID
-);
-
-previousTime =
-0;
-
-}
-
-});
 
 
-
-/* ========================================
+/* ======================================
    RESET
-======================================== */
+====================================== */
 
-function resetAll(){
-
-playing =
-false;
+function resetAll() {
 
 
-cancelAnimationFrame(
-animationID
-);
+  playing =
+    false;
 
 
-elapsed =
-0;
-
-previousTime =
-0;
+  cancelAnimationFrame(
+    animationID
+  );
 
 
-profiles.forEach(
-p => {
-
-phases[p.id] =
-0;
+  elapsed =
+    0;
 
 
-const mover =
-
-document.getElementById(
-p.id+"-mover"
-);
+  previousRealTime =
+    0;
 
 
-mover.style.transform =
-"translateY(0px)";
+  profiles.forEach(
+    profile => {
 
 
-const values =
-
-document.getElementById(
-p.id+"-values"
-);
+      phases[
+        profile.id
+      ] = 0;
 
 
-values.innerHTML =
+      const fill =
 
-`T ${p.baseT.toFixed(1)}
- /
- I ${p.baseI.toFixed(1)}
+        document.getElementById(
 
-<br>
+          profile.id +
+          "-fill"
 
-待機`;
-
-});
+        );
 
 
-timeText.textContent =
-"0.0 / 60s";
+      fill.style.height =
+        "30px";
 
 
-playButton.textContent =
-"Play";
+      const values =
+
+        document.getElementById(
+
+          profile.id +
+          "-values"
+
+        );
+
+
+      values.innerHTML =
+
+        `T ${profile.baseT.toFixed(1)}
+         /
+         I ${profile.baseI.toFixed(1)}
+
+         <br>
+
+         待機`;
+
+    }
+  );
+
+
+  updateTimeDisplay();
+
+
+  playButton.textContent =
+    "Play";
 
 }
 
 
 
 resetButton.addEventListener(
-"click",
-resetAll
+  "click",
+  resetAll
 );
 
 
@@ -1711,4 +2584,5 @@ resetAll();
 </script>
 
 </body>
+
 </html>
