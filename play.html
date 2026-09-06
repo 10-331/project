@@ -91,7 +91,25 @@ function clamp(v,a,b){return Math.max(a,Math.min(b,v))}function lerp(a,b,t){retu
 function showEvent(text){eventTime.textContent=timeString();eventText.textContent=text}function remember(type,data={}){memory.push({time:sec(),type,...data});if(memory.length>80)memory.shift()}function recent(type,within=14){const n=sec();return memory.slice().reverse().find(x=>x.type===type&&n-x.time<=within)}function recentAny(types,within=14){const n=sec();return memory.slice().reverse().find(x=>types.includes(x.type)&&n-x.time<=within)}function recentNoticedPositive(within=18){const n=sec();return memory.slice().reverse().find(x=>x.type==="noticed"&&x.positive&&n-x.time<=within)}
 const stateLabels={shy:"恥ずかしい",overwhelmed:"余裕ない",sweetVoice:"声が甘くなる",holdVoice:"声を我慢しようとする"};
 function scoreDesc(v,kind){if(kind==="stamina")return v>=80?"今日はかなり余力がある。":v>=60?"まだ余力はある。長く続くと徐々に影響が出そう。":"今日は消耗が表へ出やすい。";if(kind==="sensitivity")return v>=80?"今日は反応が立ち上がりやすい。":v>=60?"平均より少し反応が出やすい。":"今日は立ち上がりが比較的ゆっくり。";if(kind==="breakdown")return v>=80?"高まりが続くと余裕や発声抑制が崩れやすい日。":v>=60?"蓄積すると少しずつ余裕が崩れやすい。":"今日は余裕を保ちやすい方。";return v>=70?"一度崩れても比較的戻りやすい。":v>=50?"落ち着けば徐々に戻る。":"一度余裕を失うと落ち着くまで少しかかりそう。"}
-function makeCondition(){const stamina=Math.round(rand(62,91)),sensitivity=Math.round(rand(64,92)),recovery=Math.round(rand(40,78));const baseComposure=Math.round(rand(66,86));const breakdown=Math.round(clamp(sensitivity*.46+(100-baseComposure)*.38+(100-recovery)*.16+rand(-5,5),38,94));return{stamina,sensitivity,recovery,baseComposure,breakdown,seed:Math.floor(rand(100000,999999))}}
+function makeCondition(){
+  const stamina=Math.round(rand(62,91));
+  const sensitivity=Math.round(rand(64,92));
+  const recovery=Math.round(rand(40,78));
+  const baseComposure=Math.round(rand(64,84));
+
+  // Ayane baseline: "余裕を保ちやすい日"が常態になりすぎないよう、
+  // 感度を主軸に、その日の初期余裕・回復の低さを加味する。
+  // 目安は 60台後半〜80台が中心、50台/90前後が時々。
+  const breakdown=Math.round(clamp(
+    sensitivity*.55+
+    (100-baseComposure)*.45+
+    (100-recovery)*.15+
+    14+
+    rand(-7,7),
+    48,96
+  ));
+  return{stamina,sensitivity,recovery,baseComposure,breakdown,seed:Math.floor(rand(100000,999999))}
+}
 function renderCondition(c){currentCondition=c;scoreStamina.textContent=c.stamina;scoreSensitivity.textContent=c.sensitivity;scoreBreakdown.textContent=c.breakdown;scoreRecovery.textContent=c.recovery;descStamina.textContent=scoreDesc(c.stamina,"stamina");descSensitivity.textContent=scoreDesc(c.sensitivity,"sensitivity");descBreakdown.textContent=scoreDesc(c.breakdown,"breakdown");descRecovery.textContent=scoreDesc(c.recovery,"recovery");conditionSeed.textContent=`condition #${c.seed}`;reuseCondition.disabled=!previousCondition}
 function openPreflight(){sessionActive=false;stage.classList.add("session-idle");preflightMask.classList.remove("hidden");renderCondition(makeCondition())}
 function startSession(){previousCondition={...currentCondition};try{localStorage.setItem("dyadV4Condition",JSON.stringify(previousCondition))}catch(e){};const c=currentCondition;ayaneBody={stamina:c.stamina/100,sensitivity:c.sensitivity/100,recovery:c.recovery/100,breakdown:c.breakdown/100,arousal:.14,composure:c.baseComposure/100,voiceControl:clamp(.62+c.baseComposure/230,0,1),load:0,peak:.03,lastVoiceAt:-99,lastPeakAt:-99};transitionLog={composure:null,voice:null,desire:null,peak:false,output:null};peakMotion={active:false,start:0,until:0,recoverUntil:0};lastBackstageText="";lastBackstageAt=-99;sessionActive=true;sessionStart=performance.now();voiceTimer=rand(2.1,4.2);stage.classList.remove("session-idle");preflightMask.classList.add("hidden");bodyCue.textContent="";ayaneVoiceBubble.classList.remove("show");showEvent(`${profiles[partnerId].name}とのReal-time Link start`);addBackstage(`開始条件は非公開へ移行。\n\nここからは彩音の身体状態そのものではなく、外へ出た反応だけを彼が知覚する。`)}
@@ -220,4 +238,34 @@ function frame(now){
   const amplitude=(46+n*108+(phrase.boost||0)*30)*ampMul;
   const height=minHeight+wave*amplitude;
   fill.style.height=height+"px";
-  fill.classList.toggle("hot",target.external>.68||m
+  fill.classList.toggle("hot",target.external>.68||mind.cuteAgg>.62||ps?.phase==="peak");
+  const shellHeight=52+rendered.inner*150,shellWidth=68+rendered.inner*30;innerShell.style.height=shellHeight+"px";innerShell.style.width=shellWidth+"px";
+  requestAnimationFrame(frame)
+}
+function updatePartner(){const wasActive=sessionActive;partnerId=partnerSelect.value;partnerName.textContent=profiles[partnerId].name;partnerStatus.textContent="彩音の様子を見ている";mind={desire:.28,attention:.30,pursuit:.18,restraint:profiles[partnerId].regulation,cuteAgg:.08,uncertainty:.18};world={distance:2,pendingPartnerAction:null,lastUserActionAt:0,lastPartnerActionAt:0,waitingSince:0};intent={kind:null,strength:0,created:0,due:0,reason:""};phase=0;phrase={kind:"normal",until:0,pauseUntil:0,boost:0,hold:0};memory=[];backstageLog.innerHTML="";speechBubble.classList.remove("show");resolvePartnerPrompt();renderDistance();showEvent(`${profiles[partnerId].name}とのSession`);if(wasActive)openPreflight()}partnerSelect.onchange=updatePartner;
+function reset(){stopAuto();mode="manual";manualBtn.classList.add("active");autoBtn.classList.remove("active");autoBanner.classList.remove("show");states={shy:false,overwhelmed:false,sweetVoice:false,holdVoice:false};renderStates();mind={desire:.28,attention:.30,pursuit:.18,restraint:profiles[partnerId].regulation,cuteAgg:.08,uncertainty:.18};world={distance:2,pendingPartnerAction:null,lastUserActionAt:0,lastPartnerActionAt:0,waitingSince:0};intent={kind:null,strength:0,created:0,due:0,reason:""};phase=0;phrase={kind:"normal",until:0,pauseUntil:0,boost:0,hold:0};memory=[];sessionStart=performance.now();backstageLog.innerHTML="";ayaneVisible.textContent="大きな変化はまだ表に出ていない";ayaneSub.textContent="操作は下のタブから";partnerStatus.textContent="彩音の様子を見ている";speechBubble.classList.remove("show");sheet.classList.remove("open");resolvePartnerPrompt();renderDistance();showEvent("Session reset");openPreflight()}resetBtn.onclick=reset;
+function bootDyad(){
+  try{
+    renderStates();
+    updatePartner();
+    lastFrame=performance.now();
+    requestAnimationFrame(frame);
+    initiativeLoop();
+    openPreflight();
+  }catch(err){
+    console.error(err);
+    if(preflightMask){
+      preflightMask.classList.remove("hidden");
+      const note=preflightMask.querySelector(".preflight-note");
+      if(note) note.textContent="初期化エラーが発生しました。ページを再読み込みしてください。";
+    }
+  }
+}
+if(document.readyState==="loading"){
+  document.addEventListener("DOMContentLoaded",bootDyad,{once:true});
+}else{
+  bootDyad();
+}
+</script>
+</body>
+</html>
