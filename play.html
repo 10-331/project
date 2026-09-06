@@ -1,0 +1,2860 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Dyad Interaction Simulator v1</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  padding:18px 10px 60px;
+  background:#050505;
+  color:#eee;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+.app{
+  width:min(900px,100%);
+  margin:auto;
+}
+
+h1{
+  margin:4px 0 5px;
+  text-align:center;
+  font-size:17px;
+  letter-spacing:.08em;
+}
+
+.subtitle{
+  color:#888;
+  font-size:11px;
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.panel{
+  background:#101010;
+  border:1px solid #292929;
+  border-radius:19px;
+  padding:14px;
+  margin-bottom:12px;
+}
+
+.top-controls{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+}
+
+select,
+button{
+  font-family:inherit;
+}
+
+select{
+  background:#181818;
+  color:#eee;
+  border:1px solid #444;
+  border-radius:12px;
+  padding:8px 11px;
+}
+
+button{
+  background:#242424;
+  color:#eee;
+  border:1px solid #444;
+  border-radius:17px;
+  padding:9px 14px;
+  cursor:pointer;
+  transition:.15s;
+}
+
+button.active{
+  background:#eee8df;
+  color:#111;
+  border-color:#eee8df;
+}
+
+button.primary{
+  background:#eee8df;
+  color:#111;
+  border-color:#eee8df;
+  font-weight:700;
+}
+
+.mode-switch{
+  display:flex;
+  gap:5px;
+}
+
+.label{
+  font-size:11px;
+  color:#999;
+}
+
+
+/* ==========================
+   SCENE
+========================== */
+
+.scene{
+  position:relative;
+  min-height:470px;
+  overflow:hidden;
+  background:
+    radial-gradient(
+      circle at center,
+      #171717 0%,
+      #090909 58%,
+      #050505 100%
+    );
+}
+
+.partner-area,
+.ayane-area{
+  position:absolute;
+  left:50%;
+  transform:translateX(-50%);
+  text-align:center;
+}
+
+.partner-area{
+  top:35px;
+}
+
+.ayane-area{
+  bottom:35px;
+}
+
+.name{
+  font-size:21px;
+  font-weight:700;
+}
+
+.small{
+  font-size:11px;
+  color:#888;
+  margin-top:3px;
+}
+
+
+/* partner capsule */
+
+.partner-capsule{
+  position:relative;
+  width:66px;
+  height:150px;
+  margin:14px auto 0;
+  border-radius:40px;
+  background:#251f1d;
+  border:1px solid #4b3d37;
+  overflow:hidden;
+}
+
+.partner-fill{
+  position:absolute;
+  bottom:6px;
+  left:7px;
+  right:7px;
+  height:52px;
+  border-radius:30px;
+  background:#eee8df;
+  transition:
+    height .45s cubic-bezier(.25,.8,.25,1),
+    filter .35s;
+}
+
+.partner-fill.alert{
+  filter:
+    drop-shadow(0 0 9px rgba(255,255,255,.6));
+}
+
+
+/* interaction line */
+
+.link{
+  position:absolute;
+  left:50%;
+  top:218px;
+  transform:translateX(-50%);
+  width:200px;
+  height:70px;
+  text-align:center;
+}
+
+.link-line{
+  height:1px;
+  width:110px;
+  margin:18px auto 6px;
+  background:#555;
+  position:relative;
+}
+
+.arrow{
+  position:absolute;
+  top:-12px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:21px;
+  color:#ccc;
+}
+
+.link-text{
+  font-size:11px;
+  color:#999;
+}
+
+
+/* Ayane */
+
+.ayane-symbol{
+  width:62px;
+  height:62px;
+  border:2px solid #eee8df;
+  border-radius:50%;
+  margin:11px auto 8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+}
+
+.ayane-wave{
+  position:absolute;
+  left:50%;
+  bottom:59px;
+  transform:translateX(-50%);
+  width:86px;
+  height:86px;
+  border-radius:50%;
+  border:1px solid rgba(238,232,223,.15);
+  pointer-events:none;
+}
+
+.ayane-wave.flash{
+  animation:waveFlash .75s ease-out;
+}
+
+@keyframes waveFlash{
+  0%{
+    transform:translateX(-50%) scale(.65);
+    opacity:1;
+  }
+
+  100%{
+    transform:translateX(-50%) scale(1.65);
+    opacity:0;
+  }
+}
+
+
+/* current visible expression */
+
+.expression{
+  min-height:45px;
+  margin-top:8px;
+}
+
+.expression-main{
+  font-size:14px;
+  color:#eee;
+}
+
+.expression-sub{
+  font-size:11px;
+  color:#888;
+  margin-top:4px;
+}
+
+
+/* ==========================
+   DIALOGUE
+========================== */
+
+.dialogue-box{
+  margin-top:12px;
+  border-top:1px solid #292929;
+  padding-top:12px;
+  min-height:72px;
+}
+
+.dialogue-name{
+  color:#aaa;
+  font-size:11px;
+  margin-bottom:5px;
+}
+
+.dialogue-text{
+  font-size:15px;
+  line-height:1.65;
+}
+
+
+/* ==========================
+   MANUAL PANEL
+========================== */
+
+.manual-panel.hidden{
+  display:none;
+}
+
+.group-title{
+  font-size:11px;
+  color:#888;
+  margin-bottom:8px;
+}
+
+.button-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.input-btn{
+  background:#221f24;
+}
+
+.state-btn{
+  background:#202020;
+}
+
+.state-btn.active{
+  background:#eee8df;
+  color:#111;
+}
+
+.action-btn{
+  background:#20241f;
+}
+
+.control-group + .control-group{
+  margin-top:17px;
+  padding-top:14px;
+  border-top:1px solid #292929;
+}
+
+
+/* ==========================
+   CURRENT STATE
+========================== */
+
+.state-display{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:8px;
+  min-height:28px;
+}
+
+.state-tag{
+  background:#262626;
+  border-radius:15px;
+  font-size:11px;
+  padding:6px 10px;
+}
+
+
+/* ==========================
+   OBSERVABLE LOG
+========================== */
+
+.observable-log{
+  max-height:230px;
+  overflow-y:auto;
+}
+
+.public-entry{
+  padding:9px 0;
+  border-bottom:1px solid #222;
+  line-height:1.6;
+  font-size:13px;
+}
+
+.time{
+  color:#666;
+  font-size:10px;
+  margin-right:6px;
+}
+
+
+/* ==========================
+   BACKSTAGE
+========================== */
+
+.backstage{
+  display:none;
+}
+
+.backstage.visible{
+  display:block;
+}
+
+.backstage-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:9px;
+}
+
+.backstage-title{
+  font-weight:700;
+}
+
+.backstage-log{
+  max-height:390px;
+  overflow-y:auto;
+}
+
+.inner-entry{
+  padding:13px 3px;
+  border-bottom:1px solid #292929;
+  font-size:13px;
+  line-height:1.75;
+}
+
+.inner-person{
+  font-weight:700;
+  margin-bottom:4px;
+}
+
+.inner-text{
+  white-space:pre-line;
+}
+
+
+/* ==========================
+   AUTO
+========================== */
+
+.auto-info{
+  display:none;
+  color:#aaa;
+  font-size:12px;
+  line-height:1.7;
+}
+
+.auto-info.visible{
+  display:block;
+}
+
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media(max-width:600px){
+
+  body{
+    padding-left:7px;
+    padding-right:7px;
+  }
+
+  .panel{
+    padding:12px;
+  }
+
+  .scene{
+    min-height:450px;
+  }
+
+  button{
+    font-size:13px;
+    padding:9px 12px;
+  }
+
+  .partner-capsule{
+    width:61px;
+    height:142px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<h1>DYAD INTERACTION SIMULATOR v1</h1>
+
+<div class="subtitle">
+Ayane × Partner / perception・expression・response
+</div>
+
+
+<!-- TOP -->
+
+<div class="panel top-controls">
+
+<label>
+<span class="label">Partner</span>
+
+<select id="partnerSelect">
+<option value="naoto">桐谷直人</option>
+<option value="kei" selected>黒川慧</option>
+<option value="shoma">朝倉翔馬</option>
+<option value="minato">三浦湊</option>
+<option value="haruki">宮田晴輝</option>
+<option value="hyunwoo">チェ・ヒョヌ</option>
+</select>
+
+</label>
+
+
+<div class="mode-switch">
+
+<button
+  id="manualMode"
+  class="active">
+操作
+</button>
+
+<button id="autoMode">
+AUTO
+</button>
+
+</div>
+
+
+<button id="logToggle">
+彼ログ OFF
+</button>
+
+<button
+  id="dialogueToggle"
+  class="active">
+セリフ ON
+</button>
+
+<button id="reset">
+Reset
+</button>
+
+</div>
+
+
+<!-- SCENE -->
+
+<div class="panel scene">
+
+<div class="partner-area">
+
+<div
+  id="partnerName"
+  class="name">
+慧
+</div>
+
+<div
+  id="partnerSub"
+  class="small">
+現在は静かに様子を見ている
+</div>
+
+<div class="partner-capsule">
+
+<div
+  id="partnerFill"
+  class="partner-fill">
+</div>
+
+</div>
+
+</div>
+
+
+<div class="link">
+
+<div class="link-line">
+
+<div
+  id="arrow"
+  class="arrow">
+↕
+</div>
+
+</div>
+
+<div
+  id="linkText"
+  class="link-text">
+互いの様子を見ている
+</div>
+
+</div>
+
+
+<div class="ayane-area">
+
+<div class="name">
+彩音
+</div>
+
+<div
+  id="ayaneWave"
+  class="ayane-wave">
+</div>
+
+<div class="ayane-symbol">
+○
+</div>
+
+<div class="expression">
+
+<div
+  id="expressionMain"
+  class="expression-main">
+大きな変化は表に出ていない
+</div>
+
+<div
+  id="expressionSub"
+  class="expression-sub">
+彼から見える情報だけを表示
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- DIALOGUE -->
+
+<div
+  id="dialogueBox"
+  class="panel dialogue-box">
+
+<div
+  id="dialogueName"
+  class="dialogue-name">
+慧
+</div>
+
+<div
+  id="dialogueText"
+  class="dialogue-text">
+……
+</div>
+
+</div>
+
+
+<!-- AUTO INFO -->
+
+<div
+  id="autoInfo"
+  class="panel auto-info">
+
+AUTOでは彩音の操作を自動生成します。
+これは観測用LABであり、MAINの彩音の感情・意思決定を確定するものではありません。
+
+</div>
+
+
+<!-- MANUAL -->
+
+<div
+  id="manualPanel"
+  class="panel manual-panel">
+
+
+<div class="control-group">
+
+<div class="group-title">
+瞬間 INPUT
+</div>
+
+<div class="button-grid">
+
+<button class="input-btn"
+data-input="like">
+すき
+</button>
+
+<button class="input-btn"
+data-input="wantKiss">
+キスしたい
+</button>
+
+<button class="input-btn"
+data-input="more">
+もっと
+</button>
+
+<button class="input-btn"
+data-input="happy">
+嬉しい
+</button>
+
+<button class="input-btn"
+data-input="surprised">
+びっくり
+</button>
+
+<button class="input-btn"
+data-input="close">
+くっついていたい
+</button>
+
+</div>
+
+</div>
+
+
+<div class="control-group">
+
+<div class="group-title">
+継続 STATE
+</div>
+
+<div class="button-grid">
+
+<button class="state-btn"
+data-state="shy">
+恥ずかしい
+</button>
+
+<button class="state-btn"
+data-state="overwhelmed">
+余裕ない
+</button>
+
+<button class="state-btn"
+data-state="tired">
+疲れてきた
+</button>
+
+<button class="state-btn"
+data-state="sleepy">
+眠い
+</button>
+
+<button class="state-btn"
+data-state="anxious">
+不安
+</button>
+
+</div>
+
+
+<div
+  id="stateDisplay"
+  class="state-display">
+</div>
+
+</div>
+
+
+<div class="control-group">
+
+<div class="group-title">
+ACTION
+</div>
+
+<div class="button-grid">
+
+<button class="action-btn"
+data-action="kiss">
+キスする
+</button>
+
+<button class="action-btn"
+data-action="hug">
+抱きつく
+</button>
+
+<button class="action-btn"
+data-action="lean">
+顔を寄せる
+</button>
+
+<button class="action-btn"
+data-action="stay">
+そのまま近くにいる
+</button>
+
+<button class="action-btn"
+data-action="leave">
+少し離れる
+</button>
+
+<button class="action-btn"
+data-action="rest">
+休憩する
+</button>
+
+<button class="action-btn"
+data-action="sayMore">
+「もっと」と伝える
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- PUBLIC LOG -->
+
+<div class="panel">
+
+<div class="group-title">
+OBSERVED
+</div>
+
+<div
+  id="publicLog"
+  class="observable-log">
+</div>
+
+</div>
+
+
+<!-- BACKSTAGE -->
+
+<div
+  id="backstage"
+  class="panel backstage">
+
+<div class="backstage-header">
+
+<div class="backstage-title">
+彼ログ
+</div>
+
+<div class="label">
+BACKSTAGE
+</div>
+
+</div>
+
+<div
+  id="backstageLog"
+  class="backstage-log">
+</div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   PARTNER DATA
+========================================================= */
+
+const partners={
+
+naoto:{
+  name:"直人",
+  notice:{
+    face:.76,
+    gaze:.72,
+    distance:.70,
+    voice:.75,
+    action:.94
+  },
+  delay:[700,1700],
+  style:"naoto"
+},
+
+kei:{
+  name:"慧",
+  notice:{
+    face:.78,
+    gaze:.73,
+    distance:.92,
+    voice:.78,
+    action:.96
+  },
+  delay:[350,1050],
+  style:"kei"
+},
+
+shoma:{
+  name:"翔馬",
+  notice:{
+    face:.87,
+    gaze:.80,
+    distance:.82,
+    voice:.87,
+    action:.96
+  },
+  delay:[250,900],
+  style:"shoma"
+},
+
+minato:{
+  name:"湊",
+  notice:{
+    face:.96,
+    gaze:.91,
+    distance:.79,
+    voice:.90,
+    action:.95
+  },
+  delay:[280,900],
+  style:"minato"
+},
+
+haruki:{
+  name:"晴輝",
+  notice:{
+    face:.84,
+    gaze:.82,
+    distance:.84,
+    voice:.83,
+    action:.95
+  },
+  delay:[400,1200],
+  style:"haruki"
+},
+
+hyunwoo:{
+  name:"ヒョヌ",
+  notice:{
+    face:.91,
+    gaze:.89,
+    distance:.91,
+    voice:.92,
+    action:.97
+  },
+  delay:[550,1450],
+  style:"hyunwoo"
+}
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let partnerId="kei";
+
+let mode="manual";
+
+let showBackstage=false;
+
+let dialogueEnabled=true;
+
+let sessionStart=Date.now();
+
+let states={
+  shy:false,
+  overwhelmed:false,
+  tired:false,
+  sleepy:false,
+  anxious:false
+};
+
+let partnerActivation=.32;
+
+let lastPartnerAction="watch";
+
+let autoTimer=null;
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const partnerSelect=
+document.getElementById("partnerSelect");
+
+const manualMode=
+document.getElementById("manualMode");
+
+const autoMode=
+document.getElementById("autoMode");
+
+const manualPanel=
+document.getElementById("manualPanel");
+
+const autoInfo=
+document.getElementById("autoInfo");
+
+const logToggle=
+document.getElementById("logToggle");
+
+const dialogueToggle=
+document.getElementById("dialogueToggle");
+
+const resetButton=
+document.getElementById("reset");
+
+const partnerName=
+document.getElementById("partnerName");
+
+const partnerSub=
+document.getElementById("partnerSub");
+
+const partnerFill=
+document.getElementById("partnerFill");
+
+const arrow=
+document.getElementById("arrow");
+
+const linkText=
+document.getElementById("linkText");
+
+const expressionMain=
+document.getElementById("expressionMain");
+
+const expressionSub=
+document.getElementById("expressionSub");
+
+const ayaneWave=
+document.getElementById("ayaneWave");
+
+const dialogueBox=
+document.getElementById("dialogueBox");
+
+const dialogueName=
+document.getElementById("dialogueName");
+
+const dialogueText=
+document.getElementById("dialogueText");
+
+const stateDisplay=
+document.getElementById("stateDisplay");
+
+const publicLog=
+document.getElementById("publicLog");
+
+const backstage=
+document.getElementById("backstage");
+
+const backstageLog=
+document.getElementById("backstageLog");
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function rand(a,b){
+  return a+Math.random()*(b-a);
+}
+
+function chance(p){
+  return Math.random()<p;
+}
+
+function pick(arr){
+  return arr[
+    Math.floor(
+      Math.random()*arr.length
+    )
+  ];
+}
+
+function clamp(v,a,b){
+  return Math.max(a,Math.min(b,v));
+}
+
+function timeText(){
+
+  const sec=
+  Math.floor(
+    (Date.now()-sessionStart)/1000
+  );
+
+  const m=
+  String(
+    Math.floor(sec/60)
+  ).padStart(2,"0");
+
+  const s=
+  String(
+    sec%60
+  ).padStart(2,"0");
+
+  return m+":"+s;
+}
+
+
+/* =========================================================
+   LOG
+========================================================= */
+
+function addPublic(text){
+
+  const div=
+  document.createElement("div");
+
+  div.className=
+  "public-entry";
+
+  div.innerHTML=
+  `<span class="time">${timeText()}</span>${text}`;
+
+  publicLog.appendChild(div);
+
+  publicLog.scrollTop=
+  publicLog.scrollHeight;
+}
+
+
+function addBackstage(text){
+
+  const p=
+  partners[partnerId];
+
+  const div=
+  document.createElement("div");
+
+  div.className=
+  "inner-entry";
+
+  div.innerHTML=
+  `
+  <div class="inner-person">
+    ${timeText()}　${p.name}
+  </div>
+
+  <div class="inner-text">${text}</div>
+  `;
+
+  backstageLog.appendChild(div);
+
+  backstageLog.scrollTop=
+  backstageLog.scrollHeight;
+}
+
+
+/* =========================================================
+   VISUAL
+========================================================= */
+
+function pulseAyane(){
+
+  ayaneWave.classList.remove(
+    "flash"
+  );
+
+  void ayaneWave.offsetWidth;
+
+  ayaneWave.classList.add(
+    "flash"
+  );
+}
+
+
+function updatePartnerVisual(){
+
+  partnerActivation=
+  clamp(
+    partnerActivation,
+    .18,
+    1
+  );
+
+  const height=
+  38+
+  partnerActivation*
+  92;
+
+  partnerFill.style.height=
+  height+"px";
+
+  partnerFill.classList.toggle(
+    "alert",
+    partnerActivation>.72
+  );
+}
+
+
+function setInteraction(
+  type,
+  text
+){
+
+  if(type==="ayane"){
+    arrow.textContent="↓";
+  }
+
+  else if(type==="partner"){
+    arrow.textContent="↑";
+  }
+
+  else if(type==="mutual"){
+    arrow.textContent="↕";
+  }
+
+  else if(type==="apart"){
+    arrow.textContent="↔";
+  }
+
+  linkText.textContent=text;
+}
+
+
+/* =========================================================
+   STATE DISPLAY
+========================================================= */
+
+function updateStateDisplay(){
+
+  stateDisplay.innerHTML="";
+
+  const labels={
+    shy:"恥ずかしい",
+    overwhelmed:"余裕ない",
+    tired:"疲れてきた",
+    sleepy:"眠い",
+    anxious:"不安"
+  };
+
+  Object.entries(states)
+  .forEach(([key,value])=>{
+
+    if(!value){
+      return;
+    }
+
+    const div=
+    document.createElement("div");
+
+    div.className=
+    "state-tag";
+
+    div.textContent=
+    "● "+labels[key];
+
+    stateDisplay.appendChild(div);
+  });
+
+  if(
+    stateDisplay.children.length===0
+  ){
+
+    const div=
+    document.createElement("div");
+
+    div.className=
+    "label";
+
+    div.textContent=
+    "現在、指定された継続状態なし";
+
+    stateDisplay.appendChild(div);
+  }
+}
+
+
+/* =========================================================
+   AYANE EXPRESSION ENGINE
+========================================================= */
+
+function expressionFromInput(type){
+
+  let cues=[];
+
+  const shy=
+  states.shy;
+
+  const overwhelmed=
+  states.overwhelmed;
+
+  const tired=
+  states.tired;
+
+  const anxious=
+  states.anxious;
+
+
+  if(type==="like"){
+
+    if(
+      shy &&
+      !overwhelmed
+    ){
+
+      cues.push({
+        type:"gaze",
+        strength:.55,
+        text:"一度目を逸らす"
+      });
+
+      if(chance(.45)){
+        cues.push({
+          type:"face",
+          strength:.35,
+          text:"表情にわずかな変化が出る"
+        });
+      }
+
+    }
+
+    else if(
+      overwhelmed
+    ){
+
+      cues.push({
+        type:"face",
+        strength:.88,
+        text:"表情に隠しきれない柔らかさが出る"
+      });
+
+      cues.push({
+        type:"gaze",
+        strength:.77,
+        text:"相手を見る時間が少し長くなる"
+      });
+
+    }
+
+    else{
+
+      cues.push({
+        type:"face",
+        strength:.58,
+        text:"一瞬だけ表情が柔らかくなる"
+      });
+
+    }
+  }
+
+
+  if(type==="wantKiss"){
+
+    if(overwhelmed){
+
+      cues.push({
+        type:"gaze",
+        strength:.83,
+        text:"視線が口元と顔を行き来する"
+      });
+
+      cues.push({
+        type:"distance",
+        strength:.62,
+        text:"距離を取り直さなくなる"
+      });
+
+    }
+
+    else{
+
+      cues.push({
+        type:"gaze",
+        strength:.60,
+        text:"相手の顔を見る回数が増える"
+      });
+    }
+  }
+
+
+  if(type==="more"){
+
+    cues.push({
+      type:"face",
+      strength:
+        overwhelmed
+        ? .86
+        : .58,
+      text:
+        overwhelmed
+        ? "物足りなさが表情にかなり漏れる"
+        : "まだ終わりたくなさそうな様子が少し出る"
+    });
+
+  }
+
+
+  if(type==="happy"){
+
+    cues.push({
+      type:"face",
+      strength:.82,
+      text:"嬉しそうな表情が出る"
+    });
+  }
+
+
+  if(type==="surprised"){
+
+    cues.push({
+      type:"face",
+      strength:.90,
+      text:"一瞬、驚きがそのまま顔に出る"
+    });
+  }
+
+
+  if(type==="close"){
+
+    cues.push({
+      type:"distance",
+      strength:.72,
+      text:"自分から距離を開けようとしなくなる"
+    });
+  }
+
+
+  if(tired){
+
+    cues.push({
+      type:"body",
+      strength:.60,
+      text:"動きに少し疲れが混じる"
+    });
+  }
+
+
+  if(anxious){
+
+    cues.push({
+      type:"face",
+      strength:.48,
+      text:"表情にわずかな硬さが出る"
+    });
+  }
+
+
+  return cues;
+}
+
+
+/* =========================================================
+   ACTION CUES
+========================================================= */
+
+function cuesFromAction(action){
+
+  const map={
+
+    kiss:[
+      {
+        type:"action",
+        strength:1,
+        text:"彩音からキスをする"
+      }
+    ],
+
+    hug:[
+      {
+        type:"action",
+        strength:1,
+        text:"彩音から抱きつく"
+      },
+
+      {
+        type:"distance",
+        strength:1,
+        text:"身体の距離が一気に近くなる"
+      }
+    ],
+
+    lean:[
+      {
+        type:"action",
+        strength:.94,
+        text:"彩音から顔を寄せる"
+      }
+    ],
+
+    stay:[
+      {
+        type:"distance",
+        strength:.78,
+        text:"彩音がそのまま近くに残る"
+      }
+    ],
+
+    leave:[
+      {
+        type:"distance",
+        strength:.95,
+        text:"彩音が少し距離を取る"
+      }
+    ],
+
+    rest:[
+      {
+        type:"action",
+        strength:1,
+        text:"彩音が休憩する"
+      }
+    ],
+
+    sayMore:[
+      {
+        type:"voice",
+        strength:1,
+        text:"彩音が「もっと」と伝える"
+      }
+    ]
+
+  };
+
+  return map[action] || [];
+}
+
+
+/* =========================================================
+   CUE DISPLAY
+========================================================= */
+
+function showCues(cues){
+
+  if(cues.length===0){
+
+    expressionMain.textContent=
+    "大きな変化は表に出なかった";
+
+    expressionSub.textContent=
+    "内面がそのまま伝わるとは限らない";
+
+    return;
+  }
+
+
+  const strongest=
+  [...cues]
+  .sort(
+    (a,b)=>b.strength-a.strength
+  )[0];
+
+
+  expressionMain.textContent=
+  strongest.text;
+
+
+  if(cues.length>1){
+
+    expressionSub.textContent=
+    cues
+    .filter(c=>c!==strongest)
+    .map(c=>c.text)
+    .slice(0,2)
+    .join("・");
+
+  }
+
+  else{
+
+    expressionSub.textContent=
+    "彼が気づくかはまだ分からない";
+  }
+
+
+  pulseAyane();
+}
+
+
+/* =========================================================
+   PERCEPTION
+========================================================= */
+
+function perceive(cues){
+
+  const p=
+  partners[partnerId];
+
+  const noticed=[];
+
+
+  cues.forEach(cue=>{
+
+    let base=
+    p.notice[
+      cue.type
+    ];
+
+    if(base===undefined){
+
+      base=.68;
+    }
+
+
+    let probability=
+    base*
+    (
+      .52+
+      cue.strength*.58
+    );
+
+
+    /*
+      very tired / distracted partner approximation
+      reserved for future Context layer.
+    */
+
+    probability=
+    clamp(
+      probability,
+      .05,
+      .99
+    );
+
+
+    if(chance(probability)){
+
+      noticed.push(cue);
+    }
+
+  });
+
+
+  const delay=
+  rand(
+    p.delay[0],
+    p.delay[1]
+  );
+
+
+  setTimeout(
+    ()=>{
+      partnerInterpret(
+        cues,
+        noticed
+      );
+    },
+    delay
+  );
+}
+
+
+/* =========================================================
+   HUMAN-LIKE PARTNER INTERPRETATION
+========================================================= */
+
+function partnerInterpret(
+  allCues,
+  noticed
+){
+
+  const p=
+  partners[partnerId];
+
+
+  if(noticed.length===0){
+
+    if(chance(.35)){
+
+      const missedText=
+      missedBackstage(
+        p.style
+      );
+
+      addBackstage(
+        missedText
+      );
+    }
+
+    return;
+  }
+
+
+  const strongest=
+  [...noticed]
+  .sort(
+    (a,b)=>b.strength-a.strength
+  )[0];
+
+
+  const reaction=
+  buildReaction(
+    p.style,
+    strongest,
+    noticed
+  );
+
+
+  if(reaction.inner){
+
+    addBackstage(
+      reaction.inner
+    );
+  }
+
+
+  if(reaction.activation){
+
+    partnerActivation +=
+    reaction.activation;
+
+    partnerActivation=
+    clamp(
+      partnerActivation,
+      .18,
+      1
+    );
+
+    updatePartnerVisual();
+  }
+
+
+  if(reaction.sub){
+
+    partnerSub.textContent=
+    reaction.sub;
+  }
+
+
+  if(reaction.interaction){
+
+    setInteraction(
+      reaction.interaction.type,
+      reaction.interaction.text
+    );
+  }
+
+
+  if(reaction.public){
+
+    addPublic(
+      reaction.public
+    );
+  }
+
+
+  if(
+    dialogueEnabled &&
+    reaction.dialogue
+  ){
+
+    showDialogue(
+      reaction.dialogue
+    );
+  }
+}
+
+
+/* =========================================================
+   MISSED LOG
+========================================================= */
+
+function missedBackstage(style){
+
+  const data={
+
+    naoto:[
+      "何か変わった気はしたが、確信が持てるほどではなかった。\n今は決めつけず、そのままにしておく。",
+      "一瞬の変化には気づかなかった。\n別のことに注意が向いていた。"
+    ],
+
+    kei:[
+      "その瞬間の変化は拾わなかった。\n距離や身体の動きに、もっとはっきり変化が出ればたぶん気づく。",
+      "何かあったことまでは分からなかった。\nそのまま様子を見る。"
+    ],
+
+    shoma:[
+      "その一瞬は普通に見逃した。\nあとから同じ変化がもう一度あれば、たぶんそこで気づく。",
+      "今のところ、特別な意味は取っていない。"
+    ],
+
+    minato:[
+      "顔は見ていたけれど、その変化までは拾えなかった。\n見間違いだった可能性もある。",
+      "一瞬引っかかったが、意味をつける前に流れた。"
+    ],
+
+    haruki:[
+      "少し気にはなった。\nただ、それが何なのかまではまだ分からない。",
+      "変化を拾い損ねた。\n今の時点では特に意味を持たせていない。"
+    ],
+
+    hyunwoo:[
+      "小さな変化はあったかもしれない。\nただ、今の情報だけで意味を決めるほどではない。",
+      "その瞬間は気づかなかった。\nもう少し分かりやすい変化があれば拾うだろう。"
+    ]
+
+  };
+
+  return pick(data[style]);
+}
+
+
+/* =========================================================
+   REACTION GENERATOR
+========================================================= */
+
+function buildReaction(
+  style,
+  strongest,
+  noticed
+){
+
+  const type=
+  strongest.type;
+
+  const text=
+  strongest.text;
+
+
+  let result={
+    inner:"",
+    public:"",
+    dialogue:"",
+    activation:0,
+    sub:"",
+    interaction:null
+  };
+
+
+/* ==========================
+   NAOTO
+========================== */
+
+if(style==="naoto"){
+
+  if(type==="action"){
+
+    result.inner=
+`彩音の方から動いた。
+
+意図はかなり分かりやすい。
+それでも、勢いだけで先まで決めたことにはしたくない。
+
+一度、顔を見る。`;
+
+    result.activation=.18;
+
+    result.public=
+    "直人はすぐには動かず、一度彩音の顔を見る。";
+
+    result.dialogue=
+    pick([
+      "……大丈夫？",
+      "そのままでいい？",
+      "……続ける？"
+    ]);
+
+    result.sub=
+    "意図を確認している";
+
+    result.interaction={
+      type:"mutual",
+      text:"彩音の行動を受けて確認する"
+    };
+
+  }
+
+  else{
+
+    result.inner=
+`さっきと少し様子が違う。
+
+意味は一つに決められない。
+自分に向けられたものかもしれないが、今はまだ確信まではない。
+
+もう少しだけ見る。`;
+
+    result.activation=.07;
+
+    result.public=
+    "直人は少しだけ彩音の顔を見る時間が長くなる。";
+
+    result.sub=
+    "変化には気づいたが、決めつけていない";
+
+    result.interaction={
+      type:"mutual",
+      text:"直人が様子を確かめている"
+    };
+
+  }
+}
+
+
+/* ==========================
+   KEI
+========================== */
+
+if(style==="kei"){
+
+  if(
+    type==="distance" ||
+    type==="action"
+  ){
+
+    result.inner=
+`距離が変わったのはすぐ分かった。
+
+さっきまでと違って、彩音の方から離れなくなっている。
+考えるより先に、そちらへ意識が向く。
+
+このまま来るなら、わざわざ逃がしたくはない。`;
+
+    result.activation=.24;
+
+    result.public=
+    "慧の身体がわずかに彩音の方へ向く。";
+
+    result.dialogue=
+    chance(.60)
+    ?
+    pick([
+      "……なに。",
+      "まだいる？",
+      "……こっち来る？"
+    ])
+    :
+    "";
+
+    result.sub=
+    "距離の変化にかなり意識が向いた";
+
+    result.interaction={
+      type:"partner",
+      text:"慧側から距離を取り返し始める"
+    };
+
+  }
+
+  else{
+
+    result.inner=
+`今の顔。
+
+たぶん、本人が思っているより隠れていない。
+
+何だったのか聞けば、急に引っ込む気もする。
+少し迷って、今は言わずに見ていることにした。`;
+
+    result.activation=.14;
+
+    result.public=
+    "慧が一瞬、彩音の顔をじっと見る。";
+
+    result.dialogue=
+    chance(.45)
+    ?
+    pick([
+      "……今の顔なに。",
+      "なに照れてんの。",
+      "……なんか言いたい？"
+    ])
+    :
+    "";
+
+    result.sub=
+    "表情の変化が引っかかっている";
+
+    result.interaction={
+      type:"mutual",
+      text:"慧が反応を見ている"
+    };
+  }
+}
+
+
+/* ==========================
+   SHOMA
+========================== */
+
+if(style==="shoma"){
+
+  if(
+    strongest.strength>.78
+  ){
+
+    result.inner=
+`――今の。
+
+考えるより先に引っかかった。
+彩音の反応がさっきまでと明らかに違う。
+
+たぶん本人は隠せているつもりなのかもしれない。
+そう思ったら、余計に意識がそっちへ持っていかれる。`;
+
+    result.activation=.25;
+
+    result.public=
+    "翔馬の反応が一拍だけ止まり、すぐ彩音を見る。";
+
+    result.dialogue=
+    pick([
+      "……今の、ずるくない？",
+      "それ自覚ある？",
+      "……その顔やめて。いや、やめなくていいけど。"
+    ]);
+
+    result.sub=
+    "反応を拾って一気に注意が向いた";
+
+    result.interaction={
+      type:"partner",
+      text:"翔馬の反応が速く返る"
+    };
+
+  }
+
+  else{
+
+    result.inner=
+`ん？
+
+一瞬だけ何か違った。
+まだ追及するほどではない。
+
+でも、少し気になった。`;
+
+    result.activation=.10;
+
+    result.public=
+    "翔馬が一瞬だけ彩音を見る。";
+
+    result.sub=
+    "小さな変化が引っかかった";
+
+    result.interaction={
+      type:"mutual",
+      text:"翔馬が反応を拾いかけている"
+    };
+  }
+}
+
+
+/* ==========================
+   MINATO
+========================== */
+
+if(style==="minato"){
+
+  result.inner=
+`一瞬、顔が変わった。
+
+見間違いかなと思って、もう一度見る。
+やっぱり少し違う。
+
+何が、とはまだ分からない。
+でもその違い自体が気になって、なんとなく嬉しくなる。`;
+
+  result.activation=.15;
+
+  result.public=
+  "湊が彩音の顔を見て、少しだけ笑う。";
+
+  result.dialogue=
+  chance(.72)
+  ?
+  pick([
+    "……なに、その顔。",
+    "今なんか思ったでしょ。",
+    "え、なに。かわいいんだけど。",
+    "さっきと顔違う。"
+  ])
+  :
+  "";
+
+  result.sub=
+  "小さな表情差を追っている";
+
+  result.interaction={
+    type:"mutual",
+    text:"湊が彩音の変化を追っている"
+  };
+}
+
+
+/* ==========================
+   HARUKI
+========================== */
+
+if(style==="haruki"){
+
+  if(
+    states.anxious
+  ){
+
+    result.inner=
+`いつもと少し違う。
+
+嬉しい方なのか、困っている方なのか。
+一瞬、自分の中で意味を探しかける。
+
+でも今ここで勝手に決めるより、聞いた方がいい。`;
+
+    result.activation=-.04;
+
+    result.public=
+    "晴輝は少し表情を変えて、彩音の様子を見る。";
+
+    result.dialogue=
+    pick([
+      "……大丈夫？",
+      "なんか嫌だった？",
+      "一回やめる？"
+    ]);
+
+    result.sub=
+    "意味を読み違えないよう確認している";
+
+    result.interaction={
+      type:"mutual",
+      text:"晴輝が状態を確かめている"
+    };
+
+  }
+
+  else{
+
+    result.inner=
+`なんか、今ちょっと違った。
+
+自分に向けられたものなら嬉しい。
+ただ、そう思いたいだけの可能性もある。
+
+そのまま一度、彩音を見る。`;
+
+    result.activation=.12;
+
+    result.public=
+    "晴輝が彩音を見て、少しだけ目を細める。";
+
+    result.dialogue=
+    chance(.55)
+    ?
+    pick([
+      "……なに？",
+      "今ちょっとかわいかった。",
+      "なんか言いたい？"
+    ])
+    :
+    "";
+
+    result.sub=
+    "変化の意味を測っている";
+
+    result.interaction={
+      type:"mutual",
+      text:"晴輝が意味を探っている"
+    };
+  }
+}
+
+
+/* ==========================
+   HYUNWOO
+========================== */
+
+if(style==="hyunwoo"){
+
+  if(
+    type==="distance" ||
+    type==="action"
+  ){
+
+    result.inner=
+`彩音がこちらへ寄った。
+
+行動そのものは分かりやすい。
+ただ、その先まで同じ気持ちだとは決めない。
+
+今の距離は受け入れて、そのまま彩音の様子を見る。`;
+
+    result.activation=.17;
+
+    result.public=
+    "ヒョヌは距離を保ったまま、彩音の様子を見る。";
+
+    result.dialogue=
+    chance(.63)
+    ?
+    pick([
+      "괜찮아？",
+      "このままでいい？",
+      "……もっと近く来る？"
+    ])
+    :
+    "";
+
+    result.sub=
+    "受け入れながら状態も確認している";
+
+    result.interaction={
+      type:"mutual",
+      text:"距離を受け入れつつ確認している"
+    };
+
+  }
+
+  else{
+
+    result.inner=
+`表情と視線が少し変わった。
+
+一つだけなら気のせいかもしれない。
+でも二つ重なると、さっきよりは意味がありそうに見える。
+
+あえて言葉にはせず、少し待つ。`;
+
+    result.activation=.11;
+
+    result.public=
+    "ヒョヌが少しだけ彩音を見る時間を長くする。";
+
+    result.dialogue=
+    chance(.35)
+    ?
+    pick([
+      "……왜？",
+      "どうしたの。",
+      "何か言いたい？"
+    ])
+    :
+    "";
+
+    result.sub=
+    "複数の変化を合わせて見ている";
+
+    result.interaction={
+      type:"mutual",
+      text:"ヒョヌが静かに反応を待っている"
+    };
+  }
+}
+
+
+return result;
+
+}
+
+
+/* =========================================================
+   INPUT
+========================================================= */
+
+function triggerInput(type){
+
+  const labels={
+
+    like:"すき",
+
+    wantKiss:"キスしたい",
+
+    more:"もっと",
+
+    happy:"嬉しい",
+
+    surprised:"びっくりした",
+
+    close:"くっついていたい"
+
+  };
+
+
+  addPublic(
+    `彩音側INPUT：［${labels[type]}］`
+  );
+
+
+  const cues=
+  expressionFromInput(
+    type
+  );
+
+
+  showCues(cues);
+
+  perceive(cues);
+}
+
+
+/* =========================================================
+   ACTION
+========================================================= */
+
+function triggerAction(action){
+
+  const labels={
+
+    kiss:"彩音からキスする",
+
+    hug:"彩音から抱きつく",
+
+    lean:"彩音から顔を寄せる",
+
+    stay:"彩音がそのまま近くにいる",
+
+    leave:"彩音が少し離れる",
+
+    rest:"彩音が休憩する",
+
+    sayMore:"彩音が「もっと」と伝える"
+
+  };
+
+
+  addPublic(
+    labels[action]
+  );
+
+
+  const cues=
+  cuesFromAction(
+    action
+  );
+
+
+  showCues(cues);
+
+
+  if(
+    action==="leave"
+  ){
+
+    partnerActivation -=.10;
+
+    setInteraction(
+      "apart",
+      "彩音が距離を取った"
+    );
+  }
+
+
+  else if(
+    action==="rest"
+  ){
+
+    partnerActivation -=.16;
+
+    setInteraction(
+      "apart",
+      "いったん落ち着く"
+    );
+
+  }
+
+
+  else{
+
+    setInteraction(
+      "ayane",
+      "彩音側から動いた"
+    );
+  }
+
+
+  updatePartnerVisual();
+
+  perceive(cues);
+}
+
+
+/* =========================================================
+   STATE TOGGLE
+========================================================= */
+
+document
+.querySelectorAll(".state-btn")
+.forEach(button=>{
+
+  button.addEventListener(
+    "click",
+    ()=>{
+
+      const key=
+      button.dataset.state;
+
+      states[key]=
+      !states[key];
+
+      button.classList.toggle(
+        "active",
+        states[key]
+      );
+
+
+      const label=
+      button.textContent.trim();
+
+
+      addPublic(
+        `彩音STATE：${label} ${
+          states[key]
+          ? "ON"
+          : "OFF"
+        }`
+      );
+
+
+      if(
+        states[key]
+      ){
+
+        if(key==="overwhelmed"){
+
+          expressionMain.textContent=
+          "表情を隠す余力が少し落ちる";
+
+          expressionSub.textContent=
+          "以後のINPUTが外へ漏れやすくなる";
+        }
+
+
+        if(key==="shy"){
+
+          expressionMain.textContent=
+          "恥ずかしさが続いている";
+
+          expressionSub.textContent=
+          "視線や表情を隠そうとしやすい";
+        }
+
+
+        if(key==="tired"){
+
+          expressionMain.textContent=
+          "動きに疲れが出始める";
+
+          expressionSub.textContent=
+          "彼が身体的変化を拾う可能性がある";
+        }
+
+      }
+
+      else{
+
+        expressionMain.textContent=
+        `${label}が少し落ち着く`;
+
+        expressionSub.textContent=
+        "次の反応は現在のSTATEを基準に処理される";
+
+      }
+
+
+      updateStateDisplay();
+    }
+  );
+
+});
+
+
+/* =========================================================
+   BUTTON EVENTS
+========================================================= */
+
+document
+.querySelectorAll(".input-btn")
+.forEach(button=>{
+
+  button.addEventListener(
+    "click",
+    ()=>{
+
+      triggerInput(
+        button.dataset.input
+      );
+
+    }
+  );
+
+});
+
+
+document
+.querySelectorAll(".action-btn")
+.forEach(button=>{
+
+  button.addEventListener(
+    "click",
+    ()=>{
+
+      triggerAction(
+        button.dataset.action
+      );
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   DIALOGUE
+========================================================= */
+
+function showDialogue(text){
+
+  const p=
+  partners[partnerId];
+
+  dialogueName.textContent=
+  p.name;
+
+  dialogueText.textContent=
+  `「${text}」`;
+
+}
+
+
+function clearDialogue(){
+
+  dialogueName.textContent=
+  partners[partnerId].name;
+
+  dialogueText.textContent=
+  "……";
+}
+
+
+/* =========================================================
+   MODE
+========================================================= */
+
+function setMode(newMode){
+
+  mode=newMode;
+
+  manualMode.classList.toggle(
+    "active",
+    mode==="manual"
+  );
+
+  autoMode.classList.toggle(
+    "active",
+    mode==="auto"
+  );
+
+  manualPanel.classList.toggle(
+    "hidden",
+    mode==="auto"
+  );
+
+  autoInfo.classList.toggle(
+    "visible",
+    mode==="auto"
+  );
+
+
+  stopAuto();
+
+
+  if(mode==="auto"){
+
+    startAuto();
+
+  }
+}
+
+
+manualMode.addEventListener(
+  "click",
+  ()=>setMode("manual")
+);
+
+
+autoMode.addEventListener(
+  "click",
+  ()=>setMode("auto")
+);
+
+
+/* =========================================================
+   AUTO MODE
+========================================================= */
+
+const autoInputs=[
+  "like",
+  "wantKiss",
+  "more",
+  "happy",
+  "close"
+];
+
+const autoActions=[
+  "stay",
+  "lean",
+  "hug"
+];
+
+
+function autoStep(){
+
+  if(mode!=="auto"){
+    return;
+  }
+
+
+  /*
+    Occasionally state changes.
+  */
+
+  if(chance(.22)){
+
+    const possible=[
+      "shy",
+      "overwhelmed",
+      "tired",
+      "sleepy"
+    ];
+
+    const key=
+    pick(possible);
+
+
+    /*
+      auto LAB can toggle Ayane state.
+      Manual mode never does.
+    */
+
+    states[key]=
+    !states[key];
+
+    updateStateDisplay();
+  }
+
+
+  if(chance(.67)){
+
+    triggerInput(
+      pick(autoInputs)
+    );
+
+  }
+
+  else{
+
+    triggerAction(
+      pick(autoActions)
+    );
+  }
+
+
+  autoTimer=
+  setTimeout(
+    autoStep,
+    rand(
+      3500,
+      7500
+    )
+  );
+}
+
+
+function startAuto(){
+
+  autoTimer=
+  setTimeout(
+    autoStep,
+    1800
+  );
+}
+
+
+function stopAuto(){
+
+  if(autoTimer){
+
+    clearTimeout(
+      autoTimer
+    );
+
+    autoTimer=null;
+  }
+}
+
+
+/* =========================================================
+   PARTNER
+========================================================= */
+
+function updatePartner(){
+
+  partnerId=
+  partnerSelect.value;
+
+  const p=
+  partners[partnerId];
+
+  partnerName.textContent=
+  p.name;
+
+  dialogueName.textContent=
+  p.name;
+
+  partnerSub.textContent=
+  "現在は静かに様子を見ている";
+
+  clearDialogue();
+}
+
+
+partnerSelect.addEventListener(
+  "change",
+  ()=>{
+
+    updatePartner();
+
+    partnerActivation=.32;
+
+    updatePartnerVisual();
+
+    addPublic(
+      `Partnerを${partners[partnerId].name}へ変更`
+    );
+
+  }
+);
+
+
+/* =========================================================
+   LOG TOGGLE
+========================================================= */
+
+logToggle.addEventListener(
+  "click",
+  ()=>{
+
+    showBackstage=
+    !showBackstage;
+
+    backstage.classList.toggle(
+      "visible",
+      showBackstage
+    );
+
+    logToggle.classList.toggle(
+      "active",
+      showBackstage
+    );
+
+    logToggle.textContent=
+    showBackstage
+    ? "彼ログ ON"
+    : "彼ログ OFF";
+
+  }
+);
+
+
+/* =========================================================
+   DIALOGUE TOGGLE
+========================================================= */
+
+dialogueToggle.addEventListener(
+  "click",
+  ()=>{
+
+    dialogueEnabled=
+    !dialogueEnabled;
+
+    dialogueToggle.classList.toggle(
+      "active",
+      dialogueEnabled
+    );
+
+    dialogueToggle.textContent=
+    dialogueEnabled
+    ? "セリフ ON"
+    : "セリフ OFF";
+
+    dialogueBox.style.display=
+    dialogueEnabled
+    ? "block"
+    : "none";
+  }
+);
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetAll(){
+
+  stopAuto();
+
+  sessionStart=
+  Date.now();
+
+  states={
+    shy:false,
+    overwhelmed:false,
+    tired:false,
+    sleepy:false,
+    anxious:false
+  };
+
+  document
+  .querySelectorAll(".state-btn")
+  .forEach(
+    button=>
+    button.classList.remove(
+      "active"
+    )
+  );
+
+  partnerActivation=.32;
+
+  publicLog.innerHTML="";
+
+  backstageLog.innerHTML="";
+
+  expressionMain.textContent=
+  "大きな変化は表に出ていない";
+
+  expressionSub.textContent=
+  "彼から見える情報だけを表示";
+
+  setInteraction(
+    "mutual",
+    "互いの様子を見ている"
+  );
+
+  partnerSub.textContent=
+  "現在は静かに様子を見ている";
+
+  updateStateDisplay();
+
+  updatePartnerVisual();
+
+  clearDialogue();
+
+  addPublic(
+    "Session start"
+  );
+
+
+  if(mode==="auto"){
+    startAuto();
+  }
+}
+
+
+resetButton.addEventListener(
+  "click",
+  resetAll
+);
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+updatePartner();
+
+updateStateDisplay();
+
+updatePartnerVisual();
+
+addPublic(
+  "Session start"
+);
+
+</script>
+
+</body>
+</html>
