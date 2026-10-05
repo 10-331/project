@@ -335,58 +335,81 @@ button{
   cursor:pointer;
 }
 
-.talk-box::before{
-  content:"";
-  position:absolute;
-  top:auto;
-  bottom:100%;
-  width:96px;
-  height:46px;
-  background:rgba(190, 48, 48, .72);
-  pointer-events:none;
-  z-index:0;
-  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.68));
+.talk-box::before,
+.talk-box::after{
+  content:none;
 }
 
-/* 左話者: 吹き出し本体から右上へ伸びる */
-.talk-box.speaker-primary::before{
+/* 2人表示時だけ、白枠付きの話者方向テールを表示 */
+.character-count-2 ~ .talk-layer .talk-box::before,
+.character-count-2 ~ .talk-layer .talk-box::after{
+  content:"";
+  position:absolute;
+  bottom:100%;
+  pointer-events:none;
+}
+
+.character-count-2 ~ .talk-layer .talk-box::before{
+  width:100px;
+  height:48px;
+  background:rgba(255,255,255,.92);
+  z-index:0;
+}
+
+.character-count-2 ~ .talk-layer .talk-box::after{
+  width:92px;
+  height:42px;
+  background:rgba(190, 48, 48, .72);
+  z-index:1;
+}
+
+/* 左話者: 右上へ */
+.character-count-2 ~ .talk-layer .talk-box.speaker-primary::before{
   left:18%;
   clip-path:polygon(0 100%, 100% 0, 34% 100%);
 }
 
-/* 右話者: 吹き出し本体から左上へ伸びる */
-.talk-box.speaker-secondary::before{
+.character-count-2 ~ .talk-layer .talk-box.speaker-primary::after{
+  left:calc(18% + 4px);
+  clip-path:polygon(0 100%, 100% 0, 34% 100%);
+}
+
+/* 右話者: 左上へ */
+.character-count-2 ~ .talk-layer .talk-box.speaker-secondary::before{
   right:18%;
   clip-path:polygon(100% 100%, 0 0, 66% 100%);
 }
 
-.talk-box::after{
-  content:none;
+.character-count-2 ~ .talk-layer .talk-box.speaker-secondary::after{
+  right:calc(18% + 4px);
+  clip-path:polygon(100% 100%, 0 0, 66% 100%);
+}
+
+/* 1人表示時はテールなし */
+.character-count-1 ~ .talk-layer .talk-box::before,
+.character-count-1 ~ .talk-layer .talk-box::after{
+  content:none !important;
 }
 
 #talkName{
   position:absolute;
   top:-8px;
   left:14px;
-  min-width:72px;
-  height:26px;
+  min-width:76px;
+  height:28px;
   padding:0 12px;
   display:flex;
   align-items:center;
   justify-content:center;
   background:#fbfbd3;
   color:#fff;
-  border:2px solid rgba(116,120,128,.85);
+  border:2px solid rgba(255,255,255,.92);
   border-radius:999px;
   font-size:13px;
   font-weight:700;
   line-height:1;
   box-shadow:0 4px 10px rgba(0,0,0,.08);
-  text-shadow:
-    -1px -1px 0 rgba(104,108,116,.75),
-     1px -1px 0 rgba(104,108,116,.75),
-    -1px  1px 0 rgba(104,108,116,.75),
-     1px  1px 0 rgba(104,108,116,.75);
+  text-shadow:0 1px 2px rgba(0,0,0,.16);
 }
 
 #talkText{
@@ -533,7 +556,7 @@ button{
   }
 
   .character-count-2 ~ .talk-layer{
-    top:58.5%;
+    top:57.8%;
     bottom:auto;
     height:0;
   }
@@ -542,8 +565,8 @@ button{
     position:absolute;
     top:0;
     transform:translateY(-50%);
-    width:31%;
-    min-height:120px;
+    width:31.5%;
+    min-height:126px;
     margin-left:0;
     padding:34px 38px 24px 40px;
     border-radius:999px;
