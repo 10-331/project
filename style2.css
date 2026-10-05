@@ -376,12 +376,17 @@ button{
   justify-content:center;
   background:#fbfbd3;
   color:#fff;
+  border:2px solid rgba(116,120,128,.85);
   border-radius:999px;
   font-size:13px;
   font-weight:700;
   line-height:1;
   box-shadow:0 4px 10px rgba(0,0,0,.08);
-  text-shadow:0 1px 2px rgba(0,0,0,.12);
+  text-shadow:
+    -1px -1px 0 rgba(104,108,116,.75),
+     1px -1px 0 rgba(104,108,116,.75),
+    -1px  1px 0 rgba(104,108,116,.75),
+     1px  1px 0 rgba(104,108,116,.75);
 }
 
 #talkText{
@@ -528,7 +533,7 @@ button{
   }
 
   .character-count-2 ~ .talk-layer{
-    top:60%;
+    top:58.5%;
     bottom:auto;
     height:0;
   }
