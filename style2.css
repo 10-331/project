@@ -197,16 +197,48 @@ button{
   pointer-events:none;
 }
 
-.character-layer img{
+.character-slot{
   position:absolute;
-  left:55%;
-  bottom:-77%;
-  transform:translateX(-50%);
+  inset:0;
+}
+
+.character-slot[hidden]{
+  display:none;
+}
+
+.character-slot img{
+  position:absolute;
   width:auto;
-  height:166%;
   max-width:none;
   max-height:none;
   object-fit:contain;
+}
+
+/* 1人表示は現状の見た目を維持 */
+.character-count-1 .character-slot--primary img{
+  left:55%;
+  bottom:-77%;
+  transform:translateX(-50%);
+  height:166%;
+}
+
+/* 2人表示用の土台。secondary の hidden を外し、character-count-2 に切り替えて使用 */
+.character-count-2 .character-slot{
+  display:block;
+}
+
+.character-count-2 .character-slot--primary img{
+  left:39%;
+  bottom:-72%;
+  transform:translateX(-50%);
+  height:158%;
+}
+
+.character-count-2 .character-slot--secondary img{
+  left:61%;
+  bottom:-72%;
+  transform:translateX(-50%);
+  height:158%;
 }
 
 /* 右UI */
@@ -427,15 +459,25 @@ button{
     height:16px;
   }
 
-  .character-layer img{
+  .character-count-1 .character-slot--primary img{
     left:43%;
     bottom:-95%;
     transform:translateX(-50%);
-    width:auto;
     height:180%;
-    max-width:none;
-    max-height:none;
-    object-fit:contain;
+  }
+
+  .character-count-2 .character-slot--primary img{
+    left:34%;
+    bottom:-88%;
+    transform:translateX(-50%);
+    height:172%;
+  }
+
+  .character-count-2 .character-slot--secondary img{
+    left:52%;
+    bottom:-88%;
+    transform:translateX(-50%);
+    height:172%;
   }
 
   .talk-layer{
@@ -501,9 +543,15 @@ button{
 
 /* 横画面でも高さが低い端末向け */
 @media (orientation: landscape) and (max-height: 520px){
-  .character-layer img{
+  .character-count-1 .character-slot--primary img{
     height:100%;
     bottom:-9%;
+  }
+
+  .character-count-2 .character-slot--primary img,
+  .character-count-2 .character-slot--secondary img{
+    height:96%;
+    bottom:-7%;
   }
 
   .talk-layer{
