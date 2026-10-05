@@ -335,17 +335,48 @@ button{
   cursor:pointer;
 }
 
+.talk-box::before,
 .talk-box::after{
   content:"";
   position:absolute;
-  top:-18px;
-  width:0;
-  height:0;
-  border-left:16px solid transparent;
-  border-right:16px solid transparent;
-  border-bottom:20px solid rgba(190, 48, 48, .72);
-  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.75));
+  top:24px;
+  width:30px;
+  height:24px;
+  pointer-events:none;
+}
+
+.talk-box::before{
+  background:rgba(255,255,255,.78);
   z-index:0;
+}
+
+.talk-box::after{
+  background:rgba(190, 48, 48, .72);
+  z-index:1;
+}
+
+.talk-box.speaker-primary::before{
+  left:-18px;
+  clip-path:polygon(100% 0, 0 50%, 100% 100%);
+  transform:rotate(-18deg) scale(1.08);
+}
+
+.talk-box.speaker-primary::after{
+  left:-14px;
+  clip-path:polygon(100% 0, 0 50%, 100% 100%);
+  transform:rotate(-18deg);
+}
+
+.talk-box.speaker-secondary::before{
+  right:-18px;
+  clip-path:polygon(0 0, 100% 50%, 0 100%);
+  transform:rotate(18deg) scale(1.08);
+}
+
+.talk-box.speaker-secondary::after{
+  right:-14px;
+  clip-path:polygon(0 0, 100% 50%, 0 100%);
+  transform:rotate(18deg);
 }
 
 #talkName{
@@ -508,32 +539,30 @@ button{
     min-height:94px;
     padding:30px 34px 22px 38px;
     border-radius:34px;
-    transition:margin-left .22s ease,width .22s ease;
-  }
-
-  .talk-box.speaker-primary::after{
-    left:26%;
-  }
-
-  .talk-box.speaker-secondary::after{
-    left:72%;
+    transition:left .22s ease,width .22s ease;
   }
 
   .character-count-2 ~ .talk-layer{
-    bottom:33%;
+    top:62%;
+    bottom:auto;
+    height:0;
   }
 
   .character-count-2 ~ .talk-layer .talk-box{
-    width:27.5%;
+    position:absolute;
+    top:0;
+    transform:translateY(-50%);
+    width:27%;
     min-height:100px;
+    margin-left:0;
   }
 
   .character-count-2 ~ .talk-layer .talk-box.speaker-primary{
-    margin-left:18.5%;
+    left:18%;
   }
 
   .character-count-2 ~ .talk-layer .talk-box.speaker-secondary{
-    margin-left:38%;
+    left:38%;
   }
 
   #talkName{
