@@ -3,6 +3,182 @@ const talkName = document.getElementById("talkName");
 const talkText = document.getElementById("talkText");
 const leftTime = document.getElementById("leftTime");
 const mainBg = document.getElementById("mainBg");
+const characterLayer = document.getElementById("characterLayer");
+const primaryCharacterSlot = document.getElementById("primaryCharacterSlot");
+const secondaryCharacterSlot = document.getElementById("secondaryCharacterSlot");
+
+/*
+  キャラクター描画
+  - static: 軽量版の立ち絵
+  - live2d: 将来の本実装用。現時点では描画フックのみ
+*/
+const CHARACTER_RENDER_MODE = "static";
+const TWO_CHARACTER_MIN_WIDTH = 700;
+
+const CHARACTERS = {
+  aya: {
+    name: "綾",
+    visuals: {
+      default: "./assets/images/chars/aya-home.png",
+      visual2: "./assets/images/chars/aya-visual-2.png",
+      visual3: "./assets/images/chars/aya-visual-3.png",
+      corrupt: "./assets/images/chars/aya-home-corrupt.png"
+    },
+    live2d: {
+      model: null
+    }
+  },
+  fill2: {
+    name: "二人目",
+    visuals: {
+      default: "./assets/images/chars/fill2.png"
+    },
+    live2d: {
+      model: null
+    }
+  }
+};
+
+/*
+  画面上のスロット状態。
+  characterId / visual を差し替えるだけで人物・立ち絵を変更できる。
+*/
+const characterSlots = {
+  primary: {
+    characterId: "aya",
+    visual: "default"
+  },
+  secondary: {
+    characterId: "fill2",
+    visual: "default"
+  }
+};
+
+let sceneVisualMode = "characters";
+let layoutSyncRaf = null;
+
+function getCharacter(characterId) {
+  return CHARACTERS[characterId] || null;
+}
+
+function renderStaticCharacter(slotElement, slotState) {
+  const character = getCharacter(slotState.characterId);
+  if (!slotElement || !character) return;
+
+  const src =
+    character.visuals[slotState.visual] ||
+    character.visuals.default;
+
+  slotElement.replaceChildren();
+
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = character.name;
+  img.dataset.characterId = slotState.characterId;
+  img.dataset.visual = slotState.visual;
+  slotElement.appendChild(img);
+}
+
+function renderLive2DCharacter(slotElement, slotState) {
+  const character = getCharacter(slotState.characterId);
+  if (!slotElement || !character) return;
+
+  slotElement.replaceChildren();
+
+  const host = document.createElement("div");
+  host.className = "live2d-host";
+  host.dataset.characterId = slotState.characterId;
+  host.dataset.visual = slotState.visual;
+  host.dataset.model = character.live2d?.model || "";
+
+  /*
+    Live2D導入時はここで host を canvas / model に接続する。
+    model未設定時は静止画へフォールバックする。
+  */
+  if (!character.live2d?.model) {
+    renderStaticCharacter(slotElement, slotState);
+    return;
+  }
+
+  slotElement.appendChild(host);
+}
+
+function renderCharacterSlot(slotName) {
+  const slotElement =
+    slotName === "primary"
+      ? primaryCharacterSlot
+      : secondaryCharacterSlot;
+
+  const slotState = characterSlots[slotName];
+  if (!slotElement || !slotState) return;
+
+  if (CHARACTER_RENDER_MODE === "live2d") {
+    renderLive2DCharacter(slotElement, slotState);
+  } else {
+    renderStaticCharacter(slotElement, slotState);
+  }
+}
+
+function renderCharacters() {
+  if (sceneVisualMode !== "characters") return;
+  renderCharacterSlot("primary");
+  renderCharacterSlot("secondary");
+}
+
+function setCharacterSlot(slotName, characterId, visual = "default") {
+  if (!characterSlots[slotName] || !getCharacter(characterId)) return;
+
+  characterSlots[slotName] = {
+    characterId,
+    visual
+  };
+
+  renderCharacterSlot(slotName);
+}
+
+function setCharacterVisual(slotName, visual = "default") {
+  const slot = characterSlots[slotName];
+  const character = slot ? getCharacter(slot.characterId) : null;
+  if (!slot || !character?.visuals[visual]) return;
+
+  slot.visual = visual;
+  renderCharacterSlot(slotName);
+}
+
+function swapCharacterSlots() {
+  const nextPrimary = { ...characterSlots.secondary };
+  const nextSecondary = { ...characterSlots.primary };
+
+  characterSlots.primary = nextPrimary;
+  characterSlots.secondary = nextSecondary;
+  renderCharacters();
+}
+
+function shouldUseTwoCharacterLayout() {
+  const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+  return isLandscape && window.innerWidth >= TWO_CHARACTER_MIN_WIDTH;
+}
+
+function syncCharacterLayout() {
+  if (!characterLayer || !secondaryCharacterSlot) return;
+
+  const useTwoCharacter =
+    sceneVisualMode === "characters" &&
+    shouldUseTwoCharacterLayout();
+
+  characterLayer.classList.toggle("character-count-2", useTwoCharacter);
+  characterLayer.classList.toggle("character-count-1", !useTwoCharacter);
+  secondaryCharacterSlot.hidden = !useTwoCharacter;
+}
+
+function requestCharacterLayoutSync() {
+  if (layoutSyncRaf) cancelAnimationFrame(layoutSyncRaf);
+
+  layoutSyncRaf = requestAnimationFrame(() => {
+    syncCharacterLayout();
+    layoutSyncRaf = null;
+  });
+}
 
 /*
   自動再生
@@ -22,28 +198,28 @@ const SCENES = {
       id: "city",
       background: "./assets/images/bg/bg-morning.png",
       lines: [
-        { name: "綾", text: "いい天気〜！今日はどこに出かけようかな〜" },
-        { name: "綾", text: "あ、あれ……おかしいな、ここどこ？" },
-        { name: "綾", text: "仕事、結構楽しくて好きなんだよね" }
+        { speaker: "aya", text: "いい天気〜！今日はどこに出かけようかな〜" },
+        { speaker: "aya", text: "あ、あれ……おかしいな、ここどこ？" },
+        { speaker: "aya", text: "仕事、結構楽しくて好きなんだよね" }
       ],
       eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "今、なんか…………きのせい、かな" },
-        { name: "綾", text: "……お母さん、って。あ、あれ。なんだっけ？" }
+        { speaker: "aya", text: "今、なんか…………きのせい、かな" },
+        { speaker: "aya", text: "……お母さん、って。あ、あれ。なんだっけ？" }
       ]
     },
     {
       id: "station",
       background: "./assets/images/bg/bg-morning-station.png",
       lines: [
-        { name: "綾", text: "わ～すごい人！　やっぱり都会ってすごいや" },
-        { name: "綾", text: "み、みんな歩くの早くない！？" },
-        { name: "綾", text: "で、電車ってどうやって乗るの！？" }
+        { speaker: "aya", text: "わ～すごい人！　やっぱり都会ってすごいや" },
+        { speaker: "aya", text: "み、みんな歩くの早くない！？" },
+        { speaker: "aya", text: "で、電車ってどうやって乗るの！？" }
       ],
       eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "……あ、れ？　なんで誰もいないんだろ" },
-        { name: "綾", text: "…………これ、本当に乗って大丈夫なやつ？" }
+        { speaker: "aya", text: "……あ、れ？　なんで誰もいないんだろ" },
+        { speaker: "aya", text: "…………これ、本当に乗って大丈夫なやつ？" }
       ]
     }
   ],
@@ -53,28 +229,28 @@ const SCENES = {
       id: "city",
       background: "./assets/images/bg/bg-noon.png",
       lines: [
-        { name: "綾", text: "わ～いやっとお昼だ！　ご飯何にしようかな" },
-        { name: "綾", text: "やっぱり外の空気って好きだなあ" },
-        { name: "綾", text: "珈琲飲みたくなってきたなあ" }
+        { speaker: "aya", text: "わ～いやっとお昼だ！　ご飯何にしようかな" },
+        { speaker: "aya", text: "やっぱり外の空気って好きだなあ" },
+        { speaker: "aya", text: "珈琲飲みたくなってきたなあ" }
       ],
       eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "なんか、さっきから同じところ歩いてる？" },
-        { name: "綾", text: "変なの、誰かに見られているみたい" }
+        { speaker: "aya", text: "なんか、さっきから同じところ歩いてる？" },
+        { speaker: "aya", text: "変なの、誰かに見られているみたい" }
       ]
     },
     {
       id: "station",
       background: "./assets/images/bg/bg-noon-station.png",
       lines: [
-        { name: "綾", text: "駅っていつ来ても混雑してるんだ……！？" },
-        { name: "綾", text: "えっ制服！？　が、学生が駅にいるってこと！？" },
-        { name: "綾", text: "地上でもわからないのに地下なんてもっと分かんないってば" }
+        { speaker: "aya", text: "駅っていつ来ても混雑してるんだ……！？" },
+        { speaker: "aya", text: "えっ制服！？　が、学生が駅にいるってこと！？" },
+        { speaker: "aya", text: "地上でもわからないのに地下なんてもっと分かんないってば" }
       ],
       eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "昔もここに来たことあるような気がする。へんなの" },
-        { name: "綾", text: "添くんの元カノ、さん？　そ、そうなんですね……？" }
+        { speaker: "aya", text: "昔もここに来たことあるような気がする。へんなの" },
+        { speaker: "aya", text: "添くんの元カノ、さん？　そ、そうなんですね……？" }
       ]
     }
   ],
@@ -84,28 +260,28 @@ const SCENES = {
       id: "city",
       background: "./assets/images/bg/bg-evening.png",
       lines: [
-        { name: "綾", text: "もう1日終わっちゃいそう。あっという間だったなあ" },
-        { name: "綾", text: "う、さすがに寒くなってきた" },
-        { name: "綾", text: "なんかいいにおいする！　お腹すいたかも" }
+        { speaker: "aya", text: "もう1日終わっちゃいそう。あっという間だったなあ" },
+        { speaker: "aya", text: "う、さすがに寒くなってきた" },
+        { speaker: "aya", text: "なんかいいにおいする！　お腹すいたかも" }
       ],
       eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "……夕方ね、本当は苦手なの。秘密だよ" },
-        { name: "綾", text: "帰る場所ってなんなんだろう。……なんてね、冗談だよ" }
+        { speaker: "aya", text: "……夕方ね、本当は苦手なの。秘密だよ" },
+        { speaker: "aya", text: "帰る場所ってなんなんだろう。……なんてね、冗談だよ" }
       ]
     },
     {
       id: "station",
       background: "./assets/images/bg/bg-evening-station.png",
       lines: [
-        { name: "綾", text: "夕方のチャイムって地域差あるんだね" },
-        { name: "綾", text: "ほ、本当に人がすごいね……！？" },
-        { name: "綾", text: "このままどこか出かけようかなあ" }
+        { speaker: "aya", text: "夕方のチャイムって地域差あるんだね" },
+        { speaker: "aya", text: "ほ、本当に人がすごいね……！？" },
+        { speaker: "aya", text: "このままどこか出かけようかなあ" }
       ],
       eerieChance: 0.1,
       eerieLines: [
-        { name: "綾", text: "……なんか、鈴みたいな音がしたような" },
-        { name: "綾", text: "ペットロボ？　あはは、好きそうに見えた？" }
+        { speaker: "aya", text: "……なんか、鈴みたいな音がしたような" },
+        { speaker: "aya", text: "ペットロボ？　あはは、好きそうに見えた？" }
       ]
     }
   ],
@@ -115,28 +291,28 @@ const SCENES = {
       id: "city",
       background: "./assets/images/bg/bg-night.png",
       lines: [
-        { name: "綾", text: "夜もにぎわってる場所多いね" },
-        { name: "綾", text: "へえ……星、こっちはあんまり見えないんだ" },
-        { name: "綾", text: "ん、あれ？　家どっちだっけ" }
+        { speaker: "aya", text: "夜もにぎわってる場所多いね" },
+        { speaker: "aya", text: "へえ……星、こっちはあんまり見えないんだ" },
+        { speaker: "aya", text: "ん、あれ？　家どっちだっけ" }
       ],
       eerieChance: 0.2,
       eerieLines: [
-        { name: "綾", text: "……私の居場所って、本当にここなのかな" },
-        { name: "綾", text: "たまに変な夢見るんだよね。忘れちゃうんだけど" }
+        { speaker: "aya", text: "……私の居場所って、本当にここなのかな" },
+        { speaker: "aya", text: "たまに変な夢見るんだよね。忘れちゃうんだけど" }
       ]
     },
     {
       id: "station",
       background: "./assets/images/bg/bg-night-station.png",
       lines: [
-        { name: "綾", text: "終電？　始発？　……べ、勉強になります！" },
-        { name: "綾", text: "な、なんか……治安、あんまり良くなかったりする？" },
-        { name: "綾", text: "どうにかして壁を登れないかな。あっちに行きたいのに" }
+        { speaker: "aya", text: "終電？　始発？　……べ、勉強になります！" },
+        { speaker: "aya", text: "な、なんか……治安、あんまり良くなかったりする？" },
+        { speaker: "aya", text: "どうにかして壁を登れないかな。あっちに行きたいのに" }
       ],
       eerieChance: 0.2,
       eerieLines: [
-        { name: "綾", text: "……さっきから同じところを歩いているような気がする" },
-        { name: "綾", text: "なにか忘れてるような……あっ今日添くんウチ来るんだっけ！？" }
+        { speaker: "aya", text: "……さっきから同じところを歩いているような気がする" },
+        { speaker: "aya", text: "なにか忘れてるような……あっ今日添くんウチ来るんだっけ！？" }
       ]
     }
   ]
@@ -276,8 +452,24 @@ function renderLine() {
   if (!arr || !arr.length) return;
 
   const line = arr[currentLineIndex];
-  talkName.textContent = line.name;
+  const speaker = getCharacter(line.speaker);
+
+  talkName.textContent =
+    speaker?.name ||
+    line.name ||
+    "";
+
   talkText.textContent = line.text;
+
+  /*
+    将来:
+    - line.visual があれば話者の立ち絵差分へ切替
+    - line.slot があれば話者側を primary / secondary に指定
+    - Live2D時は表情・モーション命令へ変換
+  */
+  if (line.visual && line.slot && characterSlots[line.slot]) {
+    setCharacterVisual(line.slot, line.visual);
+  }
 }
 
 function setSceneForPeriod(period) {
@@ -343,5 +535,11 @@ if (mainBg) {
   });
 }
 
+renderCharacters();
+syncCharacterLayout();
 update();
+
+window.addEventListener("resize", requestCharacterLayoutSync);
+window.addEventListener("orientationchange", requestCharacterLayoutSync);
+
 setInterval(update, 1000);
