@@ -335,34 +335,20 @@ button{
   cursor:pointer;
 }
 
-.talk-box::before,
-.talk-box::after{
+.talk-box::before{
   content:"";
   position:absolute;
   top:-42px;
   width:96px;
   height:46px;
-  pointer-events:none;
-}
-
-.talk-box::before{
-  background:rgba(255,255,255,.78);
-  z-index:0;
-}
-
-.talk-box::after{
   background:rgba(190, 48, 48, .72);
+  pointer-events:none;
   z-index:1;
+  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.68));
 }
 
 /* 左話者: 吹き出し本体から右上へ伸びる */
 .talk-box.speaker-primary::before{
-  left:18%;
-  clip-path:polygon(0 100%, 100% 0, 34% 100%);
-  transform:translate(-4px,-3px) scale(1.08);
-}
-
-.talk-box.speaker-primary::after{
   left:18%;
   clip-path:polygon(0 100%, 100% 0, 34% 100%);
 }
@@ -371,12 +357,10 @@ button{
 .talk-box.speaker-secondary::before{
   right:18%;
   clip-path:polygon(100% 100%, 0 0, 66% 100%);
-  transform:translate(4px,-3px) scale(1.08);
 }
 
-.talk-box.speaker-secondary::after{
-  right:18%;
-  clip-path:polygon(100% 100%, 0 0, 66% 100%);
+.talk-box::after{
+  content:none;
 }
 
 #talkName{
