@@ -339,9 +339,9 @@ button{
 .talk-box::after{
   content:"";
   position:absolute;
-  top:24px;
-  width:30px;
-  height:24px;
+  top:-21px;
+  width:36px;
+  height:28px;
   pointer-events:none;
 }
 
@@ -356,27 +356,25 @@ button{
 }
 
 .talk-box.speaker-primary::before{
-  left:-18px;
-  clip-path:polygon(100% 0, 0 50%, 100% 100%);
-  transform:rotate(-18deg) scale(1.08);
+  left:18%;
+  clip-path:polygon(100% 100%, 0 8%, 68% 100%);
+  transform:translate(-2px,-1px) scale(1.08);
 }
 
 .talk-box.speaker-primary::after{
-  left:-14px;
-  clip-path:polygon(100% 0, 0 50%, 100% 100%);
-  transform:rotate(-18deg);
+  left:18%;
+  clip-path:polygon(100% 100%, 0 8%, 68% 100%);
 }
 
 .talk-box.speaker-secondary::before{
-  right:-18px;
-  clip-path:polygon(0 0, 100% 50%, 0 100%);
-  transform:rotate(18deg) scale(1.08);
+  right:18%;
+  clip-path:polygon(0 100%, 100% 8%, 32% 100%);
+  transform:translate(2px,-1px) scale(1.08);
 }
 
 .talk-box.speaker-secondary::after{
-  right:-14px;
-  clip-path:polygon(0 0, 100% 50%, 0 100%);
-  transform:rotate(18deg);
+  right:18%;
+  clip-path:polygon(0 100%, 100% 8%, 32% 100%);
 }
 
 #talkName{
@@ -538,7 +536,7 @@ button{
     margin-left:31%;
     min-height:94px;
     padding:30px 34px 22px 38px;
-    border-radius:34px;
+    border-radius:999px;
     transition:left .22s ease,width .22s ease;
   }
 
@@ -555,6 +553,7 @@ button{
     width:27%;
     min-height:100px;
     margin-left:0;
+    border-radius:999px;
   }
 
   .character-count-2 ~ .talk-layer .talk-box.speaker-primary{
