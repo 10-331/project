@@ -206,12 +206,17 @@ button{
   display:none;
 }
 
-.character-slot img{
+.character-slot img,
+.character-slot .live2d-host{
   position:absolute;
   width:auto;
   max-width:none;
   max-height:none;
   object-fit:contain;
+}
+
+.live2d-host{
+  pointer-events:none;
 }
 
 /* 1人表示は現状の見た目を維持 */
