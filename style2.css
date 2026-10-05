@@ -339,9 +339,9 @@ button{
 .talk-box::after{
   content:"";
   position:absolute;
-  top:-30px;
-  width:68px;
-  height:34px;
+  top:-42px;
+  width:96px;
+  height:46px;
   pointer-events:none;
 }
 
@@ -355,26 +355,28 @@ button{
   z-index:1;
 }
 
+/* 左話者: 吹き出し本体から右上へ伸びる */
 .talk-box.speaker-primary::before{
-  left:19%;
-  clip-path:polygon(100% 100%, 0 18%, 72% 100%);
-  transform:translate(-3px,-2px) scale(1.07);
+  left:18%;
+  clip-path:polygon(0 100%, 100% 0, 34% 100%);
+  transform:translate(-4px,-3px) scale(1.08);
 }
 
 .talk-box.speaker-primary::after{
-  left:19%;
-  clip-path:polygon(100% 100%, 0 18%, 72% 100%);
+  left:18%;
+  clip-path:polygon(0 100%, 100% 0, 34% 100%);
 }
 
+/* 右話者: 吹き出し本体から左上へ伸びる */
 .talk-box.speaker-secondary::before{
-  right:19%;
-  clip-path:polygon(0 100%, 100% 18%, 28% 100%);
-  transform:translate(3px,-2px) scale(1.07);
+  right:18%;
+  clip-path:polygon(100% 100%, 0 0, 66% 100%);
+  transform:translate(4px,-3px) scale(1.08);
 }
 
 .talk-box.speaker-secondary::after{
-  right:19%;
-  clip-path:polygon(0 100%, 100% 18%, 28% 100%);
+  right:18%;
+  clip-path:polygon(100% 100%, 0 0, 66% 100%);
 }
 
 #talkName{
@@ -553,7 +555,7 @@ button{
     width:31%;
     min-height:120px;
     margin-left:0;
-    padding:32px 38px 24px 40px;
+    padding:34px 38px 24px 40px;
     border-radius:999px;
   }
 
