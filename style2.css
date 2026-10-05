@@ -490,19 +490,19 @@ button{
   }
 
   .talk-box{
-    width:36%;
-    margin-left:16.5%;
+    width:34%;
+    margin-left:29%;
     min-height:76px;
     padding:24px 28px 16px 34px;
   }
 
   .character-count-2 ~ .talk-layer{
-    bottom:33%;
+    bottom:34%;
   }
 
   .character-count-2 ~ .talk-layer .talk-box{
-    width:31.5%;
-    margin-left:17.5%;
+    width:30%;
+    margin-left:33%;
   }
 
   #talkName{
@@ -519,39 +519,39 @@ button{
   }
 
   .ui-btn-world{
-    top:2.5%;
-    right:7.5%;
-    width:16.5%;
+    top:4.5%;
+    right:4.5%;
+    width:16%;
   }
 
   .ui-btn-character{
-    top:20.5%;
-    right:17%;
-    width:9%;
+    top:22%;
+    right:16.5%;
+    width:8.8%;
   }
 
   .ui-btn-illust{
-    top:39.5%;
-    right:4.5%;
-    width:10%;
+    top:31%;
+    right:3.5%;
+    width:9.5%;
   }
 
   .ui-btn-gallery{
-    top:67%;
-    right:5%;
-    width:5.6%;
+    top:55%;
+    right:8.5%;
+    width:6%;
   }
 
   .ui-btn-story{
-    right:17%;
-    bottom:20%;
+    right:16.5%;
+    bottom:31%;
     width:10.5%;
   }
 
   .ui-btn-main{
-    right:6.5%;
-    bottom:5%;
-    width:18.5%;
+    right:8.5%;
+    bottom:7%;
+    width:18%;
   }
 }
 
