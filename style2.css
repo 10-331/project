@@ -338,14 +338,14 @@ button{
 .talk-box::after{
   content:"";
   position:absolute;
-  top:-13px;
-  width:25px;
-  height:25px;
-  background:rgba(190, 48, 48, .72);
-  border-left:2px solid rgba(255,255,255,.75);
-  border-top:2px solid rgba(255,255,255,.75);
-  transform:rotate(45deg);
-  z-index:-1;
+  top:-18px;
+  width:0;
+  height:0;
+  border-left:16px solid transparent;
+  border-right:16px solid transparent;
+  border-bottom:20px solid rgba(190, 48, 48, .72);
+  filter:drop-shadow(0 -1px 0 rgba(255,255,255,.75));
+  z-index:0;
 }
 
 #talkName{
@@ -503,19 +503,20 @@ button{
   }
 
   .talk-box{
-    width:34%;
-    margin-left:29%;
-    min-height:88px;
-    padding:28px 34px 20px 38px;
+    width:30%;
+    margin-left:31%;
+    min-height:94px;
+    padding:30px 34px 22px 38px;
+    border-radius:34px;
     transition:margin-left .22s ease,width .22s ease;
   }
 
   .talk-box.speaker-primary::after{
-    left:31%;
+    left:26%;
   }
 
   .talk-box.speaker-secondary::after{
-    left:68%;
+    left:72%;
   }
 
   .character-count-2 ~ .talk-layer{
@@ -523,65 +524,66 @@ button{
   }
 
   .character-count-2 ~ .talk-layer .talk-box{
-    width:33%;
-    min-height:94px;
+    width:27.5%;
+    min-height:100px;
   }
 
   .character-count-2 ~ .talk-layer .talk-box.speaker-primary{
-    margin-left:21%;
+    margin-left:18.5%;
   }
 
   .character-count-2 ~ .talk-layer .talk-box.speaker-secondary{
-    margin-left:36%;
+    margin-left:38%;
   }
 
   #talkName{
-    top:-12px;
+    top:-13px;
     left:24px;
-    min-width:88px;
-    height:32px;
-    font-size:15px;
+    min-width:96px;
+    height:34px;
+    padding:0 16px;
+    font-size:16px;
   }
 
   #talkText{
-    font-size:clamp(16px,1.05vw,19px);
-    line-height:1.45;
+    font-size:clamp(18px,1.12vw,21px);
+    line-height:1.48;
   }
 
   .ui-btn-world{
     top:4%;
-    right:4%;
-    width:18%;
+    right:3.5%;
+    width:18.5%;
   }
 
   .ui-btn-character{
-    top:21.5%;
-    right:16.5%;
-    width:10%;
+    top:20.5%;
+    right:15.5%;
+    width:10.5%;
   }
 
   .ui-btn-illust{
-    top:30%;
-    right:3%;
-    width:10.8%;
+    top:29%;
+    right:2.5%;
+    width:11.5%;
   }
 
   .ui-btn-gallery{
-    top:54%;
-    right:7.5%;
-    width:6.8%;
+    top:52%;
+    right:6.2%;
+    width:7.3%;
   }
 
   .ui-btn-story{
-    right:16%;
-    bottom:30%;
-    width:11.8%;
+    right:14.5%;
+    bottom:31%;
+    width:12.8%;
   }
 
   .ui-btn-main{
-    right:7.5%;
-    bottom:6%;
-    width:20%;
+    right:6.8%;
+    bottom:7.5%;
+    width:21.5%;
   }
 }
 
