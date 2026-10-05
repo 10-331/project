@@ -335,6 +335,19 @@ button{
   cursor:pointer;
 }
 
+.talk-box::after{
+  content:"";
+  position:absolute;
+  top:-13px;
+  width:25px;
+  height:25px;
+  background:rgba(190, 48, 48, .72);
+  border-left:2px solid rgba(255,255,255,.75);
+  border-top:2px solid rgba(255,255,255,.75);
+  transform:rotate(45deg);
+  z-index:-1;
+}
+
 #talkName{
   position:absolute;
   top:-8px;
@@ -492,66 +505,83 @@ button{
   .talk-box{
     width:34%;
     margin-left:29%;
-    min-height:76px;
-    padding:24px 28px 16px 34px;
+    min-height:88px;
+    padding:28px 34px 20px 38px;
+    transition:margin-left .22s ease,width .22s ease;
+  }
+
+  .talk-box.speaker-primary::after{
+    left:31%;
+  }
+
+  .talk-box.speaker-secondary::after{
+    left:68%;
   }
 
   .character-count-2 ~ .talk-layer{
-    bottom:34%;
+    bottom:33%;
   }
 
   .character-count-2 ~ .talk-layer .talk-box{
-    width:30%;
-    margin-left:33%;
+    width:33%;
+    min-height:94px;
+  }
+
+  .character-count-2 ~ .talk-layer .talk-box.speaker-primary{
+    margin-left:21%;
+  }
+
+  .character-count-2 ~ .talk-layer .talk-box.speaker-secondary{
+    margin-left:36%;
   }
 
   #talkName{
-    top:-11px;
-    left:22px;
-    min-width:82px;
-    height:30px;
-    font-size:14px;
+    top:-12px;
+    left:24px;
+    min-width:88px;
+    height:32px;
+    font-size:15px;
   }
 
   #talkText{
-    font-size:15px;
-    line-height:1.38;
+    font-size:clamp(16px,1.05vw,19px);
+    line-height:1.45;
   }
 
   .ui-btn-world{
-    top:4.5%;
-    right:4.5%;
-    width:16%;
+    top:4%;
+    right:4%;
+    width:18%;
   }
 
   .ui-btn-character{
-    top:22%;
+    top:21.5%;
     right:16.5%;
-    width:8.8%;
+    width:10%;
   }
 
   .ui-btn-illust{
-    top:31%;
-    right:3.5%;
-    width:9.5%;
+    top:30%;
+    right:3%;
+    width:10.8%;
   }
 
   .ui-btn-gallery{
-    top:55%;
-    right:8.5%;
-    width:6%;
+    top:54%;
+    right:7.5%;
+    width:6.8%;
   }
 
   .ui-btn-story{
-    right:16.5%;
-    bottom:31%;
-    width:10.5%;
+    right:16%;
+    bottom:30%;
+    width:11.8%;
   }
 
   .ui-btn-main{
-    right:8.5%;
-    bottom:7%;
-    width:18%;
+    right:7.5%;
+    bottom:6%;
+    width:20%;
   }
 }
 

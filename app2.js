@@ -61,6 +61,32 @@ function getCharacter(characterId) {
   return CHARACTERS[characterId] || null;
 }
 
+function getSlotForCharacterId(characterId) {
+  return Object.entries(characterSlots).find(
+    ([, slot]) => slot.characterId === characterId
+  )?.[0] || null;
+}
+
+function applySpeakerPresentation(speakerId, explicitSlot = null) {
+  if (!talkBox) return;
+
+  const speakerSlot =
+    explicitSlot ||
+    getSlotForCharacterId(speakerId) ||
+    "primary";
+
+  talkBox.classList.remove(
+    "speaker-primary",
+    "speaker-secondary"
+  );
+  talkBox.classList.add(
+    speakerSlot === "secondary"
+      ? "speaker-secondary"
+      : "speaker-primary"
+  );
+  talkBox.dataset.speakerSlot = speakerSlot;
+}
+
 function renderStaticCharacter(slotElement, slotState) {
   const character = getCharacter(slotState.characterId);
   if (!slotElement || !character) return;
@@ -461,14 +487,20 @@ function renderLine() {
 
   talkText.textContent = line.text;
 
+  const speakerSlot =
+    line.slot && characterSlots[line.slot]
+      ? line.slot
+      : getSlotForCharacterId(line.speaker);
+
+  applySpeakerPresentation(line.speaker, speakerSlot);
+
   /*
     将来:
     - line.visual があれば話者の立ち絵差分へ切替
-    - line.slot があれば話者側を primary / secondary に指定
     - Live2D時は表情・モーション命令へ変換
   */
-  if (line.visual && line.slot && characterSlots[line.slot]) {
-    setCharacterVisual(line.slot, line.visual);
+  if (line.visual && speakerSlot && characterSlots[speakerSlot]) {
+    setCharacterVisual(speakerSlot, line.visual);
   }
 }
 
