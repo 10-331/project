@@ -466,21 +466,21 @@ button{
 
   .character-count-1 .character-slot--primary img{
     left:43%;
-    bottom:-95%;
+    bottom:-91%;
     transform:translateX(-50%);
     height:180%;
   }
 
   .character-count-2 .character-slot--primary img{
     left:34%;
-    bottom:-88%;
+    bottom:-80%;
     transform:translateX(-50%);
     height:172%;
   }
 
   .character-count-2 .character-slot--secondary img{
     left:52%;
-    bottom:-88%;
+    bottom:-80%;
     transform:translateX(-50%);
     height:172%;
   }
@@ -490,10 +490,15 @@ button{
   }
 
   .talk-box{
-    width:40%;
-    margin-left:16%;
+    width:36%;
+    margin-left:16.5%;
     min-height:76px;
     padding:24px 28px 16px 34px;
+  }
+
+  .character-count-2 ~ .talk-layer .talk-box{
+    width:34%;
+    margin-left:17%;
   }
 
   #talkName{
@@ -510,39 +515,39 @@ button{
   }
 
   .ui-btn-world{
-    top:2%;
-    right:4%;
-    width:22%;
+    top:2.5%;
+    right:7%;
+    width:17%;
   }
 
   .ui-btn-character{
-    top:25%;
-    right:13%;
-    width:12%;
+    top:20%;
+    right:15.5%;
+    width:9.5%;
   }
 
   .ui-btn-illust{
-    top:40%;
-    right:4%;
-    width:13%;
+    top:37%;
+    right:7.5%;
+    width:10.5%;
   }
 
   .ui-btn-gallery{
-    top:74%;
-    right:7%;
-    width:7%;
+    top:70.5%;
+    right:10%;
+    width:5.8%;
   }
 
   .ui-btn-story{
-    right:5%;
-    bottom:28%;
-    width:15%;
+    right:7.5%;
+    bottom:29%;
+    width:12.5%;
   }
 
   .ui-btn-main{
-    right:4%;
-    bottom:4%;
-    width:25%;
+    right:6.5%;
+    bottom:5%;
+    width:19%;
   }
 }
 
