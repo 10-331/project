@@ -11,8 +11,8 @@ body{
    2026-11-07: 公式（18TRIP）レイアウトの「まんま再現」のため、
    位置の手調整（device--top / device--button / device--visual /
    device--prof / device--card / copy-area）と
-   ボタンの背景上書き（_off画像の強制・SPでのimg非表示）、
-   items--16 の位置調整はすべて外した。
+   ボタンの背景上書き（_off画像の強制・SPでのimg非表示）は外した。
+   items--16 の位置調整は本人の指定位置のため、下記に復旧している。
    character.css 側の座標が公式と一致していることを確認済みで、
    位置はそちらに一本化する。 */
 
@@ -73,4 +73,12 @@ body{
 
 .menu-overlay[hidden] {
   display: none !important;
+}
+
+/* 浮遊アイテム items--16 の位置（本人の調整を復旧：2026-11-07） */
+@media screen and (max-width: 768px){
+  .items--16{
+    top: 28%;   /* 下げる */
+    left: 16%;  /* 右に寄せる */
+  }
 }
