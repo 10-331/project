@@ -1,0 +1,250 @@
+/* ============================================================
+綾／フィラー キャラページ専用スタイル（character.html / character-filler.html）
+ten.css（叢雲添レプリカ）で確立した実測レイアウト方式を流用し、
+当サイトのオリジナルキャラ用に再構成したもの。
+- ジオメトリ（デバイス基準 1344×968、ステージ 1520/1080、各要素の配置、
+  SP の vw 換算、名前をデバイスに潜らせる z-index 等）は ten.css と同一。
+- 違う点：card／visual／zoom は絵素材が無いため公式キャンバス寸法の
+  プレースホルダ枠。prof は画像ではなく正本データの HTML 描画。
+  VOICE は音声ファイルが存在しないため「セリフ表示のみ」（理由は各HTMLのJSコメント参照）。
+- ページごとの色帯・サブナビ帯色は CSS 変数で切替：
+  .chara-wrap--aya（ライム系）／ .chara-wrap--filler（サーモン系）
+============================================================ */
+.chara-page{background:var(--paper)}
+.chara-wrap{position:relative;overflow:hidden;background:#f0f0e2 url("official/character_detail_bg.png") center top no-repeat;background-size:cover}
+.chara-wrap img{display:block}
+.chara-wrap p,.chara-wrap ul,.chara-wrap h2,.chara-wrap h3,.chara-wrap h4,.chara-wrap dl,.chara-wrap dt,.chara-wrap dd{margin:0;padding:0}
+.chara-wrap ul{list-style:none}
+.chara-wrap a{text-decoration:none}
+.chara-wrap--aya{--band:#d9eab0;--ln-bg:#e9f5c6;--ln-border:#aed63e;--sheet-accent:#004986}
+.chara-wrap--filler{--band:#f2ccc4;--ln-bg:#fce7e2;--ln-border:#ff8c78;--sheet-accent:#c0452f}
+
+/* ---- 名前（公式 .name） ---- */
+.chara-name{width:100%;position:absolute;left:0;top:0;z-index:5}
+.chara-name .name__team{text-align:center;font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:20px;line-height:1em;width:100%;position:absolute;left:0;top:30px;color:#231815}
+.chara-name .name__member{position:absolute;right:195px;top:50px;text-align:right}
+.chara-name .member--pc{display:block}
+.chara-name .member--pc span{font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:70px;line-height:.942em;display:block;color:rgba(0,0,0,0);-webkit-text-fill-color:rgba(0,0,0,0);-webkit-text-stroke:1px #231815}
+.chara-name .member--sp{display:none}
+
+/* ---- 詳細ステージ（公式 .detail） ---- */
+.chara-detail{position:relative;z-index:0;width:100%;aspect-ratio:1520/1080;max-height:1080px}
+
+/* ---- デバイス（公式 .detail__device、基準 1344×968） ---- */
+.chara-device{width:1344px;height:968px;position:absolute;left:50%;top:55px;z-index:0;transform:translateX(-50%);margin-left:-222px;transform-origin:50% 0}
+.chara-device__inner{width:100%;height:100%;position:relative;transform-origin:50% 50%}
+.chara-device__inner::before{content:"";display:block;width:1499px;height:1087px;background:url("official/character_device_shadow.png") center top no-repeat;background-size:100% 100%;position:absolute;left:-48px;top:-27px;z-index:0;pointer-events:none}
+.chara-device__inner .device--bottom,
+.chara-device__inner .device--top,
+.chara-device__inner .device--lcd,
+.chara-device__inner .device--light,
+.chara-device__inner .device--grid,
+.chara-device__inner .device--card,
+.chara-device__inner .device--prof,
+.chara-device__inner .device--visual{position:absolute;pointer-events:none}
+.chara-device__inner .device--bottom{left:15px;top:23px;z-index:0}
+.chara-device__inner .device--top{left:0;top:0;z-index:10}
+.chara-device__inner .device--top img,.chara-device__inner .device--bottom img{width:1329px;height:945px}
+.chara-device__inner .device--lcd{left:72px;top:41px;z-index:30}
+.chara-device__inner .device--light{left:95px;top:160px;z-index:40;opacity:.9}
+.chara-device__inner .device--grid{left:72px;top:41px;z-index:41;mix-blend-mode:overlay}
+.chara-device__inner .device--card{left:359px;top:125px;z-index:5}
+.chara-device__inner .device--prof{left:135px;top:95px;z-index:30;width:528px;container-type:inline-size}
+.chara-device__inner .device--visual{left:496px;top:160px;z-index:25}
+.chara-device__inner .device--visual p{position:relative;overflow:hidden}
+
+/* ---- 画像プレースホルダ（素材待ち。公式キャンバス寸法で枠だけ先に作る） ---- */
+.chara-ph{
+border:2px dashed #8a97a5;background:repeating-linear-gradient(45deg,#eef3f4,#eef3f4 14px,#e2eaec 14px,#e2eaec 28px);
+display:flex;align-items:center;justify-content:center;text-align:center;
+color:#556;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+letter-spacing:.12em;line-height:1.9;
+}
+.chara-ph b{display:block;font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:1.5em;letter-spacing:.2em;color:#33424e}
+.chara-ph--card{width:1026px;height:769px;font-size:26px}
+.chara-ph--visual{width:686px;height:741px;font-size:24px}
+
+/* ---- Git版（project/test.html）から統合した綾の実画像（assets/aya/） ----
+   card SP画像と prof SP画像はSP専用（PCでは隠し、既存の器を使う）。
+   visual はSP画像をPCにも流用する（PC幅686pxに縮小表示）。 */
+.card-img--sp{display:none}
+.prof-img{display:none}
+.chara-device__inner .device--visual img{width:686px;height:auto}
+.chara-zoom .zoom__visual img{height:min(94vh,1500px);width:auto;max-width:94vw}
+
+/* ---- profシート（HTML描画版。公式 prof 画像 1055×1042 の器に正本データを流す）
+   文字サイズは cqw（prof枠幅に対する%）で指定し、PC/SP どちらでも
+   枠の拡縮に比例して文字が追従するようにする。px はフォールバック。 ---- */
+.prof-sheet{
+width:100%;aspect-ratio:1055/1042;overflow:hidden;
+background:#fffdf4;border:3px solid #231815;border-radius:6px;
+padding:27px;padding:5.2cqw;color:#231815;
+display:flex;flex-direction:column;
+}
+.prof-sheet .prof-catch{
+font-family:"18TRIPSansFunnyMedium","IBM Plex Sans JP",sans-serif;font-weight:700;
+font-size:24px;font-size:4.5cqw;line-height:1.35;color:var(--sheet-accent);
+}
+.prof-sheet .prof-name{
+font-size:44px;font-size:8.3cqw;font-weight:900;line-height:1.15;margin-top:.15em;
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;letter-spacing:.04em;
+}
+.prof-sheet .prof-name span{font-size:16px;font-size:3cqw;font-family:"18TRIPSansMedium",sans-serif;letter-spacing:.28em;color:#556;margin-left:.6em}
+.prof-sheet .prof-hash{font-size:15px;font-size:2.8cqw;color:#778;letter-spacing:.06em;margin-top:.3em}
+.prof-sheet .prof-list{margin-top:.8em;border-top:2px solid #231815}
+.prof-sheet .prof-list>div{display:flex;gap:.8em;padding:.3em .1em;border-bottom:1px solid #d8d8cc;align-items:baseline}
+.prof-sheet .prof-list dt{
+flex:none;width:86px;width:16.5cqw;
+font-size:19px;font-size:3.5cqw;font-weight:800;color:var(--sheet-accent);letter-spacing:.08em;
+}
+.prof-sheet .prof-list dd{font-size:18px;font-size:3.3cqw;line-height:1.4}
+.prof-sheet .prof-list--half{display:grid;grid-template-columns:1fr 1fr;column-gap:1.2em}
+.prof-sheet .prof-list--half>div{display:flex;gap:.6em;padding:.3em .1em;border-bottom:1px solid #d8d8cc;align-items:baseline}
+.prof-sheet .prof-list--half dt{width:64px;width:12.5cqw}
+.prof-sheet .prof-foot{margin-top:auto;font-size:14px;font-size:2.6cqw;color:#778;line-height:1.5}
+
+/* ---- デバイスボタン（公式 .device--button、基準 335×181） ---- */
+.chara-device__inner .device--button{width:335px;height:181px;position:absolute;left:52px;top:632px;z-index:30}
+.chara-device__inner .device--button ul{width:100%;height:100%;position:relative}
+.chara-device__inner .device--button li{position:absolute;width:128px;height:145px}
+.chara-device__inner .device--button li.is--hidden{pointer-events:none}
+.chara-device__inner .device--button a{display:block;width:100%;height:100%}
+.chara-device__inner .device--button img{opacity:0;transition:opacity .2s;width:128px;height:145px}
+.chara-device__inner .device--button a:hover img{opacity:1}
+.chara-device__inner .device--button__zoom{left:0;top:0;background:url("official/character_device_btn_zoom_off.png") center center no-repeat;background-size:cover}
+.chara-device__inner .device--button__voice{left:104px;top:18px;background:url("official/character_device_btn_voice_off.png") center center no-repeat;background-size:cover}
+.chara-device__inner .device--button__voice.is--on a img{opacity:1}
+.chara-device__inner .device--button__movie{left:207px;top:36px;background:url("official/character_device_btn_movie_off.png") center center no-repeat;background-size:cover}
+.chara-device__inner .device--button__movie.is--hidden{background-image:url("official/character_device_btn_movie_hidden.png")}
+
+/* ---- BACK / NEXT（公式 .device--prev / .device--next） ---- */
+.chara-device .device--prev,.chara-device .device--next{position:absolute;top:50%;z-index:50;transform:translateY(-50%)}
+.chara-device .device--prev a,.chara-device .device--next a{display:block;width:140px;height:30px;line-height:30px;border-radius:30px;background-color:#c8ff46;font-family:"18TRIPSansMedium",sans-serif;color:#000;font-size:15px;letter-spacing:.15em}
+.chara-device .device--prev span,.chara-device .device--next span{display:flex;justify-content:space-between;align-items:center;margin:0 17px}
+.chara-device .device--prev span::before,.chara-device .device--prev span::after,
+.chara-device .device--next span::before,.chara-device .device--next span::after{content:"";display:block;width:18px;height:14px;background:url("official/common_icon_arw_black.png") center center no-repeat;background-size:cover;transition:all .2s}
+.chara-device .device--prev{left:-68px}
+.chara-device .device--prev span::before{display:none}
+.chara-device .device--prev span::after{transform:rotate(180deg)}
+.chara-device .device--prev a:hover span::after{transform:rotate(180deg) translateX(10px)}
+.chara-device .device--next{right:-110px}
+.chara-device .device--next span::before{transform:rotate(0deg)}
+.chara-device .device--next span::after{display:none}
+.chara-device .device--next a:hover span::before{transform:rotate(0deg) translateX(10px)}
+
+/* ---- VOICEセリフ表示（音声の代わりにセリフを吹き出し表示する） ---- */
+.chara-voice-line{
+position:absolute;left:50%;bottom:18px;transform:translateX(-50%) translateY(8px);z-index:60;
+max-width:min(88%,760px);background:rgba(255,255,253,.97);border:2px solid #231815;border-radius:999px;
+padding:.55em 1.3em;font-size:.92rem;line-height:1.5;color:#231815;text-align:center;
+opacity:0;visibility:hidden;transition:opacity .25s,transform .25s,visibility .25s;
+box-shadow:0 6px 18px rgba(35,24,21,.18);
+}
+.chara-voice-line.is--show{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.chara-voice-line b{
+display:inline-block;font-family:"18TRIPSansMedium",sans-serif;font-size:.68rem;letter-spacing:.2em;
+color:var(--sheet-accent);margin-right:.7em;vertical-align:.08em;
+}
+
+/* ---- MEMBERサブナビ（当サイトの3人用。公式 .localnav の文法を流用、PCは右端固定） ---- */
+.chara-localnav{position:fixed;right:2.6041666667%;top:50%;transform:translateY(-50%);z-index:6}
+.chara-localnav #localnavBg{display:none}
+.chara-localnav .localnav__head,.chara-localnav .localnav__pager{display:none}
+.chara-localnav .localnav__block li{margin-bottom:30px;width:103px}
+.chara-localnav .localnav__block li:last-of-type{margin-bottom:0}
+.chara-localnav .localnav__block li.is--current{pointer-events:none}
+.chara-localnav .localnav__block li.is--current span::before{opacity:1}
+.chara-localnav .localnav__block a{display:block;width:100%;height:100%}
+.chara-localnav .localnav__block a:hover span{transform:scale(1.1)}
+.chara-localnav .localnav__block a:hover span::before{opacity:1}
+.chara-localnav .localnav__block span{display:block;width:100%;height:94px;position:relative;transition:all .2s;
+background:rgba(255,255,253,.85);border:2px solid #231815;border-radius:50%;
+text-align:center;color:#231815}
+.chara-localnav .localnav__block span::before{content:"";display:block;width:100%;height:100%;border-radius:50%;background:url("official/character_subnav_hover.png") center center no-repeat;background-size:cover;position:absolute;left:0;top:0;z-index:1;mix-blend-mode:multiply;opacity:0;transition:opacity .2s}
+.chara-localnav .localnav__block .nav-emoji{display:block;font-size:34px;line-height:1;padding-top:16px;position:relative;z-index:2}
+.chara-localnav .localnav__block .nav-name{display:block;font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:13px;letter-spacing:.06em;position:relative;z-index:2;margin-top:2px}
+
+/* ---- ZOOM（公式 .zoom / .zoom--bg。zoom画像は素材待ちプレースホルダ） ---- */
+.chara-zoom-bg{width:100%;height:100%;position:fixed;left:0;top:0;z-index:8000;background-color:#5a5a5a;mix-blend-mode:multiply;display:none}
+.chara-zoom{width:100%;height:100%;position:fixed;left:0;top:0;z-index:8001;display:none}
+.chara-zoom.is--open,.chara-zoom-bg.is--open{display:block}
+.chara-zoom::after{content:"";display:block;width:100%;height:100%;position:absolute;left:0;top:0;z-index:1}
+.chara-zoom .zoom__visual{position:relative;z-index:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;pointer-events:none}
+.chara-zoom .chara-ph--zoom{height:min(94vh,1500px);aspect-ratio:695/1500;font-size:20px}
+
+/* ============================================================
+SP（公式ブレークポイント max-width: 768px、設計幅375のvw換算）
+ten.css で確立した知見を最初から適用：
+- SP は PC ステージの縮小ではなく SP 専用値で組む
+- 名前（.chara-name）は z-index:1 でデバイス（.chara-detail z-index:2）の下に潜らせる
+- 左端 24vw の色帯（.chara-wrap::before）が縦書き名の地になる
+============================================================ */
+@media screen and (max-width:768px){
+.chara-wrap{background:#f0f0e2 url("official/character_detail_bg_sp.png") center top no-repeat;background-size:cover}
+.chara-wrap::before{content:"";display:block;width:24vw;height:100%;background-color:var(--band);position:absolute;left:0;top:0;z-index:0}
+.chara-name{z-index:1}
+.chara-name .name__team{font-size:2.6666666667vw;top:5.6vw}
+.chara-name .name__member{right:auto;left:1.3333333333vw;top:22.6666666667vw;text-align:left}
+.chara-name .member--pc{display:none}
+.chara-name .member--sp{display:block}
+.chara-name .member--sp span{font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:17.3333333333vw;line-height:17.3333333333vw;height:17.3333333333vw;display:block;color:rgba(0,0,0,0);-webkit-text-fill-color:rgba(0,0,0,0);-webkit-text-stroke:.1333333333vw #231815;white-space:nowrap;transform-origin:0 0;transform:translateX(17.3333333333vw) rotate(90deg)}
+.chara-detail{position:relative;z-index:2;width:100%;height:auto;aspect-ratio:auto;max-height:100%;padding-top:32.2666666667vw;margin-bottom:12vw}
+.chara-device{width:139.7333333333vw;height:auto;position:relative;left:auto;top:auto;transform:none;margin-left:-6.6666666667vw}
+.chara-device__inner::before{width:156.1333333333vw;height:256.8vw;background-image:url("official/character_device_shadow_sp.png");left:-6.9333333333vw;top:0}
+.chara-device__inner .device--bottom{display:none}
+.chara-device__inner .device--top{position:relative;left:auto;top:auto;z-index:10}
+.chara-device__inner .device--top img{width:139.7333333333vw;height:auto}
+.chara-device__inner .device--lcd{left:8.6666666667vw;top:106.5333333333vw;z-index:30}
+.chara-device__inner .device--lcd img{width:109.3333333333vw;height:auto}
+.chara-device__inner .device--light{display:none}
+.chara-device__inner .device--grid{left:8.6666666667vw;top:106.5333333333vw;z-index:41}
+.chara-device__inner .device--grid img{width:109.3333333333vw;height:auto}
+.chara-device__inner .device--card{left:36.4vw;top:-6.5333333333vw;z-index:5}
+.chara-ph--card{width:83.4666666667vw;height:auto;aspect-ratio:1026/769;font-size:3.4666666667vw}
+.chara-wrap--aya .card-img--sp{display:block;width:83.4666666667vw;height:auto}
+.chara-wrap--aya .device--card .chara-ph--card{display:none}
+.chara-device__inner .device--prof{left:10.6666666667vw;top:79.6vw;z-index:30;width:93.7333333333vw}
+.chara-wrap--aya .prof-img{display:block}
+.chara-wrap--aya .prof-img img{width:93.7333333333vw;height:auto}
+.chara-wrap--aya .prof-sheet{display:none}
+.chara-device__inner .device--visual{left:24.2666666667vw;top:7.7333333333vw;z-index:25}
+.chara-device__inner .device--visual img{width:100.5333333333vw;height:auto}
+.chara-ph--visual{width:100.5333333333vw;height:auto;aspect-ratio:686/741;font-size:3.2vw}
+.chara-device__inner .device--button{width:20.1333333333vw;height:48.6666666667vw;left:20.9333333333vw;top:6.5333333333vw;z-index:30}
+.chara-device__inner .device--button li{width:18vw;height:auto}
+.chara-device__inner .device--button img{width:18vw;height:auto}
+.chara-device__inner .device--button a:hover img{opacity:0}
+.chara-device__inner .device--button__zoom{left:2.1333333333vw;top:0;background-image:url("official/character_device_btn_zoom_off_sp.png")}
+.chara-device__inner .device--button__voice{left:1.0666666667vw;top:16vw;background-image:url("official/character_device_btn_voice_off_sp.png")}
+.chara-device__inner .device--button__voice.is--on a img{opacity:1}
+.chara-device__inner .device--button__movie{left:0;top:32vw;background-image:url("official/character_device_btn_movie_off_sp.png")}
+.chara-device__inner .device--button__movie.is--hidden{background-image:url("official/character_device_btn_movie_hidden_sp.png")}
+.chara-device .device--prev,.chara-device .device--next{top:67.7333333333vw;transform:scale(.75)}
+.chara-device .device--prev a,.chara-device .device--next a{width:24.8vw;height:5.3333333333vw;line-height:5.3333333333vw;border-radius:5.3333333333vw;font-size:2.6666666667vw}
+.chara-device .device--prev span,.chara-device .device--next span{margin:0 3.4666666667vw}
+.chara-device .device--prev span::before,.chara-device .device--prev span::after,
+.chara-device .device--next span::before,.chara-device .device--next span::after{width:2.4vw;height:1.8666666667vw}
+.chara-device .device--prev{left:10.6666666667vw;transform-origin:0 0}
+.chara-device .device--next{right:37.0666666667vw;transform-origin:100% 0}
+.chara-voice-line{bottom:2vw;font-size:.82rem;max-width:92%}
+
+/* ローカルナビ（SPは通常フロー。帯色はページ変数 --ln-bg / --ln-border） */
+.chara-localnav{position:relative;right:auto;top:auto;transform:none;z-index:3;padding-bottom:10.6666666667vw}
+.chara-localnav #localnavBg{display:block;width:100%;height:calc(100% - 12vw);position:absolute;left:0;bottom:0;z-index:0}
+.chara-localnav #localnavBg::before,.chara-localnav #localnavBg::after{content:"";display:block;width:100%;height:100%;position:absolute;left:0;bottom:0;z-index:0}
+.chara-localnav #localnavBg::before{border-bottom:1.6vw solid var(--ln-border);background-color:var(--ln-bg);box-sizing:border-box}
+.chara-localnav #localnavBg::after{background:url("official/character_localnav_bg_sp.png") center top no-repeat;background-size:cover;mix-blend-mode:multiply}
+.chara-localnav .localnav__head{position:relative;z-index:1;display:block;width:100%;text-align:center;margin-bottom:4vw}
+.chara-localnav .localnav__head .head--member{font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:20.6666666667vw;line-height:20.6666666667vw;height:20.6666666667vw;color:rgba(0,0,0,0);-webkit-text-fill-color:rgba(0,0,0,0);-webkit-text-stroke:.1333333333vw #231815;margin-bottom:2.6666666667vw}
+.chara-localnav .localnav__head .head--team{font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:2.6666666667vw;line-height:1em}
+.chara-localnav .localnav__block{position:relative;z-index:1}
+.chara-localnav .localnav__block ul{display:flex;width:100%;flex-wrap:wrap;justify-content:center;padding-bottom:4vw}
+.chara-localnav .localnav__block li{margin:0 1.3333333333vw 4vw;width:auto}
+.chara-localnav .localnav__block li:last-of-type{margin-bottom:4vw}
+.chara-localnav .localnav__block span{width:26.8vw;height:25.0666666667vw}
+.chara-localnav .localnav__block .nav-emoji{font-size:9.0666666667vw;padding-top:4.2666666667vw}
+.chara-localnav .localnav__block .nav-name{font-size:3.4666666667vw}
+.chara-localnav .localnav__block a:hover span{transform:none}
+.chara-localnav .localnav__block a:hover span::before{opacity:0}
+.chara-localnav .localnav__block li.is--current span::before{opacity:1}
+}
