@@ -349,5 +349,42 @@ PC では正本準拠の現行版を優先した）。
 - 公開URL：https://10-331.github.io/project/aya/index.html
 - 経路：ブランチ `add-aya-site` へのスナップショット push → PR → main へマージ。既存ファイル（test.html 等）は変更・削除していない。
 - **反映できたのはテキストファイル16点のみ**：HTML 7（index／character／character-filler／ten／story／terms／event-camelia）、CSS 5（site／index／ten／character／fonts/plex-faces）、JS 1（site.js）、MD 3（ASSETS／DECISIONS／FLOW）。内部リンクは全て相対パスのため、`aya/` 配置でもページ間導線（index の MEMBERS、ten⇄character⇄character-filler の BACK/NEXT、assets 参照）は壊れないことを確認済み。
-- **未反映（バイナリ 508ファイル・約12.5MB）**：woff2 378／woff 5（assets/fonts/）、png 124（assets/official／assets/ten／assets/aya）、mp3 1（assets/ten/voice/1_3.mp3）。GitHub 連携ツール（MCP の push_files／create_or_update_file）が UTF-8 テキスト専用でバイナリを送れないため。git の SSH は遮断・HTTPS は資格情報なしで push 不可だった。
-- このため GitHub Pages 上の表示は、バイナリが揃うまで不完全（フォント・画像・音声が出ない）。バイナリの追加は、ユーザーが GitHub の Web UI から `aya/assets/` 配下へフォルダごとアップロードする等、別経路が必要。完全な状態はローカル `site/` が正。
+- **バイナリは 2026-11-09 に反映完了**：当初未反映だった508ファイル（woff2 378／woff 5（assets/fonts/）、png 124（assets/official／assets/ten／assets/aya）、mp3 1（assets/ten/voice/1_3.mp3））に、作業中に追加された `assets/map-bg.jpg` を加えた計509点を、GitHub PAT（カスタムコネクタ `custom.github-pat`）経由の Git Data API（blob → tree → commit → ref 更新、force なし）で main へ追加した（コミット `66ffca1`）。MCP 連携ツールがテキスト専用だったための迂回路で、手順は `~/workspace/custom-connectors/custom.github-pat/CONNECTOR.md` に記録。
+- 同じタイミングで新規追加されていた `assets/story.css`（§11）も同経路で追加した（コミット `1e4363d`）。
+- 検証：GitHub API の再帰ツリーで `aya/` 配下ファイル数を数え、ローカル `site/` の全526ファイルと完全一致（欠落0・余分0）を確認。GitHub Pages 上でも代表アセット（フォント woff2／ten の画像／音声 mp3 等）の URL が 200 を返すことを確認した。
+
+## §11 ノベル一覧ステージ（2026-11-09 追加）
+
+- `assets/map-bg.jpg`：ユーザーが提示したゲーム内地図背景のスクリーンショット（1170×541）をそのまま採用。下部のホームインジケーターが映り込んでいたため、下部7%をトリミングして 1170×503 とした（切り取ったのは帯状の余白部のみで、線画の主要部は保持）。
+- `assets/story.css`：story.html の区長ノベル一覧ステージ（C-4 実測文法の再現）専用CSS。新規作成。
+- 立ち絵は `assets/aya/aya-fullbody.png`（統合時に保管された全身絵原本）を使用。
+- GitHub 側 `aya/` への反映は、テキスト（story.html／story.css）は通常経路、バイナリ（map-bg.jpg）は PAT 経由のバイナリ追加と合わせて行う想定。
+
+## §12 ノベル一覧の独立ページ化（2026-11-09 追加）
+
+ユーザーの方針「ゲーム風にするっていうので横にしたい」を受けて、§11 のステージを
+story.html（縦基準・`.page` 最大720px）から切り離し、独立した横画面ページにした。
+
+- `novel.html`（新規）：ノベル一覧ステージ単体のページ。共通ヘッダー／フッター／
+  全画面メニュー（site.js の注入を含む）は付けず、ゲーム画面として完結させる。
+  戻り導線はステージ上部バーの BACK（→ index.html）とホームアイコン。
+- `assets/novel.css`（新規）：旧 story.css のステージ＋モーダル規則を移設し、
+  横長ステージ前提で再調整したもの。
+  - ステージ幅は `min(100vw, 100dvh × 1558/720)`、アスペクト 1558/720 固定の
+    レターボックス収め。余白部は暗色（#26262e）。
+  - フォントは site.css を読み込まず、plex-faces.css の @import と
+    18TRIPSansMedium の @font-face を自前で持つ。
+  - 旧 story.css にあった上部バーの `max-height:64px`（720px幅前提の頭打ち）は撤廃し、
+    フル画面幅でも cqw 比例が効くようにした。
+  - 旧 story.css の「スマホ縦持ち＝縦積みフォールバック」は廃止。
+- 縦持ち時の扱い：縦積みにはせず、ステージを画面幅に合わせて相似縮小表示し、
+  そのまま操作可能にする。その上で `orientation:portrait` のときだけ
+  ステージ下に小さく「横向き推奨」の注記を出す（判断：ゲーム画面の比率を崩さない
+  ことを優先し、注記は強制ではなく案内に留める）。
+- story.html 側：SIDE-A のステージ実装・詳細モーダル・専用スクリプトを取り除き、
+  地図背景サムネイル付きの導線バナー（→ novel.html）に置き換えた。
+  SIDE-B（カメリア／サブストーリー枠）と SIDE タブ切替（site.js）は不変。
+- `assets/story.css` は、どの HTML からも参照されなくなった旧版として残置する
+  （並行して進行中の GitHub 反映フローとの整合のため、削除はしない）。
+  現行の実装は novel.html ＋ novel.css。
+- GitHub 側 `aya/` への反映は今回の対象外（別途進行中の反映フローで扱う）。

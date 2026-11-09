@@ -5,6 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>STORY ✈ 笹井綾ノベル</title>
 <link rel="stylesheet" href="assets/site.css">
+<style>
+/* SIDE-A：ノベル一覧は独立した横画面ページ（novel.html）への導線バナーに置き換え */
+.nvl-banner{
+  display:block;margin:1rem;text-decoration:none;color:#191919;
+  border:2px solid var(--ink);border-radius:8px;overflow:hidden;background:#dbc9a0;
+}
+.nvl-banner .thumb{
+  display:block;height:110px;background:url("assets/map-bg.jpg") center 30%/cover no-repeat;
+  border-bottom:2px solid var(--ink);
+}
+.nvl-banner .body{display:block;padding:.7rem .9rem .8rem}
+.nvl-banner .ttl{
+  display:block;font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;
+  font-size:1rem;font-weight:900;letter-spacing:.06em;
+}
+.nvl-banner .desc{display:block;font-size:.78rem;color:#3c3c34;margin-top:.25rem;line-height:1.6}
+.nvl-banner .open{
+  display:inline-block;margin-top:.55rem;background:#c8ff46;color:#16230a;
+  font-size:.75rem;font-weight:800;letter-spacing:.1em;padding:.3rem .9rem;border-radius:99px;
+  border:1.6px solid #16230a;
+}
+.nvl-banner:hover .open{background:#fff}
+.nvl-note{margin:.6rem 1rem 0;font-size:.72rem;color:#99a}
+</style>
 </head>
 <body>
 <div class="page">
@@ -38,39 +62,18 @@
 </div>
 
 <div data-side-panel="a">
-<ol class="track-list">
-<li>
-<span class="no">Track.1</span>
-<h3>かみさまのおうち</h3>
-<p>村と大樹。「かみさまのおうち」と呼ばれた大樹のもとで育った少女は、高校3年の1月、帰郷して更地になった村と向き合う。家族の名前も、顔も、思い出せないまま、彼女は名前のない「■」として目覚める。</p>
-<p class="read"><a href="#">▶ 本文を読む（準備中）</a></p>
-</li>
-<li>
-<span class="no">Track.2</span>
-<h3>鈴の音</h3>
-<p>河川敷と踏切。古びた鈴の音と「赤」に引きずられる日々。変わらないはずの日常だけが歪んで残り、疲弊していくフィラーの記録。</p>
-<p class="read"><a href="#">▶ 本文を読む（準備中）</a></p>
-</li>
-<li>
-<span class="no">Track.3</span>
-<h3>解体</h3>
-<p>変異体（感情を持ったアンドロイド）の解体任務。国家新設の対アンドロイド部隊の前衛として、彼女の心は静かに折れていく。</p>
-<p class="read"><a href="#">▶ 本文を読む（準備中）</a></p>
-</li>
-<li>
-<span class="no">Track.4</span>
-<h3>このファイルは削除しておこうか</h3>
-<p>記憶改ざんを内側から聞く場面。「記憶を消せる人間がいる」――少女・南野陽葵との出会いが、「親友」という新しい過去を彼女に与える。</p>
-<p class="read"><a href="#">▶ 本文を読む（準備中）</a></p>
-</li>
-<li>
-<span class="no">Track.5</span>
-<h3>いつから好きだったか</h3>
-<p>2055年、HAMAのカフェ。陽葵への「夢」の相談に静かに蓋をして、名前も知らない彼（黒いふわふわの髪、目の下のホクロ）への恋が始まる。ブラックコーヒー――「いつから好きだったか、思い出せない」。</p>
-<p class="read"><a href="#">▶ 本文を読む（準備中）</a></p>
-</li>
-</ol>
-<p style="margin:0 1rem;font-size:.72rem;color:#99a">※現行Git版5話は旧版として保存。2026-06-14構成のリメイク版が正本ライン。本文への導線はリメイク版の配置後に接続する。</p>
+
+<!-- ノベル一覧は独立した横画面ページ（ゲーム画面）へ分離。ここは導線バナー -->
+<a class="nvl-banner" href="novel.html">
+<span class="thumb" aria-hidden="true"></span>
+<span class="body">
+<span class="ttl">NOVEL ― 5話短編・話数リスト</span>
+<span class="desc">区長ノベル一覧の文法で組んだ、横画面のゲーム風ページです。話数リスト・詳細（カセット型モーダル）はこちらから。横向き推奨。</span>
+<span class="open">▶ ノベル一覧（ゲーム画面）を開く</span>
+</span>
+</a>
+
+<p class="nvl-note">※現行Git版5話は旧版として保存。2026-06-14構成のリメイク版が正本ライン。本文への導線はリメイク版の配置後に接続する。</p>
 </div>
 
 <div data-side-panel="b" style="display:none">
@@ -100,6 +103,7 @@
 </footer>
 
 </div>
+
 <script src="assets/site.js"></script>
 </body>
 </html>

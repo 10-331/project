@@ -1,0 +1,181 @@
+/* ============================================================
+NOVEL ― 区長ノベル一覧（C-4 実測文法）の綾版ステージ
+story.html（縦基準）から切り離し、novel.html 単体の横長ゲーム画面として
+完結させるための専用CSS。共通部品（site.css／site.js）は読み込まない。
+ステージは実画面比率 1558×720（≒2.16:1）をビューポートに
+レターボックス収めし、内部寸法は container query unit（cqw）で
+ステージ幅に比例させる（旧 story.css の仕組みを流用）。
+縦持ちでも縦積みにはせず、相似縮小のまま操作可能にする＋回転注記を出す。
+============================================================ */
+@import url("fonts/plex-faces.css"); /* IBM Plex Sans JP（site.css と同じ読み込み） */
+@font-face{font-family:"18TRIPSansMedium";src:url("fonts/18TRIPSans-Medium.woff2") format("woff2"),url("fonts/18TRIPSans-Medium.woff") format("woff")}
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+background:#26262e; /* レターボックスの余白色（ゲーム画面の外側） */
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+min-height:100dvh;
+font-family:"IBM Plex Sans JP","Helvetica Neue","Helvetica","Hiragino Sans","Hiragino Kaku Gothic ProN","Arial","Yu Gothic","Meiryo",sans-serif;
+}
+
+/* ---- ステージ本体：画面全体を使う横長ステージ ---- */
+.nvl-stage{
+position:relative;
+width:min(100vw, calc(100dvh * 1558 / 720));
+aspect-ratio:1558/720;
+container-type:inline-size;overflow:hidden;background:#f2f2f4;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+flex:none;
+}
+.nvl-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+
+/* ---- 縦持ち時の回転注記（横向きでは出さない） ---- */
+.nvl-rotate-note{
+display:none;margin:.7rem 0 0;color:#b9b9c4;font-size:.72rem;
+letter-spacing:.08em;text-align:center;padding:0 1rem;
+}
+@media (orientation:portrait){
+.nvl-rotate-note{display:block}
+}
+
+/* ---- 上部バー ---- */
+.nvl-topbar{
+position:absolute;left:0;right:0;top:0;height:9.5cqw;
+background:rgba(143,144,137,.88);display:flex;align-items:center;
+gap:2.4cqw;padding:0 2.2cqw;z-index:5;
+}
+.nvl-back{
+background:#fff;color:#222;text-decoration:none;font-weight:800;
+font-size:1.9cqw;letter-spacing:.14em;padding:1cqw 2.6cqw 1cqw 1.8cqw;
+border-radius:.8cqw;box-shadow:0 1px 3px rgba(0,0,0,.25);white-space:nowrap;
+}
+.nvl-title{font-weight:800;color:#1c1c1c;font-size:2.6cqw;letter-spacing:.06em;white-space:nowrap}
+.nvl-tools{margin-left:auto;display:flex;align-items:center;gap:2.2cqw}
+.nvl-toggle{display:flex;align-items:center;gap:.9cqw;font-size:1.7cqw;font-weight:700;color:#1c1c1c;white-space:nowrap}
+.tgl{
+display:inline-flex;align-items:center;gap:.7cqw;border:0;cursor:pointer;
+background:#6f7069;color:#fff;border-radius:99px;padding:.55cqw 1.4cqw.55cqw.55cqw;
+font-size:1.55cqw;font-weight:800;letter-spacing:.08em;font-family:inherit;
+}
+.tgl i{
+width:2.5cqw;height:2.5cqw;border-radius:50%;background:#fff;display:block;
+box-shadow:0 0 0.45cqw #d8d8d2 inset;transition:transform.18s;
+}
+.tgl[aria-pressed="true"]{background:#8fbf1f;color:#16230a}
+.tgl[aria-pressed="true"] i{transform:translateX(1.2cqw);box-shadow:none;background:#eaffb0}
+.nvl-ic{
+width:4.6cqw;height:4.6cqw;display:grid;place-items:center;color:#1c1c1c;
+font-size:3.4cqw;line-height:1;text-decoration:none;
+}
+.nvl-stage.novel-on.nvl-panel{outline:.5cqw solid rgba(200,255,70,.55);outline-offset:-.5cqw}
+
+/* ---- 立ち絵 ---- */
+.nvl-chara{
+position:absolute;left:1.2%;bottom:0;height:90%;z-index:2;
+filter:drop-shadow(0 4px 10px rgba(40,40,60,.25));
+}
+
+/* ---- フォルダ型パネル ---- */
+.nvl-panel{
+position:absolute;left:37.5%;right:2.2%;top:15.5%;bottom:3.5%;z-index:3;
+background:#dbc9a0;border-radius:1.6cqw;
+box-shadow:0.8cqw 2.4cqw rgba(60,50,20,.25);
+padding:2.2cqw 3.4cqw 1.6cqw 5.2cqw;
+}
+.nvl-tab{
+position:absolute;left:0;top:-4.6cqw;height:4.8cqw;min-width:34%;
+background:#dbc9a0;border-radius:1.4cqw 1.4cqw 0 0;
+display:flex;align-items:baseline;gap:1.6cqw;padding:.7cqw 3cqw 0 5.2cqw;
+}
+.nvl-tab-en{
+font-family:Georgia,"Times New Roman",serif;font-weight:700;
+font-size:3.6cqw;letter-spacing:.04em;color:#191919;
+}
+.nvl-tab-jp{font-size:1.9cqw;font-weight:700;color:#191919}
+.nvl-band{
+position:absolute;left:0;top:0;bottom:0;width:3.1cqw;background:#151515;
+border-radius:1.6cqw 0 0 1.6cqw;overflow:hidden;
+display:flex;align-items:center;justify-content:center;
+}
+.nvl-band span{
+writing-mode:vertical-rl;color:#fff;font-size:1.45cqw;letter-spacing:.28em;
+white-space:nowrap;font-weight:600;
+}
+.nvl-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.5cqw;height:100%}
+.nvl-row{
+position:relative;flex:1;background:#fff;border-radius:1.2cqw;
+display:flex;align-items:center;gap:1.8cqw;padding:.6cqw 2cqw;
+box-shadow:0.3cqw.8cqw rgba(60,50,20,.18);
+}
+.nvl-row[hidden]{display:none}
+.nvl-stamp{width:6.4cqw;height:6.4cqw;flex:none}
+.nvl-row-main{display:flex;flex-direction:column;min-width:0}
+.nvl-season{font-size:1.75cqw;color:#b07cc6;font-weight:600;letter-spacing:.05em}
+.nvl-row-title{font-size:2.35cqw;font-weight:800;color:#151515;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nvl-checked{
+position:absolute;right:15%;top:50%;transform:translateY(-58%) rotate(-7deg);
+font-family:"Segoe Script","Bradley Hand","Comic Sans MS",cursive;
+font-size:3.1cqw;color:#a8c400;opacity:.92;pointer-events:none;
+text-decoration:underline;text-underline-offset:.4cqw;text-decoration-thickness:.28cqw;
+}
+.nvl-row-side{margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:.5cqw;flex:none}
+.nvl-fav{width:4.5cqw;height:4.5cqw}
+.nvl-detail{
+border:.28cqw solid #333;background:#fff;color:#151515;cursor:pointer;
+font-size:1.7cqw;font-weight:700;border-radius:.7cqw;padding:.45cqw 1.7cqw;font-family:inherit;
+}
+.nvl-detail:hover{background:#c8ff46}
+.nvl-scroll{
+position:absolute;right:.9cqw;top:6%;height:88%;width:1.5cqw;
+background:#151515;border-radius:99px;
+}
+
+/* ---- 詳細モーダル（カセット型） ---- */
+.nvl-modal{
+position:fixed;inset:0;z-index:200;background:rgba(28,28,38,.58);
+display:none;align-items:center;justify-content:center;padding:1rem;
+}
+.nvl-modal.open{display:flex}
+.nvl-cassette{
+display:flex;width:min(700px,94vw);background:#f2edd8;border-radius:10px;
+transform:rotate(-1.1deg);box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+}
+.nvl-spine{
+flex:0 0 15%;background:#141414;color:#fff;display:flex;flex-direction:column;
+align-items:center;padding:1rem.3rem.8rem;gap:.55rem;text-align:center;
+}
+.nvl-spine.tr{font-size:.62rem;letter-spacing:.34em;color:#ddd}
+.nvl-spine.no{font-size:2rem;font-weight:800;line-height:1;font-stretch:condensed}
+.nvl-spine.dots{display:flex;flex-direction:column;gap:.34rem;margin:.3rem 0}
+.nvl-spine.dots i{width:9px;height:9px;border-radius:50%;border:1.6px solid #eee;display:block}
+.nvl-spine.fav{width:44px;height:44px}
+.nvl-spine.tours{margin-top:auto;font-size:.56rem;letter-spacing:.22em;color:#bbb;line-height:1.7}
+.nvl-cbody{flex:1;padding:1rem 1.1rem.9rem;position:relative}
+.nvl-cbody::before{
+content:"";position:absolute;top:.45rem;left:8%;right:8%;height:.5rem;
+background:repeating-linear-gradient(90deg,#222 0 3px,transparent 3px 12px);opacity:.75;
+}
+.nvl-field{margin-top:.85rem}
+.nvl-field:first-of-type{margin-top:1rem}
+.nvl-label{
+display:inline-block;background:#141414;color:#c8ff46;font-size:.64rem;font-weight:800;
+letter-spacing:.22em;padding:.18rem.6rem;margin-bottom:.3rem;
+}
+.nvl-field p{margin:0;font-size:.92rem;font-weight:700;color:#191919}
+.nvl-field.syn{font-size:.78rem;font-weight:500;color:#3c3c34;line-height:1.65}
+.nvl-cwin{display:flex;align-items:center;justify-content:center;padding:.4rem 0.2rem}
+.nvl-cwin svg{width:min(300px,58vw);height:auto}
+.nvl-cbtns{display:flex;gap:.55rem;justify-content:flex-end;margin-top:.7rem}
+.nvl-cbtns button,.nvl-cbtns a{
+width:52px;height:44px;border-radius:8px;border:2px solid #222;background:#fff;
+font-size:1rem;font-weight:800;cursor:pointer;display:grid;place-items:center;
+color:#151515;text-decoration:none;font-family:inherit;
+}
+.nvl-cbtns.play{background:#c8ff46}
+.nvl-cbtns button:disabled{opacity:.35;cursor:default}
+.nvl-close{
+position:absolute;top:.6rem;right:.7rem;border:0;background:none;font-size:1.3rem;
+cursor:pointer;color:#333;line-height:1;
+}

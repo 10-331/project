@@ -67,7 +67,8 @@ Funny「LINK→」「←LINK」文字が流れ、SNSカードが絶対配置で�
 
 - TOP →（HERO主CTA／MEMBERS綾）→ CHARACTER（綾）
 - TOP →（MEMBERSフィラー）→ CHARACTER-FILLER（フィラー過去編）
-- TOP →（HERO副CTA／INTRO）→ STORY（5話短編・カメリア枠）
+- TOP →（HERO副CTA／INTRO）→ STORY（5話短編の案内・カメリア枠）
+- STORY →（SIDE-A のバナー）→ NOVEL（ノベル一覧。独立した横画面ページ＝ゲーム画面として完結し、共通ヘッダー／フッターを持たない。戻りはステージ上部バーの BACK → TOP）
 - TOP →（MEMBERS添）→ TEN（レプリカ）→（パネル・フッター経由）→ 公式キャラページ
 - TOP →（EVENT／NEWS の EVENT行）→ EVENT「壊生カメリア」特設
 - TOP →（INTRO／フッター）→ TERMS（用語集）
