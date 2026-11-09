@@ -1,0 +1,172 @@
+/* ============================================================
+index.html 専用スタイル（トップページ仕上げ、2026-11-09）
+動線設計は ../FLOW.md。共通部品（site.css のヘッダー／フッター、
+site.js のメニュー注入）には触らず、index 固有の分だけをここに閉じる。
+============================================================ */
+
+/* ---- HERO（キービジュアルの器） ----
+   公式文法：visual 全面配置＋ロゴ重ね。素材（KV画像）は未到着のため、
+   .hero-img の差し替え口だけを用意した器。画像が来たら
+   .hero-ph を <img class="hero-img" src="..."> に置換するだけでよい。
+   公式KVの実寸は未実測（ASSETS.md §5 の素材待ち項目）。 */
+.hero{padding:0 0 .4rem}
+.hero-stage{
+position:relative;overflow:hidden;background:var(--chara-bg);
+border-bottom:3px solid var(--ink);
+aspect-ratio:4/3; /* 器の仮寸法。KV素材の実寸が来たら合わせる */
+}
+.hero-ph{
+position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+text-align:center;color:#667;font-size:.72rem;padding:.6rem;
+border:1px dashed #99a;margin:.6rem;border-radius:4px;
+background:repeating-linear-gradient(45deg,#eef3f4,#eef3f4 10px,#e4ecee 10px,#e4ecee 20px);
+}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-logo{
+position:absolute;left:0;right:0;top:12%;text-align:center;margin:0;
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;
+font-size:2rem;letter-spacing:.18em;color:var(--ink);
+text-shadow:2px 2px 0 var(--accent);
+}
+.hero-catch{
+position:absolute;left:0;right:0;bottom:9%;text-align:center;margin:0;
+font-weight:900;letter-spacing:.14em;font-size:.86rem;color:var(--ink);
+background:rgba(255,255,255,.75);padding:.25rem 0;
+}
+.hero-cta{display:flex;gap:.6rem;padding:.8rem 1rem 0}
+.hero-cta a{
+flex:1;text-align:center;text-decoration:none;font-weight:800;font-size:.84rem;
+border:2px solid var(--ink);border-radius:999px;padding:.55rem 0;transition:transform .2s,background .2s;
+}
+.hero-cta .cta-main{background:var(--accent);color:var(--ink)}
+.hero-cta .cta-sub{background:#fff;color:var(--ink)}
+.hero-cta a:hover{transform:scale(.96)}
+
+/* ---- NEWS：行リンク（FLOW.md §1 #3） ---- */
+.news-list a{color:inherit;text-decoration:none;display:block}
+.news-list a:hover{color:var(--accent-text)}
+.news-list a .go{color:var(--accent-text);font-weight:700;font-size:.75rem;margin-left:.4rem}
+
+/* ---- INTRODUCTION：末尾の導線（FLOW.md §1 #4） ---- */
+.intro-links{margin-top:1rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+.intro-links a{color:var(--accent-text);font-weight:700;font-size:.85rem;text-decoration:none}
+.intro-links a:hover{text-decoration:underline}
+
+/* ---- MEMBERS：背景演出（FLOW.md §1 #5） ----
+   公式のユニット切替に倣い、選択中のキャラでセクションの
+   背景色＋装飾が切り替わる。装飾層は取得済みの公式背景
+   （top_members_bg1/bg2）を薄く敷き、色味はキャラごとに切替。
+   切替は index.html 内のスクリプトが .sec-members の
+   data-active を書き換える（site.js のパネル切替と併走）。 */
+.sec-members{overflow:hidden;transition:background-color .5s}
+.sec-members::before{
+content:"";position:absolute;inset:0;pointer-events:none;
+background:url("official/top_members_bg1.png") center/cover no-repeat;
+opacity:.16;transition:opacity .5s;
+}
+.sec-members>*{position:relative}
+.sec-members[data-active="aya"]{background-color:#f6ffd9}
+.sec-members[data-active="filler"]{background-color:#ffeee9}
+.sec-members[data-active="filler"]::before{background-image:url("official/top_members_bg2.png");opacity:.2}
+.sec-members[data-active="ten"]{background-color:#e9eff7}
+.sec-members[data-active="ten"]::before{opacity:.1}
+.member-note{font-size:.72rem;color:#667;margin-top:.5rem}
+
+/* ---- EVENT：バナー風導線（FLOW.md §1 #6） ---- */
+.sec-event .event-banner{
+display:block;border:2px solid var(--ink);border-radius:6px;background:#fff;
+padding:1rem;text-decoration:none;color:var(--ink);transition:transform .2s;
+background-image:linear-gradient(90deg,var(--accent2) 0 6px,transparent 6px);
+}
+.sec-event .event-banner:hover{transform:scale(.98)}
+.sec-event .event-banner b{font-size:1.02rem;display:block}
+.sec-event .event-banner span{font-size:.8rem;color:#445}
+
+/* ---- MOVIE：チケット風セクション（FLOW.md §1 #7） ----
+   公式：movie_bg の上にチケット風アイテム＋再生アイコン。
+   動画素材は無いため、チケットは無効化（リンクなし）で
+   見た目と hover のみ成立させる。背景は取得済みの公式背景
+   （top_movie_bg / _sp）を使用開始。チケット画像そのもの
+   （公式の絵柄）は使わず、形だけを自前で組む。 */
+.sec-movie{overflow:hidden}
+.sec-movie::before{
+content:"";position:absolute;inset:0;pointer-events:none;
+background:url("official/top_movie_bg_sp.png") center/cover no-repeat;opacity:.5;
+}
+@media(min-width:769px){
+.sec-movie::before{background-image:url("official/top_movie_bg.png")}
+}
+.sec-movie>*{position:relative}
+.tickets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.9rem}
+.ticket{
+position:relative;display:flex;align-items:stretch;gap:0;
+background:#fff;border:2px solid var(--ink);border-radius:8px;overflow:hidden;
+transition:transform .2s,box-shadow .2s;
+}
+.ticket:hover{transform:scale(.97);box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.ticket-thumb{
+flex:none;width:38%;min-height:88px;
+display:flex;align-items:center;justify-content:center;text-align:center;
+color:#667;font-size:.68rem;padding:.5rem;
+background:repeating-linear-gradient(45deg,#eef3f4,#eef3f4 10px,#e4ecee 10px,#e4ecee 20px);
+border-right:2px dashed var(--ink); /* ミシン目（半券の切り離し線） */
+}
+.ticket-info{flex:1;padding:.7rem .8rem;display:flex;flex-direction:column;justify-content:center}
+.ticket-title{font-weight:800;font-size:.92rem;line-height:1.4}
+.ticket-meta{
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.66rem;letter-spacing:.22em;color:var(--accent-text);margin-top:.25rem;
+}
+.ticket-play{
+position:absolute;right:.6rem;top:50%;transform:translateY(-50%);
+width:40px;height:40px;opacity:.85;pointer-events:none;
+}
+.ticket.is-disabled{cursor:default}
+.ticket.is-disabled .ticket-play{opacity:.3}
+
+/* ---- LINK：外部リンクカード（FLOW.md §1 #8／§5） ----
+   公式実測（ASSETS.md §7）：position:sticky、高さ PC 540px／SP 160vw、
+   170px のライム色 Funny「LINK→」「←LINK」文字が流れ、
+   SNSカードが絶対配置で散らばり hover で scale(0.95)。
+   当サイトは中央カラム（最大720px）のため、高さ・文字サイズは
+   カラム幅に合わせて縮小換算した（高さ：SP は 160vw→約78vh 相当に、
+   文字：170px→clamp 最大 120px）。地色は公式どおり白。
+   sticky で留まり、後続のフッター（position:relative・不透明）が
+   上に被さってくる公式の締め方を再現する。 */
+@keyframes linkFloatR{0%{transform:translateY(-8px)}100%{transform:translateY(14px)}}
+@keyframes linkFloatL{0%{transform:translateY(12px)}100%{transform:translateY(-10px)}}
+.link-sec{
+position:sticky;top:0;background:#fff;overflow:hidden;
+min-height:78vh;border-top:3px solid var(--ink);
+}
+@media(min-width:769px){.link-sec{min-height:540px}}
+.link-stage{position:absolute;inset:0}
+.link-word{
+position:absolute;left:0;right:0;margin:0;text-align:center;pointer-events:none;
+font-family:"18TRIPSansFunnyMedium","IBM Plex Sans JP",sans-serif;
+font-size:clamp(64px,20vw,120px);line-height:1;color:var(--accent);
+white-space:nowrap;
+}
+.link-word--r{top:4%;animation:linkFloatR 5s ease-in-out infinite alternate}
+.link-word--l{bottom:4%;animation:linkFloatL 6s ease-in-out infinite alternate}
+.link-card{
+position:absolute;width:47%;max-width:230px;display:block;text-decoration:none;
+background:#fff;border:2px solid var(--ink);border-radius:10px;
+padding:.7rem .8rem;color:var(--ink);
+box-shadow:4px 4px 0 rgba(50,50,50,.85);
+transition:transform .2s;
+}
+.link-card:hover{transform:scale(.95)}
+.link-card .lc-name{display:block;font-weight:800;font-size:.9rem;line-height:1.35}
+.link-card .lc-sub{
+display:block;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.62rem;letter-spacing:.24em;color:var(--accent-text);margin-top:.2rem;
+}
+.link-card .lc-arw{position:absolute;right:.55rem;top:.45rem;font-weight:900;color:var(--accent2)}
+/* 散布配置（ステージに対する % 指定。公式の絶対配置文法に倣う） */
+.lc-1{left:4%;top:19%;transform:rotate(-2deg)}
+.lc-2{right:4%;top:27%;transform:rotate(1.6deg)}
+.lc-3{left:7%;top:47%;transform:rotate(1.2deg)}
+.lc-4{right:7%;top:56%;transform:rotate(-1.8deg)}
+.lc-5{left:26%;bottom:15%;transform:rotate(.8deg)}
+.lc-1:hover,.lc-2:hover,.lc-3:hover,.lc-4:hover,.lc-5:hover{transform:scale(.95)}

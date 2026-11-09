@@ -1,0 +1,445 @@
+/* ============================================================
+笹井綾 総まとめサイト 共通スタイル
+18TRIP公式サイトの構成に寄せた再現版。
+フォント・主要色・UI装飾は公式サイト（18trip.jp）から取得した
+実ファイル／実測値に差し替え済み（2026-11-09、詳細は ../ASSETS.md）。
+残るギャップ：デバイス枠まわり等は ASSETS.md 参照。
+============================================================ */
+@import url("fonts/plex-faces.css"); /* IBM Plex Sans JP 500/600/700（公式がGoogle Fonts経由で使用） */
+@font-face{font-family:"18TRIPSansLight";src:url("fonts/18TRIPSans-Light.woff2") format("woff2"),url("fonts/18TRIPSans-Light.woff") format("woff")}
+@font-face{font-family:"18TRIPSansRegular";src:url("fonts/18TRIPSans-Regular.woff2") format("woff2"),url("fonts/18TRIPSans-Regular.woff") format("woff")}
+@font-face{font-family:"18TRIPSansMedium";src:url("fonts/18TRIPSans-Medium.woff2") format("woff2"),url("fonts/18TRIPSans-Medium.woff") format("woff")}
+@font-face{font-family:"18TRIPSansBold";src:url("fonts/18TRIPSans-Bold.woff2") format("woff2"),url("fonts/18TRIPSans-Bold.woff") format("woff")}
+@font-face{font-family:"18TRIPSansFunnyMedium";src:url("fonts/18TRIPSansFunny-Medium.woff2") format("woff2"),url("fonts/18TRIPSansFunny-Medium.woff") format("woff")}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-300.woff2") format("woff2");font-weight:300}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-700.woff2") format("woff2");font-weight:700}
+@font-face{font-family:"job-clarendon-hairline";src:url("fonts/job-clarendon-hairline-100.woff2") format("woff2");font-weight:100}
+:root{
+--ink:#323232; /* 実測：公式共通ダーク（top.css 出現最多のUI色） */
+--text:#000; /* 実測：公式 body 文字色 */
+--paper:#fff; /* 実測：公式 body 背景 */
+--chara-bg:#f0f0e2; /* 実測：キャラページ地色（character.css .wrapper） */
+--accent:#c8ff46; /* 実測：公式メイン（ライム）。ローダー／ホバー／戻るボタンの地色 */
+--accent2:#ff8c78; /* 実測：公式サブ（サーモンピンク） */
+--yellow:#ffea00; /* 実測：公式アクセント黄 */
+--accent-text:#004986; /* 実測：公式リンク色（hover #5a8fba） */
+--line:#e8ebeb; /* 実測：公式グレー地 */
+--footer-bg:#efefef; /* 実測：公式フッター地色（top.css .footer） */
+--menu-bg:#f0f0f0; /* 実測：公式メニュー背景 .header__bg の地色 */
+--sp-break:768px; /* 公式SP切替ブレイクポイント（実測済み） */
+}
+/* 公式の浮遊アニメーション（実測：top.css の @keyframes を転記）
+   fuluffyVertical：上下 ±10px、fluffyHorizon：左右 ±5px＋回転 ±5deg */
+@keyframes fuluffyVertical{0%{transform:translate3d(0,10px,0)}50%{transform:translate3d(0,-10px,0)}100%{transform:translate3d(0,10px,0)}}
+@keyframes fluffyHorizon{0%{transform:translate3d(5px,0,0) rotate(-5deg)}50%{transform:translate3d(-5px,0,0) rotate(5deg)}100%{transform:translate3d(5px,0,0) rotate(-5deg)}}
+@keyframes rotation{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes rotationPlane{0%{transform:rotate(0deg)}80%{transform:rotate(0deg)}100%{transform:rotate(-360deg)}}
+.eff--vertical,.eff--horizon{display:block;transform-origin:50% 50%}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+font-family:"IBM Plex Sans JP","Helvetica Neue","Helvetica","Hiragino Sans","Hiragino Kaku Gothic ProN","Arial","Yu Gothic","Meiryo",sans-serif; /* 公式 body と同一の書体指定 */
+font-weight:500;font-feature-settings:"palt"; /* 公式 body と同一 */
+color:var(--text);background:#e8ebeb; /* PC時の両サイド背景：公式グレー地 */
+line-height:1.7;
+overflow-x:clip; /* 幅フィットの安全網：装飾等の横はみ出しで横スクロールを出さない。clip はスクロールコンテナを作らないため sticky（LINKセクション）を壊さない */
+}
+/* スマホ縦基準：本体は中央寄せカラム */
+.page{
+max-width:480px;margin:0 auto;background:var(--paper);
+min-height:100vh;display:flex;flex-direction:column;
+box-shadow:0 0 24px rgba(0,0,0,.12);
+}
+@media(min-width:769px){.page{max-width:720px}}
+/* キャラページ：公式 .wrapper と同じ地色＋背景装飾（detail_bg_sp） */
+.page.chara{background:var(--chara-bg) url("official/character_detail_bg_sp.png") center top/100% auto no-repeat}
+
+/* ---- 共通ヘッダー（全ページ同一構造） ----
+   公式の文法に寄せた：上部バーではなく「左上にページトップ機アイコン＋ロゴ、
+   右上に2本線ハンバーガー」が浮くオーバーレイ型。
+   公式実測：ハンバーガーは 80×70px（SP 16vw×12vw）、線は 1px で
+   top:30px/40px（SP 4.8vw/6.67vw）、開くと ±20deg の X になる。
+   メニュー本体は site.js が .menu-overlay として注入する。 */
+.site-header{
+position:sticky;top:0;z-index:1200;
+display:flex;align-items:flex-start;justify-content:space-between;
+padding:.55rem 1rem .9rem;
+background:linear-gradient(to bottom,rgba(255,255,255,.94) 55%,rgba(255,255,255,0));
+}
+.page.chara .site-header{background:linear-gradient(to bottom,rgba(240,240,226,.94) 55%,rgba(240,240,226,0))}
+.site-header .logo{
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;letter-spacing:.12em;
+text-decoration:none;color:var(--ink);line-height:1.25;
+padding-left:46px;min-height:30px;
+background:url("official/common_icon_pagetop_black.png") left top/auto 28px no-repeat; /* 公式 pagetop 機アイコン 81×66 */
+}
+.site-header .logo small{display:block;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.6rem;letter-spacing:.3em;color:var(--accent-text)}
+/* 通常は非表示：リンクはメニューオーバーレイ側で使う。
+   広い画面では公式 .header__sideNav と同じ「左下・縦積み・ピン付き」サイドナビになる */
+.globalnav{display:none}
+@media(min-width:1100px){
+.globalnav{
+display:flex;flex-direction:column;gap:25px; /* 実測：sideNav li margin-bottom:25px */
+position:fixed;left:max(24px,calc(50% - 360px - 190px));bottom:145px;z-index:900; /* 実測：left:70px;bottom:145px を当サイトのカラム基準に換算 */
+}
+.globalnav a{
+font-family:"18TRIPSansFunnyMedium","IBM Plex Sans JP",sans-serif;
+font-size:20px;line-height:30px;color:#282828;text-decoration:none; /* 実測：sideNav a（color--black 時 #282828） */
+position:relative;white-space:nowrap;transition:color .3s;
+}
+.globalnav a::before{
+content:"";display:block;width:14px;height:19px; /* 実測：icon_pin 14×19 */
+background:url("official/common_icon_pin.png") center/contain no-repeat;
+position:absolute;left:-30px;top:50%;transform:translateY(-50%);margin-top:-10px;
+opacity:0;transition:all .2s;
+}
+.globalnav a:hover,.globalnav a[aria-current="page"]{color:var(--accent-text)}
+.globalnav a:hover::before{margin-top:0;opacity:1}
+}
+/* ハンバーガー（site.js が .site-header 内に注入。公式 .header__ham の実測値） */
+.ham{
+margin-left:auto;width:60px;width:16vw;max-width:80px;height:45px;height:12vw;max-height:70px;
+background:none;border:none;padding:0;cursor:pointer;position:relative;flex:none;
+}
+@media(min-width:769px){.ham{width:80px;height:70px}}
+.ham span{
+display:block;width:100%;height:1px;background:var(--ink);
+position:absolute;left:0;transform-origin:50% 50%;transition:all .2s;
+}
+.ham span:nth-child(1){top:18px;top:4.8vw}
+.ham span:nth-child(2){top:25px;top:6.67vw}
+@media(min-width:769px){
+.ham span:nth-child(1){top:30px}
+.ham span:nth-child(2){top:40px}
+}
+.ham:hover span{transform:scaleX(.6)}
+.ham.is--open span{top:25px;top:6.67vw}
+@media(min-width:769px){.ham.is--open span{top:35px}}
+.ham.is--open span:nth-child(1){transform:rotate(20deg)}
+.ham.is--open span:nth-child(2){transform:rotate(-20deg)}
+
+/* ---- 全画面メニュー（site.js が body 直下に注入） ----
+   公式実測：背景 #f0f0f0 が右端起点の scaleX ブラインドで開く。
+   背後に巨大な「MENU」ウォーターマーク（Funny、白、PC 26.46vw／SP 40vw）。
+   リンクは大きな英字イラスト文字のコラージュ配置（当サイトはテキストで再構成）。
+   周囲に hd_items_1〜13 が fluffy アニメーションで浮遊する。 */
+.menu-overlay{position:fixed;inset:0;z-index:1050;display:none}
+.menu-overlay.is--open{display:block}
+.menu-bg{
+position:absolute;inset:0;background:var(--menu-bg);
+transform:scaleX(0);transform-origin:100% 0;
+transition:transform .6s cubic-bezier(.63,0,.33,1); /* 実測：公式の標準イージング */
+}
+.menu-overlay.is--shown .menu-bg{transform:scaleX(1)}
+.menu-inner{
+position:relative;height:100%;max-width:480px;margin:0 auto;
+opacity:0;transition:opacity .4s ease .25s;
+}
+@media(min-width:769px){.menu-inner{max-width:720px}}
+.menu-overlay.is--shown .menu-inner{opacity:1}
+.menu-title{
+position:absolute;left:50%;transform:translateX(-50%);top:1%;z-index:0;pointer-events:none;
+font-family:"18TRIPSansFunnyMedium","IBM Plex Sans JP",sans-serif;
+font-size:40vw;line-height:1;color:#fff;white-space:nowrap;
+}
+@media(min-width:769px){.menu-title{font-size:300px}}
+.menu-list{position:absolute;left:0;top:0;width:100%;height:100%;z-index:5}
+.menu-list a{
+position:absolute;display:block;text-decoration:none;color:var(--ink);
+font-family:"18TRIPSansFunnyMedium","IBM Plex Sans JP",sans-serif;
+font-size:2rem;line-height:1.15;letter-spacing:.04em;white-space:nowrap;
+transition:transform .25s,opacity .25s;
+}
+.menu-list a small{display:block;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.62rem;letter-spacing:.34em;color:#667}
+.menu-list a:hover{opacity:.55;transform:translateX(6px) rotate(0deg)!important}
+.menu-list a[aria-current="page"]{color:var(--accent-text)}
+.menu-list .m--top{left:12%;top:13%;transform:rotate(-2deg)}
+.menu-list .m--character{left:6%;top:29%;transform:rotate(1.5deg)}
+.menu-list .m--story{left:16%;top:45%;transform:rotate(-1deg)}
+.menu-list .m--terms{left:8%;top:61%;transform:rotate(2deg)}
+.menu-list .m--event{left:14%;top:77%;transform:rotate(-1.5deg)}
+.menu-logo{
+position:absolute;left:0;right:0;bottom:17.6vw;z-index:1;text-align:center; /* 実測：SP は中央・bottom:17.6vw */
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;letter-spacing:.14em;color:var(--ink);
+}
+.menu-logo small{display:block;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.6rem;letter-spacing:.32em;color:var(--accent-text)}
+@media(min-width:769px){
+.menu-logo{left:auto;right:30px;bottom:30px;text-align:right} /* 実測：PC は右下 */
+}
+.menu-copy{
+position:absolute;left:0;right:0;bottom:4vw;z-index:1;text-align:center; /* 実測：SP は下部中央 */
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.52rem;line-height:1.6;color:var(--ink);
+}
+@media(min-width:769px){
+.menu-copy{left:34px;right:auto;bottom:30px;text-align:left;font-size:10px;line-height:1.625;transform:scale(.8);transform-origin:0 100%} /* 実測：PC は左下・10px を scale(.8) */
+}
+.menu-items{position:absolute;inset:0;z-index:1;pointer-events:none}
+.menu-items p{position:absolute;margin:0}
+.menu-items img{width:100%;height:auto;display:block}
+/* SP の配置・サイズは公式実測（vw／%）をそのまま転記 */
+.menu-items .items--1{width:3.73vw;left:22%;top:2.48%}
+.menu-items .items--2{width:6.53vw;left:68.27%;top:11.35%}
+.menu-items .items--3{width:7.6vw;left:78.27%;top:8.65%}
+.menu-items .items--4{width:10.93vw;left:75.07%;top:79.5%}
+.menu-items .items--5{width:7.6vw;left:87.33%;top:76.45%}
+.menu-items .items--6{width:4.27vw;left:9.2%;top:75.96%}
+.menu-items .items--7{width:6.13vw;left:4%;top:60.21%}
+.menu-items .items--8{width:8.93vw;left:14.27%;top:79.29%}
+.menu-items .items--9{width:10vw;left:28.53%;top:73.19%}
+.menu-items .items--10{width:10.13vw;left:86.93%;top:47.02%}
+.menu-items .items--11{width:6.13vw;left:7.2%;top:10.78%}
+.menu-items .items--12{width:5.73vw;left:83.87%;top:42.98%}
+.menu-items .items--13{width:4.4vw;left:92.27%;top:38.79%}
+@media(min-width:769px){
+/* PC は公式実測（%配置、items--11〜13 は非表示、画像は原寸） */
+.menu-items .items--1{width:45px;left:3.23%;top:5.09%}
+.menu-items .items--2{width:59px;left:53.49%;top:13.33%}
+.menu-items .items--3{width:55px;left:58.85%;top:8.89%}
+.menu-items .items--4{width:91px;left:72.4%;top:25.56%}
+.menu-items .items--5{width:66px;left:76.25%;top:36.2%}
+.menu-items .items--6{width:31px;left:16.3%;top:48.8%}
+.menu-items .items--7{width:44px;left:20.42%;top:49.91%}
+.menu-items .items--8{width:67px;left:16.67%;top:56.57%}
+.menu-items .items--9{width:72px;left:22.45%;top:61.39%}
+.menu-items .items--10{width:92px;left:71.35%;top:55.37%}
+.menu-items .items--11,.menu-items .items--12,.menu-items .items--13{display:none}
+}
+.menu-items .items--1 .eff--vertical{animation:fuluffyVertical 7s ease-in-out infinite alternate}
+.menu-items .items--1 .eff--horizon{animation:fluffyHorizon 8s ease-in-out infinite alternate}
+.menu-items .items--2 .eff--vertical{animation:fuluffyVertical 8s ease-in-out infinite alternate}
+.menu-items .items--2 .eff--horizon{animation:fluffyHorizon 7s ease-in-out infinite alternate}
+.menu-items .items--3 .eff--vertical{animation:fuluffyVertical 6s ease-in-out infinite alternate-reverse}
+.menu-items .items--3 .eff--horizon{animation:fluffyHorizon 8s ease-in-out infinite alternate-reverse}
+.menu-items .items--4 .eff--vertical{animation:fuluffyVertical 9s ease-in-out infinite alternate-reverse}
+.menu-items .items--4 .eff--horizon{animation:fluffyHorizon 6s ease-in-out infinite alternate-reverse}
+.menu-items .items--5 .eff--vertical{animation:fuluffyVertical 8s ease-in-out infinite alternate}
+.menu-items .items--5 .eff--horizon{animation:fluffyHorizon 7s ease-in-out infinite alternate}
+.menu-items .items--6 .eff--vertical{animation:fuluffyVertical 7s ease-in-out infinite alternate}
+.menu-items .items--6 .eff--horizon{animation:fluffyHorizon 9s ease-in-out infinite alternate}
+.menu-items .items--7 .eff--vertical{animation:fuluffyVertical 9s ease-in-out infinite alternate-reverse}
+.menu-items .items--7 .eff--horizon{animation:fluffyHorizon 8s ease-in-out infinite alternate-reverse}
+.menu-items .items--8 .eff--vertical{animation:fuluffyVertical 6s ease-in-out infinite alternate-reverse}
+.menu-items .items--8 .eff--horizon{animation:fluffyHorizon 9s ease-in-out infinite alternate-reverse}
+.menu-items .items--9 .eff--vertical{animation:fuluffyVertical 10s ease-in-out infinite alternate}
+.menu-items .items--9 .eff--horizon{animation:fluffyHorizon 5s ease-in-out infinite alternate}
+.menu-items .items--10 .eff--vertical{animation:fuluffyVertical 12s ease-in-out infinite alternate-reverse}
+.menu-items .items--10 .eff--horizon{animation:fluffyHorizon 4s ease-in-out infinite alternate-reverse}
+.menu-items .items--11 .eff--vertical{animation:fuluffyVertical 11s ease-in-out infinite alternate}
+.menu-items .items--11 .eff--horizon{animation:fluffyHorizon 15s ease-in-out infinite alternate}
+.menu-items .items--12 .eff--vertical{animation:fuluffyVertical 15s ease-in-out infinite alternate-reverse}
+.menu-items .items--12 .eff--horizon{animation:fluffyHorizon 10s ease-in-out infinite alternate-reverse}
+.menu-items .items--13 .eff--vertical{animation:fuluffyVertical 9s ease-in-out infinite alternate}
+.menu-items .items--13 .eff--horizon{animation:fluffyHorizon 12s ease-in-out infinite alternate}
+body.menu-open{overflow:hidden}
+
+/* ---- BACK TO TOP 円形ボタン（site.js が body 直下に注入） ----
+   公式実測：ライム地の円（PC 200px／SP 22.67vw）、右下に固定され
+   スクロールで右からスライドイン。文字リングは 15s で逆回転し続け、
+   中央の機アイコンは rotationPlane（5s、80%静止→1回転）。 */
+.backtotop{
+position:fixed;z-index:900;border-radius:50%;background:var(--accent);
+width:22.67vw;height:22.67vw;max-width:110px;max-height:110px;
+right:5.33vw;bottom:6.67vw;
+transform:translateX(160px);transition:transform .6s cubic-bezier(.63,0,.33,1);
+}
+@media(min-width:769px){
+.backtotop{width:120px;height:120px;right:calc(50% - 360px + 40px);bottom:40px}
+}
+.backtotop.is--show{transform:translateX(0)}
+.backtotop .btt-text{
+position:absolute;inset:0;border-radius:50%;
+background:url("official/common_backtotop_text_sp.png") center/88% no-repeat;
+animation:rotation 15s linear infinite reverse;
+}
+@media(min-width:769px){
+.backtotop .btt-text{background-image:url("official/common_backtotop_text.png")}
+}
+.backtotop .btt-icon{
+position:absolute;inset:0;
+background:url("official/common_backtotop_icon.png") center/38% no-repeat;
+animation:rotationPlane 5s cubic-bezier(.86,-.43,.26,1.24) infinite;
+}
+.backtotop:hover .btt-icon{animation:none;transform:scale(1.4);transition:transform .4s}
+
+/* ---- フライト情報ティッカー ---- */
+.ticker{
+background:var(--ink);color:#fff;font-size:.78rem;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+padding:.35rem.8rem;display:flex;gap:1rem;white-space:nowrap;overflow:hidden;
+}
+.ticker .place{color:var(--yellow);font-weight:700}
+.ticker .place::before{content:"";display:inline-block;width:.62rem;height:.85rem;
+background:url("official/common_icon_pin.png") center/contain no-repeat;
+vertical-align:-.12rem;margin-right:.3rem}
+
+/* ---- セクション見出し（✈装飾つき英字見出しの型） ---- */
+.sec{padding:1.4rem 1rem.4rem;position:relative}
+.news-deco{position:absolute;right:.5rem;top:.4rem;width:52px;height:auto;pointer-events:none}
+.sec-title{
+font-family:"18TRIPSansBold","job-clarendon","IBM Plex Sans JP",sans-serif;
+font-size:1.3rem;font-weight:900;letter-spacing:.18em;margin:0 0.2rem;
+}
+.sec-title::before{content:"✈✈✈ ";color:var(--accent2);font-size:.8em}
+.sec-sub{font-size:.72rem;letter-spacing:.2em;color:#667;margin:0 0.8rem}
+
+/* ---- NEWS ---- */
+.news-list{list-style:none;margin:0;padding:0}
+.news-list li{border-top:1px solid var(--line);padding:.55rem 0;font-size:.85rem}
+.news-list time{font-weight:700;margin-right:.6rem}
+.tag{display:inline-block;font-size:.65rem;border:1px solid var(--accent-text);color:var(--accent-text);
+border-radius:2px;padding:0.4em;margin-right:.5rem;vertical-align:middle}
+
+/* ---- MEMBERS切替 ---- */
+.member-tabs{display:flex;gap:.5rem;margin-bottom:.8rem}
+.member-tabs button{
+flex:1;padding:.55rem 0;border:2px solid var(--ink);background:#fff;color:var(--ink);
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-weight:800;cursor:pointer;border-radius:4px;
+}
+.member-tabs button.active{background:var(--accent);color:var(--ink)}
+.member-panel{border:2px solid var(--ink);border-radius:6px;background:#fff;padding:1rem}
+.member-panel h3{margin:.2rem 0;font-size:1.2rem}
+.member-panel .catch{font-family:"18TRIPSansFunnyMedium","IBM Plex Sans JP",sans-serif;font-weight:700;color:var(--accent-text)}
+.ph-img{
+/* 画像プレースホルダ：要素材が来たら img に差し替え。寸法は公式キャンバス準拠 */
+border:1px dashed #99a;background:repeating-linear-gradient(45deg,#eef3f4,#eef3f4 10px,#e4ecee 10px,#e4ecee 20px);
+display:flex;align-items:center;justify-content:center;text-align:center;
+color:#667;font-size:.72rem;padding:.6rem;min-height:120px;border-radius:4px;
+}
+
+/* ---- デバイス枠（キャラ詳細） ---- */
+.device{
+border:3px solid var(--ink);border-radius:18px;background:#fff;
+padding:.7rem;margin:0 1rem;
+}
+.device-bar{display:flex;justify-content:space-between;font-size:.68rem;color:#667;
+border-bottom:1px solid var(--line);padding-bottom:.4rem;margin-bottom:.6rem}
+.device-btns{display:flex;gap:.5rem;margin-top:.7rem}
+.device-btns span{
+flex:1;text-align:center;border:2px solid var(--ink);border-radius:999px;
+padding:.3rem 0;font-weight:800;font-size:.75rem;letter-spacing:.15em;
+}
+/* 公式デバイスボタン画像版（character.html で使用） */
+.device-btns span.btn-img{border:none;border-radius:0;padding:0;background:none;line-height:0}
+.device-btns span.btn-img img{width:64px;max-width:100%;height:auto}
+.prof-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.prof-table th,.prof-table td{border-bottom:1px solid var(--line);padding:.35rem.2rem;text-align:left;vertical-align:top}
+.prof-table th{width:32%;color:var(--accent-text);font-weight:800}
+
+/* ---- ストーリーリスト（区長ノベル型） ---- */
+.side-tabs{display:flex;gap:.5rem;margin:0 1rem}
+.side-tabs button{flex:1;padding:.5rem 0;font-weight:800;border:2px solid var(--ink);background:#fff;cursor:pointer}
+.side-tabs button.active{background:var(--accent);color:var(--ink);border-color:var(--ink)}
+.track-list{list-style:none;margin:1rem;padding:0}
+.track-list li{border:2px solid var(--ink);border-radius:6px;background:#fff;padding:.8rem 1rem;margin-bottom:.7rem}
+.track-list .no{font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.7rem;letter-spacing:.2em;color:var(--accent-text);font-weight:800}
+.track-list h3{margin:.1rem 0.3rem;font-size:1rem}
+.track-list p{margin:0;font-size:.82rem;color:#445}
+.track-list .read{margin-top:.5rem;font-size:.75rem}
+.track-list .read a{color:var(--accent-text);font-weight:700}
+
+/* ---- 用語集 ---- */
+.term-index{display:flex;flex-wrap:wrap;gap:.35rem;margin:0 1rem}
+.term-index a{border:1px solid var(--ink);border-radius:999px;padding:.05rem.6rem;font-size:.75rem;color:var(--ink);text-decoration:none;background:#fff}
+.term-list{margin:1rem;padding:0;list-style:none}
+.term-list li{background:#fff;border-left:4px solid var(--accent);padding:.7rem.9rem;margin-bottom:.6rem}
+.term-list h3{margin:0 0.2rem;font-size:.95rem}
+.term-list h3.yomi{font-size:.7rem;color:#667;font-weight:400;margin-left:.5rem}
+.term-list p{margin:0;font-size:.82rem}
+
+/* ---- 特設（イベント） ---- */
+.event-hero{margin:0}
+.event-gate{display:flex;gap:.6rem;margin:1rem}
+.event-gate a{flex:1;text-align:center;border:2px solid var(--ink);padding:.8rem 0;font-weight:800;text-decoration:none;color:var(--ink);background:#fff;border-radius:6px}
+.event-sec{margin:0 1rem 1.2rem;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.9rem 1rem}
+.event-sec h3{margin:.1rem 0.4rem}
+.event-sec p{font-size:.85rem;margin:.3rem 0}
+
+/* ---- 共通フッター（全ページ同一構造） ----
+   公式の文法に寄せた：地色 #efefef の広い余白帯の上に、
+   (1) 白の巨大タイトル字（公式 ft_title グラフィックの代替としてテキストで再構成）
+   (2) ロゴ＋作品情報 dl（実測：12px／行間2em、dt 90px）
+   (3) 白帯のナビ（実測：行高60px、1px×14px の仕切り、hover でライム）
+   (4) 上端左右に ft_frame のコーナー装飾がスライドイン（実測：100×65／SP 13.33vw×8.67vw）
+   (5) ft_item_1 が fluffy で浮遊（実測位置：PC left:84.74%／SP left:81.73%）
+   コーナー・帯・アイテム・情報 dl は site.js が注入し、フッターが画面内に入ると
+   .is--limit が付いて公式どおりスライドインする。 */
+.site-footer{
+margin-top:auto;position:relative;
+background:var(--footer-bg);color:var(--ink);
+padding:1.6rem 1rem 0;font-size:.72rem;
+}
+/* (1) 巨大タイトル字：公式は ft_title.png（1784×182、SP 表示 91.73vw）を中央に置く */
+.site-footer::before{
+content:"AYA TRIP ✈✈✈";
+display:block;text-align:center;white-space:nowrap;overflow:hidden;
+font-family:"18TRIPSansFunnyMedium","IBM Plex Sans JP",sans-serif;
+font-size:12.5vw;line-height:1.1;color:#fff;letter-spacing:.06em;
+margin-bottom:1.2rem;pointer-events:none;
+}
+@media(min-width:769px){.site-footer::before{font-size:88px}}
+/* (4) フレーム：コーナー（上端左右） */
+.ft-corner{
+position:absolute;top:0;width:13.33vw;height:8.67vw;max-width:100px;max-height:65px;
+background:center/cover no-repeat;z-index:2;pointer-events:none;
+transition:transform .6s cubic-bezier(.63,0,.33,1);
+}
+.ft-corner--l{left:0;background-image:url("official/common_ft_frame_l.png");transform:translate(-100%,-100%)}
+.ft-corner--r{right:0;background-image:url("official/common_ft_frame_r.png");transform:translate(100%,-100%)}
+.site-footer.is--limit .ft-corner{transform:translate(0,-100%)}
+/* (4b) フレーム：左右の縦帯（公式は position:fixed の 33px／SP 4.4vw 帯。site.js が body 直下に注入） */
+.ft-side{
+position:fixed;top:0;bottom:0;width:4.4vw;max-width:33px;background:var(--footer-bg);
+z-index:800;pointer-events:none;transition:transform .6s cubic-bezier(.63,0,.33,1);
+}
+.ft-side--l{left:0;transform:translateX(-100%)}
+.ft-side--r{right:0;transform:translateX(100%)}
+@media(min-width:481px){
+.ft-side--l{left:calc(50% - 240px - 33px)}
+.ft-side--r{right:calc(50% - 240px - 33px)}
+}
+@media(min-width:769px){
+.ft-side--l{left:calc(50% - 360px - 33px)}
+.ft-side--r{right:calc(50% - 360px - 33px)}
+}
+.ft-side.is--limit{transform:translateX(0)}
+/* (5) 浮遊アイテム ft_item_1（71×77） */
+.ft-item{position:absolute;left:81.73%;top:16.7vw;width:8.67vw;max-width:71px;z-index:1;pointer-events:none}
+@media(min-width:769px){.ft-item{left:84.74%;top:64px;width:71px}}
+.ft-item img{width:100%;height:auto;display:block}
+.ft-item .eff--vertical{animation:fuluffyVertical 10s ease-in-out infinite alternate-reverse}
+.ft-item .eff--horizon{animation:fluffyHorizon 6s ease-in-out infinite alternate-reverse}
+/* (2) 作品情報：ロゴ＋dl（公式 .footer__logo／.footer__desc__app の実測値） */
+.ft-desc{display:flex;gap:1.2rem;align-items:flex-start;justify-content:center;flex-wrap:wrap;margin-bottom:1.4rem;position:relative;z-index:1}
+.ft-desc .ft-logo{
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;letter-spacing:.12em;
+color:var(--ink);line-height:1.3;font-size:1rem;text-align:center;
+}
+.ft-desc .ft-logo small{display:block;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.58rem;letter-spacing:.3em;color:var(--accent-text)}
+.ft-desc dl{display:flex;justify-content:space-between;margin:0 0 7px;font-size:12px;line-height:2em;letter-spacing:.05em;color:var(--ink)}
+.ft-desc dt{flex:none;width:90px;font-weight:500} /* 実測：dt flex-basis:90px */
+.ft-desc dd{margin:0;font-weight:500}
+.ft-rights{
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:12px;line-height:2em;letter-spacing:.05em;
+text-align:center;color:var(--ink);width:100%;
+}
+/* (3) ナビ：白帯＋仕切り（公式 .footer__nav の実測値） */
+.site-footer nav{
+display:flex;flex-wrap:wrap;justify-content:center;background:#fff;
+margin:0 -1rem;padding:0 .5rem;
+}
+.site-footer nav a{
+color:var(--ink);text-decoration:none;font-weight:500;font-size:.78rem;
+line-height:2.6;letter-spacing:.05em;padding:0 1em;position:relative;transition:color .2s;
+}
+.site-footer nav a:not(:first-child)::before{
+content:"";display:block;width:1px;height:14px;background:var(--ink); /* 実測：仕切り 1px×14px */
+position:absolute;left:0;top:50%;transform:translateY(-50%);
+}
+.site-footer nav a:hover{color:#7ba800} /* 公式 hover はライム #c8ff46（白地では視認性のため濃度を落とした近似） */
+@media(min-width:769px){.site-footer nav a{line-height:60px}} /* 実測：PC の nav 行高 60px */
+.site-footer>p{
+margin:0 -1rem;padding:.9rem 1rem 1.1rem;text-align:center;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.68rem;letter-spacing:.05em;color:#667;
+}

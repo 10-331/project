@@ -1,0 +1,230 @@
+/* ============================================================
+叢雲添キャラページ レプリカ専用スタイル（ten.html）
+公式 character.css の実測値（2026-11-09 取得）を土台に、
+当サイトの assets 構成（official/ = character_ 接頭辞つき公式UI部品、
+ten/ = 添ページ専用アセット）に合わせて再構成したもの。
+公式は GSAP でデバイスを拡縮・アニメーションさせるが、
+本レプリカは静的レイアウト＋最小限のJSで等価の見た目を再現する。
+============================================================ */
+.ten-page{background:var(--paper)}
+.ten-wrap{position:relative;overflow:hidden;background:#f0f0e2 url("official/character_detail_bg.png") center top no-repeat;background-size:cover}
+.ten-wrap img{display:block}
+.ten-wrap p,.ten-wrap ul,.ten-wrap h2,.ten-wrap h3{margin:0;padding:0}
+.ten-wrap ul{list-style:none}
+.ten-wrap a{text-decoration:none}
+
+/* ---- 名前（公式 .name） ---- */
+.ten-name{width:100%;position:absolute;left:0;top:0;z-index:5}
+.ten-name .name__team{text-align:center;font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:20px;line-height:1em;width:100%;position:absolute;left:0;top:30px;color:#231815}
+.ten-name .name__member{position:absolute;right:195px;top:50px;text-align:right}
+.ten-name .member--pc{display:block}
+.ten-name .member--pc span{font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:70px;line-height:.942em;display:block;color:rgba(0,0,0,0);-webkit-text-fill-color:rgba(0,0,0,0);-webkit-text-stroke:1px #231815}
+.ten-name .member--sp{display:none}
+
+/* ---- 詳細ステージ（公式 .detail） ---- */
+.ten-detail{position:relative;z-index:0;width:100%;aspect-ratio:1520/1080;max-height:1080px}
+
+/* ---- デバイス（公式 .detail__device、基準 1344×968） ---- */
+.ten-device{width:1344px;height:968px;position:absolute;left:50%;top:55px;z-index:0;transform:translateX(-50%);margin-left:-222px;transform-origin:50% 0}
+.ten-device__inner{width:100%;height:100%;position:relative;transform-origin:50% 50%}
+.ten-device__inner::before{content:"";display:block;width:1499px;height:1087px;background:url("official/character_device_shadow.png") center top no-repeat;background-size:100% 100%;position:absolute;left:-48px;top:-27px;z-index:0;pointer-events:none}
+.ten-device__inner .device--bottom,
+.ten-device__inner .device--top,
+.ten-device__inner .device--lcd,
+.ten-device__inner .device--light,
+.ten-device__inner .device--grid,
+.ten-device__inner .device--card,
+.ten-device__inner .device--prof,
+.ten-device__inner .device--visual{position:absolute;pointer-events:none}
+.ten-device__inner .device--bottom{left:15px;top:23px;z-index:0}
+.ten-device__inner .device--top{left:0;top:0;z-index:10}
+.ten-device__inner .device--top img,.ten-device__inner .device--bottom img{width:1329px;height:945px}
+.ten-device__inner .device--lcd{left:72px;top:41px;z-index:30}
+.ten-device__inner .device--light{left:95px;top:160px;z-index:40;opacity:.9}
+.ten-device__inner .device--grid{left:72px;top:41px;z-index:41;mix-blend-mode:overlay}
+.ten-device__inner .device--card{left:359px;top:125px;z-index:5}
+.ten-device__inner .device--prof{left:135px;top:95px;z-index:30}
+.ten-device__inner .device--prof span{display:block;overflow:hidden}
+.ten-device__inner .device--prof img{width:528px;height:auto}
+.ten-device__inner .device--visual{left:496px;top:160px;z-index:25} /* detail--1__3（添）固有位置 */
+.ten-device__inner .device--visual p{position:relative;overflow:hidden}
+
+/* ---- デバイスボタン（公式 .device--button、基準 335×181） ---- */
+.ten-device__inner .device--button{width:335px;height:181px;position:absolute;left:52px;top:632px;z-index:30}
+.ten-device__inner .device--button ul{width:100%;height:100%;position:relative}
+.ten-device__inner .device--button li{position:absolute;width:128px;height:145px}
+.ten-device__inner .device--button li.is--hidden{pointer-events:none}
+.ten-device__inner .device--button a{display:block;width:100%;height:100%}
+.ten-device__inner .device--button img{opacity:0;transition:opacity .2s;width:128px;height:145px}
+.ten-device__inner .device--button a:hover img{opacity:1}
+.ten-device__inner .device--button__zoom{left:0;top:0;background:url("official/character_device_btn_zoom_off.png") center center no-repeat;background-size:cover}
+.ten-device__inner .device--button__voice{left:104px;top:18px;background:url("official/character_device_btn_voice_off.png") center center no-repeat;background-size:cover}
+.ten-device__inner .device--button__voice.is--playing a img{opacity:1}
+.ten-device__inner .device--button__movie{left:207px;top:36px;background:url("official/character_device_btn_movie_off.png") center center no-repeat;background-size:cover}
+.ten-device__inner .device--button__movie.is--hidden{background-image:url("official/character_device_btn_movie_hidden.png")}
+
+/* ---- BACK / NEXT（公式 .device--prev / .device--next） ---- */
+.ten-device .device--prev,.ten-device .device--next{position:absolute;top:50%;z-index:50;transform:translateY(-50%)}
+.ten-device .device--prev a,.ten-device .device--next a{display:block;width:140px;height:30px;line-height:30px;border-radius:30px;background-color:#c8ff46;font-family:"18TRIPSansMedium",sans-serif;color:#000;font-size:15px;letter-spacing:.15em}
+.ten-device .device--prev span,.ten-device .device--next span{display:flex;justify-content:space-between;align-items:center;margin:0 17px}
+.ten-device .device--prev span::before,.ten-device .device--prev span::after,
+.ten-device .device--next span::before,.ten-device .device--next span::after{content:"";display:block;width:18px;height:14px;background:url("official/common_icon_arw_black.png") center center no-repeat;background-size:cover;transition:all .2s}
+.ten-device .device--prev{left:-68px}
+.ten-device .device--prev span::before{display:none}
+.ten-device .device--prev span::after{transform:rotate(180deg)}
+.ten-device .device--prev a:hover span::after{transform:rotate(180deg) translateX(10px)}
+.ten-device .device--next{right:-110px}
+.ten-device .device--next span::before{transform:rotate(0deg)}
+.ten-device .device--next span::after{display:none}
+.ten-device .device--next a:hover span::before{transform:rotate(0deg) translateX(10px)}
+
+/* ---- MEMBERサブナビ（公式 .localnav、PCは右端固定） ---- */
+.ten-localnav{position:fixed;right:2.6041666667%;top:50%;transform:translateY(-50%);z-index:6}
+.ten-localnav #localnavBg{display:none}
+.ten-localnav .localnav__head,.ten-localnav .localnav__pager{display:none}
+.ten-localnav .localnav__block ul{display:none}
+.ten-localnav .localnav__block ul.is--current{display:block}
+.ten-localnav .localnav__block li{margin-bottom:30px;width:103px}
+.ten-localnav .localnav__block li:last-of-type{margin-bottom:0}
+.ten-localnav .localnav__block li.is--current{pointer-events:none}
+.ten-localnav .localnav__block li.is--current span::before{opacity:1}
+.ten-localnav .localnav__block a{display:block;width:100%;height:100%}
+.ten-localnav .localnav__block a:hover span{transform:scale(1.1)}
+.ten-localnav .localnav__block a:hover span::before{opacity:1}
+.ten-localnav .localnav__block span{display:block;width:100%;height:100%;position:relative;transition:all .2s}
+.ten-localnav .localnav__block span::before{content:"";display:block;width:100%;height:100%;background:url("official/character_subnav_hover.png") center center no-repeat;background-size:cover;position:absolute;left:0;top:0;z-index:1;mix-blend-mode:multiply;opacity:0;transition:opacity .2s}
+.ten-localnav .localnav__block img{position:relative;z-index:0;width:103px;height:auto}
+
+/* ---- HAMAWARDS（公式 .hamanav） ---- */
+.ten-hamanav{position:relative;z-index:0;width:100%;padding-top:35px;padding-bottom:194px}
+.ten-hamanav .hamanav__head{width:calc(100% - 200px);margin:0 auto;text-align:center;font-family:"18TRIPSansFunnyMedium",sans-serif;color:#fff;font-size:165px;height:165px;line-height:165px;margin-bottom:15px;position:relative}
+.ten-hamanav .hamanav__list{width:calc(100% - 200px);margin:0 auto;display:flex;justify-content:center}
+.ten-hamanav .hamanav__list ul{display:flex;justify-content:center;position:relative}
+.ten-hamanav .hamanav__list ul::before{content:"";display:block;width:100%;height:15px;background-color:#c8ff46;position:absolute;left:0;top:50%;z-index:0;transform:translateY(-50%)}
+.ten-hamanav .hamanav__list li{position:relative;z-index:1;margin:0 30px}
+.ten-hamanav .hamanav__list li.is--current{pointer-events:none}
+.ten-hamanav .hamanav__list li.is--current .logo--bg{transform:scale(1);opacity:1}
+.ten-hamanav .hamanav__list li.is--current .hamanav__list__name span::before{transform:scaleX(1)}
+.ten-hamanav .hamanav__list a{display:block;position:relative}
+.ten-hamanav .hamanav__list a:hover .logo--bg{transform:scale(1);opacity:1}
+.ten-hamanav .hamanav__list a:hover .hamanav__list__name span::before{transform:scaleX(1)}
+.ten-hamanav .hamanav__list span{display:block}
+.ten-hamanav .hamanav__list__logo{position:relative}
+.ten-hamanav .hamanav__list__logo .logo--mark{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:1}
+.ten-hamanav .hamanav__list__logo .logo--bg{position:relative;z-index:0;transform:scale(.9);opacity:0;transition:all .2s}
+.ten-hamanav .hamanav__list__name{text-align:center;width:180px;font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:24px;line-height:35px;color:#323232;position:absolute;left:50%;bottom:-80px;z-index:1;transform:translateX(-50%)}
+.ten-hamanav .hamanav__list__name span{position:relative}
+.ten-hamanav .hamanav__list__name span::before{content:"";display:block;width:100%;height:100%;background-color:#c8ff46;position:absolute;left:0;top:0;z-index:-1;border-radius:35px;transform:scaleX(0);transition:all .2s}
+
+/* ---- ZOOM（公式 .zoom / .zoom--bg） ---- */
+.ten-zoom-bg{width:100%;height:100%;position:fixed;left:0;top:0;z-index:8000;background-color:#5a5a5a;mix-blend-mode:multiply;display:none}
+.ten-zoom{width:100%;height:100%;position:fixed;left:0;top:0;z-index:8001;display:none}
+.ten-zoom.is--open,.ten-zoom-bg.is--open{display:block}
+.ten-zoom::after{content:"";display:block;width:100%;height:100%;position:absolute;left:0;top:0;z-index:1}
+.ten-zoom .zoom__visual{position:relative;z-index:0;width:100%;height:100%;display:flex;justify-content:center;align-items:center;pointer-events:none}
+.ten-zoom .zoom__visual img{max-width:100%;max-height:100%;width:auto;height:auto}
+
+/* ============================================================
+中間幅（769〜1400px）：HAMANAV を vw 流動にして見切れを防ぐ。
+基礎側の固定値（ロゴ143px＋マージン30px×5点＝約1015px）は
+コンテナ幅（100%-200px）に対して 1215px 未満で溢れるため、
+この帯域だけ各寸法を vw（上限つき）に置き換える。
+1401px 以上は基礎の公式実測値そのまま。
+============================================================ */
+@media screen and (min-width:769px) and (max-width:1400px){
+.ten-hamanav .hamanav__head{font-size:min(165px,12.9vw);height:1em;line-height:1em}
+.ten-hamanav .hamanav__list li{margin:0 min(30px,1.5vw)}
+.ten-hamanav .hamanav__list__logo .logo--bg img{width:min(143px,11.2vw);height:auto}
+.ten-hamanav .hamanav__list__logo .logo--mark img{width:min(128px,10vw);height:auto}
+.ten-hamanav .hamanav__list__name{width:min(180px,14vw);font-size:min(24px,1.9vw);line-height:1.46em}
+}
+
+/* ============================================================
+SP（公式ブレークポイント max-width: 768px、設計幅375のvw換算）
+============================================================ */
+@media screen and (max-width:768px){
+.ten-wrap{background:#f0f0e2 url("official/character_detail_bg_sp.png") center top no-repeat;background-size:cover}
+/* 公式 .wrapper::before：左端24vwの色帯（添＝detail--1__3 の #c8d7eb）。縦書き名の地になる */
+.ten-wrap::before{content:"";display:block;width:24vw;height:100%;background-color:#c8d7eb;position:absolute;left:0;top:0;z-index:0}
+/* 公式 .name は z-index:1 で .detail（z-index:2）より下。名前がデバイスに潜るのが公式の見え方 */
+.ten-name{z-index:1}
+.ten-name .name__team{font-size:2.6666666667vw;top:5.6vw}
+.ten-name .name__member{right:auto;left:1.3333333333vw;top:22.6666666667vw;text-align:left}
+.ten-name .member--pc{display:none}
+.ten-name .member--sp{display:block}
+.ten-name .member--sp span{font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:17.3333333333vw;line-height:17.3333333333vw;height:17.3333333333vw;display:block;color:rgba(0,0,0,0);-webkit-text-fill-color:rgba(0,0,0,0);-webkit-text-stroke:.1333333333vw #231815;white-space:nowrap;transform-origin:0 0;transform:translateX(17.3333333333vw) rotate(90deg)}
+.ten-detail{position:relative;z-index:2;width:100%;height:auto;aspect-ratio:auto;max-height:100%;padding-top:32.2666666667vw;margin-bottom:12vw}
+.ten-device{width:139.7333333333vw;height:auto;position:relative;left:auto;top:auto;transform:none;margin-left:-6.6666666667vw}
+.ten-device__inner::before{width:156.1333333333vw;height:256.8vw;background-image:url("official/character_device_shadow_sp.png");left:-6.9333333333vw;top:0}
+.ten-device__inner .device--bottom{display:none}
+.ten-device__inner .device--top{position:relative;left:auto;top:auto;z-index:10}
+.ten-device__inner .device--top img{width:139.7333333333vw;height:auto}
+.ten-device__inner .device--lcd{left:8.6666666667vw;top:106.5333333333vw;z-index:30}
+.ten-device__inner .device--lcd img{width:109.3333333333vw;height:auto}
+.ten-device__inner .device--light{display:none}
+.ten-device__inner .device--grid{left:8.6666666667vw;top:106.5333333333vw;z-index:41}
+.ten-device__inner .device--grid img{width:109.3333333333vw;height:auto}
+.ten-device__inner .device--card{left:36.4vw;top:-6.5333333333vw;z-index:5}
+.ten-device__inner .device--card img{width:83.4666666667vw;height:auto}
+.ten-device__inner .device--prof{left:10.6666666667vw;top:79.6vw;z-index:30}
+.ten-device__inner .device--prof img{width:93.7333333333vw;height:auto}
+.ten-device__inner .device--visual{left:24.2666666667vw;top:7.7333333333vw;z-index:25}
+.ten-device__inner .device--visual img{width:100.5333333333vw;height:auto}
+.ten-device__inner .device--button{width:20.1333333333vw;height:48.6666666667vw;left:20.9333333333vw;top:6.5333333333vw;z-index:30}
+.ten-device__inner .device--button li{width:18vw;height:auto}
+.ten-device__inner .device--button img{width:18vw;height:auto}
+.ten-device__inner .device--button a:hover img{opacity:0}
+.ten-device__inner .device--button__zoom{left:2.1333333333vw;top:0;background-image:url("official/character_device_btn_zoom_off_sp.png")}
+.ten-device__inner .device--button__voice{left:1.0666666667vw;top:16vw;background-image:url("official/character_device_btn_voice_off_sp.png")}
+.ten-device__inner .device--button__movie{left:0;top:32vw;background-image:url("official/character_device_btn_movie_off_sp.png")}
+.ten-device__inner .device--button__movie.is--hidden{background-image:url("official/character_device_btn_movie_hidden_sp.png")}
+.ten-device .device--prev,.ten-device .device--next{top:67.7333333333vw;transform:scale(.75)}
+.ten-device .device--prev a,.ten-device .device--next a{width:24.8vw;height:5.3333333333vw;line-height:5.3333333333vw;border-radius:5.3333333333vw;font-size:2.6666666667vw}
+.ten-device .device--prev span,.ten-device .device--next span{margin:0 3.4666666667vw}
+.ten-device .device--prev span::before,.ten-device .device--prev span::after,
+.ten-device .device--next span::before,.ten-device .device--next span::after{width:2.4vw;height:1.8666666667vw}
+.ten-device .device--prev{left:10.6666666667vw;transform-origin:0 0}
+.ten-device .device--next{right:37.0666666667vw;transform-origin:100% 0}
+
+/* ローカルナビ（SPは通常フロー） */
+.ten-localnav{position:relative;right:auto;top:auto;transform:none;z-index:3;padding-bottom:10.6666666667vw}
+.ten-localnav #localnavBg{display:block;width:100%;height:calc(100% - 12vw);position:absolute;left:0;bottom:0;z-index:0}
+.ten-localnav #localnavBg::before,.ten-localnav #localnavBg::after{content:"";display:block;width:100%;height:100%;position:absolute;left:0;bottom:0;z-index:0}
+.ten-localnav #localnavBg::before{border-bottom:1.6vw solid var(--ln-border,#3596ff);background-color:var(--ln-bg,#6799ce);box-sizing:border-box}
+.ten-localnav #localnavBg::after{background:url("official/character_localnav_bg_sp.png") center top no-repeat;background-size:cover;mix-blend-mode:multiply}
+.ten-localnav .localnav__head{position:relative;z-index:1;display:block;width:100%;text-align:center;margin-bottom:4vw}
+.ten-localnav .localnav__head .head--member{font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:20.6666666667vw;line-height:20.6666666667vw;height:20.6666666667vw;color:rgba(0,0,0,0);-webkit-text-fill-color:rgba(0,0,0,0);-webkit-text-stroke:.1333333333vw #231815;margin-bottom:2.6666666667vw}
+.ten-localnav .localnav__head .head--team{font-family:"18TRIPSansFunnyMedium",sans-serif;font-size:2.6666666667vw;line-height:1em}
+.ten-localnav .localnav__block{position:relative;z-index:1}
+.ten-localnav .localnav__block ul{display:none;width:100%;flex-wrap:wrap;justify-content:center;padding-bottom:4vw}
+.ten-localnav .localnav__block ul.is--current{display:flex}
+.ten-localnav .localnav__block li{margin:0 1.3333333333vw 4vw;width:auto}
+.ten-localnav .localnav__block li:last-of-type{margin-bottom:4vw}
+.ten-localnav .localnav__block img{width:26.8vw}
+.ten-localnav .localnav__block a:hover span{transform:none}
+.ten-localnav .localnav__block a:hover span::before{opacity:0}
+.ten-localnav .localnav__pager{position:relative;z-index:1;width:92%;margin:0 auto;display:flex;justify-content:space-between}
+.ten-localnav .localnav__pager p{transform:scale(.75)}
+.ten-localnav .localnav__pager a{display:block;width:24.8vw;height:5.3333333333vw;line-height:5.3333333333vw;border-radius:5.3333333333vw;background-color:#c8ff46;font-family:"18TRIPSansMedium",sans-serif;color:#000;font-size:2.6666666667vw;letter-spacing:.15em}
+.ten-localnav .localnav__pager span{display:flex;justify-content:space-between;align-items:center;margin:0 3.4666666667vw}
+.ten-localnav .localnav__pager span::before,.ten-localnav .localnav__pager span::after{content:"";display:block;width:2.4vw;height:1.8666666667vw;background:url("official/common_icon_arw_black.png") center center no-repeat;background-size:cover}
+.ten-localnav .localnav__pager .pager--prev{transform-origin:0 0}
+.ten-localnav .localnav__pager .pager--prev span::before{display:none}
+.ten-localnav .localnav__pager .pager--prev span::after{transform:rotate(180deg)}
+.ten-localnav .localnav__pager .pager--next{transform-origin:100% 0}
+.ten-localnav .localnav__pager .pager--next span::after{display:none}
+
+/* HAMANAV（SPは上部に小さく） */
+.ten-hamanav{position:absolute;left:0;top:10vw;z-index:3;width:100%;padding:0}
+.ten-hamanav .hamanav__head{display:none}
+.ten-hamanav .hamanav__list{width:100%}
+.ten-hamanav .hamanav__list ul::before{height:1.0666666667vw}
+.ten-hamanav .hamanav__list li{margin:0 .6666666667vw}
+.ten-hamanav .hamanav__list__logo .logo--mark{transform:translate(-50%,-50%) scale(.7);width:10.6666666667vw}
+.ten-hamanav .hamanav__list__logo .logo--mark img{width:100%;height:auto}
+.ten-hamanav .hamanav__list__logo .logo--bg{width:12vw;transition:none}
+.ten-hamanav .hamanav__list__logo .logo--bg img{width:100%;height:auto}
+/* 公式も display:none !important。素の display:none では基礎側の
+   .hamanav__list span{display:block}（要素セレクタ分だけ詳細度が高い）に負けて名前が出てしまう */
+.ten-hamanav .hamanav__list__name{display:none !important}
+}
