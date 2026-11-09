@@ -1,78 +1,401 @@
 /* ============================================================
-index.html 専用スタイル（トップページ仕上げ、2026-11-09）
-動線設計は ../FLOW.md。共通部品（site.css のヘッダー／フッター、
-site.js のメニュー注入）には触らず、index 固有の分だけをここに閉じる。
+index.html 専用スタイル（トップページ再構築、2026-11-09）
+方針：内容はAYAオリジナル、レイアウト文法は18TRIP公式。
+- FV は 100vw × 100svh の一枚UI（absolute 重ね、中央コンテナなし）
+- NEWS は端末文法（LATEST UPDATE 秒まで＋DATE/TO/REMARKS列）
+- INTRODUCTION は多層グラフィック、CHARACTER は公式型アートボード
+- PC/SP はブレイクポイントごとに座標を個別設定（単純縮小しない）
+共通部品（site.css/site.js）への変更はなし。index では共通ヘッダーを
+FV 上の固定オーバーレイとして扱う上書きだけをここに置く。
 ============================================================ */
 
-/* ---- HERO（キービジュアルの器） ----
-   公式文法：visual 全面配置＋ロゴ重ね。素材（KV画像）は未到着のため、
-   .hero-img の差し替え口だけを用意した器。画像が来たら
-   .hero-ph を <img class="hero-img" src="..."> に置換するだけでよい。
-   公式KVの実寸は未実測（ASSETS.md §5 の素材待ち項目）。 */
-.hero{padding:0 0 .4rem}
-.hero-stage{
-position:relative;overflow:hidden;background:var(--chara-bg);
-border-bottom:3px solid var(--ink);
-aspect-ratio:4/3; /* 器の仮寸法。KV素材の実寸が来たら合わせる */
+/* ---- index 専用：共通ヘッダーを FV 上の固定オーバーレイに ---- */
+body.top .site-header{
+position:fixed;top:0;left:0;right:0;z-index:1400;
 }
-.hero-ph{
-position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
-text-align:center;color:#667;font-size:.72rem;padding:.6rem;
-border:1px dashed #99a;margin:.6rem;border-radius:4px;
-background:repeating-linear-gradient(45deg,#eef3f4,#eef3f4 10px,#e4ecee 10px,#e4ecee 20px);
+
+/* ---- スクロールイン ---- */
+.reveal{opacity:0;transform:translateY(26px);
+transition:opacity .8s ease,transform .8s cubic-bezier(.63,0,.33,1)}
+.reveal.is-in{opacity:1;transform:translateY(0)}
+
+/* ============================================================
+FV（ファーストビュー）：100vw × 100svh の一枚UI
+============================================================ */
+.fv{
+position:relative;width:100vw;margin-left:calc(50% - 50vw);
+height:100svh;min-height:560px;overflow:hidden;
+background:#e3e6f2; /* 地図画像の読み込み前の地色（map-bg の空色に近い淡ラベンダー） */
 }
-.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero-logo{
-position:absolute;left:0;right:0;top:12%;text-align:center;margin:0;
+.fv-bg{position:absolute;inset:0}
+.fv-bg img{
+width:100%;height:100%;object-fit:cover;object-position:38% 50%;display:block;
+transform:translateY(var(--py,0)) scale(1.14);
+}
+.fv-shade{
+position:absolute;inset:0;pointer-events:none;
+background:
+linear-gradient(to right,rgba(255,255,255,.62),rgba(255,255,255,0) 46%),
+linear-gradient(to bottom,rgba(255,255,255,.5),rgba(255,255,255,0) 26%,rgba(255,255,255,0) 78%,rgba(240,240,226,.4));
+}
+/* 人物：中央〜右に大きくオーバーラップ（SP座標） */
+.fv-chara{
+position:absolute;z-index:3;bottom:2.7rem;right:-31%;
+height:71%;width:auto;pointer-events:none;
+filter:drop-shadow(0 10px 22px rgba(40,40,60,.28));
+animation:fvIn 1.1s cubic-bezier(.63,0,.33,1) .1s both;
+}
+@keyframes fvIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fvFade{from{opacity:0}to{opacity:1}}
+/* ロゴブロック（SP座標） */
+.fv-logo{position:absolute;z-index:6;left:6%;top:12.5%;width:66%;
+animation:fvIn .9s cubic-bezier(.63,0,.33,1) .3s both}
+.fv-logo-sub{
+margin:0;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.6rem;letter-spacing:.3em;color:var(--accent-text);font-weight:700;
+}
+.fv-logo-main{
+margin:.1rem 0 0;font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;
+font-weight:900;font-size:16.5vw;line-height:1.02;letter-spacing:.05em;color:var(--ink);
+text-shadow:3px 3px 0 var(--accent);
+}
+.fv-catch{
+margin:.7rem 0 0;display:inline-block;font-weight:900;letter-spacing:.12em;
+font-size:.92rem;line-height:1.6;color:var(--ink);
+background:rgba(255,255,255,.82);padding:.3rem .6rem;
+box-shadow:4px 4px 0 rgba(50,50,50,.85);
+}
+.fv-links{margin:.85rem 0 0;display:flex;gap:1.1rem}
+.fv-links a{
 font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;
-font-size:2rem;letter-spacing:.18em;color:var(--ink);
-text-shadow:2px 2px 0 var(--accent);
+font-size:.78rem;letter-spacing:.16em;color:var(--ink);text-decoration:none;
+border-bottom:3px solid var(--accent);padding-bottom:.1rem;
 }
-.hero-catch{
-position:absolute;left:0;right:0;bottom:9%;text-align:center;margin:0;
-font-weight:900;letter-spacing:.14em;font-size:.86rem;color:var(--ink);
-background:rgba(255,255,255,.75);padding:.25rem 0;
+.fv-links a:hover{color:var(--accent-text)}
+/* 左縦ナビ（FV専用。1100px以上は共通サイドナビが担うため隠す） */
+.fv-nav{
+position:absolute;z-index:6;left:.6rem;top:57%;transform:translateY(-50%);
+display:flex;flex-direction:column;gap:1.15em;
+animation:fvFade 1s ease .6s both;
 }
-.hero-cta{display:flex;gap:.6rem;padding:.8rem 1rem 0}
-.hero-cta a{
-flex:1;text-align:center;text-decoration:none;font-weight:800;font-size:.84rem;
-border:2px solid var(--ink);border-radius:999px;padding:.55rem 0;transition:transform .2s,background .2s;
+.fv-nav a{
+writing-mode:vertical-rl;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.6rem;letter-spacing:.3em;color:var(--ink);text-decoration:none;
+display:flex;align-items:center;gap:.5em;
 }
-.hero-cta .cta-main{background:var(--accent);color:var(--ink)}
-.hero-cta .cta-sub{background:#fff;color:var(--ink)}
-.hero-cta a:hover{transform:scale(.96)}
+.fv-nav a::after{content:"";width:1px;height:1.6em;background:rgba(50,50,50,.4)}
+.fv-nav a:hover{color:var(--accent-text)}
+.fv-nav a[aria-current="page"]{color:var(--accent-text);font-weight:700}
+.fv-nav a[aria-current="page"]::before{
+content:"";width:7px;height:10px;flex:none;
+background:url("official/common_icon_pin.png") center/contain no-repeat;
+}
+/* 右縦デコ（PCのみ） */
+.fv-side{display:none}
+/* スクロールキュー */
+.fv-scroll{
+position:absolute;z-index:6;left:50%;bottom:3.3rem;transform:translateX(-50%);
+margin:0;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.56rem;letter-spacing:.34em;color:var(--ink);text-align:center;
+animation:fvFade 1s ease .8s both;
+}
+.fv-scroll span{
+display:block;width:1px;height:34px;margin:.35rem auto 0;background:var(--ink);
+transform-origin:top;animation:scrollLine 2.2s cubic-bezier(.63,0,.33,1) infinite;
+}
+@keyframes scrollLine{0%{transform:scaleY(0)}45%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+/* 浮遊アイテム（公式 fluffy 文法：site.css の keyframes を使用） */
+.fv-item{position:absolute;z-index:5;margin:0;pointer-events:none}
+.fv-item img{width:100%;height:auto;display:block}
+.fv-item .eff--vertical{animation:fuluffyVertical 8s ease-in-out infinite alternate}
+.fv-item .eff--horizon{animation:fluffyHorizon 7s ease-in-out infinite alternate}
+.fv-item--1{width:44px;right:9%;top:15%}
+.fv-item--2{width:32px;left:47%;top:7.5%}
+.fv-item--2 .eff--vertical{animation-duration:10s}
+.fv-item--3{display:none}
+/* 下部ステータスバー：画面最下端に横一列（端末読み出し） */
+.fv-status{
+position:absolute;z-index:8;left:0;right:0;bottom:0;
+display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none;
+background:var(--ink);color:#fff;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+animation:fvFade .8s ease .5s both;
+}
+.fv-status::-webkit-scrollbar{display:none}
+.fv-st-cell{
+margin:0;display:flex;align-items:center;gap:.55em;white-space:nowrap;
+padding:.5rem .8rem;font-size:.74rem;border-right:1px solid rgba(255,255,255,.28);
+}
+.fv-st-label{font-size:.54rem;letter-spacing:.26em;color:#b9c4c9}
+.fv-st-val{font-weight:700;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.fv-st-val--dim{color:#8b979d}
+.fv-st-place{color:var(--yellow);font-weight:700;letter-spacing:.1em}
+.fv-st-place::before{content:"";display:inline-block;width:.62rem;height:.85rem;
+background:url("official/common_icon_pin.png") center/contain no-repeat;vertical-align:-.12rem}
+.fv-st-tag{letter-spacing:.08em}
 
-/* ---- NEWS：行リンク（FLOW.md §1 #3） ---- */
-.news-list a{color:inherit;text-decoration:none;display:block}
-.news-list a:hover{color:var(--accent-text)}
-.news-list a .go{color:var(--accent-text);font-weight:700;font-size:.75rem;margin-left:.4rem}
+/* FV：PC座標（横画面をUIキャンバスとして再配置） */
+@media(min-width:769px){
+.fv{min-height:640px}
+.fv-bg img{object-position:50% 50%}
+.fv-chara{right:5%;bottom:2.7rem;height:93%}
+.fv-logo{left:8.5%;top:23%;width:auto}
+.fv-logo-sub{font-size:.7rem}
+.fv-logo-main{font-size:clamp(84px,9.5vw,138px)}
+.fv-catch{font-size:1.05rem}
+.fv-nav{left:2rem;top:50%;gap:1.5em}
+.fv-nav a{font-size:.76rem}
+.fv-side{
+display:block;position:absolute;z-index:6;right:1.5rem;top:50%;transform:translateY(-50%);
+writing-mode:vertical-rl;margin:0;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.6rem;letter-spacing:.36em;color:#445;
+animation:fvFade 1s ease .7s both;
+}
+.fv-item--1{width:64px;right:auto;left:56%;top:12%}
+.fv-item--2{width:44px;left:34%;top:9%}
+.fv-item--3{display:block;width:56px;left:27%;bottom:19%}
+.fv-scroll{left:auto;right:9%;transform:none}
+}
+@media(min-width:1100px){
+.fv-nav{display:none} /* 左ナビは共通サイドナビ（site.css .globalnav）が担う */
+}
 
-/* ---- INTRODUCTION：末尾の導線（FLOW.md §1 #4） ---- */
-.intro-links{margin-top:1rem;display:flex;gap:1.2rem;flex-wrap:wrap}
+/* ============================================================
+NEWS：端末文法（DATE / TO / REMARKS）
+============================================================ */
+.news-head{
+display:grid;grid-template-columns:3.4em 4.8em 1fr;gap:.6rem;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.6rem;letter-spacing:.26em;color:#667;
+border-top:2px solid var(--ink);padding-top:.45rem;margin-top:.55rem;
+}
+#news-latest{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700}
+.news-list--tbl li{
+display:grid;grid-template-columns:3.4em 4.8em 1fr;gap:.6rem;align-items:baseline;
+}
+.news-list--tbl li:has(>a){display:block;padding:0}
+.news-list--tbl li>a{
+display:grid;grid-template-columns:3.4em 4.8em 1fr;gap:.6rem;align-items:baseline;
+padding:.55rem 0;color:inherit;text-decoration:none;
+}
+.news-list--tbl li>a:hover{color:var(--accent-text)}
+.n-date{font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;letter-spacing:.06em}
+.n-to{
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.64rem;letter-spacing:.16em;color:var(--accent-text);
+border:1px solid var(--accent-text);border-radius:2px;text-align:center;padding:.08em 0;
+}
+.n-rem time{color:#667;font-size:.78rem;font-weight:500;margin-right:.6rem}
+.n-rem .go{color:var(--accent-text);font-weight:700;font-size:.75rem;margin-left:.4rem}
+
+/* ============================================================
+INTRODUCTION：多層グラフィック（旅行の記録画面）
+============================================================ */
+.sec-intro{overflow:hidden}
+.intro-word{
+position:absolute;right:-.5rem;top:1.6rem;margin:0;pointer-events:none;
+writing-mode:vertical-rl;font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;
+font-weight:900;font-size:2.4rem;letter-spacing:.28em;line-height:1;
+color:rgba(50,50,50,.06);-webkit-text-stroke:1px rgba(50,50,50,.16);
+}
+.intro-stage{position:relative;margin-top:.3rem}
+.intro-text{
+position:relative;z-index:5;background:rgba(255,255,255,.92);
+border:2px solid var(--ink);box-shadow:6px 6px 0 rgba(50,50,50,.85);
+padding:1rem 1.1rem;
+}
+.intro-text p{margin:.2rem 0}
+.intro-note{font-size:.78rem;color:#556}
+.intro-links{margin:.8rem 0 0;display:flex;gap:1.2rem;flex-wrap:wrap}
 .intro-links a{color:var(--accent-text);font-weight:700;font-size:.85rem;text-decoration:none}
 .intro-links a:hover{text-decoration:underline}
+/* 視覚クラスタ：窓・写真・チケット・カセット・航路を重ねる */
+.intro-cluster{position:relative;height:336px;margin-top:1.3rem}
+.intro-route{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.intro-window{
+position:absolute;z-index:2;right:0;top:0;width:66%;margin:0;
+background:#fff;border:2px solid var(--ink);padding:.45rem .45rem .2rem;
+box-shadow:5px 5px 0 rgba(50,50,50,.8);
+transform:rotate(2deg) translateY(var(--py,0));
+}
+.intro-window img{width:100%;height:148px;object-fit:cover;display:block}
+.intro-window figcaption,.intro-photo figcaption{
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.56rem;letter-spacing:.22em;color:#445;padding:.32rem .1rem .15rem;
+}
+.intro-photo{
+position:absolute;z-index:3;left:0;bottom:0;width:45%;margin:0;
+background:#fff;border:2px solid var(--ink);padding:.4rem .4rem .2rem;
+box-shadow:5px 5px 0 rgba(50,50,50,.8);
+transform:rotate(-3deg) translateY(var(--py,0));
+}
+.intro-photo::before{ /* マスキングテープ */
+content:"";position:absolute;top:-11px;left:50%;width:84px;height:22px;z-index:2;
+transform:translateX(-50%) rotate(-4deg);
+background:rgba(200,255,70,.5);
+border-left:1px dashed rgba(50,50,50,.35);border-right:1px dashed rgba(50,50,50,.35);
+}
+.intro-photo img{width:100%;height:188px;object-fit:cover;object-position:top;display:block}
+.intro-cassette{
+position:absolute;z-index:1;left:53%;top:46%;width:132px;
+background:#fff;border:2px solid var(--ink);border-radius:8px;
+padding:.38rem .5rem .32rem;transform:rotate(3deg);
+}
+.ic-label{display:block;text-align:center;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.5rem;letter-spacing:.18em}
+.ic-window{display:flex;align-items:center;gap:.3rem;border:1.5px solid var(--ink);border-radius:4px;padding:.16rem .3rem;margin-top:.22rem}
+.ic-reel{flex:none;width:15px;height:15px;border:1.5px solid var(--ink);border-radius:50%;
+background:radial-gradient(circle,#fff 0 3px,var(--ink) 3px 4px,#fff 4px)}
+.ic-tape{flex:1;height:2px;background:var(--ink)}
+.ic-side{display:block;text-align:center;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.48rem;letter-spacing:.26em;color:#667;margin-top:.18rem}
+.intro-ticket{
+position:absolute;z-index:4;right:1%;bottom:4%;width:54%;
+display:block;background:var(--ink);color:#fff;text-decoration:none;
+padding:.55rem .7rem .6rem;transform:rotate(1.2deg);
+box-shadow:4px 4px 0 rgba(50,50,50,.35);transition:transform .2s;
+}
+.intro-ticket:hover{transform:rotate(0) scale(.98)}
+.it-main{display:flex;gap:.55rem;align-items:baseline;
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;letter-spacing:.14em;font-size:1rem}
+.it-arw{color:var(--accent)}
+.it-meta{display:block;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.54rem;letter-spacing:.22em;color:#cfd6da;margin-top:.15rem}
+.it-barcode{display:block;height:15px;margin-top:.4rem;
+background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 5px,#fff 5px 6px,transparent 6px 10px)}
+.intro-item{position:absolute;z-index:4;margin:0;pointer-events:none}
+.intro-item img{width:100%;height:auto;display:block}
+.intro-item .eff--vertical{animation:fuluffyVertical 9s ease-in-out infinite alternate}
+.intro-item .eff--horizon{animation:fluffyHorizon 8s ease-in-out infinite alternate}
+.intro-item--1{width:38px;right:40%;top:-8px}
+.intro-item--2{width:28px;left:1%;top:36%}
+.intro-item--2 .eff--vertical{animation-duration:11s}
+/* INTRO：PC座標 */
+@media(min-width:769px){
+.intro-text{width:57%}
+.intro-cluster{height:372px;width:82%;margin:-2.2rem 0 0 auto}
+.intro-window{width:56%}
+.intro-window img{height:168px}
+.intro-photo{width:36%}
+.intro-photo img{height:212px}
+.intro-cassette{left:44%;top:40%;width:148px}
+.intro-ticket{width:44%}
+}
 
-/* ---- MEMBERS：背景演出（FLOW.md §1 #5） ----
-   公式のユニット切替に倣い、選択中のキャラでセクションの
-   背景色＋装飾が切り替わる。装飾層は取得済みの公式背景
-   （top_members_bg1/bg2）を薄く敷き、色味はキャラごとに切替。
-   切替は index.html 内のスクリプトが .sec-members の
-   data-active を書き換える（site.js のパネル切替と併走）。 */
-.sec-members{overflow:hidden;transition:background-color .5s}
-.sec-members::before{
+/* ============================================================
+CHARACTER：公式型アートボード
+アートボード内部比率は公式キャンバス 686×741（CSS側のみで使用し、
+寸法そのものは画面に表示しない）
+============================================================ */
+.sec-chara{overflow:hidden;
+transition:background-color .5s,opacity .8s ease,transform .8s cubic-bezier(.63,0,.33,1)}
+.sec-chara::before{
 content:"";position:absolute;inset:0;pointer-events:none;
 background:url("official/top_members_bg1.png") center/cover no-repeat;
 opacity:.16;transition:opacity .5s;
 }
-.sec-members>*{position:relative}
-.sec-members[data-active="aya"]{background-color:#f6ffd9}
-.sec-members[data-active="filler"]{background-color:#ffeee9}
-.sec-members[data-active="filler"]::before{background-image:url("official/top_members_bg2.png");opacity:.2}
-.sec-members[data-active="ten"]{background-color:#e9eff7}
-.sec-members[data-active="ten"]::before{opacity:.1}
-.member-note{font-size:.72rem;color:#667;margin-top:.5rem}
+.sec-chara>*{position:relative}
+.sec-chara[data-active="aya"]{background-color:#f6ffd9}
+.sec-chara[data-active="filler"]{background-color:#ffeee9}
+.sec-chara[data-active="filler"]::before{background-image:url("official/top_members_bg2.png");opacity:.2}
+.sec-chara[data-active="ten"]{background-color:#e9eff7}
+.sec-chara[data-active="ten"]::before{opacity:.1}
+.chara-tabs{display:flex;gap:.5rem;margin-bottom:.9rem}
+.chara-tabs button{
+flex:1;padding:.55rem 0;border:2px solid var(--ink);background:#fff;color:var(--ink);
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;
+font-weight:900;font-size:.82rem;letter-spacing:.24em;cursor:pointer;border-radius:4px;
+}
+.chara-tabs button.active{background:var(--accent);color:var(--ink)}
+.chara-frame{position:relative}
+.chara-nav{
+position:absolute;top:36%;z-index:6;width:52px;padding:.32rem 0 .22rem;
+background:#fff;border:2px solid var(--ink);border-radius:999px;cursor:pointer;
+display:flex;flex-direction:column;align-items:center;
+box-shadow:3px 3px 0 rgba(50,50,50,.8);transition:transform .2s;
+}
+.chara-nav img{width:22px;height:22px;display:block}
+.chara-nav span{font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.48rem;letter-spacing:.18em;margin-top:.05rem}
+.chara-nav:hover{transform:scale(.92)}
+.chara-nav--prev{left:-.35rem}
+.chara-nav--next{right:-.35rem}
+.chara-panel{animation:charaIn .45s cubic-bezier(.63,0,.33,1)}
+@keyframes charaIn{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:translateX(0)}}
+.chara-board{
+position:relative;border:2px solid var(--ink);background:rgba(255,255,255,.93);
+padding:1rem .9rem 1.1rem;overflow:hidden;
+}
+.chara-board::after{ /* 航路サークルの装飾 */
+content:"";position:absolute;right:-34px;top:-34px;width:150px;height:150px;
+border:2px dashed rgba(0,73,134,.32);border-radius:50%;pointer-events:none;
+}
+.chara-art{
+position:relative;aspect-ratio:686/741;max-width:330px;margin:0 auto;overflow:hidden;
+background:var(--chara-bg) url("official/character_detail_bg_sp.png") center top/cover no-repeat;
+border:2px solid var(--ink);
+}
+.chara-art-word{
+position:absolute;left:.45rem;top:.25rem;z-index:1;line-height:1;
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;
+font-size:3.3rem;letter-spacing:.03em;color:transparent;
+-webkit-text-stroke:1.5px rgba(50,50,50,.42);
+}
+.chara-art-img{
+position:absolute;left:50%;bottom:0;transform:translateX(-50%);
+height:97%;width:auto;max-width:none;
+}
+.chara-art-no{
+position:absolute;left:.55rem;bottom:.45rem;z-index:2;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.56rem;letter-spacing:.24em;background:var(--ink);color:#fff;padding:.14rem .5rem;
+}
+/* フィラー：絵素材がないため、■と赤のタイポグラフィで画面として成立させる */
+.chara-art--filler{background:linear-gradient(165deg,#3a3230,#17130f)}
+.chara-art--filler .chara-art-word{
+left:auto;right:.55rem;top:.6rem;font-size:1.45rem;letter-spacing:.5em;
+writing-mode:vertical-rl;-webkit-text-stroke:1px rgba(255,140,120,.8);
+}
+.chara-art-mark{
+position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);
+font-size:7.2rem;line-height:1;color:var(--accent2);
+text-shadow:0 0 34px rgba(255,140,120,.45);
+}
+.chara-art--filler .chara-art-no{background:var(--accent2);color:var(--ink)}
+.chara-info{position:relative;z-index:2;padding-top:.95rem}
+.chara-romaji{
+margin:0;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.64rem;letter-spacing:.34em;color:var(--accent-text);font-weight:700;
+}
+.chara-name{font-size:1.7rem;margin:.05rem 0 .1rem;letter-spacing:.05em}
+.chara-info .catch{
+font-family:"18TRIPSansFunnyMedium","IBM Plex Sans JP",sans-serif;
+font-weight:700;color:var(--accent-text);margin:.1rem 0 .6rem;
+}
+.chara-status{list-style:none;display:flex;flex-wrap:wrap;gap:.4rem;margin:0 0 .7rem;padding:0}
+.chara-status li{
+border:1.5px solid var(--ink);background:#fff;padding:.14rem .55rem;
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;font-size:.78rem;
+}
+.chara-status li span{
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-weight:500;
+font-size:.52rem;letter-spacing:.2em;color:#667;margin-right:.45em;vertical-align:.14em;
+}
+.chara-prof{font-size:.86rem;margin:.2rem 0 .6rem}
+.chara-link{margin:.25rem 0}
+.chara-link a{color:var(--accent-text);font-weight:700;font-size:.85rem;text-decoration:none}
+.chara-link a:hover{text-decoration:underline}
+/* CHARACTER：PC座標（アートボード＋情報を一体のグラフィックに） */
+@media(min-width:769px){
+.chara-board{display:grid;grid-template-columns:308px 1fr;gap:1.5rem;align-items:center;padding:1.4rem}
+.chara-art{margin:0;width:308px;max-width:none}
+.chara-info{padding-top:0}
+.chara-name{font-size:2.1rem}
+.chara-nav{top:42%;width:60px}
+.chara-nav--prev{left:-.6rem}
+.chara-nav--next{right:-.6rem}
+}
 
-/* ---- EVENT：バナー風導線（FLOW.md §1 #6） ---- */
+/* ============================================================
+EVENT（バナー導線：従来構成を維持）
+============================================================ */
 .sec-event .event-banner{
 display:block;border:2px solid var(--ink);border-radius:6px;background:#fff;
 padding:1rem;text-decoration:none;color:var(--ink);transition:transform .2s;
@@ -82,12 +405,9 @@ background-image:linear-gradient(90deg,var(--accent2) 0 6px,transparent 6px);
 .sec-event .event-banner b{font-size:1.02rem;display:block}
 .sec-event .event-banner span{font-size:.8rem;color:#445}
 
-/* ---- MOVIE：チケット風セクション（FLOW.md §1 #7） ----
-   公式：movie_bg の上にチケット風アイテム＋再生アイコン。
-   動画素材は無いため、チケットは無効化（リンクなし）で
-   見た目と hover のみ成立させる。背景は取得済みの公式背景
-   （top_movie_bg / _sp）を使用開始。チケット画像そのもの
-   （公式の絵柄）は使わず、形だけを自前で組む。 */
+/* ============================================================
+MOVIE：チケット風（サムネは既存素材のクロップで完成形に）
+============================================================ */
 .sec-movie{overflow:hidden}
 .sec-movie::before{
 content:"";position:absolute;inset:0;pointer-events:none;
@@ -105,12 +425,10 @@ transition:transform .2s,box-shadow .2s;
 }
 .ticket:hover{transform:scale(.97);box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .ticket-thumb{
-flex:none;width:38%;min-height:88px;
-display:flex;align-items:center;justify-content:center;text-align:center;
-color:#667;font-size:.68rem;padding:.5rem;
-background:repeating-linear-gradient(45deg,#eef3f4,#eef3f4 10px,#e4ecee 10px,#e4ecee 20px);
+flex:none;width:38%;min-height:88px;padding:0;overflow:hidden;
 border-right:2px dashed var(--ink); /* ミシン目（半券の切り離し線） */
 }
+.ticket-thumb img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
 .ticket-info{flex:1;padding:.7rem .8rem;display:flex;flex-direction:column;justify-content:center}
 .ticket-title{font-weight:800;font-size:.92rem;line-height:1.4}
 .ticket-meta{
@@ -124,15 +442,9 @@ width:40px;height:40px;opacity:.85;pointer-events:none;
 .ticket.is-disabled{cursor:default}
 .ticket.is-disabled .ticket-play{opacity:.3}
 
-/* ---- LINK：外部リンクカード（FLOW.md §1 #8／§5） ----
-   公式実測（ASSETS.md §7）：position:sticky、高さ PC 540px／SP 160vw、
-   170px のライム色 Funny「LINK→」「←LINK」文字が流れ、
-   SNSカードが絶対配置で散らばり hover で scale(0.95)。
-   当サイトは中央カラム（最大720px）のため、高さ・文字サイズは
-   カラム幅に合わせて縮小換算した（高さ：SP は 160vw→約78vh 相当に、
-   文字：170px→clamp 最大 120px）。地色は公式どおり白。
-   sticky で留まり、後続のフッター（position:relative・不透明）が
-   上に被さってくる公式の締め方を再現する。 */
+/* ============================================================
+LINK：外部リンクカード（公式実測の sticky 演出、従来どおり）
+============================================================ */
 @keyframes linkFloatR{0%{transform:translateY(-8px)}100%{transform:translateY(14px)}}
 @keyframes linkFloatL{0%{transform:translateY(12px)}100%{transform:translateY(-10px)}}
 .link-sec{
@@ -163,10 +475,19 @@ display:block;font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
 font-size:.62rem;letter-spacing:.24em;color:var(--accent-text);margin-top:.2rem;
 }
 .link-card .lc-arw{position:absolute;right:.55rem;top:.45rem;font-weight:900;color:var(--accent2)}
-/* 散布配置（ステージに対する % 指定。公式の絶対配置文法に倣う） */
 .lc-1{left:4%;top:19%;transform:rotate(-2deg)}
 .lc-2{right:4%;top:27%;transform:rotate(1.6deg)}
 .lc-3{left:7%;top:47%;transform:rotate(1.2deg)}
 .lc-4{right:7%;top:56%;transform:rotate(-1.8deg)}
 .lc-5{left:26%;bottom:15%;transform:rotate(.8deg)}
 .lc-1:hover,.lc-2:hover,.lc-3:hover,.lc-4:hover,.lc-5:hover{transform:scale(.95)}
+
+/* ---- モーション抑制の尊重 ---- */
+@media(prefers-reduced-motion:reduce){
+.fv-chara,.fv-logo,.fv-nav,.fv-side,.fv-scroll,.fv-status{animation:none}
+.fv-scroll span{animation:none}
+.fv-item .eff--vertical,.fv-item .eff--horizon,
+.intro-item .eff--vertical,.intro-item .eff--horizon{animation:none}
+.reveal{transition:none;opacity:1;transform:none}
+.chara-panel{animation:none}
+}

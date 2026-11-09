@@ -7,10 +7,10 @@
 <link rel="stylesheet" href="assets/site.css">
 <link rel="stylesheet" href="assets/index.css">
 </head>
-<body>
+<body class="top">
 <div class="page">
 
-<!-- 共通ヘッダー -->
+<!-- 共通ヘッダー（index では FV の上に固定オーバーレイとして重ねる：index.css） -->
 <header class="site-header">
 <a class="logo" href="index.html">AYA TRIP<small>SASAI AYA ARCHIVE</small></a>
 <nav class="globalnav">
@@ -21,93 +21,215 @@
 </nav>
 </header>
 
-<!-- フライト情報ティッカー（実時刻JS表示／天気は要素材：API未接続） -->
-<div class="ticker">
-<span id="ticker-clock">----.--.--</span>
-<span class="place">[HAMA]</span>
-<span>#HAMA NICE TRIP</span>
-<span>#溶けてそのまま雲隠れ</span>
+<!-- ============ FV：100vw × 100svh の一枚UI（公式PC版のレイアウト文法） ============
+     背景全面＋人物オーバーラップ＋ロゴ＋左縦ナビ＋右縦デコ＋下部ステータスバーを
+     すべて absolute で重ねる。中央コンテナには収めない。 -->
+<section class="fv" aria-label="AYA TRIP メインビジュアル">
+<div class="fv-bg"><img src="assets/map-bg.jpg" alt="" data-parallax="0.18"></div>
+<div class="fv-shade"></div>
+
+<img class="fv-chara" src="assets/aya/aya-fullbody.png" alt="笹井綾">
+
+<p class="fv-item fv-item--1"><span class="eff--vertical"><span class="eff--horizon"><img src="assets/official/common_hd_items_4.png" alt=""></span></span></p>
+<p class="fv-item fv-item--2"><span class="eff--vertical"><span class="eff--horizon"><img src="assets/official/common_hd_items_9.png" alt=""></span></span></p>
+<p class="fv-item fv-item--3"><span class="eff--vertical"><span class="eff--horizon"><img src="assets/official/common_hd_items_2.png" alt=""></span></span></p>
+
+<nav class="fv-nav" aria-label="メインナビゲーション">
+<a href="index.html" aria-current="page">TOP</a>
+<a href="character.html">CHARACTER</a>
+<a href="story.html">STORY</a>
+<a href="terms.html">TERMS</a>
+<a href="event-camelia.html">EVENT</a>
+</nav>
+
+<div class="fv-logo">
+<p class="fv-logo-sub">SASAI AYA ARCHIVE ✈✈✈ 2055 HAMA</p>
+<h1 class="fv-logo-main">AYA TRIP</h1>
+<p class="fv-catch">今がすべての、<br>方向音痴なムードメーカー</p>
+<p class="fv-links">
+<a href="character.html">CHARACTER ▶</a>
+<a href="story.html">STORY ▶</a>
+</p>
 </div>
 
-<!-- HERO（キービジュアルは要素材：器のみ。差し替え口は index.css の .hero-img） -->
-<section class="hero">
-<div class="hero-stage">
-<div class="hero-ph">キービジュアル差し替え口<br>公式文法：visual 全面配置＋ロゴ重ね</div>
-<p class="hero-logo">AYA TRIP</p>
-<p class="hero-catch">今がすべての、方向音痴なムードメーカー</p>
-</div>
-<div class="hero-cta">
-<a class="cta-main" href="character.html">CHARACTER ▶ 綾の詳細へ</a>
-<a class="cta-sub" href="story.html">STORY ▶ 5話短編へ</a>
+<p class="fv-side" aria-hidden="true">AYA TRIP — A RECORD OF SASAI AYA, WHO LIVES ONLY IN THE PRESENT</p>
+
+<p class="fv-scroll" aria-hidden="true">SCROLL<span></span></p>
+
+<!-- 下部ステータスバー：DATE/TIME は実時刻JS（site.js の #ticker-clock）。
+     WEATHER はAPI未接続のため無データ読み出し（---）表示 -->
+<div class="fv-status">
+<p class="fv-st-cell"><span class="fv-st-label">DATE / TIME</span><span class="fv-st-val" id="ticker-clock">----.--.--</span></p>
+<p class="fv-st-cell"><span class="fv-st-label">WEATHER</span><span class="fv-st-val fv-st-val--dim">---</span></p>
+<p class="fv-st-cell fv-st-place">[HAMA]</p>
+<p class="fv-st-cell fv-st-tag">#HAMA NICE TRIP!</p>
+<p class="fv-st-cell fv-st-tag">#溶けてそのまま雲隠れ</p>
 </div>
 </section>
 
-<!-- NEWS -->
-<section class="sec">
+<!-- ============ NEWS：公式の端末文法（LATEST UPDATE 秒まで＋DATE/TO/REMARKS列） ============ -->
+<section class="sec sec-news reveal">
 <img class="news-deco" src="assets/official/top_news_item_1.png" alt="">
 <h2 class="sec-title">NEWS</h2>
-<p class="sec-sub">LATEST UPDATE: <span id="latest-update">----</span></p>
-<ul class="news-list">
-<li><time>2026.11.09</time><span class="tag">SITE</span>総まとめサイト（ローカル骨格版）を開設</li>
-<li><a href="story.html"><time>2026.11.09</time><span class="tag">STORY</span>5話短編・話数リストをSTORYページに掲載<span class="go">▶ STORY</span></a></li>
-<li><a href="event-camelia.html"><time>2026.11.09</time><span class="tag">EVENT</span>イベントストーリー「壊生カメリア」特設ページ骨格を公開<span class="go">▶ EVENT</span></a></li>
+<p class="sec-sub">LATEST UPDATE : <span id="news-latest">2026.11.09 20:40:12</span></p>
+<div class="news-head" aria-hidden="true"><span>DATE</span><span>TO</span><span>REMARKS</span></div>
+<ul class="news-list news-list--tbl">
+<li><span class="n-date">1109</span><span class="n-to">SITE</span><span class="n-rem"><time>2026.11.09 20:40</time>総まとめサイトを開設</span></li>
+<li><a href="story.html"><span class="n-date">1109</span><span class="n-to">STORY</span><span class="n-rem"><time>2026.11.09 19:48</time>5話短編・話数リストをSTORYページに掲載<span class="go">▶</span></span></a></li>
+<li><a href="event-camelia.html"><span class="n-date">1109</span><span class="n-to">EVENT</span><span class="n-rem"><time>2026.11.09 19:05</time>イベントストーリー「壊生カメリア」特設ページを公開<span class="go">▶</span></span></a></li>
 </ul>
 </section>
 
-<!-- INTRODUCTION -->
-<section class="sec">
+<!-- ============ INTRODUCTION：多層グラフィック（旅行の記録画面） ============ -->
+<section class="sec sec-intro reveal">
+<p class="intro-word" aria-hidden="true">INTRODUCTION</p>
 <h2 class="sec-title">INTRODUCTION</h2>
 <p class="sec-sub">✈✈✈ WHAT IS THIS ✈✈✈</p>
+
+<div class="intro-stage">
+<div class="intro-text">
 <p>2055年、近未来の横浜――HAMA。<br>
 ここは、笹井綾というひとりのエンジニアの記録を集めた場所。<br>
 村と、大樹と、神隠し。名前を失い、名前を与えられた少女の、<br>
 「今」だけを生きる物語のアーカイブ。</p>
-<p style="font-size:.82rem;color:#556">※本サイトは一次創作×二次創作の夢創作の個人アーカイブです。18TRIP公式とは関係ありません。</p>
+<p class="intro-note">※本サイトは一次創作×二次創作の夢創作の個人アーカイブです。18TRIP公式とは関係ありません。</p>
 <p class="intro-links">
 <a href="terms.html">▶ 用語集（TERMS）</a>
 <a href="story.html">▶ 物語を読む（STORY）</a>
 </p>
-</section>
-
-<!-- MEMBERS -->
-<section class="sec sec-members" id="members" data-active="aya">
-<h2 class="sec-title">MEMBERS</h2>
-<p class="sec-sub">✈✈✈ SELECT ✈✈✈</p>
-<div class="member-tabs">
-<button data-member-tab="aya" class="active">綾 🍨</button>
-<button data-member-tab="filler">フィラー 🫧</button>
-<button data-member-tab="ten">添 ☁️</button>
 </div>
 
-<div class="member-panel" data-member-panel="aya">
-<div class="ph-img">綾 ビジュアル<br>visual 686×741（公式キャンバス）</div>
-<h3>笹井 綾</h3>
+<div class="intro-cluster">
+<svg class="intro-route" viewBox="0 0 600 300" preserveAspectRatio="none" aria-hidden="true">
+<path d="M-10,250 C140,180 220,290 330,190 S520,60 615,90" fill="none" stroke="#004986" stroke-width="2" stroke-dasharray="7 7" opacity=".55"/>
+</svg>
+<figure class="intro-window" data-parallax="0.30">
+<img src="assets/map-bg.jpg" alt="HAMAの地図">
+<figcaption>HAMA — CENTRAL BAY ✈ FLIGHT MAP</figcaption>
+</figure>
+<figure class="intro-photo" data-parallax="0.55">
+<img src="assets/aya/aya-visual-sp.png" alt="笹井綾">
+<figcaption>AYA SASAI, 2055</figcaption>
+</figure>
+<a class="intro-ticket" href="story.html">
+<span class="it-main"><span class="it-from">HAMA</span><span class="it-arw">✈</span><span class="it-to">STORY</span></span>
+<span class="it-meta">BOARDING PASS — 5話短編 SIDE-A</span>
+<span class="it-barcode" aria-hidden="true"></span>
+</a>
+<div class="intro-cassette" aria-hidden="true">
+<span class="ic-label">AYA ARCHIVE TAPE</span>
+<span class="ic-window"><span class="ic-reel"></span><span class="ic-tape"></span><span class="ic-reel"></span></span>
+<span class="ic-side">SIDE-A ✈ SIDE-B</span>
+</div>
+<p class="intro-item intro-item--1"><span class="eff--vertical"><span class="eff--horizon"><img src="assets/official/common_hd_items_7.png" alt=""></span></span></p>
+<p class="intro-item intro-item--2"><span class="eff--vertical"><span class="eff--horizon"><img src="assets/official/common_hd_items_12.png" alt=""></span></span></p>
+</div>
+</div>
+</section>
+
+<!-- ============ CHARACTER：公式型アートボード（BACK/NEXT切替） ============
+     切替の表示制御は site.js の [data-member-tab]/[data-member-panel] 契約に乗る。
+     アートボードの内部比率は index.css 側でのみ管理する。 -->
+<section class="sec sec-chara reveal" id="members" data-active="aya">
+<h2 class="sec-title">CHARACTER</h2>
+<p class="sec-sub">✈✈✈ MEMBERS ✈✈✈</p>
+
+<div class="chara-tabs">
+<button data-member-tab="aya" class="active">AYA</button>
+<button data-member-tab="filler">FILLER</button>
+<button data-member-tab="ten">TEN</button>
+</div>
+
+<div class="chara-frame">
+<button class="chara-nav chara-nav--prev" id="chara-prev" type="button" aria-label="前のキャラクター（BACK）">
+<img src="assets/official/top_icon_prev.png" alt=""><span>BACK</span>
+</button>
+
+<div class="chara-panels">
+
+<article class="chara-panel" data-member-panel="aya">
+<div class="chara-board">
+<div class="chara-art">
+<span class="chara-art-word" aria-hidden="true">AYA</span>
+<img class="chara-art-img" src="assets/aya/aya-fullbody.png" alt="笹井綾">
+<span class="chara-art-no">No.01 ✈ HAMA</span>
+</div>
+<div class="chara-info">
+<p class="chara-romaji">AYA SASAI</p>
+<h3 class="chara-name">笹井 綾</h3>
 <p class="catch">今がすべての／方向音痴なムードメーカー</p>
-<p style="font-size:.85rem">22歳・エンジニア。2054年冬にHAMAへ来て、2055年1月に転職したばかり。明るく猪突猛進、極度の方向音痴。</p>
-<p><a href="character.html">▶ CHARACTER 詳細へ</a></p>
+<ul class="chara-status">
+<li><span>AGE</span>22</li>
+<li><span>HEIGHT</span>145cm</li>
+<li><span>BIRTH</span>09.20</li>
+<li><span>BLOOD</span>A</li>
+<li><span>JOB</span>ENGINEER</li>
+</ul>
+<p class="chara-prof">22歳・エンジニア。2054年冬にHAMAへ来て、2055年1月に転職したばかり。明るく猪突猛進、極度の方向音痴。</p>
+<p class="chara-link"><a href="character.html">PROFILE ▶ 詳細ページへ</a></p>
 </div>
+</div>
+</article>
 
-<div class="member-panel" data-member-panel="filler" style="display:none">
-<div class="ph-img">フィラー ビジュアル</div>
-<h3>■（フィラー）</h3>
+<article class="chara-panel" data-member-panel="filler" style="display:none">
+<div class="chara-board">
+<div class="chara-art chara-art--filler">
+<span class="chara-art-word" aria-hidden="true">FILLER</span>
+<span class="chara-art-mark" aria-hidden="true">■</span>
+<span class="chara-art-no">NAME: ■■■■ 🫧</span>
+</div>
+<div class="chara-info">
+<p class="chara-romaji">FILLER</p>
+<h3 class="chara-name">■（フィラー）</h3>
 <p class="catch">名前のない、赤い髪の前衛</p>
-<p style="font-size:.85rem">村もろとも「なかったこと」にされ、名を失った存在。対アンドロイド部隊の前衛として、家族に見つけてもらう願いを込めて髪を赤く染めた。</p>
-<p><a href="character-filler.html">▶ CHARACTER 詳細へ（フィラー）</a></p>
-<p class="member-note">※フィラー専用ページ（過去編）。本編は 5話短編のある STORY へ（FLOW.md §3）。</p>
+<ul class="chara-status">
+<li><span>NAME</span>■</li>
+<li><span>ORG</span>AIB</li>
+<li><span>ROLE</span>前衛</li>
+<li><span>STATUS</span>失踪中</li>
+</ul>
+<p class="chara-prof">村もろとも「なかったこと」にされ、名を失った存在。対アンドロイド部隊の前衛として、家族に見つけてもらう願いを込めて髪を赤く染めた。</p>
+<p class="chara-link"><a href="character-filler.html">PROFILE ▶ 詳細ページへ（フィラー）</a></p>
+</div>
+</div>
+</article>
+
+<article class="chara-panel" data-member-panel="ten" style="display:none">
+<div class="chara-board">
+<div class="chara-art">
+<span class="chara-art-word" aria-hidden="true">TEN</span>
+<img class="chara-art-img" src="assets/ten/c1_3_visual.png" alt="叢雲添">
+<span class="chara-art-no">R1ze ✈ HAMA 1区</span>
+</div>
+<div class="chara-info">
+<p class="chara-romaji">TEN MURAKUMO</p>
+<h3 class="chara-name">叢雲 添</h3>
+<p class="catch">R1ze／HAMA1区長</p>
+<ul class="chara-status">
+<li><span>AGE</span>21</li>
+<li><span>HEIGHT</span>176cm</li>
+<li><span>BIRTH</span>04.04</li>
+<li><span>BLOOD</span>B</li>
+<li><span>UNIT</span>R1ze</li>
+</ul>
+<p class="chara-prof">本サイトではお相手紹介として、公式キャラ紹介ページへのリンクのみを置きます（夢創作側のプロフィールは作りません）。</p>
+<p class="chara-link"><a href="ten.html">▶ 添のページ（レプリカ）へ</a></p>
+<p class="chara-link"><a href="https://18trip.jp/character/r1ze/ten-murakumo/" target="_blank" rel="noopener">公式キャラ紹介ページ（18trip.jp）はこちら</a></p>
+</div>
+</div>
+</article>
+
 </div>
 
-<div class="member-panel" data-member-panel="ten" style="display:none">
-<div class="ph-img">叢雲添は18TRIP公式キャラクターです</div>
-<h3>叢雲 添</h3>
-<p class="catch">R1ze／HAMA1区長</p>
-<p style="font-size:.85rem">本サイトではお相手紹介として、公式キャラ紹介ページへのリンクのみを置きます（夢創作側のプロフィールは作りません）。</p>
-<p><a href="ten.html">▶ 添のページ（レプリカ）へ</a></p>
-<p><a href="https://18trip.jp/character/r1ze/ten-murakumo/" target="_blank" rel="noopener">公式キャラ紹介ページ（18trip.jp）はこちら</a></p>
+<button class="chara-nav chara-nav--next" id="chara-next" type="button" aria-label="次のキャラクター（NEXT）">
+<img src="assets/official/top_icon_next.png" alt=""><span>NEXT</span>
+</button>
 </div>
 </section>
 
-<!-- EVENT導線 -->
-<section class="sec sec-event">
+<!-- ============ EVENT ============ -->
+<section class="sec sec-event reveal">
+<img class="news-deco" src="assets/official/top_news_item_2.png" alt="">
 <h2 class="sec-title">EVENT</h2>
 <p class="sec-sub">✈✈✈ EVENT STORY ✈✈✈</p>
 <a class="event-banner" href="event-camelia.html">
@@ -116,13 +238,13 @@
 </a>
 </section>
 
-<!-- MOVIE（動画素材は未到着：チケットは無効化で見た目のみ。FLOW.md §4） -->
-<section class="sec sec-movie">
+<!-- ============ MOVIE：チケット風（動画は未公開のため無効化のまま、見た目を完成形に） ============ -->
+<section class="sec sec-movie reveal">
 <h2 class="sec-title">MOVIE</h2>
 <p class="sec-sub">✈✈✈ MOVIE ✈✈✈</p>
 <ul class="tickets">
 <li class="ticket is-disabled" aria-disabled="true">
-<span class="ticket-thumb">NO IMAGE<br>（サムネ差し替え口）</span>
+<span class="ticket-thumb"><img src="assets/aya/aya-visual-sp.png" alt=""></span>
 <span class="ticket-info">
 <span class="ticket-title">プロモーションムービー</span>
 <span class="ticket-meta">COMING SOON</span>
@@ -130,7 +252,7 @@
 <img class="ticket-play" src="assets/official/top_movie_play.png" alt="">
 </li>
 <li class="ticket is-disabled" aria-disabled="true">
-<span class="ticket-thumb">NO IMAGE<br>（サムネ差し替え口）</span>
+<span class="ticket-thumb"><img src="assets/official/top_movie_bg.png" alt=""></span>
 <span class="ticket-info">
 <span class="ticket-title">「壊生カメリア」ティザー</span>
 <span class="ticket-meta">COMING SOON</span>
@@ -138,7 +260,7 @@
 <img class="ticket-play" src="assets/official/top_movie_play.png" alt="">
 </li>
 <li class="ticket is-disabled" aria-disabled="true">
-<span class="ticket-thumb">NO IMAGE<br>（サムネ差し替え口）</span>
+<span class="ticket-thumb"><img src="assets/map-bg.jpg" alt=""></span>
 <span class="ticket-info">
 <span class="ticket-title">システム紹介</span>
 <span class="ticket-meta">COMING SOON</span>
@@ -148,7 +270,7 @@
 </ul>
 </section>
 
-<!-- LINK（外部リンクカード：公式実測の sticky 演出。FLOW.md §5） -->
+<!-- LINK（外部リンクカード：公式実測の sticky 演出。変更なし） -->
 <section class="link-sec" aria-label="LINK">
 <div class="link-stage">
 <p class="link-word link-word--r">LINK→</p>
@@ -194,16 +316,67 @@
 </div>
 <script src="assets/site.js"></script>
 <script>
-/* MEMBERS 背景演出：選択中のキャラでセクションの背景を切り替える
-   （パネル切替は site.js 側の既存処理と併走する。FLOW.md §1 #5） */
 (function(){
   var sec=document.getElementById('members');
-  if(!sec) return;
-  document.querySelectorAll('[data-member-tab]').forEach(function(btn){
+
+  /* CHARACTER：data-active 同期（背景切替）＋ BACK/NEXT の循環切替。
+     パネルの表示切替そのものは site.js のタブ処理に委ね、ここでは
+     タブボタンの click を経由して状態を揃える */
+  var tabs=Array.prototype.slice.call(document.querySelectorAll('[data-member-tab]'));
+  tabs.forEach(function(btn){
     btn.addEventListener('click',function(){
-      sec.setAttribute('data-active',btn.getAttribute('data-member-tab'));
+      if(sec) sec.setAttribute('data-active',btn.getAttribute('data-member-tab'));
     });
   });
+  function step(dir){
+    var cur=tabs.findIndex(function(b){return b.classList.contains('active');});
+    if(cur<0) cur=0;
+    tabs[(cur+dir+tabs.length)%tabs.length].click();
+  }
+  var prev=document.getElementById('chara-prev');
+  var next=document.getElementById('chara-next');
+  if(prev) prev.addEventListener('click',function(){step(-1);});
+  if(next) next.addEventListener('click',function(){step(1);});
+
+  /* スクロールイン（フェード＋ rise） */
+  var revealEls=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && revealEls.length){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){ en.target.classList.add('is-in'); io.unobserve(en.target); }
+      });
+    },{threshold:.12});
+    revealEls.forEach(function(el){io.observe(el);});
+  }else{
+    revealEls.forEach(function(el){el.classList.add('is-in');});
+  }
+
+  /* 軽いパララックス：[data-parallax] の要素を、親の画面内位置に応じて
+     --py 経由で上下にずらす（transform は CSS 側で --py を合成する） */
+  var plx=Array.prototype.slice.call(document.querySelectorAll('[data-parallax]'));
+  if(plx.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    var ticking=false;
+    function update(){
+      ticking=false;
+      var vh=window.innerHeight;
+      plx.forEach(function(el){
+        var host=el.closest('section')||el.parentElement;
+        var r=host.getBoundingClientRect();
+        if(r.bottom<-80||r.top>vh+80) return;
+        var prog=(r.top+r.height/2-vh/2)/vh; /* -0.5〜0.5 目安 */
+        var sp=parseFloat(el.getAttribute('data-parallax'))||0.2;
+        var y=Math.max(-56,Math.min(56,-prog*120*sp));
+        el.style.setProperty('--py',y.toFixed(1)+'px');
+      });
+    }
+    window.addEventListener('scroll',function(){
+      if(!ticking){ ticking=true; requestAnimationFrame(update); }
+    },{passive:true});
+    window.addEventListener('resize',function(){
+      if(!ticking){ ticking=true; requestAnimationFrame(update); }
+    });
+    update();
+  }
 })();
 </script>
 </body>
