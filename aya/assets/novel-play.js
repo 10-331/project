@@ -42,7 +42,7 @@ var fade=$("npFade"), cover=$("npCover"), reader=$("npReader"),
 
 $("tkNo").textContent=DATA.no;
 $("tkTitle").textContent=DATA.title;
-document.title="「笹井綾」について ✈ "+DATA.no+" "+DATA.title;
+document.title="「笹井綾」について ― "+DATA.no+" "+DATA.title;
 
 /* ---------- 状態 ---------- */
 var started=false, finished=false;
@@ -154,7 +154,7 @@ function typeFrame(ts){
       var done=false;
       if(typing.pos>=typing.text.length){ typing.pos=typing.text.length; done=true; }
       typing.el.textContent=typing.text.slice(0,typing.pos);
-      followScroll(); /* 文字の追記とスクロール確定を同一フレーム内で行い、描画を1回に揃える */
+      queueFollowScroll(); /* スクロール確定は次フレームへ分離（残像対策：第3弾） */
       if(done){ stopTyping(); onBlockDone(); return; }
     }
   }
@@ -164,11 +164,14 @@ function stopTyping(){ if(typing){ if(typing.raf) cancelAnimationFrame(typing.ra
 function completeTyping(){
   if(!typing) return;
   var t=typing; stopTyping();
+  /* 残像対策（第3弾）：タップ送りで即時完了させる時は、全文を書き込む前に
+     スクロール位置を先に確定させ、書き込みとスクロール移動を重ねない */
+  followScroll();
   t.el.textContent=t.text;
   onBlockDone();
 }
 function onBlockDone(){
-  followScroll();
+  queueFollowScroll();
   if(curIdx>=TOTAL-1){ endPhase(); return; }
   showNext(true);
   /* 次ブロックまでの間：早送り時は固定350ms、AUTO時は
@@ -193,6 +196,17 @@ scrollEl.addEventListener("touchmove",function(){ followPause=true; },{passive:t
 function scrollToBlock(i){
   var el=els[i]; if(!el) return;
   scrollEl.scrollTop=Math.max(0,el.offsetTop-70);
+}
+/* 残像対策（実機FB 第3弾・試行）：タイピングの文字追記と scrollTop の
+   変更を同一フレームに重ねると、iOS Safari で既存行が二重に描画される
+   残像フレームが残った。スクロール確定を rAF で次フレームへ送り、
+   追記（描画）とスクロール移動のタスクを分ける。既に予約済みなら
+   重ねて予約しない（1フレームに最大1回） */
+var scrollQueued=false;
+function queueFollowScroll(){
+  if(scrollQueued) return;
+  scrollQueued=true;
+  requestAnimationFrame(function(){ scrollQueued=false; followScroll(); });
 }
 /* タイピング中：現在のブロックの末尾が画面外に出た時だけ、
    末尾が見える位置まで即時スクロールする */

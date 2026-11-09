@@ -98,12 +98,16 @@ padding:10px 2px 26px;
 /* --- AYA'S STORY チケット（紫。下辺に右から差し込まれる） --- */
 /* 実機FB 第2弾（2026-11-09）で調整：スライドインは従来の倍の時間をかけ、
    チケットの縦幅はパディング・行間・副次要素（フレーバー英文）を詰めて
-   圧縮した（高さの目安は CSS 値からの算出で 約108px → 約84px） */
+   圧縮した（高さの目安は CSS 値からの算出で 約108px → 約84px）
+   実機FB 第3弾（2026-11-10）で再調整：まだ速いとの指摘を受け、
+   表紙カードの入場（.15s+.7s で完了）の後に約1.15秒の「間」（表紙だけが
+   静止して見える時間）を置いてから、1.9秒かけてゆっくり差し込む。
+   間の最中のタップは cover のクリックハンドラが受けて演出を飛ばし即開始する */
 .np-ticket{
 position:absolute;left:13%;bottom:-30px;width:122%;
 display:flex;align-items:stretch;background:#fff;color:#191919;
 box-shadow:0 10px 26px rgba(0,0,0,.4);
-animation:npTicketIn 1.3s cubic-bezier(.22,.9,.3,1) both .75s;
+animation:npTicketIn 1.9s cubic-bezier(.22,.9,.3,1) both 2s;
 }
 @keyframes npTicketIn{from{transform:translateX(72%);opacity:0}to{transform:translateX(0);opacity:1}}
 .np-ticket-band{
@@ -162,6 +166,10 @@ padding:11vh 8vw 6vh;
 font-family:var(--np-mincho);
 font-size:var(--np-fs,17px);
 line-height:2.05;letter-spacing:.02em;color:#171717;
+/* 残像対策（実機FB 第3弾・試行）：本文側をコンポジット層に分離し、
+   スクロール時の再描画をブラウザのタイル再描画から切り離す。
+   iOS Safari のスクロール残像への効果は実機確認が必要 */
+transform:translateZ(0);
 }
 .np-block{margin:0 0 1.9em;white-space:pre-wrap;word-break:break-all}
 .np-endpad{height:34vh}

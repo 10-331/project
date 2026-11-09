@@ -132,6 +132,8 @@ box-shadow:0 0 0.45cqw #d8d8d2 inset;transition:transform.18s;
 width:3.3cqw;height:3.3cqw;display:grid;place-items:center;color:var(--text);
 font-size:2.6cqw;line-height:1;text-decoration:none;
 }
+/* ヘッダーのアイコンは絵文字でなく単色SVGで描く（方針：UIに絵文字を使わない） */
+.nvl-ic svg{width:2.5cqw;height:2.5cqw;display:block}
 /* 右端の黒正方形ハンバーガー（実画面どおり角に flush、見た目のみ）。
    高さはバー高（5.5cqw）に一致させ、バー下へはみ出さない */
 .nvl-burger{
@@ -202,7 +204,11 @@ position:relative;flex:none;height:7.1cqw;background:var(--paper);border-radius:
 display:flex;align-items:center;gap:1.4cqw;padding:.5cqw 1.6cqw .5cqw 2.8cqw;
 box-shadow:0.3cqw .8cqw rgba(60,50,20,.18);
 animation:nvlRowIn .45s ease both;
+cursor:pointer; /* 行本体クリックで直接その話を開始できる（状態表現は色変化のみ） */
+transition:background-color .18s ease;
 }
+.nvl-row:hover{background:#faf3da}
+.nvl-row:active{background:#f3e9c6}
 .nvl-row:nth-child(1){animation-delay:.38s}
 .nvl-row:nth-child(2){animation-delay:.46s}
 .nvl-row:nth-child(3){animation-delay:.54s}
@@ -282,6 +288,8 @@ font-size:1rem;font-weight:800;cursor:pointer;display:grid;place-items:center;
 color:#151515;text-decoration:none;font-family:inherit;
 }
 .nvl-cbtns .play{background:var(--accent)}
+/* 再生マークは絵文字（▶️）でなく単色SVG三角形をボタン中央に置く */
+.nvl-cbtns .play svg{width:19px;height:19px;display:block}
 .nvl-cbtns button:disabled{opacity:.35;cursor:default}
 .nvl-close{
 position:absolute;top:.6rem;right:.7rem;border:0;background:none;font-size:1.3rem;
