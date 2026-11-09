@@ -75,6 +75,19 @@ body{
   display: none !important;
 }
 
+/* ハンバーガーメニュー：AYA側に無い SYSTEM / STAFF & CAST / MUSIC の
+   項目を除去したため、EVENT を旧SYSTEMの位置へ繰り上げて
+   ワードマークのカスケード間隔を維持する（2026-11-09） */
+.header__menu__list li.list--event{
+  top: 338px;
+}
+@media screen and (max-width: 768px){
+  .header__menu__list li.list--event{
+    top: 184px;
+    top: 49.0666666667vw;
+  }
+}
+
 /* 浮遊アイテム items--16 の位置（本人の調整を復旧：2026-11-07） */
 @media screen and (max-width: 768px){
   .items--16{

@@ -12,7 +12,15 @@ FV 上の固定オーバーレイとして扱う上書きだけをここに置�
 /* ---- index 専用：共通ヘッダーを FV 上の固定オーバーレイに ---- */
 body.top .site-header{
 position:fixed;top:0;left:0;right:0;z-index:1400;
+transition:padding .35s cubic-bezier(.63,0,.33,1);
 }
+body.top .site-header .logo{transition:min-height .35s cubic-bezier(.63,0,.33,1)}
+body.top .site-header .logo small{transition:opacity .25s ease}
+/* スクロール後（index.html のJSが body に .is-scrolled を付ける）：
+   サブタイトルを消し、縦のパディングとロゴ域を縮めて圧迫感を減らす */
+body.top.is-scrolled .site-header{padding:.28rem 1rem .4rem}
+body.top.is-scrolled .site-header .logo{min-height:24px;background-size:auto 22px}
+body.top.is-scrolled .site-header .logo small{display:none}
 
 /* ---- スクロールイン ---- */
 .reveal{opacity:0;transform:translateY(26px);
@@ -72,6 +80,12 @@ font-size:.78rem;letter-spacing:.16em;color:var(--ink);text-decoration:none;
 border-bottom:3px solid var(--accent);padding-bottom:.1rem;
 }
 .fv-links a:hover{color:var(--accent-text)}
+/* SP：FV内の導線は左縦ナビ（.fv-nav）に一本化し、ロゴ下の
+   CHARACTER/STORY リンク（.fv-links）は消して重複を解く。
+   PC（769px以上）は現行どおり両方を残す */
+@media(max-width:768px){
+.fv-links{display:none}
+}
 /* 左縦ナビ（FV専用。1100px以上は共通サイドナビが担うため隠す） */
 .fv-nav{
 position:absolute;z-index:6;left:.6rem;top:57%;transform:translateY(-50%);
@@ -307,13 +321,13 @@ font-weight:900;font-size:.82rem;letter-spacing:.24em;cursor:pointer;border-radi
 .chara-tabs button.active{background:var(--accent);color:var(--ink)}
 .chara-frame{position:relative}
 .chara-nav{
-position:absolute;top:36%;z-index:6;width:52px;padding:.32rem 0 .22rem;
+position:absolute;top:36%;z-index:6;width:52px;padding:.28rem 0 .18rem;
 background:#fff;border:2px solid var(--ink);border-radius:999px;cursor:pointer;
 display:flex;flex-direction:column;align-items:center;
-box-shadow:3px 3px 0 rgba(50,50,50,.8);transition:transform .2s;
+box-shadow:2px 2px 0 rgba(50,50,50,.32);transition:transform .2s;
 }
 .chara-nav img{width:22px;height:22px;display:block}
-.chara-nav span{font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.48rem;letter-spacing:.18em;margin-top:.05rem}
+.chara-nav span{font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;font-size:.48rem;letter-spacing:.1em;margin-top:0}
 .chara-nav:hover{transform:scale(.92)}
 .chara-nav--prev{left:-.35rem}
 .chara-nav--next{right:-.35rem}

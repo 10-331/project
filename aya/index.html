@@ -68,7 +68,7 @@
 </section>
 
 <!-- ============ NEWS：公式の端末文法（LATEST UPDATE 秒まで＋DATE/TO/REMARKS列） ============ -->
-<section class="sec sec-news reveal">
+<section class="sec sec-news reveal" id="news">
 <img class="news-deco" src="assets/official/top_news_item_1.png" alt="">
 <h2 class="sec-title">NEWS</h2>
 <p class="sec-sub">LATEST UPDATE : <span id="news-latest">2026.11.09 20:40:12</span></p>
@@ -81,7 +81,7 @@
 </section>
 
 <!-- ============ INTRODUCTION：多層グラフィック（旅行の記録画面） ============ -->
-<section class="sec sec-intro reveal">
+<section class="sec sec-intro reveal" id="introduction">
 <p class="intro-word" aria-hidden="true">INTRODUCTION</p>
 <h2 class="sec-title">INTRODUCTION</h2>
 <p class="sec-sub">✈✈✈ WHAT IS THIS ✈✈✈</p>
@@ -151,7 +151,9 @@
 <div class="chara-board">
 <div class="chara-art">
 <span class="chara-art-word" aria-hidden="true">AYA</span>
-<img class="chara-art-img" src="assets/aya/aya-fullbody.png" alt="笹井綾">
+<!-- 実絵の透明余白を詰めたトリム版を使う（原画は人物描画範囲が画布の約3割で
+     小さく見えるため。原本は novel.html 等で使用中のため別ファイルにした） -->
+<img class="chara-art-img" src="assets/aya/aya-fullbody-trim.png" alt="笹井綾">
 <span class="chara-art-no">No.01 ✈ HAMA</span>
 </div>
 <div class="chara-info">
@@ -317,6 +319,18 @@
 <script src="assets/site.js"></script>
 <script>
 (function(){
+  /* 固定ヘッダーの縮小：スクロールしたら body に .is-scrolled を付け、
+     index.css 側でサブタイトルを消しヘッダー高を縮める（index専用） */
+  var tickingH=false;
+  function onScrollH(){
+    tickingH=false;
+    document.body.classList.toggle('is-scrolled',window.scrollY>40);
+  }
+  window.addEventListener('scroll',function(){
+    if(!tickingH){ tickingH=true; requestAnimationFrame(onScrollH); }
+  },{passive:true});
+  onScrollH();
+
   var sec=document.getElementById('members');
 
   /* CHARACTER：data-active 同期（背景切替）＋ BACK/NEXT の循環切替。

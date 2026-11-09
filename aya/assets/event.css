@@ -1,0 +1,331 @@
+/* ============================================================
+壊生カメリア特設（event-camelia.html）専用スタイル
+文法の出典は実測カタログ 18trip-ui-inventory.md：
+- C-5.1 イベント予告ページ（傾いたKV＋INFORMATIONカード＋ライム帯）
+- C-5.4 イベントストーリー詳細（TRACK行＋あらすじモーダル＋登場人物）
+当サイトはスマホ縦基準カラム（.page）のため、実測比率は
+「PC＝横並び2カラム／SP＝縦積み」に換算して座標を分けている。
+テーマ（表＝落露／裏＝綾）は .ev-stage の data-theme で切り替える。
+============================================================ */
+
+/* ---- 上部ストリップ（C-5.1／C-5.4 の上部バーの文法） ---- */
+.ev-topbar{
+display:flex;align-items:center;gap:.6rem;
+background:#d8d8d2;padding:.55rem .8rem;
+border-bottom:1px solid #c4c4bc;
+}
+.ev-back{
+display:inline-flex;align-items:center;gap:.35rem;flex:none;
+border:1.5px solid var(--ink);border-radius:6px;background:transparent;
+color:var(--ink);text-decoration:none;
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-size:.72rem;font-weight:700;letter-spacing:.14em;
+padding:.32rem .7rem .32rem .55rem;
+}
+.ev-back:hover{background:var(--accent)}
+.ev-topbar .ev-bar-title{font-weight:800;font-size:.92rem;letter-spacing:.12em}
+.ev-topbar .ev-bar-sub{font-size:.62rem;color:#556;letter-spacing:.18em;margin-left:.2rem}
+.ev-topbar .spacer{flex:1}
+.ev-synopsis-btn{
+flex:none;border:1.5px solid var(--ink);border-radius:999px;background:#fff;
+color:var(--ink);font-weight:800;font-size:.75rem;letter-spacing:.14em;
+padding:.34rem .95rem;cursor:pointer;
+}
+.ev-synopsis-btn:hover{background:var(--accent)}
+
+/* ---- テーマ切替ゲート（表／裏） ---- */
+.ev-gate{
+display:flex;gap:.6rem;padding:.9rem 1rem .2rem;
+}
+.ev-gate button{
+flex:1;padding:.7rem .4rem;cursor:pointer;
+border:2px solid var(--ink);border-radius:6px;background:#fff;color:var(--ink);
+font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
+font-weight:800;font-size:.82rem;letter-spacing:.1em;
+transition:background .25s,color .25s,transform .25s;
+}
+.ev-gate button small{display:block;font-size:.6rem;letter-spacing:.3em;font-weight:500;color:#778;margin-top:.15rem}
+.ev-gate button:hover{transform:translateY(-2px)}
+.ev-stage[data-theme="omote"] .ev-gate button[data-gate="omote"],
+.ev-stage[data-theme="ura"] .ev-gate button[data-gate="ura"]{background:var(--ink);color:#fff}
+.ev-stage[data-theme="omote"] .ev-gate button[data-gate="omote"] small,
+.ev-stage[data-theme="ura"] .ev-gate button[data-gate="ura"] small{color:var(--accent)}
+
+/* ---- ステージ（C-5.1：薄紫地＋地図線画の背景） ---- */
+.ev-stage{position:relative}
+.ev-field{
+position:relative;overflow:hidden;
+margin:.8rem 0 0;padding:2.2rem 1.1rem 2.4rem;
+background:#e7e2f0; /* 実測：予告ページの薄紫（ラベンダー）地 */
+}
+.ev-field::before{
+content:"";position:absolute;inset:0;
+background:url("map-bg.jpg") center/cover no-repeat;
+opacity:.55;pointer-events:none;
+}
+.ev-field::after{ /* 右奥に覗く写真パネルの気配（ぼかした角丸） */
+content:"";position:absolute;right:-30px;top:6%;width:34%;height:56%;
+border-radius:14px;background:linear-gradient(150deg,#7d94b8,#3d4d6b 60%,#232c40);
+filter:blur(3px);opacity:.5;pointer-events:none;
+}
+.ev-main{position:relative;z-index:1}
+
+/* ---- KVパネル（C-5.1：白枠ポスター＋背面コラージュ＋約7°傾斜） ---- */
+.ev-kv-wrap{position:relative;margin:0 auto;max-width:400px}
+.ev-kv-back{position:absolute;inset:0;transform:rotate(-7deg)}
+.ev-kv-back .bk-black{
+position:absolute;inset:0;background:#191921;
+transform:translate(-16px,10px);
+}
+.ev-kv-back .bk-magenta{
+position:absolute;top:-8px;bottom:-8px;right:-14px;width:15%;
+background:#e6007e; /* 実測：背面のマゼンタ帯 */
+}
+.ev-kv{
+position:relative;transform:rotate(-7deg);
+background:#fff;padding:10px 10px 12px; /* 実測：白枠（画面幅の約2.5%相当） */
+box-shadow:0 14px 30px rgba(20,16,40,.28);
+}
+.ev-kv-art{position:relative;aspect-ratio:3/4.1;overflow:hidden;background:#2a1220}
+.ev-kv-layer{position:absolute;inset:0;opacity:0;transition:opacity .5s ease}
+.ev-kv-layer.is-on{opacity:1}
+.ev-kv-layer img{width:100%;height:100%;object-fit:cover;object-position:center 18%;display:block}
+.ev-kv-layer--ura::after{ /* 裏テーマ：下部に椿色のグラデを足してロゴを載せやすくする */
+content:"";position:absolute;inset:auto 0 0 0;height:46%;
+background:linear-gradient(to top,rgba(64,8,20,.55),transparent);
+}
+.ev-kv-pageno{
+position:absolute;right:2px;bottom:52px;z-index:3;
+writing-mode:vertical-rl;font-family:"18TRIPSansMedium",sans-serif;
+font-size:.6rem;letter-spacing:.24em;color:#c8102e;font-weight:700;
+}
+/* ステッカー（C-5.1：枠に半分重なる絵文字ステッカーの位置文法） */
+.ev-sticker{position:absolute;z-index:4;pointer-events:none}
+.ev-sticker--camellia{left:-20px;bottom:24%;width:52px;height:52px}
+.ev-sticker--pin{right:-14px;top:9%;width:34px;height:46px}
+.ev-sticker--pin img{width:100%;height:auto;display:block}
+.ev-sticker .eff--vertical{animation:fuluffyVertical 8s ease-in-out infinite alternate}
+.ev-sticker .eff--horizon{animation:fluffyHorizon 9s ease-in-out infinite alternate}
+/* イベントロゴ（パネル下部に重ねる） */
+.ev-logo{
+position:absolute;left:50%;bottom:7%;transform:translateX(-50%);z-index:3;
+width:82%;text-align:center;color:#fff;
+background:rgba(24,6,14,.72);
+border:1.5px solid #e8b64c;outline:3px solid rgba(24,6,14,.72);
+padding:.55rem .4rem .65rem;
+}
+.ev-logo .ev-logo-kicker{
+display:block;font-family:"18TRIPSansMedium",sans-serif;
+font-size:.56rem;letter-spacing:.5em;color:#e8b64c;margin-bottom:.2rem;
+}
+.ev-logo .ev-logo-title{
+display:block;font-weight:900;font-size:1.55rem;letter-spacing:.22em;line-height:1.2;
+text-shadow:0 2px 10px rgba(0,0,0,.5);
+}
+.ev-logo .ev-logo-catch{display:block;font-size:.66rem;letter-spacing:.18em;margin-top:.3rem;color:#ffe9ec}
+
+/* ---- INFORMATIONカード（C-5.1） ---- */
+.ev-info{
+position:relative;background:#fff;margin-top:2rem;
+box-shadow:0 10px 24px rgba(20,16,40,.18);
+display:flex;flex-direction:column;
+}
+.ev-info-head{
+position:relative;background:#1d2a6b; /* 実測：紺の帯 */
+color:#fff;font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;
+font-size:.8rem;letter-spacing:.34em;padding:.5rem .9rem;
+}
+.ev-info-tab{ /* 金色タブ：帯を跨いで右下へ突出 */
+position:absolute;right:14px;top:0;width:42px;height:52px;
+background:#d9a514;border-radius:0 0 5px 5px;
+display:flex;align-items:center;justify-content:center;
+box-shadow:0 3px 6px rgba(0,0,0,.25);
+}
+.ev-info-body{padding:.95rem 1rem .6rem}
+.ev-start{
+background:#dde6ee; /* 実測：EVENT START の淡青グレーボックス */
+padding:.55rem .8rem .65rem;margin-bottom:.8rem;
+}
+.ev-start .lb{
+display:block;font-family:"18TRIPSansMedium",sans-serif;
+font-size:.6rem;letter-spacing:.3em;color:#34506e;font-weight:700;
+}
+.ev-start .vl{display:block;font-weight:900;font-size:1.06rem;letter-spacing:.14em;margin-top:.15rem}
+.ev-start .nt{display:block;font-size:.66rem;color:#556;margin-top:.2rem}
+.ev-facts{margin:0 0 .4rem;font-size:.8rem}
+.ev-facts div{display:flex;gap:.7rem;padding:.34rem 0;border-bottom:1px dashed var(--line)}
+.ev-facts dt{
+flex:none;width:5.6em;font-family:"18TRIPSansMedium",sans-serif;
+font-size:.62rem;letter-spacing:.22em;color:#1d2a6b;font-weight:700;padding-top:.22rem;
+}
+.ev-facts dd{margin:0;font-weight:600}
+.ev-story-head{
+font-family:"18TRIPSansMedium",sans-serif;font-size:.66rem;font-weight:700;
+letter-spacing:.34em;color:#1d2a6b;margin:.85rem 0 .35rem;
+}
+.ev-story{
+position:relative;max-height:11.5em;overflow-y:auto;
+padding-right:.9rem;font-size:.83rem;line-height:1.8;
+scrollbar-width:thin;scrollbar-color:#191921 transparent;
+}
+.ev-story::-webkit-scrollbar{width:4px}
+.ev-story::-webkit-scrollbar-thumb{background:#191921;border-radius:2px}
+.ev-story p{margin:0 0 .8em}
+.ev-story .tbd{color:#778;font-size:.76rem}
+/* ライム帯（C-5.1：ロゴ＋ピクトグラム＋番号＋バーコード） */
+.ev-lime{
+margin-top:auto;background:var(--accent);color:var(--ink);
+padding:.5rem .9rem .6rem;display:flex;align-items:center;gap:.8rem;
+}
+.ev-lime .tours{
+font-family:"18TRIPSansBold",sans-serif;font-weight:900;font-style:italic;
+font-size:1rem;line-height:.95;letter-spacing:.02em;white-space:nowrap;
+}
+.ev-lime .tours small{display:block;font-style:normal;font-size:.52rem;letter-spacing:.42em}
+.ev-lime .pictos{display:flex;gap:.5rem;margin-left:auto;align-items:center}
+.ev-lime .pictos svg{width:19px;height:19px;display:block}
+.ev-lime .code{font-family:"18TRIPSansMedium",sans-serif;font-size:.54rem;letter-spacing:.14em;text-align:right}
+.ev-barcode{
+height:16px;margin-top:2px;
+background:repeating-linear-gradient(90deg,#111 0 2px,transparent 2px 4px,#111 4px 7px,transparent 7px 9px,#111 9px 10px,transparent 10px 14px,#111 14px 16px,transparent 16px 18px);
+}
+
+/* ---- 詳細セクション（C-5.4） ---- */
+.ev-detail{padding:1.6rem 1rem .4rem}
+.ev-detail-head{display:flex;align-items:center;gap:.7rem;margin-bottom:1rem}
+.ev-detail-head h2{
+font-family:"18TRIPSansBold","job-clarendon","IBM Plex Sans JP",sans-serif;
+font-size:1.12rem;font-weight:900;letter-spacing:.16em;margin:0;
+}
+.ev-detail-head h2::before{content:"✈✈✈ ";color:var(--accent2);font-size:.8em}
+.ev-detail-head .spacer{flex:1}
+.ev-mini{display:none}
+.ev-track-list{list-style:none;margin:0;padding:0;position:relative}
+.ev-track-list::after{ /* 右端のドット軌道（実測：スクロールバーの文法） */
+content:"";position:absolute;right:-2px;top:6px;bottom:6px;width:5px;
+background-image:radial-gradient(circle,#191921 1.6px,transparent 1.8px);
+background-size:5px 15px;background-repeat:repeat-y;opacity:.55;
+}
+.ev-track{
+position:relative;display:flex;align-items:center;gap:.8rem;
+background:#fff;border:1px solid #ddd6c4;border-radius:8px;
+padding:.8rem .95rem;margin:0 14px .7rem 0;
+box-shadow:0 3px 8px rgba(20,16,40,.07);
+}
+.ev-track .no{
+display:block;font-family:"18TRIPSansMedium",sans-serif;
+font-size:.64rem;letter-spacing:.24em;color:#8b5fb8;font-weight:700; /* 実測：紫の小字ラベル */
+}
+.ev-track h3{margin:.08rem 0 .1rem;font-size:.98rem}
+.ev-track .sub{font-size:.72rem;color:#778}
+.ev-track .fav{flex:none;margin-left:auto;text-align:center}
+.ev-track .fav svg{width:40px;height:40px;display:block}
+.ev-track .dtl{
+flex:none;border:1.5px solid var(--ink);border-radius:5px;background:#fff;
+font-size:.72rem;font-weight:700;letter-spacing:.2em;padding:.34rem .8rem;
+color:var(--ink);
+}
+.ev-track .dtl[disabled]{opacity:.38;cursor:not-allowed}
+.ev-track--tbd{background:#f4f1e8;box-shadow:none;color:#778}
+.ev-track--tbd h3{font-size:.86rem;font-weight:600;color:#667}
+.ev-detail-note{font-size:.74rem;color:#778;margin:.2rem 0 0}
+
+/* ---- あらすじモーダル（C-5.4／C-5.2 と同型の殻） ---- */
+.ev-modal{position:fixed;inset:0;z-index:1500;display:none}
+.ev-modal.is--open{display:block}
+.ev-modal-bg{position:absolute;inset:0;background:rgba(24,26,32,.62)}
+.ev-modal-shell{
+position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+width:min(680px,calc(100vw - 28px));max-height:88vh;
+background:#fdfcf6;display:flex;flex-direction:column;
+box-shadow:0 18px 44px rgba(0,0,0,.35);
+}
+.ev-modal-head{
+position:relative;background:var(--accent);text-align:center;
+font-weight:900;font-size:1.02rem;letter-spacing:.34em;
+padding:.62rem 2.6rem;
+}
+.ev-modal-close{
+position:absolute;right:0;top:0;width:46px;height:100%;
+background:none;border:none;font-size:1.35rem;line-height:1;cursor:pointer;color:var(--ink);
+}
+.ev-modal-body{
+position:relative;display:flex;gap:0;overflow:hidden;
+padding:1rem 1.6rem .4rem;
+}
+.ev-modal-body::before,.ev-modal-body::after{ /* 両縁の縦書き（実測） */
+position:absolute;top:50%;transform:translateY(-50%);
+writing-mode:vertical-rl;font-family:"18TRIPSansMedium",sans-serif;
+font-size:.52rem;letter-spacing:.3em;color:#99a;
+}
+.ev-modal-body::before{content:"HAMA NICE TRIP!";left:.45rem}
+.ev-modal-body::after{content:"HAMA NICE TRIP!";right:.45rem}
+.ev-cast{flex:none;width:38%;padding-right:1rem}
+.ev-cast h3{
+background:#191921;color:#fff;font-size:.72rem;letter-spacing:.24em;
+margin:0 0 .7rem;padding:.34rem .6rem;font-weight:700;
+}
+.ev-cast-row{display:flex;align-items:center;gap:.55rem;margin-bottom:.65rem}
+.ev-cast-row .role{
+flex:none;font-size:.6rem;font-weight:700;letter-spacing:.06em;
+background:#e7dfc8;border-radius:3px;padding:.22rem .42rem;white-space:nowrap;
+}
+.ev-cast-row .face{
+flex:none;width:42px;height:42px;border-radius:50%;overflow:hidden;
+border:2px solid #191921;background:#d9d2bd;
+display:flex;align-items:center;justify-content:center;
+font-weight:900;font-size:1rem;color:#5a4a2f;
+}
+.ev-cast-row .face img{width:100%;height:100%;object-fit:cover;object-position:center 12%}
+.ev-cast-row .nm{font-size:.78rem;font-weight:700}
+.ev-cast-note{font-size:.64rem;color:#99a;line-height:1.6;margin:.2rem 0 0}
+.ev-modal-story{
+flex:1;overflow-y:auto;padding:0 .4rem 0 1rem;border-left:1px solid var(--line);
+font-size:.85rem;line-height:1.85;max-height:56vh;
+scrollbar-width:thin;scrollbar-color:#191921 transparent;
+}
+.ev-modal-story::-webkit-scrollbar{width:4px}
+.ev-modal-story::-webkit-scrollbar-thumb{background:#191921;border-radius:2px}
+.ev-modal-story p{margin:0 0 .9em}
+.ev-modal-foot{padding:.7rem 1rem 1rem;text-align:center}
+.ev-modal-foot button{
+border:1.5px solid var(--ink);border-radius:6px;background:#fff;
+font-size:.85rem;font-weight:700;letter-spacing:.3em;
+padding:.55rem 3.2rem .55rem 3.5rem;cursor:pointer;
+}
+.ev-modal-foot button:hover{background:var(--accent)}
+body.ev-modal-open{overflow:hidden}
+@media(max-width:560px){
+.ev-modal-body{flex-direction:column;overflow-y:auto;max-height:calc(88vh - 130px)}
+.ev-cast{width:100%;padding-right:0}
+.ev-modal-story{border-left:none;padding:.4rem 0 0;max-height:none;overflow:visible}
+}
+
+/* ---- PC（769px〜）：座標を分けた2カラム構成 ---- */
+@media(min-width:769px){
+.ev-main{display:flex;gap:2.4rem;align-items:stretch;padding:0 .6rem}
+.ev-kv-wrap{flex:1.12;margin:0;max-width:none}
+.ev-kv{transform:rotate(-7deg)}
+.ev-info{flex:.88;margin-top:0}
+.ev-detail-grid{display:flex;gap:1.6rem;align-items:flex-start}
+.ev-mini{
+display:block;flex:none;width:180px;position:relative;margin-top:.4rem;
+}
+.ev-mini .frame{
+background:#fff;padding:6px;transform:rotate(-7deg);
+box-shadow:0 8px 18px rgba(20,16,40,.22);
+}
+.ev-mini .frame .art{aspect-ratio:3/4.1;overflow:hidden;position:relative;background:#2a1220}
+.ev-mini .frame img{width:100%;height:100%;object-fit:cover;object-position:center 18%;display:block}
+.ev-mini .pageno{
+position:absolute;right:-4px;bottom:26px;writing-mode:vertical-rl;
+font-family:"18TRIPSansMedium",sans-serif;font-size:.52rem;letter-spacing:.22em;color:#c8102e;font-weight:700;
+}
+.ev-detail-main{flex:1;min-width:0}
+}
+@media(max-width:768px){
+.ev-field{padding:1.8rem .9rem 2rem}
+.ev-kv{transform:rotate(-5deg)}
+.ev-kv-back{transform:rotate(-5deg)}
+.ev-logo .ev-logo-title{font-size:1.32rem}
+}

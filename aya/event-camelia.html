@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EVENT ✈ 壊生カメリア 特設</title>
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/event.css">
 </head>
 <body>
 <div class="page">
@@ -16,6 +17,7 @@
 <a href="character.html">CHARACTER</a>
 <a href="story.html">STORY</a>
 <a href="terms.html">TERMS</a>
+<a href="event-camelia.html" aria-current="page">EVENT</a>
 </nav>
 </header>
 
@@ -25,40 +27,255 @@
 <span>#壊生カメリア</span>
 </div>
 
-<!-- イベント特設：1周年特設型（テーマ切替ゲート）の骨格。
-ゲート選択で全体テーマ（配色・装飾）を切り替える仕掛けは要素材到着後に実装。 -->
-<figure class="event-hero">
-<div class="ph-img" style="min-height:220px;border:none;border-radius:0">キービジュアル<br>「壊生カメリア」</div>
-</figure>
+<!-- イベント特設：実測 C-5.1（イベント予告ページ）の文法で再構築。
+左＝約7°傾いたKVパネル＋背面コラージュ、右＝INFORMATIONカード。
+下段は C-5.4（イベントストーリー詳細）の TRACK行＋あらすじモーダル。
+テーマ切替ゲート（表＝落露／裏＝綾）は .ev-stage の data-theme で切り替える。 -->
+<div class="ev-topbar">
+<a class="ev-back" href="story.html">＜ BACK</a>
+<span class="ev-bar-title">イベント特設</span><span class="ev-bar-sub">EVENT STORY</span>
+<span class="spacer"></span>
+<button class="ev-synopsis-btn" type="button" data-ev-modal-open>あらすじ</button>
+</div>
 
-<section class="sec" style="text-align:center">
-<h2 class="sec-title" style="letter-spacing:.3em">壊生カメリア</h2>
-<p class="sec-sub">EVENT STORY</p>
+<div class="ev-stage" id="evStage" data-theme="omote">
+
+<div class="ev-gate" role="group" aria-label="テーマ切替">
+<button type="button" data-gate="omote" aria-pressed="true">表 ― 落露の宴へ<small>OMOTE</small></button>
+<button type="button" data-gate="ura" aria-pressed="false">裏 ― 綾の過去へ<small>URA</small></button>
+</div>
+
+<div class="ev-field">
+<div class="ev-main">
+
+<!-- KVパネル -->
+<div class="ev-kv-wrap">
+<div class="ev-kv-back" aria-hidden="true"><span class="bk-black"></span><span class="bk-magenta"></span></div>
+<div class="ev-kv">
+<div class="ev-kv-art">
+
+<!-- 表テーマ：落露の絵は持たないため、椿とタイポグラフィの合成でポスターにする -->
+<div class="ev-kv-layer ev-kv-layer--omote is-on" data-layer="omote">
+<svg viewBox="0 0 300 410" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" role="img" aria-label="壊生カメリア 表テーマのポスター（椿の合成画）">
+<defs>
+<radialGradient id="kvBg" cx="50%" cy="34%" r="85%">
+<stop offset="0%" stop-color="#57182f"/>
+<stop offset="55%" stop-color="#33101f"/>
+<stop offset="100%" stop-color="#180710"/>
+</radialGradient>
+<linearGradient id="kvBar" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0%" stop-color="#0d0d14" stop-opacity="0"/>
+<stop offset="100%" stop-color="#0d0d14" stop-opacity=".88"/>
+</linearGradient>
+<path id="ptl" d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z"/>
+</defs>
+<rect width="300" height="410" fill="url(#kvBg)"/>
+<text x="238" y="30" font-size="120" fill="#ffffff" opacity=".05" font-weight="900" text-anchor="middle">椿</text>
+<circle cx="150" cy="158" r="104" fill="none" stroke="#e8b64c" stroke-width="1" opacity=".55"/>
+<circle cx="150" cy="158" r="96" fill="none" stroke="#e8b64c" stroke-width=".6" opacity=".35"/>
+<g transform="translate(150 158)">
+<g fill="#a31226">
+<use href="#ptl"/><use href="#ptl" transform="rotate(72)"/><use href="#ptl" transform="rotate(144)"/><use href="#ptl" transform="rotate(216)"/><use href="#ptl" transform="rotate(288)"/>
+</g>
+<g fill="#d21f3c" transform="scale(.78) rotate(36)">
+<use href="#ptl"/><use href="#ptl" transform="rotate(72)"/><use href="#ptl" transform="rotate(144)"/><use href="#ptl" transform="rotate(216)"/><use href="#ptl" transform="rotate(288)"/>
+</g>
+<g fill="#ef5350" transform="scale(.48) rotate(12)">
+<use href="#ptl"/><use href="#ptl" transform="rotate(72)"/><use href="#ptl" transform="rotate(144)"/><use href="#ptl" transform="rotate(216)"/><use href="#ptl" transform="rotate(288)"/>
+</g>
+<g fill="#f4c542">
+<circle cx="0" cy="-7" r="3.2"/><circle cx="7" cy="0" r="3.2"/><circle cx="0" cy="7" r="3.2"/><circle cx="-7" cy="0" r="3.2"/><circle cx="0" cy="0" r="3.6"/>
+</g>
+</g>
+<g transform="translate(238 300) scale(.42)" fill="#d21f3c">
+<use href="#ptl"/><use href="#ptl" transform="rotate(72)"/><use href="#ptl" transform="rotate(144)"/><use href="#ptl" transform="rotate(216)"/><use href="#ptl" transform="rotate(288)"/>
+<circle r="4" fill="#f4c542"/>
+</g>
+<g fill="#e8452f" opacity=".85">
+<path d="M52,286 q7,-12 16,-4 q-6,11 -16,4 Z"/>
+<path d="M84,330 q10,-8 16,2 q-9,8 -16,-2 Z"/>
+<path d="M36,232 q6,-11 15,-5 q-5,10 -15,5 Z"/>
+</g>
+<rect y="300" width="300" height="110" fill="url(#kvBar)"/>
+</svg>
+</div>
+
+<!-- 裏テーマ：綾の既存ビジュアルを使用 -->
+<div class="ev-kv-layer ev-kv-layer--ura" data-layer="ura">
+<img src="assets/aya/aya-visual-sp.png" alt="笹井綾 ビジュアル">
+</div>
+
+<div class="ev-logo">
+<span class="ev-logo-kicker">SEASON EVENT</span>
+<span class="ev-logo-title">壊生カメリア</span>
+<span class="ev-logo-catch">過去と向き合う、ひとつの宴。</span>
+</div>
+<span class="ev-kv-pageno">CML / 01 920</span>
+</div><!-- /.ev-kv-art -->
+
+<div class="ev-sticker ev-sticker--camellia" aria-hidden="true">
+<span class="eff--vertical"><span class="eff--horizon">
+<svg viewBox="0 0 60 60" width="52" height="52">
+<circle cx="30" cy="30" r="28" fill="#fff"/>
+<g transform="translate(30 30) scale(.5)">
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" fill="#d21f3c"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" fill="#d21f3c" transform="rotate(72)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" fill="#d21f3c" transform="rotate(144)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" fill="#ef5350" transform="rotate(216)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" fill="#ef5350" transform="rotate(288)"/>
+<circle r="4.5" fill="#f4c542"/>
+</g>
+</svg>
+</span></span>
+</div>
+<div class="ev-sticker ev-sticker--pin" aria-hidden="true">
+<span class="eff--vertical"><span class="eff--horizon"><img src="assets/official/common_icon_pin.png" alt=""></span></span>
+</div>
+</div>
+</div>
+
+<!-- INFORMATIONカード -->
+<aside class="ev-info" aria-label="イベント情報">
+<div class="ev-info-head">INFORMATION
+<span class="ev-info-tab" aria-hidden="true">
+<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#1d2a6b" stroke-width="1.7">
+<rect x="2.5" y="5" width="19" height="14" rx="2"/>
+<circle cx="8" cy="11" r="2.1"/>
+<path d="M5.4 16.4c.6-1.5 1.5-2.2 2.6-2.2s2 .7 2.6 2.2M14 9.5h5M14 13h5"/>
+</svg>
+</span>
+</div>
+<div class="ev-info-body">
+<div class="ev-start">
+<span class="lb">EVENT START</span>
+<span class="vl">未定</span>
+<span class="nt">開催期間は決まり次第、こちらと NEWS でお知らせします。</span>
+</div>
+<dl class="ev-facts">
+<div><dt>種別</dt><dd>イベントストーリー</dd></div>
+<div><dt>ホスト</dt><dd>メイン：落露 ／ サブ：笹井綾 🍨</dd></div>
+<div><dt>備考</dt><dd>将来、Live2D化を予定</dd></div>
+</dl>
+<h3 class="ev-story-head">STORY</h3>
+<div class="ev-story" tabindex="0">
+<p>落露をメインホスト、笹井綾をサブホストに据えたイベントストーリー。双方にとって重要な物語として位置づけられる。</p>
+<p>綾が目を逸らし続けてきた「過去」と向き合う話。落露がフィーチャーされる物語は、本編とは別にイベント枠で届けられる。</p>
+<p class="tbd">※話数・各話タイトル・詳しいあらすじは未定です。公開時にこちらへ掲載します。</p>
+</div>
+</div>
+<div class="ev-lime">
+<span class="tours">AYA<small>TRIP</small></span>
+<span class="pictos" aria-hidden="true">
+<svg viewBox="0 0 24 24" fill="none" stroke="#323232" stroke-width="1.7"><path d="M3 15.5 21 4l-4.5 16-3.2-6.8L3 15.5Z"/><path d="M13.3 13.2 21 4"/></svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="#323232" stroke-width="1.7"><rect x="3" y="7" width="18" height="12" rx="2"/><path d="M3 12h18" stroke-dasharray="2.5 2.5"/><circle cx="17.5" cy="15.5" r="1.4"/></svg>
+<svg viewBox="0 0 24 24" fill="none" stroke="#323232" stroke-width="1.7"><rect x="3" y="8" width="18" height="12" rx="2"/><circle cx="12" cy="14" r="3.2"/><path d="M8.5 8 10 5h4l1.5 3"/></svg>
+</span>
+<span class="code">AYA-920<span class="ev-barcode" style="display:block;width:86px"></span></span>
+</div>
+</aside>
+
+</div><!-- /.ev-main -->
+</div><!-- /.ev-field -->
+
+<!-- 詳細（C-5.4：TRACK行リスト） -->
+<section class="ev-detail">
+<div class="ev-detail-head">
+<h2>EVENT STORY</h2>
+<span class="spacer"></span>
+<button class="ev-synopsis-btn" type="button" data-ev-modal-open>あらすじ</button>
+</div>
+<div class="ev-detail-grid">
+<div class="ev-mini" aria-hidden="true">
+<div class="frame"><div class="art">
+<svg viewBox="0 0 300 410" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+<rect width="300" height="410" fill="#33101f"/>
+<g transform="translate(150 170)">
+<g fill="#a31226">
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" transform="rotate(72)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" transform="rotate(144)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" transform="rotate(216)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" transform="rotate(288)"/>
+</g>
+<g fill="#ef5350" transform="scale(.5) rotate(20)">
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" transform="rotate(72)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" transform="rotate(144)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" transform="rotate(216)"/>
+<path d="M0,-44 C24,-36 32,-10 0,2 C-32,-10 -24,-36 0,-44 Z" transform="rotate(288)"/>
+</g>
+<circle r="5" fill="#f4c542"/>
+</g>
+<text x="150" y="330" font-size="30" font-weight="900" fill="#fff" text-anchor="middle" letter-spacing="8">壊生カメリア</text>
+</svg>
+</div></div>
+<span class="pageno">CML / 01 920</span>
+</div>
+<div class="ev-detail-main">
+<ol class="ev-track-list">
+<li class="ev-track">
+<div>
+<span class="no">TRACK.1</span>
+<h3>壊生カメリア 第1話</h3>
+<span class="sub">タイトル未定 ― 公開時に掲載します</span>
+</div>
+<span class="fav" aria-hidden="true">
+<svg viewBox="0 0 48 48">
+<defs><path id="favArc" d="M24,3.5 a20.5,20.5 0 1,1 -0.01,0"/></defs>
+<circle cx="24" cy="24" r="12.5" fill="none" stroke="#323232" stroke-width="1.3"/>
+<text font-size="6.4" letter-spacing="1.6" fill="#323232" font-family="18TRIPSansMedium,sans-serif"><textPath href="#favArc">FAVORITE</textPath></text>
+<path d="M24 29.6c-3.4-2.3-5-4-5-6a2.9 2.9 0 0 1 5-1.6 2.9 2.9 0 0 1 5 1.6c0 2-1.6 3.7-5 6Z" fill="#ff8c78"/>
+</svg>
+</span>
+<button class="dtl" type="button" disabled title="公開時に有効になります">詳細</button>
+</li>
+<li class="ev-track ev-track--tbd">
+<div>
+<span class="no">TRACK.2 ―</span>
+<h3>以降の話数・タイトルは未定です</h3>
+<span class="sub">決まり次第、こちらに行を追加します</span>
+</div>
+</li>
+</ol>
+<p class="ev-detail-note">※本編の話数構成は未確定のため、確定している第1話の枠のみ置いています。Checked スタンプや既読表示は公開後に付けます。</p>
+</div>
+</div>
 </section>
 
-<!-- テーマ切替ゲート（骨格のみ：遷移先は将来のテーマ別表示） -->
-<div class="event-gate">
-<a href="#">表 ― 落露の宴へ</a>
-<a href="#">裏 ― 綾の過去へ</a>
-</div>
+</div><!-- /.ev-stage -->
 
-<div class="event-sec">
-<h3>■ 開催概要</h3>
-<p>種別：イベントストーリー（本編タイトル「壊生カメリア」）</p>
-<p>開催期間：未定</p>
-<p>将来、Live2D化を予定。</p>
+<!-- あらすじモーダル（C-5.4 の殻：ライムヘッダー＋両縁の縦書き＋登場人物グリッド） -->
+<div class="ev-modal" id="evModal" role="dialog" aria-modal="true" aria-labelledby="evModalTitle" hidden>
+<div class="ev-modal-bg" data-ev-modal-close></div>
+<div class="ev-modal-shell">
+<div class="ev-modal-head"><span id="evModalTitle">あらすじ</span>
+<button class="ev-modal-close" type="button" data-ev-modal-close aria-label="閉じる">×</button>
 </div>
-
-<div class="event-sec">
-<h3>■ ストーリー概要</h3>
-<p>落露をメインホスト、笹井綾をサブホストに据えたイベントストーリー。綾が目を逸らし続けてきた「過去」と向き合う話として位置づけられる。</p>
+<div class="ev-modal-body">
+<div class="ev-cast">
+<h3>登場人物</h3>
+<div class="ev-cast-row">
+<span class="role">メインホスト</span>
+<span class="face" aria-hidden="true">落</span>
+<span class="nm">落露</span>
 </div>
-
-<div class="event-sec">
-<h3>■ 登場キャラクター</h3>
-<p><strong>落露</strong>（メインホスト）</p>
-<p><strong>笹井綾 🍨</strong>（サブホスト）→ <a href="character.html">CHARACTER</a></p>
-<p style="font-size:.75rem;color:#99a">※他キャラクターの詳細設定は本サイトでは扱いません。</p>
+<div class="ev-cast-row">
+<span class="role">サブホスト</span>
+<span class="face"><img src="assets/aya/aya-visual-sp.png" alt=""></span>
+<span class="nm">笹井綾 🍨</span>
+</div>
+<p class="ev-cast-note">※落露は他所の創作者のキャラクターです。本サイトでは名前と役割のみを扱います。その他のキャラクターの詳細設定も本サイトでは扱いません。</p>
+</div>
+<div class="ev-modal-story">
+<p>落露をメインホスト、笹井綾をサブホストに据えたイベントストーリー。双方にとって重要な物語として位置づけられる。</p>
+<p>綾が目を逸らし続けてきた「過去」と向き合う話。落露がフィーチャーされる物語は、本編とは別にイベント枠で届けられる。</p>
+<p>詳しいあらすじは未定です。公開時にこちらへ掲載します。</p>
+</div>
+</div>
+<div class="ev-modal-foot">
+<button type="button" data-ev-modal-close>閉じる</button>
+</div>
+</div>
 </div>
 
 <footer class="site-footer">
@@ -71,6 +288,48 @@
 </footer>
 
 </div>
+
 <script src="assets/site.js"></script>
+<script>
+(function(){
+"use strict";
+var stage=document.getElementById("evStage");
+/* テーマ切替ゲート：表／裏で KV レイヤーとテーマを切り替える */
+stage.querySelectorAll("[data-gate]").forEach(function(btn){
+btn.addEventListener("click",function(){
+var theme=btn.getAttribute("data-gate");
+stage.setAttribute("data-theme",theme);
+stage.querySelectorAll("[data-gate]").forEach(function(b){
+b.setAttribute("aria-pressed",b===btn?"true":"false");
+});
+stage.querySelectorAll("[data-layer]").forEach(function(l){
+l.classList.toggle("is-on",l.getAttribute("data-layer")===theme);
+});
+});
+});
+/* あらすじモーダル */
+var modal=document.getElementById("evModal");
+function openModal(){
+modal.hidden=false;
+requestAnimationFrame(function(){modal.classList.add("is--open");});
+document.body.classList.add("ev-modal-open");
+modal.querySelector(".ev-modal-close").focus();
+}
+function closeModal(){
+modal.classList.remove("is--open");
+modal.hidden=true;
+document.body.classList.remove("ev-modal-open");
+}
+document.querySelectorAll("[data-ev-modal-open]").forEach(function(b){
+b.addEventListener("click",openModal);
+});
+modal.querySelectorAll("[data-ev-modal-close]").forEach(function(b){
+b.addEventListener("click",closeModal);
+});
+document.addEventListener("keydown",function(e){
+if(e.key==="Escape"&&!modal.hidden)closeModal();
+});
+})();
+</script>
 </body>
 </html>

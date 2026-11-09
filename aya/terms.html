@@ -5,6 +5,59 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TERMS ✈ 用語集</title>
 <link rel="stylesheet" href="assets/site.css">
+<style>
+/* ===== TERMS専用：空港案内板／端末読み出しの文法（site.css は無変更、このページだけで完結） ===== */
+/* 見出し＝出発案内板の帯：紺地にライム、フラップ表示を思わせる字間とセル罫 */
+.sec{
+  background:var(--accent-text);margin:.8rem 1rem 0;padding:.9rem 1rem .8rem;
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.14) 0 1px,transparent 1px 2.2rem);
+  border-bottom:4px solid var(--accent);
+}
+.sec-title{color:#fff;letter-spacing:.34em}
+.sec-title::before{color:var(--accent)}
+.sec-sub{color:var(--accent);margin-bottom:0}
+
+/* 索引＝行き先表示の行リスト：[便コード] 用語名 → の端末行。五十音アンカーは従来どおり */
+.term-index{
+  display:block;margin:.9rem 1rem 0;border:1px solid var(--ink);background:#fff;
+  counter-reset:idx;
+}
+.term-index a{
+  display:flex;align-items:baseline;gap:.7rem;
+  border:none;border-radius:0;border-bottom:1px solid var(--line);
+  padding:.5rem .8rem;font-size:.85rem;background:transparent;
+  counter-increment:idx;
+}
+.term-index a:last-child{border-bottom:none}
+.term-index a::before{
+  content:"AYA " counter(idx,decimal-leading-zero);
+  font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;
+  font-size:.68rem;letter-spacing:.12em;color:var(--accent-text);white-space:nowrap;
+}
+.term-index a::after{content:"→";margin-left:auto;color:var(--accent-text);font-weight:700}
+.term-index a:hover{background:var(--accent);color:var(--ink)}
+.term-index a:hover::before,.term-index a:hover::after{color:var(--ink)}
+
+/* 用語本体＝端末読み出しの列構成：左に便コード列（紺地＋ライム）、右に用語名＋定義（本文は無変更） */
+.term-list{counter-reset:trm}
+.term-list li{
+  display:grid;grid-template-columns:3.1rem 1fr;grid-template-rows:auto 1fr;
+  padding:0;margin-bottom:.5rem;background:#fff;
+  border:1px solid var(--line);scroll-margin-top:.8rem;
+  counter-increment:trm;
+}
+.term-list li::before{
+  content:"AYA\A" counter(trm,decimal-leading-zero);
+  white-space:pre;grid-column:1;grid-row:1/3;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--accent-text);color:var(--accent);
+  font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-weight:900;
+  font-size:.66rem;line-height:1.5;letter-spacing:.1em;text-align:center;
+  border-left:4px solid var(--accent);
+}
+.term-list li h3{grid-column:2;padding:.65rem .9rem 0}
+.term-list li p{grid-column:2;padding:0 .9rem .7rem}
+</style>
 </head>
 <body>
 <div class="page">
