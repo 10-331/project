@@ -4,16 +4,58 @@ story.html（縦基準）から切り離し、novel.html 単体の横長ゲー�
 完結させるための専用CSS。共通部品（site.css／site.js）は読み込まない。
 ステージは実画面比率 1558×720（≒2.16:1）をビューポートに
 レターボックス収めし、内部寸法は container query unit（cqw）で
-ステージ幅に比例させる（旧 story.css の仕組みを流用）。
-縦持ちでも縦積みにはせず、相似縮小のまま操作可能にする＋回転注記を出す。
+ステージ幅に比例させる。縦持ちでも縦積みにはせず、相似縮小のまま
+操作可能にする＋回転注記を出す。
+
+2026-11-09 実画面（区長ノベル一覧）との比較で再調整：
+- 寸法は画録フレーム 1558×720 基準の実測％に合わせた
+  （上部バー高 11.8%H／パネル x 37.6〜90.8%・上端 20.5%H／
+   行高 15.3%H・ピッチ 17.0%H／スタンプ径 ≒ 行高の 68%）
+- フォントは取得済み資産を本適用（18TRIPSans 各ウェイト／
+  IBM Plex Sans JP／見出し MAYORS は job-clarendon 700）
+- モーションは公式の fluffy 文法（fuluffyVertical＋fluffyHorizon の
+  二重構造・周期ずらし）を地図上のピンへ、入場はブラインド＋
+  時差フェード（公式サイトの GSAP 文法寄せ）
+- 色は実測パレット（site.css の変数）から外れない範囲に限定し、
+  レターボックスはキャラ地 #f0f0e2 に寄せた
+
+2026-11-09 追加調整（レイヤーと立ち絵の framing）：
+- レイヤー順は 背景（z0）→ 浮遊ピン（z1）→ 立ち絵（z2）→ パネル（z3）
+  → 上部バー（z5）の奥→手前に固定する
+- 立ち絵の framing はユーザーの綾版モック実測に合わせ、実絵高さ
+  150%H の上半身中心（頭頂 24.8%H、下端はスカート途中で切れる）に
+  拡大した。横はモックの実絵中心に合わせ、パネルとは重ねない
+  （数値は .nvl-chara のコメント参照）
+- 立ち絵の入場は横スライドでなく scale 1.06→1.0 のズームで収める。
+  画録3の抽出フレームは選択画面→一覧完成形の2点のみで遷移の
+  中間形を確認できないため、この一般形を採用した
 ============================================================ */
 @import url("fonts/plex-faces.css"); /* IBM Plex Sans JP（site.css と同じ読み込み） */
+@font-face{font-family:"18TRIPSansLight";src:url("fonts/18TRIPSans-Light.woff2") format("woff2"),url("fonts/18TRIPSans-Light.woff") format("woff")}
+@font-face{font-family:"18TRIPSansRegular";src:url("fonts/18TRIPSans-Regular.woff2") format("woff2"),url("fonts/18TRIPSans-Regular.woff") format("woff")}
 @font-face{font-family:"18TRIPSansMedium";src:url("fonts/18TRIPSans-Medium.woff2") format("woff2"),url("fonts/18TRIPSans-Medium.woff") format("woff")}
+@font-face{font-family:"18TRIPSansBold";src:url("fonts/18TRIPSans-Bold.woff2") format("woff2"),url("fonts/18TRIPSans-Bold.woff") format("woff")}
+@font-face{font-family:"18TRIPSansFunnyMedium";src:url("fonts/18TRIPSansFunny-Medium.woff2") format("woff2"),url("fonts/18TRIPSansFunny-Medium.woff") format("woff")}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-300.woff2") format("woff2");font-weight:300}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-700.woff2") format("woff2");font-weight:700}
+@font-face{font-family:"job-clarendon-hairline";src:url("fonts/job-clarendon-hairline-100.woff2") format("woff2");font-weight:100}
+
+:root{
+--ink:#323232; /* 実測：公式共通ダーク */
+--text:#000; /* 実測：公式 body 文字色 */
+--paper:#fff; /* 実測：公式 body 背景 */
+--chara-bg:#f0f0e2; /* 実測：キャラページ地色 */
+--accent:#c8ff46; /* 実測：公式メイン（ライム） */
+--accent2:#ff8c78; /* 実測：公式サブ（サーモンピンク） */
+--line:#e8ebeb; /* 実測：グレー地 */
+--accent-text:#004986; /* 実測：リンク色 */
+}
 
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;height:100%}
 body{
-background:#26262e; /* レターボックスの余白色（ゲーム画面の外側） */
+background:var(--chara-bg); /* レターボックス部＝実測のページ地に寄せる */
 display:flex;flex-direction:column;align-items:center;justify-content:center;
 min-height:100dvh;
 font-family:"IBM Plex Sans JP","Helvetica Neue","Helvetica","Hiragino Sans","Hiragino Kaku Gothic ProN","Arial","Yu Gothic","Meiryo",sans-serif;
@@ -24,110 +66,172 @@ font-family:"IBM Plex Sans JP","Helvetica Neue","Helvetica","Hiragino Sans","Hir
 position:relative;
 width:min(100vw, calc(100dvh * 1558 / 720));
 aspect-ratio:1558/720;
-container-type:inline-size;overflow:hidden;background:#f2f2f4;
+container-type:inline-size;overflow:hidden;background:var(--chara-bg);
 font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
 flex:none;
 }
-.nvl-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+.nvl-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:0 /* レイヤー最奥：背景（地図） */}
 
 /* ---- 縦持ち時の回転注記（横向きでは出さない） ---- */
 .nvl-rotate-note{
-display:none;margin:.7rem 0 0;color:#b9b9c4;font-size:.72rem;
+display:none;margin:.7rem 0 0;color:var(--ink);opacity:.78;font-size:.72rem;
 letter-spacing:.08em;text-align:center;padding:0 1rem;
 }
 @media (orientation:portrait){
 .nvl-rotate-note{display:block}
 }
 
-/* ---- 上部バー ---- */
+/* ---- 入場モーション（公式サイトのブラインド＋時差フェード寄せ） ---- */
+@keyframes nvlBarIn{from{transform:translateY(-102%)}to{transform:translateY(0)}}
+@keyframes nvlCharaIn{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:scale(1)}} /* 立ち絵入場：やや大きい状態から定位置へ収まるズーム */
+@keyframes nvlPanelIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes nvlRowIn{from{opacity:0;transform:translateY(1.1cqw)}to{opacity:1;transform:translateY(0)}}
+@keyframes nvlFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes nvlCassIn{from{opacity:0;transform:rotate(-1.1deg) translateY(14px) scale(.97)}to{opacity:1;transform:rotate(-1.1deg) translateY(0) scale(1)}}
+
+/* ---- 公式 fluffy（top.css 実測 keyframes の文法を cqw 換算で転記）
+   外側＝上下 ±10px 相当、内側＝左右 ±5px 相当＋回転 ±5deg の二重構造 ---- */
+@keyframes fuluffyVertical{0%{transform:translate3d(0,.65cqw,0)}50%{transform:translate3d(0,-.65cqw,0)}100%{transform:translate3d(0,.65cqw,0)}}
+@keyframes fluffyHorizon{0%{transform:translate3d(.35cqw,0,0) rotate(-5deg)}50%{transform:translate3d(-.35cqw,0,0) rotate(5deg)}100%{transform:translate3d(.35cqw,0,0) rotate(-5deg)}}
+@keyframes favFloat{from{transform:translate3d(.25cqw,0,0) rotate(3deg)}to{transform:translate3d(-.25cqw,0,0) rotate(-3deg)}}
+
+/* ---- 地図上の浮遊ピン（hd_items の浮遊文法を地図の小物へ転用） ---- */
+.nvl-pin{position:absolute;z-index:1;width:1.9cqw;animation:nvlFadeIn .8s ease .55s both}
+.nvl-pin img{width:100%;height:auto;display:block;filter:drop-shadow(0 .2cqw .3cqw rgba(50,50,40,.35))}
+.nvl-pin .nv-v{display:block;animation:fuluffyVertical var(--vd,8s) ease-in-out infinite alternate}
+.nvl-pin .nv-h{display:block;animation:fluffyHorizon var(--hd,7s) ease-in-out infinite alternate}
+.nvl-pin .nv-h.rev{animation-direction:alternate-reverse}
+
+/* ---- 上部バー（実測：高さ ≒ ステージ高の 11.8%） ---- */
 .nvl-topbar{
-position:absolute;left:0;right:0;top:0;height:9.5cqw;
-background:rgba(143,144,137,.88);display:flex;align-items:center;
-gap:2.4cqw;padding:0 2.2cqw;z-index:5;
+position:absolute;left:0;right:0;top:0;height:5.5cqw;
+background:rgba(198,199,193,.92);display:flex;align-items:center;
+gap:2.2cqw;padding:0 0 0 2.2cqw;z-index:5;
+animation:nvlBarIn .45s ease both;
 }
 .nvl-back{
-background:#fff;color:#222;text-decoration:none;font-weight:800;
-font-size:1.9cqw;letter-spacing:.14em;padding:1cqw 2.6cqw 1cqw 1.8cqw;
-border-radius:.8cqw;box-shadow:0 1px 3px rgba(0,0,0,.25);white-space:nowrap;
+background:var(--paper);color:var(--ink);text-decoration:none;
+font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;
+font-size:1.55cqw;letter-spacing:.14em;padding:.6cqw 2.2cqw .6cqw 1.4cqw;
+border-radius:.7cqw;box-shadow:0 1px 3px rgba(0,0,0,.25);white-space:nowrap;
 }
-.nvl-title{font-weight:800;color:#1c1c1c;font-size:2.6cqw;letter-spacing:.06em;white-space:nowrap}
-.nvl-tools{margin-left:auto;display:flex;align-items:center;gap:2.2cqw}
-.nvl-toggle{display:flex;align-items:center;gap:.9cqw;font-size:1.7cqw;font-weight:700;color:#1c1c1c;white-space:nowrap}
+.nvl-title{font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;color:var(--text);font-size:2.2cqw;letter-spacing:.06em;white-space:nowrap}
+.nvl-tools{margin-left:auto;display:flex;align-items:center;gap:2cqw}
+.nvl-toggle{display:flex;align-items:center;gap:.9cqw;font-size:1.5cqw;font-weight:700;color:var(--text);white-space:nowrap}
 .tgl{
 display:inline-flex;align-items:center;gap:.7cqw;border:0;cursor:pointer;
-background:#6f7069;color:#fff;border-radius:99px;padding:.55cqw 1.4cqw.55cqw.55cqw;
-font-size:1.55cqw;font-weight:800;letter-spacing:.08em;font-family:inherit;
+background:#6f7069;color:#fff;border-radius:99px;padding:.4cqw 1.3cqw .4cqw .4cqw;
+font-size:1.45cqw;font-weight:800;letter-spacing:.08em;font-family:inherit;
 }
 .tgl i{
-width:2.5cqw;height:2.5cqw;border-radius:50%;background:#fff;display:block;
+width:1.9cqw;height:1.9cqw;border-radius:50%;background:#fff;display:block;
 box-shadow:0 0 0.45cqw #d8d8d2 inset;transition:transform.18s;
 }
-.tgl[aria-pressed="true"]{background:#8fbf1f;color:#16230a}
-.tgl[aria-pressed="true"] i{transform:translateX(1.2cqw);box-shadow:none;background:#eaffb0}
+.tgl[aria-pressed="true"]{background:var(--accent);color:var(--ink)}
+.tgl[aria-pressed="true"] i{transform:translateX(1.1cqw);box-shadow:none;background:var(--ink)}
 .nvl-ic{
-width:4.6cqw;height:4.6cqw;display:grid;place-items:center;color:#1c1c1c;
-font-size:3.4cqw;line-height:1;text-decoration:none;
+width:3.6cqw;height:3.6cqw;display:grid;place-items:center;color:var(--text);
+font-size:2.9cqw;line-height:1;text-decoration:none;
 }
-.nvl-stage.novel-on.nvl-panel{outline:.5cqw solid rgba(200,255,70,.55);outline-offset:-.5cqw}
+/* 右端の黒正方形ハンバーガー（実画面どおり角に flush、見た目のみ） */
+.nvl-burger{
+flex:none;align-self:flex-start;width:6.2cqw;height:6cqw;margin-left:.4cqw;
+background:#141414;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;
+}
+.nvl-burger i{display:block;width:3.1cqw;height:.4cqw;background:#fff;border-radius:99px}
+.nvl-stage.novel-on .nvl-panel{outline:.5cqw solid rgba(200,255,70,.55);outline-offset:-.5cqw}
 
-/* ---- 立ち絵 ---- */
+/* ---- 立ち絵（レイヤー2：背景の手前、パネルの奥）
+   framing はユーザーの綾版モック（実測）そのものに合わせる：
+   モック実測＝頭頂 24.8%H／実絵 x 11.8〜33.4%W（幅 21.6%W）／
+   髪の最大幅 10.8%W／下端はステージ下端でスカートの途中
+   （原画比で約 50%、股下あたり）で切れる。
+   aya-fullbody.png の実絵 bbox は画布の縦 6.1%〜95.3%（占有 89.2%）、
+   横 32.6%〜65.7%（占有 33.1%）。実絵高さがステージの 150%H になるよう
+   img は height:168.3%（=150/0.892）に割り戻し、頭頂が 24.8%H に来るよう
+   bottom:-82.8%（実絵の足元は 174.8%H で画面外）。横はモックの実絵
+   中心（22.6%W）に合わせ left:-6.1% で、実絵は x 12.9〜32.2%W（幅
+   19.3%W）、髪最大幅は 10.6%W。パネル左端（黒縦帯 37.6%W）との間隔は
+   5.4%W で、モックどおり大きな重なりはない（レイヤー順のみ維持）。
+   入場ズームは実絵の見えている重心（ステージ下端中央付近）を基点に
+   scale 1.06→1.0 で収めるため transform-origin は 49% 51% ---- */
 .nvl-chara{
-position:absolute;left:1.2%;bottom:0;height:90%;z-index:2;
+position:absolute;left:-6.1%;bottom:-82.8%;height:168.3%;z-index:2;
+transform-origin:49% 51%;
 filter:drop-shadow(0 4px 10px rgba(40,40,60,.25));
+animation:nvlCharaIn .7s ease-out .1s both;
 }
 
-/* ---- フォルダ型パネル ---- */
+/* ---- フォルダ型パネル（レイヤー3：立ち絵より手前。
+   実測：x 37.6〜90.8%、上端 20.5%H、下端は画面外） ---- */
 .nvl-panel{
-position:absolute;left:37.5%;right:2.2%;top:15.5%;bottom:3.5%;z-index:3;
+position:absolute;left:37.6%;right:9.2%;top:20.5%;bottom:0;z-index:3;
 background:#dbc9a0;border-radius:1.6cqw;
 box-shadow:0.8cqw 2.4cqw rgba(60,50,20,.25);
-padding:2.2cqw 3.4cqw 1.6cqw 5.2cqw;
+transform-origin:0 50%;
+animation:nvlPanelIn .6s cubic-bezier(.63,0,.33,1) .15s both;
 }
 .nvl-tab{
-position:absolute;left:0;top:-4.6cqw;height:4.8cqw;min-width:34%;
-background:#dbc9a0;border-radius:1.4cqw 1.4cqw 0 0;
-display:flex;align-items:baseline;gap:1.6cqw;padding:.7cqw 3cqw 0 5.2cqw;
+position:absolute;left:2.5cqw;top:-3.65cqw;height:3.9cqw;min-width:46%;
+background:#dbc9a0;border-radius:1.3cqw 1.3cqw 0 0;
+display:flex;align-items:baseline;gap:1.6cqw;padding:.45cqw 3cqw 0 3.2cqw;
 }
 .nvl-tab-en{
-font-family:Georgia,"Times New Roman",serif;font-weight:700;
-font-size:3.6cqw;letter-spacing:.04em;color:#191919;
+font-family:"job-clarendon",Georgia,serif;font-weight:700;
+font-size:3cqw;letter-spacing:.02em;color:var(--text);
 }
-.nvl-tab-jp{font-size:1.9cqw;font-weight:700;color:#191919}
+.nvl-tab-jp{font-size:1.8cqw;font-weight:700;color:var(--text)}
 .nvl-band{
-position:absolute;left:0;top:0;bottom:0;width:3.1cqw;background:#151515;
+position:absolute;left:0;top:0;bottom:0;width:2.5cqw;background:#151515;
 border-radius:1.6cqw 0 0 1.6cqw;overflow:hidden;
 display:flex;align-items:center;justify-content:center;
 }
 .nvl-band span{
-writing-mode:vertical-rl;color:#fff;font-size:1.45cqw;letter-spacing:.28em;
-white-space:nowrap;font-weight:600;
+writing-mode:vertical-rl;transform:rotate(180deg); /* 実画面どおり下から上へ読む */
+color:#fff;font-family:"18TRIPSansRegular","IBM Plex Sans JP",sans-serif;
+font-size:1.2cqw;letter-spacing:.22em;white-space:nowrap;font-weight:600;
 }
-.nvl-rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.5cqw;height:100%}
+.nvl-rows{
+position:absolute;left:3.7cqw;right:6.4cqw;top:2.6cqw;bottom:0;
+list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.8cqw;
+overflow-y:auto;scrollbar-width:none;
+}
+.nvl-rows::-webkit-scrollbar{display:none}
 .nvl-row{
-position:relative;flex:1;background:#fff;border-radius:1.2cqw;
-display:flex;align-items:center;gap:1.8cqw;padding:.6cqw 2cqw;
-box-shadow:0.3cqw.8cqw rgba(60,50,20,.18);
+position:relative;flex:none;height:7.1cqw;background:var(--paper);border-radius:1.1cqw;
+display:flex;align-items:center;gap:1.8cqw;padding:.5cqw 1.6cqw .5cqw 3.3cqw;
+box-shadow:0.3cqw .8cqw rgba(60,50,20,.18);
+animation:nvlRowIn .45s ease both;
 }
+.nvl-row:nth-child(1){animation-delay:.38s}
+.nvl-row:nth-child(2){animation-delay:.46s}
+.nvl-row:nth-child(3){animation-delay:.54s}
+.nvl-row:nth-child(4){animation-delay:.62s}
+.nvl-row:nth-child(5){animation-delay:.70s}
 .nvl-row[hidden]{display:none}
-.nvl-stamp{width:6.4cqw;height:6.4cqw;flex:none}
+.nvl-stamp{width:4.9cqw;height:4.9cqw;flex:none}
 .nvl-row-main{display:flex;flex-direction:column;min-width:0}
-.nvl-season{font-size:1.75cqw;color:#b07cc6;font-weight:600;letter-spacing:.05em}
-.nvl-row-title{font-size:2.35cqw;font-weight:800;color:#151515;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nvl-season{font-family:"18TRIPSansRegular","IBM Plex Sans JP",sans-serif;font-size:1.1cqw;color:#b07cc6;letter-spacing:.05em}
+.nvl-row-title{font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-size:1.8cqw;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .nvl-checked{
-position:absolute;right:15%;top:50%;transform:translateY(-58%) rotate(-7deg);
-font-family:"Segoe Script","Bradley Hand","Comic Sans MS",cursive;
-font-size:3.1cqw;color:#a8c400;opacity:.92;pointer-events:none;
+position:absolute;right:13%;top:50%;transform:translateY(-55%) rotate(-9deg);
+font-family:"Segoe Script","Bradley Hand","Comic Sans MS",cursive; /* スクリプト系フォント資産が無いため cursive フォールバック */
+font-size:3.4cqw;color:#a8c400;opacity:.92;pointer-events:none;
 text-decoration:underline;text-underline-offset:.4cqw;text-decoration-thickness:.28cqw;
 }
-.nvl-row-side{margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:.5cqw;flex:none}
-.nvl-fav{width:4.5cqw;height:4.5cqw}
+.nvl-row-side{margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:.45cqw;flex:none}
+.nvl-fav{width:4.6cqw;height:4.6cqw;animation:favFloat 9s ease-in-out infinite alternate}
+.nvl-row:nth-child(2) .nvl-fav{animation-duration:11s;animation-delay:-4s}
+.nvl-row:nth-child(3) .nvl-fav{animation-duration:8s;animation-delay:-2s}
+.nvl-row:nth-child(4) .nvl-fav{animation-duration:12s;animation-delay:-6s}
+.nvl-row:nth-child(5) .nvl-fav{animation-duration:10s;animation-delay:-3s}
 .nvl-detail{
-border:.28cqw solid #333;background:#fff;color:#151515;cursor:pointer;
-font-size:1.7cqw;font-weight:700;border-radius:.7cqw;padding:.45cqw 1.7cqw;font-family:inherit;
+border:.24cqw solid #333;background:var(--paper);color:#151515;cursor:pointer;
+font-size:1.35cqw;font-weight:700;border-radius:.7cqw;padding:.4cqw 1.5cqw;font-family:inherit;
 }
-.nvl-detail:hover{background:#c8ff46}
+.nvl-detail:hover{background:var(--accent)}
 .nvl-scroll{
-position:absolute;right:.9cqw;top:6%;height:88%;width:1.5cqw;
+position:absolute;right:3.6cqw;top:2.6cqw;bottom:2cqw;width:1.1cqw;
 background:#151515;border-radius:99px;
 }
 
@@ -137,6 +241,7 @@ position:fixed;inset:0;z-index:200;background:rgba(28,28,38,.58);
 display:none;align-items:center;justify-content:center;padding:1rem;
 }
 .nvl-modal.open{display:flex}
+.nvl-modal.open .nvl-cassette{animation:nvlCassIn .35s ease both}
 .nvl-cassette{
 display:flex;width:min(700px,94vw);background:#f2edd8;border-radius:10px;
 transform:rotate(-1.1deg);box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;
@@ -144,15 +249,15 @@ font-family:"18TRIPSansMedium","IBM Plex Sans JP",sans-serif;
 }
 .nvl-spine{
 flex:0 0 15%;background:#141414;color:#fff;display:flex;flex-direction:column;
-align-items:center;padding:1rem.3rem.8rem;gap:.55rem;text-align:center;
+align-items:center;padding:1rem .3rem .8rem;gap:.55rem;text-align:center;
 }
-.nvl-spine.tr{font-size:.62rem;letter-spacing:.34em;color:#ddd}
-.nvl-spine.no{font-size:2rem;font-weight:800;line-height:1;font-stretch:condensed}
-.nvl-spine.dots{display:flex;flex-direction:column;gap:.34rem;margin:.3rem 0}
-.nvl-spine.dots i{width:9px;height:9px;border-radius:50%;border:1.6px solid #eee;display:block}
-.nvl-spine.fav{width:44px;height:44px}
-.nvl-spine.tours{margin-top:auto;font-size:.56rem;letter-spacing:.22em;color:#bbb;line-height:1.7}
-.nvl-cbody{flex:1;padding:1rem 1.1rem.9rem;position:relative}
+.nvl-spine .tr{font-family:"18TRIPSansRegular","IBM Plex Sans JP",sans-serif;font-size:.62rem;letter-spacing:.34em;color:#ddd}
+.nvl-spine .no{font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-size:2rem;line-height:1}
+.nvl-spine .dots{display:flex;flex-direction:column;gap:.34rem;margin:.3rem 0}
+.nvl-spine .dots i{width:9px;height:9px;border-radius:50%;border:1.6px solid #eee;display:block}
+.nvl-spine .fav{width:44px;height:44px}
+.nvl-spine .tours{margin-top:auto;font-size:.56rem;letter-spacing:.22em;color:#bbb;line-height:1.7}
+.nvl-cbody{flex:1;padding:1rem 1.1rem .9rem;position:relative}
 .nvl-cbody::before{
 content:"";position:absolute;top:.45rem;left:8%;right:8%;height:.5rem;
 background:repeating-linear-gradient(90deg,#222 0 3px,transparent 3px 12px);opacity:.75;
@@ -160,12 +265,12 @@ background:repeating-linear-gradient(90deg,#222 0 3px,transparent 3px 12px);opac
 .nvl-field{margin-top:.85rem}
 .nvl-field:first-of-type{margin-top:1rem}
 .nvl-label{
-display:inline-block;background:#141414;color:#c8ff46;font-size:.64rem;font-weight:800;
-letter-spacing:.22em;padding:.18rem.6rem;margin-bottom:.3rem;
+display:inline-block;background:#141414;color:var(--accent);font-size:.64rem;font-weight:800;
+letter-spacing:.22em;padding:.18rem .6rem;margin-bottom:.3rem;
 }
 .nvl-field p{margin:0;font-size:.92rem;font-weight:700;color:#191919}
-.nvl-field.syn{font-size:.78rem;font-weight:500;color:#3c3c34;line-height:1.65}
-.nvl-cwin{display:flex;align-items:center;justify-content:center;padding:.4rem 0.2rem}
+.nvl-field .syn{font-size:.78rem;font-weight:500;color:#3c3c34;line-height:1.65}
+.nvl-cwin{display:flex;align-items:center;justify-content:center;padding:.4rem 0 .2rem}
 .nvl-cwin svg{width:min(300px,58vw);height:auto}
 .nvl-cbtns{display:flex;gap:.55rem;justify-content:flex-end;margin-top:.7rem}
 .nvl-cbtns button,.nvl-cbtns a{
@@ -173,9 +278,14 @@ width:52px;height:44px;border-radius:8px;border:2px solid #222;background:#fff;
 font-size:1rem;font-weight:800;cursor:pointer;display:grid;place-items:center;
 color:#151515;text-decoration:none;font-family:inherit;
 }
-.nvl-cbtns.play{background:#c8ff46}
+.nvl-cbtns .play{background:var(--accent)}
 .nvl-cbtns button:disabled{opacity:.35;cursor:default}
 .nvl-close{
 position:absolute;top:.6rem;right:.7rem;border:0;background:none;font-size:1.3rem;
 cursor:pointer;color:#333;line-height:1;
+}
+
+@media (prefers-reduced-motion: reduce){
+.nvl-topbar,.nvl-chara,.nvl-panel,.nvl-row,.nvl-pin,
+.nvl-pin .nv-v,.nvl-pin .nv-h,.nvl-fav,.nvl-modal.open .nvl-cassette{animation:none}
 }
