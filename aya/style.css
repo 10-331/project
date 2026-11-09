@@ -1,0 +1,84 @@
+html, body{
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  overflow-x: hidden;
+}
+
+/* ===== 元CSSへの微調整 =====
+   2026-11-07: 公式（18TRIP）レイアウトの「まんま再現」のため、
+   位置の手調整（device--top / device--button / device--visual /
+   device--prof / device--card / copy-area）と
+   ボタンの背景上書き（_off画像の強制・SPでのimg非表示）は外した。
+   items--16 の位置調整は本人の指定位置のため、下記に復旧している。
+   character.css 側の座標が公式と一致していることを確認済みで、
+   位置はそちらに一本化する。 */
+
+
+/* Zoom（このページ独自のモーダル用） */
+.zoom--bg{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.72);
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s ease;
+  z-index: 9998;
+}
+
+.zoom{
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: .25s ease;
+  z-index: 9999;
+}
+
+.zoom.is-open,
+.zoom--bg.is-open{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.zoom__visual{
+  margin: 0;
+  width: min(92vw, 680px);
+}
+
+.zoom__visual img{
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.zoom__close{
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #fff;
+  color: #111;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.menu-overlay[hidden] {
+  display: none !important;
+}
+
+/* 浮遊アイテム items--16 の位置（本人の調整を復旧：2026-11-07） */
+@media screen and (max-width: 768px){
+  .items--16{
+    top: 28%;   /* 下げる */
+    left: 16%;  /* 右に寄せる */
+  }
+}

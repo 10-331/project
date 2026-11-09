@@ -388,3 +388,16 @@ story.html（縦基準・`.page` 最大720px）から切り離し、独立した
   （並行して進行中の GitHub 反映フローとの整合のため、削除はしない）。
   現行の実装は novel.html ＋ novel.css。
 - GitHub 側 `aya/` への反映は今回の対象外（別途進行中の反映フローで扱う）。
+
+## §13 キャラページを公式保存HTML版（test.html）へ置き換え（2026-11-09 追加）
+
+- 方針：ユーザーの評価（「キャラクター紹介とかハンバーガーメニューとか、むしろこっちの方が忠実でクオリティ高い」）を受け、`character.html` を project リポジトリの `test.html`（公式保存HTML＋公式CSS保存版＋公式JS一式）そのままの実装に置き換えた。
+- 取り込み内容：リポジトリ `shared/` 全146ファイル（Git Data API で blob ハッシュ全件検証済み）を `site/shared/` に配置。`test.html` 本体は `site/character.html` に、`style.css`（上書きCSS）は `site/style.css` に配置。
+- リポジトリ側に無く、CSS が参照している不足分を既存の公式アセット保管分から補完（いずれも公式から取得した同一ファイル）：
+  - フォント8点（18TRIPSans Bold／Light／Regular の woff＋woff2、Medium.woff、Funny-Medium.woff）を `assets/fonts/` から `shared/fonts/` へ。
+  - 画像6点（device_btn_movie_off／device_btn_voice_hidden（＋_sp）／device_btn_zoom_hidden（＋_sp）／common の icon_pin）を `assets/official/` から改名して `shared/img/` へ。
+- 接続のための変更はゼロ：`test.html` 内のリンクは元々 `./index.html`（サイトTOP）と `./character.html`（自己）で、サイト内相対パスで完結していた。見た目・構造・ハンバーガーメニューの挙動は公式保存版のまま無変更。
+- 残る既知の欠落は `shared/js/plugins/jquery-3.7.1.min.js` のみ（jQuery の CDN フォールバック用。リポジトリにも存在せず、公開中の test.html も同じ状態。本体は Google CDN から読むため表示には影響しない）。
+- 画像スロットの現状：SP版（prof／visual／card）は綾版、zoom は綾の全身絵（2743×3658）。**PC版 card／prof／visual は添の公式画像のまま**（勝手に差し替えない方針）。
+- VOICE ボタンはリポジトリ版時点で `href="#"` に無効化されており、音声再生は元々動作しない状態（公式JSは `/shared/sound/` の絶対パス前提）。
+- 退避：従来の自作版は `character-legacy.html` に改名して残置（サイトの導線からは外れた。`assets/character.css` は legacy 用にそのまま保持）。

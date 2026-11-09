@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHARACTER ✈ 笹井綾</title>
+<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/character.css">
+</head>
+<body>
+<div class="chara-page">
+
+<header class="site-header">
+<a class="logo" href="index.html">AYA TRIP<small>SASAI AYA ARCHIVE</small></a>
+<nav class="globalnav">
+<a href="index.html">TOP</a>
+<a href="character.html" aria-current="page">CHARACTER</a>
+<a href="story.html">STORY</a>
+<a href="terms.html">TERMS</a>
+</nav>
+</header>
+
+<div class="ticker">
+<span id="ticker-clock">----.--.--</span>
+<span class="place">[HAMA]</span>
+<span>#HAMA NICE TRIP</span>
+</div>
+
+<!-- ============================================================
+笹井綾 キャラページ（当サイトのオリジナルキャラ）
+レイアウトは公式キャラページ（ten.html レプリカで実測した方式）と同一。
+2026-11-09：GitHub project リポジトリの test.html を精査し、綾の実画像を統合した。
+  - SP：prof／visual／card は Git版の綾画像（assets/aya/）を使用
+    （Git版 test.html は SP スロットだけ綾に差し替えた作りだった）
+  - PC：prof は HTML 描画のまま（Git版 PC prof は添の公式画像だったため不採用）、
+    card はプレースホルダのまま（Git版 PC card も添のため不採用。判断待ちとして記録）
+  - visual は SP画像を PC にも流用、zoom は Git版 zoom スロットの全身絵
+    （aya-fullbody.png）から公式キャンバス 695×1500 を生成して使用
+VOICE は音声ファイルが存在しないため「セリフ表示のみ」
+（音声のある公式キャラ＝添とは扱いが違う。理由は下部JSコメント参照）。
+============================================================ -->
+<div class="chara-wrap chara-wrap--aya" id="charaWrap">
+
+<div class="chara-name">
+<h2 class="name__team">✈✈✈ CHARACTER ✈✈✈</h2>
+<h3 class="name__member"><span class="member--pc"><span>AYA</span><span>SASAI</span></span><span class="member--sp"><span>AYA SASAI</span></span></h3>
+</div>
+
+<section class="chara-detail">
+<div class="chara-device" id="detailDevice">
+<div class="chara-device__inner">
+<p class="device--bottom"><img src="assets/official/character_device_bottom.png" width="1329" height="945" alt=""></p>
+<p class="device--top">
+<picture>
+<source srcset="assets/ten/device_top_sp.png" media="(max-width: 768px)"><img src="assets/official/character_device_top.png" width="1329" height="945" alt="">
+</picture>
+</p>
+<p class="device--lcd">
+<picture>
+<source srcset="assets/ten/device_lcd_sp.png" media="(max-width: 768px)"><img src="assets/official/character_device_lcd.png" width="635" height="659" alt="">
+</picture>
+</p>
+<p class="device--light"><img src="assets/official/character_device_lcd_light.png" width="597" height="538" alt=""></p>
+<p class="device--grid">
+<picture>
+<source srcset="assets/ten/device_lcd_grid_sp.png" media="(max-width: 768px)"><img src="assets/official/character_device_lcd_grid.png" width="635" height="659" alt="">
+</picture>
+</p>
+<div class="device--button">
+<ul>
+<li class="device--button__zoom"><a href="#" id="charaZoomBtn">
+<picture>
+<source srcset="assets/official/character_device_btn_zoom_on_sp.png" media="(max-width: 768px)"><img src="assets/official/character_device_btn_zoom_on.png" width="128" height="145" alt="ZOOM">
+</picture></a></li>
+<li class="device--button__voice" id="charaVoiceBtnWrap"><a href="#" id="charaVoiceBtn">
+<picture>
+<source srcset="assets/official/character_device_btn_voice_on_sp.png" media="(max-width: 768px)"><img src="assets/official/character_device_btn_voice_on.png" width="128" height="145" alt="VOICE">
+</picture></a></li>
+<li class="device--button__movie is--hidden"><a href="#">
+<picture>
+<source srcset="assets/official/character_device_btn_movie_on_sp.png" media="(max-width: 768px)"><img src="assets/official/character_device_btn_movie_on.png" width="128" height="145" alt="MOVIE">
+</picture></a></li>
+</ul>
+</div>
+<div class="device--card">
+<!-- SP は Git版の綾 card 画像（626×140、カセットラベル部 AZ5402 AS092032）。
+     PC は綾版が存在しないためプレースホルダのまま（SP では CSS で切替） -->
+<img class="card-img--sp" src="assets/aya/aya-card-sp.png" width="626" height="140" alt="AZ5402 AS092032">
+<div class="chara-ph chara-ph--card"><p><b>CARD</b>素材待ち<br>1026 × 769</p></div>
+</div>
+<div class="device--prof">
+<!-- prof：PC は prof 画像の器（1055×1042）に
+     正本（canon-aya-draft.md §1・§2・§13・§14）のデータを HTML で流し込む。
+     SP は Git版の綾 prof 画像（703×976、焼き込みシート）を使う -->
+<picture class="prof-img"><img src="assets/aya/aya-prof-sp.png" width="703" height="976" alt="笹井綾 プロフィール"></picture>
+<div class="prof-sheet">
+<p class="prof-catch">今がすべての<br>方向音痴なムードメーカー</p>
+<h4 class="prof-name">笹井 綾<span>SASAI AYA</span></h4>
+<p class="prof-hash">#溶けてそのまま雲隠れ</p>
+<dl class="prof-list prof-list--half">
+<div><dt>年齢</dt><dd>22歳</dd></div>
+<div><dt>誕生日</dt><dd>9月20日</dd></div>
+<div><dt>身長</dt><dd>145cm</dd></div>
+<div><dt>血液型</dt><dd>A型</dd></div>
+</dl>
+<dl class="prof-list">
+<div><dt>職業</dt><dd>エンジニア（2055年1月転職）</dd></div>
+<div><dt>出身</dt><dd>■■村（関西地方・山間部）</dd></div>
+<div><dt>現住所</dt><dd>HAMA（2054年冬に移住）</dd></div>
+<div><dt>好き</dt><dd>珈琲の「苦さ」／月1のフレンチトースト</dd></div>
+<div><dt>備考</dt><dd>極度の方向音痴。左目の下のホクロはメイクで描いたもの。手のひらが温かい体質</dd></div>
+</dl>
+<p class="prof-foot">2055年現在。表向きの経歴と本当の経歴については STORY へ。</p>
+</div>
+</div>
+<div class="device--visual">
+<p><img class="visual-img" src="assets/aya/aya-visual-sp.png" width="755" height="719" alt="笹井綾 ビジュアル"></p>
+</div>
+<p class="device--prev"><a href="ten.html"><span>BACK</span></a></p>
+<p class="device--next"><a href="character-filler.html"><span>NEXT</span></a></p>
+</div>
+</div>
+<p class="chara-voice-line" id="charaVoiceLine"><b>AYA</b>「はじめまして〜笹井綾です。仲良くしてくれると嬉しいなあ」</p>
+</section>
+
+<section class="chara-localnav">
+<div id="localnavBg"></div>
+<div class="localnav__head">
+<p class="head--member">MENBER</p>
+<p class="head--team">✈✈✈ SASAI AYA ARCHIVE ✈✈✈</p>
+</div>
+<div class="localnav__block">
+<ul>
+<li class="is--current"><a href="character.html"><span><i class="nav-emoji">🍨</i><i class="nav-name">綾</i></span></a></li>
+<li><a href="character-filler.html"><span><i class="nav-emoji">🫧</i><i class="nav-name">フィラー</i></span></a></li>
+<li><a href="ten.html"><span><i class="nav-emoji">☁️</i><i class="nav-name">添</i></span></a></li>
+</ul>
+</div>
+</section>
+
+</div><!-- /.chara-wrap -->
+
+<footer class="site-footer">
+<nav>
+<a href="index.html">TOP</a><a href="character.html">CHARACTER</a>
+<a href="story.html">STORY</a><a href="terms.html">TERMS</a>
+<a href="event-camelia.html">EVENT</a>
+</nav>
+<p>非公式ファンアーカイブ ／ 18TRIP © Liber Entertainment Inc.</p>
+</footer>
+
+</div>
+
+<div class="chara-zoom-bg" id="charaZoomBg"></div>
+<div class="chara-zoom" id="charaZoom">
+<div class="zoom__visual"><img src="assets/aya/aya-zoom.png" width="695" height="1500" alt="笹井綾 全身"></div>
+</div>
+
+<script src="assets/site.js"></script>
+<script>
+/* 笹井綾ページ専用JS（ten.html の方式を流用） */
+(function(){
+  /* ---- VOICE：綾はオリジナルキャラで音声ファイルが存在しないため、
+     公式の音声再生ではなく「セリフ表示のみ」とする。
+     セリフは正本 canon-aya-draft.md §11 の表トークサンプルから採用。
+     音声素材が将来用意できたら ten.html と同じ Audio 再生に差し替える。 ---- */
+  var voiceBtn=document.getElementById('charaVoiceBtn');
+  var voiceWrap=document.getElementById('charaVoiceBtnWrap');
+  var line=document.getElementById('charaVoiceLine');
+  voiceBtn.addEventListener('click',function(e){
+    e.preventDefault();
+    var on=line.classList.toggle('is--show');
+    voiceWrap.classList.toggle('is--on',on);
+  });
+
+  /* ---- ZOOM：全面オーバーレイで zoom 枠を表示し、クリックで閉じる（公式と同挙動） ---- */
+  var zoom=document.getElementById('charaZoom'), zoomBg=document.getElementById('charaZoomBg');
+  document.getElementById('charaZoomBtn').addEventListener('click',function(e){
+    e.preventDefault(); zoom.classList.add('is--open'); zoomBg.classList.add('is--open');
+  });
+  function closeZoom(){ zoom.classList.remove('is--open'); zoomBg.classList.remove('is--open'); }
+  zoom.addEventListener('click',closeZoom); zoomBg.addEventListener('click',closeZoom);
+
+  /* ---- デバイス拡縮：ten.html の幅フィット版 fit() と同一方式
+     （scale・margin-left・top を同率拡縮し、BACK/NEXT を含む
+     フットプリント 1522 幅が画面内に収まるよう横シフトでクランプ） ---- */
+  var device=document.getElementById('detailDevice');
+  var detail=device.closest('.chara-detail');
+  function fit(){
+    if(window.innerWidth<=768){ device.style.transform=''; device.style.marginLeft=''; device.style.top=''; return; }
+    var W=detail.clientWidth;
+    var s=Math.min(1, W/1520, (W-8)/1522);
+    var lo=962*s - W/2 + 4;
+    var hi=W/2 - 560*s - 4;
+    var shift=0;
+    if(lo>0) shift=Math.min(lo, Math.max(hi,0));
+    device.style.transform='translateX(-50%) scale('+s+')';
+    device.style.marginLeft=(-222*s + shift)+'px';
+    device.style.top=(55*s)+'px';
+  }
+  window.addEventListener('resize',fit); fit();
+})();
+</script>
+</body>
+</html>
