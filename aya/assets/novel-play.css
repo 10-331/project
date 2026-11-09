@@ -148,7 +148,7 @@ font-family:"18TRIPSansBold",var(--np-ui);
 /* ============ 再生フェイズ ============ */
 .np-reader{position:fixed;inset:0;z-index:40}
 .np-scroll{
-height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
+height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;overflow-anchor:none;
 background:
 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"),
 radial-gradient(130% 100% at 50% 0%,#fdfaf1 0%,var(--np-paper) 55%,#f1ecd9 100%);
@@ -188,7 +188,8 @@ box-shadow:0 2px 8px rgba(0,0,0,.25);
 /* メニューバー（上部に展開。有効状態はライムピル） */
 .np-menubar{
 position:fixed;top:0;left:0;right:0;z-index:80;
-background:rgba(255,255,255,.97);border-bottom:1.5px solid var(--ink);
+background:#fff; /* 背後の本文が透けないよう完全不透明（旧 rgba .97 から変更） */
+border-bottom:1.5px solid var(--ink);box-shadow:0 2px 10px rgba(0,0,0,.14);
 display:flex;flex-wrap:wrap;gap:2px;padding:8px 52px 8px 8px;
 }
 .np-menubar button{
@@ -246,22 +247,28 @@ display:flex;gap:10px;
 
 /* ============ ログ（ダークスレート） ============ */
 .np-log{position:fixed;inset:0;z-index:120;background:var(--np-slate)}
-.np-log-scroll{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.np-log-scroll{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;overflow-anchor:none}
 .np-log-list{max-width:680px;margin:0 auto;padding:64px 20px 18vh}
+/* エントリは通常の文書フロー（flex行）で積む。絶対配置・負マージンで
+   詰めないため、エントリ同士・本文とハートが構造的に重ならない */
 .np-log-entry{
-position:relative;padding:16px 44px 16px 2px;
+display:flex;align-items:flex-end;gap:14px;
+padding:16px 2px;
 border-bottom:1px solid rgba(255,255,255,.28);
 }
 .np-log-text{
+flex:1;min-width:0;
 margin:0;color:#fff;font-family:var(--np-mincho);
 font-size:15px;line-height:1.95;letter-spacing:.02em;white-space:pre-wrap;word-break:break-all;
 }
 .np-heart{
-position:absolute;right:0;bottom:12px;width:34px;height:34px;
+flex:none;width:34px;height:34px;
 border:none;border-radius:50%;background:#fff;padding:0;
 display:flex;align-items:center;justify-content:center;
 box-shadow:0 2px 6px rgba(0,0,0,.3);
 }
+/* ログ内の透かしスタンプは本文に重なるため出さない（リーダー側のみ） */
+.np-log .np-stamps{display:none}
 .np-heart svg{width:19px;height:19px;fill:#b9bec4}
 .np-heart.on svg{fill:var(--np-heart)}
 .np-log-close{

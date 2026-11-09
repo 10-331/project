@@ -23,7 +23,9 @@ if(!DATA){ location.replace("novel.html"); return; }
 var blocks=DATA.blocks, TOTAL=blocks.length;
 
 var settings=lsGet(LS.settings,{speed:"normal",font:"normal"});
-var SPEED_MS={slow:48,normal:30,fast:17};
+/* 文字送り速度（1文字あたりms）。2026-11-09 実機FB「全体に食い気味で速い」を受けて
+   旧値 {slow:48,normal:30,fast:17} から全体に約1.9倍へ落とした */
+var SPEED_MS={slow:90,normal:55,fast:32};
 
 /* ---------- 要素 ---------- */
 function $(id){ return document.getElementById(id); }
@@ -41,7 +43,7 @@ document.title="「笹井綾」について ✈ "+DATA.no+" "+DATA.title;
 /* ---------- 状態 ---------- */
 var started=false, finished=false;
 var els=[], curIdx=-1;           // els[i] = 表示済みブロック要素
-var typing=null;                 // {el,text,pos,timer}
+var typing=null;                 // {el,text,pos,acc,timer} 単一tickerが唯一の書き手
 var autoMode=false, ffRate=0, uiHidden=false;
 var pendingTimer=null;           // AUTO／早送りの次ブロック予約
 
@@ -67,7 +69,7 @@ function enterReader(fromIdx){
   blackout(function(){
     cover.hidden=true; reader.hidden=false;
     for(var i=0;i<fromIdx;i++) appendBlock(i,true);
-    if(fromIdx>0){ curIdx=fromIdx-1; scrollToBlock(curIdx,false); showNext(true); }
+    if(fromIdx>0){ curIdx=fromIdx-1; scrollToBlock(curIdx); showNext(true); }
     else startBlock(0);
   });
 }
@@ -89,25 +91,43 @@ function appendBlock(i,instant){
 }
 function startBlock(i){
   hideNext();
+  followPause=false;
   var el=appendBlock(i,false);
   curIdx=i;
-  scrollToBlock(i,true);
+  /* 直列化：ブロック追加 → スクロール即時確定 → タイピング開始。
+     スクロールはアニメーションさせず scrollTop を直接指定して
+     タイピングの描画と同じフレームで確定させる。旧実装は smooth
+     スクロールのアニメーション中にタイピングが走り、iOS Safari の
+     再描画と競合して文字が重なって見えた（実機FB 2026-11-09） */
+  scrollToBlock(i);
   runTyping(el,blocks[i]);
+}
+/* タイピングは単一 ticker（40ms周期）が唯一の書き手。
+   速度は「文字/秒」で持ち、設定速度と早送り倍率を毎tick読むため、
+   再生中の速度変更・倍率変更は打ち直しなしで即時反映される。
+   追記は対象ブロック（typing.el）に対してのみ行う */
+var TICK_MS=40;
+function charsPerTick(){
+  var cps=1000/(SPEED_MS[settings.speed]||55);
+  if(ffRate>0) cps*=ffRate;
+  return cps*TICK_MS/1000;
 }
 function runTyping(el,text){
   stopTyping();
-  var pos=0;
-  var timer=setInterval(function(){
-    var step, done=false;
-    if(ffRate>0){ step=Math.max(1,Math.round(ffRate/2)); }
-    else step=1;
-    pos+=step;
-    if(pos>=text.length){ pos=text.length; done=true; }
-    el.textContent=text.slice(0,pos);
-    if(pos%12===0) scrollToBlock(curIdx,true);
-    if(done){ stopTyping(); onBlockDone(); }
-  }, ffRate>0?16:(SPEED_MS[settings.speed]||30));
-  typing={el:el,text:text,timer:timer};
+  typing={el:el,text:text,pos:0,acc:0,timer:setInterval(typeTick,TICK_MS)};
+}
+function typeTick(){
+  if(!typing) return;
+  typing.acc+=charsPerTick();
+  var step=Math.floor(typing.acc);
+  if(step<1) return;
+  typing.acc-=step;
+  typing.pos+=step;
+  var done=false;
+  if(typing.pos>=typing.text.length){ typing.pos=typing.text.length; done=true; }
+  typing.el.textContent=typing.text.slice(0,typing.pos);
+  followScroll(); /* 文字の追記とスクロール確定を同一tick内で行い、描画を1回に揃える */
+  if(done){ stopTyping(); onBlockDone(); }
 }
 function stopTyping(){ if(typing){ clearInterval(typing.timer); typing=null; } }
 function completeTyping(){
@@ -117,11 +137,13 @@ function completeTyping(){
   onBlockDone();
 }
 function onBlockDone(){
-  scrollToBlock(curIdx,true);
+  followScroll();
   if(curIdx>=TOTAL-1){ endPhase(); return; }
   showNext(true);
-  if(ffRate>0){ clearPending(); pendingTimer=setTimeout(function(){ advance(); },110); }
-  else if(autoMode){ clearPending(); pendingTimer=setTimeout(function(){ advance(); }, 800+Math.min(1600, blocks[curIdx].length*14)); }
+  /* 次ブロックまでの間：早送り時は固定350ms、AUTO時は
+     「固定1200ms＋文字数比例（25ms/字・上限3000ms）」の読み時間を置く */
+  if(ffRate>0){ clearPending(); pendingTimer=setTimeout(function(){ advance(); },350); }
+  else if(autoMode){ clearPending(); pendingTimer=setTimeout(function(){ advance(); }, 1200+Math.min(3000, blocks[curIdx].length*25)); }
 }
 function advance(){
   clearPending();
@@ -130,10 +152,24 @@ function advance(){
   if(curIdx+1>=TOTAL){ endPhase(); return; }
   startBlock(curIdx+1);
 }
-function scrollToBlock(i,smooth){
+/* スクロールは全て scrollTop の直接指定（アニメーションなし）。
+   ユーザーが自分でスクロールした間は追随を止める（followPause） */
+var followPause=false;
+scrollEl.addEventListener("wheel",function(){ followPause=true; },{passive:true});
+scrollEl.addEventListener("touchmove",function(){ followPause=true; },{passive:true});
+function scrollToBlock(i){
   var el=els[i]; if(!el) return;
-  var y=el.offsetTop-70;
-  scrollEl.scrollTo({top:y,behavior:smooth?"smooth":"auto"});
+  scrollEl.scrollTop=Math.max(0,el.offsetTop-70);
+}
+/* タイピング中：現在のブロックの末尾が画面外に出た時だけ、
+   末尾が見える位置まで即時スクロールする */
+function followScroll(){
+  if(followPause) return;
+  var el=els[curIdx]; if(!el) return;
+  var vh=scrollEl.clientHeight;
+  var target=Math.max(el.offsetTop-70, el.offsetTop+el.offsetHeight-vh+56);
+  if(target<0) target=0;
+  if(Math.abs(scrollEl.scrollTop-target)>1) scrollEl.scrollTop=target;
 }
 function showNext(v){ nextPin.classList.toggle("show",!!v); }
 function hideNext(){ showNext(false); }
@@ -192,7 +228,7 @@ function setUiHidden(v){
 function setAuto(v){
   autoMode=v; markActive("auto",v);
   if(v && !typing && !finished && curIdx>=0 && curIdx<TOTAL-1){
-    clearPending(); pendingTimer=setTimeout(function(){ advance(); },600);
+    clearPending(); pendingTimer=setTimeout(function(){ advance(); },900);
   }
   if(!v) clearPending();
 }
@@ -202,22 +238,15 @@ function setFf(rate){
     b.classList.toggle("active",+b.getAttribute("data-rate")===rate);
   });
   markActive("ff",rate>0);
-  if(typing){ // 速度を即時反映するため現在のブロックを打ち直す
-    var el=typing.el, text=typing.text, pos=el.textContent.length;
-    stopTyping();
-    var t=setInterval(function(){
-      var step=rate>0?Math.max(1,Math.round(rate/2)):1;
-      pos+=step;
-      if(pos>=text.length){ pos=text.length; el.textContent=text; stopTypingSafe(t); onBlockDone(); return; }
-      el.textContent=text.slice(0,pos);
-    }, rate>0?16:(SPEED_MS[settings.speed]||30));
-    typing={el:el,text:text,timer:t};
-  } else if(rate>0 && !finished && curIdx>=0 && curIdx<TOTAL-1){
-    clearPending(); pendingTimer=setTimeout(function(){ advance(); },110);
+  /* タイピング中は ticker が毎tick倍率を読むため、打ち直しなしで即時反映される。
+     タイピング間隔とブロック間の間（onBlockDone）の両方に同じ倍率の考え方を適用 */
+  if(!typing){
+    clearPending();
+    if(rate>0 && !finished && curIdx>=0 && curIdx<TOTAL-1){
+      pendingTimer=setTimeout(function(){ advance(); },350);
+    }
   }
-  if(rate===0) clearPending();
 }
-function stopTypingSafe(t){ clearInterval(t); if(typing&&typing.timer===t) typing=null; }
 
 menubar.addEventListener("click",function(e){
   var b=e.target.closest("[data-menu]"); if(!b) return;
@@ -268,7 +297,7 @@ function doSkip(){
     else els[i].textContent=blocks[i];
   }
   curIdx=TOTAL-1;
-  scrollToBlock(curIdx,true);
+  scrollToBlock(curIdx);
   endPhase();
 }
 
@@ -338,13 +367,7 @@ function syncEtc(){
 $("npSpeedOpts").addEventListener("click",function(e){
   var b=e.target.closest("[data-speed]"); if(!b) return;
   settings.speed=b.getAttribute("data-speed"); lsSet(LS.settings,settings); syncEtc();
-  if(typing){ var el=typing.el,text=typing.text; var pos=el.textContent.length; stopTyping();
-    typing={el:el,text:text,timer:setInterval(function(){
-      pos+=1;
-      if(pos>=text.length){ el.textContent=text; stopTyping(); onBlockDone(); return; }
-      el.textContent=text.slice(0,pos);
-    }, SPEED_MS[settings.speed]||30)};
-  }
+  /* タイピング中でも ticker が毎tick速度を読むため、打ち直しなしで即時反映される */
 });
 $("npFontOpts").addEventListener("click",function(e){
   var b=e.target.closest("[data-font]"); if(!b) return;

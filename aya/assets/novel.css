@@ -106,7 +106,7 @@ letter-spacing:.08em;text-align:center;padding:0 1rem;
 .nvl-topbar{
 position:absolute;left:0;right:0;top:0;height:5.5cqw;
 background:rgba(198,199,193,.92);display:flex;align-items:center;
-gap:2.2cqw;padding:0 0 0 2.2cqw;z-index:5;
+gap:1.6cqw;padding:0 0 0 2.2cqw;z-index:5;
 animation:nvlBarIn .45s ease both;
 }
 .nvl-back{
@@ -116,8 +116,8 @@ font-size:1.55cqw;letter-spacing:.14em;padding:.6cqw 2.2cqw .6cqw 1.4cqw;
 border-radius:.7cqw;box-shadow:0 1px 3px rgba(0,0,0,.25);white-space:nowrap;
 }
 .nvl-title{font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;color:var(--text);font-size:2.2cqw;letter-spacing:.06em;white-space:nowrap}
-.nvl-tools{margin-left:auto;display:flex;align-items:center;gap:2cqw}
-.nvl-toggle{display:flex;align-items:center;gap:.9cqw;font-size:1.5cqw;font-weight:700;color:var(--text);white-space:nowrap}
+.nvl-tools{margin-left:auto;display:flex;align-items:center;gap:1.4cqw}
+.nvl-toggle{display:flex;align-items:center;gap:.7cqw;font-size:1.4cqw;font-weight:700;color:var(--text);white-space:nowrap}
 .tgl{
 display:inline-flex;align-items:center;gap:.7cqw;border:0;cursor:pointer;
 background:#6f7069;color:#fff;border-radius:99px;padding:.4cqw 1.3cqw .4cqw .4cqw;
@@ -130,12 +130,13 @@ box-shadow:0 0 0.45cqw #d8d8d2 inset;transition:transform.18s;
 .tgl[aria-pressed="true"]{background:var(--accent);color:var(--ink)}
 .tgl[aria-pressed="true"] i{transform:translateX(1.1cqw);box-shadow:none;background:var(--ink)}
 .nvl-ic{
-width:3.6cqw;height:3.6cqw;display:grid;place-items:center;color:var(--text);
-font-size:2.9cqw;line-height:1;text-decoration:none;
+width:3.3cqw;height:3.3cqw;display:grid;place-items:center;color:var(--text);
+font-size:2.6cqw;line-height:1;text-decoration:none;
 }
-/* 右端の黒正方形ハンバーガー（実画面どおり角に flush、見た目のみ） */
+/* 右端の黒正方形ハンバーガー（実画面どおり角に flush、見た目のみ）。
+   高さはバー高（5.5cqw）に一致させ、バー下へはみ出さない */
 .nvl-burger{
-flex:none;align-self:flex-start;width:6.2cqw;height:6cqw;margin-left:.4cqw;
+flex:none;align-self:flex-start;width:6.2cqw;height:5.5cqw;margin-left:.4cqw;
 background:#141414;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;
 }
 .nvl-burger i{display:block;width:3.1cqw;height:.4cqw;background:#fff;border-radius:99px}
@@ -165,20 +166,20 @@ animation:nvlCharaIn .7s ease-out .1s both;
 /* ---- フォルダ型パネル（レイヤー3：立ち絵より手前。
    実測：x 37.6〜90.8%、上端 20.5%H、下端は画面外） ---- */
 .nvl-panel{
-position:absolute;left:37.6%;right:9.2%;top:20.5%;bottom:0;z-index:3;
+position:absolute;left:37.6%;right:9.2%;top:21%;bottom:0;z-index:3; /* 上端は実測20.5%から僅かに下げ、上部バー／タブとの間隔を確保（2026-11-09 実機FB） */
 background:#dbc9a0;border-radius:1.6cqw;
 box-shadow:0.8cqw 2.4cqw rgba(60,50,20,.25);
 transform-origin:0 50%;
 animation:nvlPanelIn .6s cubic-bezier(.63,0,.33,1) .15s both;
 }
 .nvl-tab{
-position:absolute;left:2.5cqw;top:-3.65cqw;height:3.9cqw;min-width:46%;
+position:absolute;left:2.5cqw;top:-3.4cqw;height:3.7cqw;min-width:46%;
 background:#dbc9a0;border-radius:1.3cqw 1.3cqw 0 0;
 display:flex;align-items:baseline;gap:1.6cqw;padding:.45cqw 3cqw 0 3.2cqw;
 }
 .nvl-tab-en{
 font-family:"job-clarendon",Georgia,serif;font-weight:700;
-font-size:3cqw;letter-spacing:.02em;color:var(--text);
+font-size:2.85cqw;letter-spacing:.02em;color:var(--text);
 }
 .nvl-tab-jp{font-size:1.8cqw;font-weight:700;color:var(--text)}
 .nvl-band{
@@ -199,7 +200,7 @@ overflow-y:auto;scrollbar-width:none;
 .nvl-rows::-webkit-scrollbar{display:none}
 .nvl-row{
 position:relative;flex:none;height:7.1cqw;background:var(--paper);border-radius:1.1cqw;
-display:flex;align-items:center;gap:1.8cqw;padding:.5cqw 1.6cqw .5cqw 3.3cqw;
+display:flex;align-items:center;gap:1.4cqw;padding:.5cqw 1.6cqw .5cqw 2.8cqw;
 box-shadow:0.3cqw .8cqw rgba(60,50,20,.18);
 animation:nvlRowIn .45s ease both;
 }
@@ -210,14 +211,19 @@ animation:nvlRowIn .45s ease both;
 .nvl-row:nth-child(5){animation-delay:.70s}
 .nvl-row[hidden]{display:none}
 .nvl-stamp{width:4.9cqw;height:4.9cqw;flex:none}
-.nvl-row-main{display:flex;flex-direction:column;min-width:0}
+.nvl-row-main{display:flex;flex-direction:column;flex:1;min-width:0}
 .nvl-season{font-family:"18TRIPSansRegular","IBM Plex Sans JP",sans-serif;font-size:1.1cqw;color:#b07cc6;letter-spacing:.05em}
 .nvl-row-title{font-family:"18TRIPSansBold","IBM Plex Sans JP",sans-serif;font-size:1.8cqw;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Checked スタンプ：旧実装は行の右13%に絶対配置で、詳細ボタン／ハートと
+   重なり、長いタイトルにも被っていた（実機FB 2026-11-09）。
+   フレックスアイテムとしてタイトル列と右カラムの間に置き、回転と
+   筆記体の見た目は保ったまま、構造的にどこにも重ならない配置にした。
+   サイズも 3.4cqw → 2.5cqw に縮小。タイトルは残り幅で ellipsis する */
 .nvl-checked{
-position:absolute;right:13%;top:50%;transform:translateY(-55%) rotate(-9deg);
+flex:none;align-self:center;transform:rotate(-9deg);
 font-family:"Segoe Script","Bradley Hand","Comic Sans MS",cursive; /* スクリプト系フォント資産が無いため cursive フォールバック */
-font-size:3.4cqw;color:#a8c400;opacity:.92;pointer-events:none;
-text-decoration:underline;text-underline-offset:.4cqw;text-decoration-thickness:.28cqw;
+font-size:2.5cqw;color:#a8c400;opacity:.92;pointer-events:none;
+text-decoration:underline;text-underline-offset:.3cqw;text-decoration-thickness:.22cqw;
 }
 .nvl-row-side{margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:.45cqw;flex:none}
 .nvl-fav{width:4.6cqw;height:4.6cqw;animation:favFloat 9s ease-in-out infinite alternate}
