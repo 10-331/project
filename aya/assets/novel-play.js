@@ -23,9 +23,13 @@ if(!DATA){ location.replace("novel.html"); return; }
 var blocks=DATA.blocks, TOTAL=blocks.length;
 
 var settings=lsGet(LS.settings,{speed:"normal",font:"normal"});
-/* 文字送り速度（1文字あたりms）。2026-11-09 実機FB「全体に食い気味で速い」を受けて
-   旧値 {slow:48,normal:30,fast:17} から全体に約1.9倍へ落とした */
-var SPEED_MS={slow:90,normal:55,fast:32};
+/* 文字送り速度（1文字あたりms）。変遷：
+   初版 {slow:48,normal:30,fast:17} → 実機FB「食い気味で速い」で
+   {90,55,32} まで落としたが、今度は「かくかくして遅い」とのFB（2026-11-09 第2弾）。
+   描画を rAF 駆動にして滑らかさを確保した上で、基準は公式アプリの
+   オート再生に近い ふつう≒30ms/字（約33字/秒）へ戻し、3段階の比率は
+   従来どおり（90:55:32 を 30 基準に換算）で全体を速めた */
+var SPEED_MS={slow:49,normal:30,fast:17};
 
 /* ---------- 要素 ---------- */
 function $(id){ return document.getElementById(id); }
@@ -43,7 +47,7 @@ document.title="「笹井綾」について ✈ "+DATA.no+" "+DATA.title;
 /* ---------- 状態 ---------- */
 var started=false, finished=false;
 var els=[], curIdx=-1;           // els[i] = 表示済みブロック要素
-var typing=null;                 // {el,text,pos,acc,timer} 単一tickerが唯一の書き手
+var typing=null;                 // {el,text,pos,acc,last,raf} rAFループが唯一の書き手
 var autoMode=false, ffRate=0, uiHidden=false;
 var pendingTimer=null;           // AUTO／早送りの次ブロック予約
 
@@ -75,6 +79,14 @@ function enterReader(fromIdx){
 }
 $("npBook").addEventListener("click",function(){ enterReader(resumeIdx); });
 $("npBook").addEventListener("keydown",function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); enterReader(resumeIdx); } });
+/* 表紙画面は全面タップで開始できる（旧実装は本＝チケット部分しか反応せず、
+   「チケット部分しか当たり判定がない」と実機FBで指摘された）。
+   BACK リンクや再開ボタンなど、a／button の上はそれぞれの動作を優先する */
+cover.addEventListener("click",function(e){
+  var t=e.target;
+  if(t && t.closest && t.closest("a,button")) return;
+  enterReader(resumeIdx);
+});
 $("npResumeBtn").addEventListener("click",function(e){ e.stopPropagation(); enterReader(resumeIdx); });
 $("npRestartBtn").addEventListener("click",function(e){
   e.stopPropagation(); lsDel(LS.progress); resumeIdx=0; enterReader(0);
@@ -102,34 +114,53 @@ function startBlock(i){
   scrollToBlock(i);
   runTyping(el,blocks[i]);
 }
-/* タイピングは単一 ticker（40ms周期）が唯一の書き手。
-   速度は「文字/秒」で持ち、設定速度と早送り倍率を毎tick読むため、
-   再生中の速度変更・倍率変更は打ち直しなしで即時反映される。
-   追記は対象ブロック（typing.el）に対してのみ行う */
-var TICK_MS=40;
-function charsPerTick(){
-  var cps=1000/(SPEED_MS[settings.speed]||55);
+/* タイピングは requestAnimationFrame 駆動の単一ループが唯一の書き手。
+   旧実装は 40ms 周期タイマーで文字追加が量子化され、実機では
+   「かくかくして遅い」と感じられた（実機FB 2026-11-09 第2弾）。
+   rAF ではフレームの経過時間から表示文字数を連続的に決め、端数は
+   typing.acc に蓄積して次のフレームへ持ち越すため、チャンク感のない
+   滑らかな字送りになる。速度は「文字/秒」で持ち、設定速度と早送り
+   倍率を毎フレーム読むため、再生中の変更は打ち直しなしで即時反映。
+   追記は対象ブロック（typing.el）に対してのみ行う。
+   早送り×8以上では、高速タイピング自体が残像・重なりの原因になるため、
+   1文字ずつ打たずブロック単位でまとめて表示する（間隔は onBlockDone 側） */
+function charsPerSec(){
+  var cps=1000/(SPEED_MS[settings.speed]||30);
   if(ffRate>0) cps*=ffRate;
-  return cps*TICK_MS/1000;
+  return cps;
 }
 function runTyping(el,text){
   stopTyping();
-  typing={el:el,text:text,pos:0,acc:0,timer:setInterval(typeTick,TICK_MS)};
+  if(ffRate>=8 || text.length===0){
+    el.textContent=text; /* ブロック単位表示：全文を一度に確定させる */
+    onBlockDone();
+    return;
+  }
+  typing={el:el,text:text,pos:0,acc:0,last:0,raf:0};
+  typing.raf=requestAnimationFrame(typeFrame);
 }
-function typeTick(){
+function typeFrame(ts){
   if(!typing) return;
-  typing.acc+=charsPerTick();
-  var step=Math.floor(typing.acc);
-  if(step<1) return;
-  typing.acc-=step;
-  typing.pos+=step;
-  var done=false;
-  if(typing.pos>=typing.text.length){ typing.pos=typing.text.length; done=true; }
-  typing.el.textContent=typing.text.slice(0,typing.pos);
-  followScroll(); /* 文字の追記とスクロール確定を同一tick内で行い、描画を1回に揃える */
-  if(done){ stopTyping(); onBlockDone(); }
+  if(typeof ts!=="number") ts=performance.now();
+  if(!typing.last){ typing.last=ts; typing.raf=requestAnimationFrame(typeFrame); return; }
+  var dt=ts-typing.last; typing.last=ts;
+  if(dt>100) dt=100; /* タブ復帰時などの大きな飛びで一気に進めない */
+  if(dt>0){
+    typing.acc+=charsPerSec()*dt/1000;
+    var step=Math.floor(typing.acc);
+    if(step>0){
+      typing.acc-=step;
+      typing.pos+=step;
+      var done=false;
+      if(typing.pos>=typing.text.length){ typing.pos=typing.text.length; done=true; }
+      typing.el.textContent=typing.text.slice(0,typing.pos);
+      followScroll(); /* 文字の追記とスクロール確定を同一フレーム内で行い、描画を1回に揃える */
+      if(done){ stopTyping(); onBlockDone(); return; }
+    }
+  }
+  typing.raf=requestAnimationFrame(typeFrame);
 }
-function stopTyping(){ if(typing){ clearInterval(typing.timer); typing=null; } }
+function stopTyping(){ if(typing){ if(typing.raf) cancelAnimationFrame(typing.raf); typing=null; } }
 function completeTyping(){
   if(!typing) return;
   var t=typing; stopTyping();
@@ -141,9 +172,11 @@ function onBlockDone(){
   if(curIdx>=TOTAL-1){ endPhase(); return; }
   showNext(true);
   /* 次ブロックまでの間：早送り時は固定350ms、AUTO時は
-     「固定1200ms＋文字数比例（25ms/字・上限3000ms）」の読み時間を置く */
+     「固定600ms＋文字数比例（12ms/字・上限1800ms）」の読み時間を置く。
+     旧 AUTO 間隔（1200ms＋25ms/字）は公式アプリのオートより間延びして
+     感じられたため、速度の見直し（実機FB 第2弾）に合わせて詰めた */
   if(ffRate>0){ clearPending(); pendingTimer=setTimeout(function(){ advance(); },350); }
-  else if(autoMode){ clearPending(); pendingTimer=setTimeout(function(){ advance(); }, 1200+Math.min(3000, blocks[curIdx].length*25)); }
+  else if(autoMode){ clearPending(); pendingTimer=setTimeout(function(){ advance(); }, 600+Math.min(1800, blocks[curIdx].length*12)); }
 }
 function advance(){
   clearPending();
@@ -228,18 +261,25 @@ function setUiHidden(v){
 function setAuto(v){
   autoMode=v; markActive("auto",v);
   if(v && !typing && !finished && curIdx>=0 && curIdx<TOTAL-1){
-    clearPending(); pendingTimer=setTimeout(function(){ advance(); },900);
+    clearPending(); pendingTimer=setTimeout(function(){ advance(); },600);
   }
   if(!v) clearPending();
 }
 function setFf(rate){
   ffRate=rate;
+  /* 現在の倍率が一目で分かる表示にする（実機FB 第2弾：戻し方が分かりにくい）：
+     - ピルは ×1（通常）も含めて選択中を active にする
+     - 「早送り」ボタンのラベルに現在の倍率を出す（×1 の時は従来表示） */
   ffStack.querySelectorAll("[data-rate]").forEach(function(b){
-    b.classList.toggle("active",+b.getAttribute("data-rate")===rate);
+    var br=+b.getAttribute("data-rate");
+    b.classList.toggle("active", rate===0 ? br===1 : br===rate);
   });
+  var ffBtn=menubar.querySelector('[data-menu="ff"]');
+  if(ffBtn) ffBtn.textContent = rate>0 ? "早送り ×"+rate : "早送り";
   markActive("ff",rate>0);
-  /* タイピング中は ticker が毎tick倍率を読むため、打ち直しなしで即時反映される。
-     タイピング間隔とブロック間の間（onBlockDone）の両方に同じ倍率の考え方を適用 */
+  /* タイピング中は rAF ループが毎フレーム倍率を読むため、打ち直しなしで
+     即時反映される。タイピング速度とブロック間の間（onBlockDone）の
+     両方に同じ倍率の考え方を適用 */
   if(!typing){
     clearPending();
     if(rate>0 && !finished && curIdx>=0 && curIdx<TOTAL-1){
@@ -272,7 +312,8 @@ menubar.addEventListener("click",function(e){
 ffStack.addEventListener("click",function(e){
   var b=e.target.closest("[data-rate]"); if(!b) return;
   var r=+b.getAttribute("data-rate");
-  setFf(ffRate===r?0:r);
+  if(r===1){ setFf(0); ffStack.hidden=true; return; } /* 「×1 通常」で通常速度へ戻す */
+  setFf(ffRate===r?0:r); /* 選択中のピルを再タップしても ×1 に戻れる */
   if(ffRate===0) ffStack.hidden=true;
 });
 
@@ -367,7 +408,7 @@ function syncEtc(){
 $("npSpeedOpts").addEventListener("click",function(e){
   var b=e.target.closest("[data-speed]"); if(!b) return;
   settings.speed=b.getAttribute("data-speed"); lsSet(LS.settings,settings); syncEtc();
-  /* タイピング中でも ticker が毎tick速度を読むため、打ち直しなしで即時反映される */
+  /* タイピング中でも rAF ループが毎フレーム速度を読むため、打ち直しなしで即時反映される */
 });
 $("npFontOpts").addEventListener("click",function(e){
   var b=e.target.closest("[data-font]"); if(!b) return;

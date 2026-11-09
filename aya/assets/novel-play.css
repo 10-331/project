@@ -96,28 +96,31 @@ padding:10px 2px 26px;
 .np-book-author{font-family:var(--np-mincho);font-size:13px;color:#444;white-space:nowrap}
 
 /* --- AYA'S STORY チケット（紫。下辺に右から差し込まれる） --- */
+/* 実機FB 第2弾（2026-11-09）で調整：スライドインは従来の倍の時間をかけ、
+   チケットの縦幅はパディング・行間・副次要素（フレーバー英文）を詰めて
+   圧縮した（高さの目安は CSS 値からの算出で 約108px → 約84px） */
 .np-ticket{
 position:absolute;left:13%;bottom:-30px;width:122%;
 display:flex;align-items:stretch;background:#fff;color:#191919;
 box-shadow:0 10px 26px rgba(0,0,0,.4);
-animation:npTicketIn .65s cubic-bezier(.22,.9,.3,1) both .75s;
+animation:npTicketIn 1.3s cubic-bezier(.22,.9,.3,1) both .75s;
 }
 @keyframes npTicketIn{from{transform:translateX(72%);opacity:0}to{transform:translateX(0);opacity:1}}
 .np-ticket-band{
 flex:0 0 30px;background:#191919;color:#fff;
 display:flex;flex-direction:column;align-items:center;justify-content:space-between;
-padding:7px 0 6px;
+padding:5px 0 4px;
 }
 .np-band-text{writing-mode:vertical-rl;font-size:7.5px;letter-spacing:.14em;font-family:"18TRIPSansRegular",var(--np-ui)}
 .np-band-emblem{width:15px;height:19px;border:1.4px solid #fff;border-radius:50%;display:block}
-.np-ticket-main{flex:1;padding:8px 10px 9px 12px;border-top:4px solid var(--np-purple);min-width:0}
+.np-ticket-main{flex:1;padding:5px 10px 6px 12px;border-top:3px solid var(--np-purple);min-width:0}
 .np-ticket-top{display:flex;align-items:baseline;gap:10px}
-.np-ticket-head{font-family:"job-clarendon",Georgia,serif;font-weight:700;font-size:19px;letter-spacing:.03em;color:var(--np-purple)}
-.np-ticket-no{font-family:"Courier New",monospace;font-weight:700;font-size:14px;letter-spacing:.1em;border-left:1.5px solid #bbb;padding-left:10px}
-.np-ticket-flavor{margin:4px 0 0;font-size:8.5px;line-height:1.5;color:#666;font-family:Georgia,serif;font-style:italic}
+.np-ticket-head{font-family:"job-clarendon",Georgia,serif;font-weight:700;font-size:17px;line-height:1.2;letter-spacing:.03em;color:var(--np-purple)}
+.np-ticket-no{font-family:"Courier New",monospace;font-weight:700;font-size:13px;letter-spacing:.1em;border-left:1.5px solid #bbb;padding-left:10px}
+.np-ticket-flavor{margin:2px 0 0;font-size:7.5px;line-height:1.4;color:#666;font-family:Georgia,serif;font-style:italic}
 .np-ticket-title{
-margin:6px 0 0;padding-top:6px;border-top:1px solid #d8d8d2;
-font-weight:700;font-size:14.5px;color:#111;display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+margin:4px 0 0;padding-top:4px;border-top:1px solid #d8d8d2;
+font-weight:700;font-size:13.5px;color:#111;display:flex;align-items:baseline;justify-content:space-between;gap:8px;
 }
 .np-ticket-t-author{font-size:8.5px;color:#777;font-weight:400;white-space:nowrap}
 .np-ticket-stub{

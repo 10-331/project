@@ -93,7 +93,6 @@ letter-spacing:.08em;text-align:center;padding:0 1rem;
    外側＝上下 ±10px 相当、内側＝左右 ±5px 相当＋回転 ±5deg の二重構造 ---- */
 @keyframes fuluffyVertical{0%{transform:translate3d(0,.65cqw,0)}50%{transform:translate3d(0,-.65cqw,0)}100%{transform:translate3d(0,.65cqw,0)}}
 @keyframes fluffyHorizon{0%{transform:translate3d(.35cqw,0,0) rotate(-5deg)}50%{transform:translate3d(-.35cqw,0,0) rotate(5deg)}100%{transform:translate3d(.35cqw,0,0) rotate(-5deg)}}
-@keyframes favFloat{from{transform:translate3d(.25cqw,0,0) rotate(3deg)}to{transform:translate3d(-.25cqw,0,0) rotate(-3deg)}}
 
 /* ---- 地図上の浮遊ピン（hd_items の浮遊文法を地図の小物へ転用） ---- */
 .nvl-pin{position:absolute;z-index:1;width:1.9cqw;animation:nvlFadeIn .8s ease .55s both}
@@ -225,12 +224,10 @@ font-family:"Segoe Script","Bradley Hand","Comic Sans MS",cursive; /* スクリ�
 font-size:2.5cqw;color:#a8c400;opacity:.92;pointer-events:none;
 text-decoration:underline;text-underline-offset:.3cqw;text-decoration-thickness:.22cqw;
 }
-.nvl-row-side{margin-left:auto;display:flex;flex-direction:column;align-items:center;gap:.45cqw;flex:none}
-.nvl-fav{width:4.6cqw;height:4.6cqw;animation:favFloat 9s ease-in-out infinite alternate}
-.nvl-row:nth-child(2) .nvl-fav{animation-duration:11s;animation-delay:-4s}
-.nvl-row:nth-child(3) .nvl-fav{animation-duration:8s;animation-delay:-2s}
-.nvl-row:nth-child(4) .nvl-fav{animation-duration:12s;animation-delay:-6s}
-.nvl-row:nth-child(5) .nvl-fav{animation-duration:10s;animation-delay:-3s}
+/* 一覧のお気に入り（FAVORITE ハート）は実機FB 第2弾で撤去。
+   右カラムは詳細ボタンだけになり、縦中央に置いて行を詰め直した。
+   詳細モーダル側のお気に入り表示（.nvl-spine .fav）は対象外で維持 */
+.nvl-row-side{margin-left:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
 .nvl-detail{
 border:.24cqw solid #333;background:var(--paper);color:#151515;cursor:pointer;
 font-size:1.35cqw;font-weight:700;border-radius:.7cqw;padding:.4cqw 1.5cqw;font-family:inherit;
@@ -293,5 +290,5 @@ cursor:pointer;color:#333;line-height:1;
 
 @media (prefers-reduced-motion: reduce){
 .nvl-topbar,.nvl-chara,.nvl-panel,.nvl-row,.nvl-pin,
-.nvl-pin .nv-v,.nvl-pin .nv-h,.nvl-fav,.nvl-modal.open .nvl-cassette{animation:none}
+.nvl-pin .nv-v,.nvl-pin .nv-h,.nvl-modal.open .nvl-cassette{animation:none}
 }

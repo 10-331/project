@@ -76,12 +76,14 @@
 </nav>
 <button class="np-burger" type="button" id="npBurger" aria-label="メニュー"><i></i><i></i><i></i></button>
 
-<!-- 早送り倍率ピル（本文左に下から ×4／×8／×16／×32 が積み上がる） -->
+<!-- 早送り倍率ピル（本文左に下から ×4／×8／×16／×32 が積み上がり、
+     最下段に「×1 通常」を常設して通常速度への戻し先を明示する） -->
 <div class="np-ffstack" id="npFfStack" hidden>
 <button type="button" data-rate="32">&raquo;&raquo; &times;32</button>
 <button type="button" data-rate="16">&raquo;&raquo; &times;16</button>
 <button type="button" data-rate="8">&raquo;&raquo; &times;8</button>
 <button type="button" data-rate="4">&raquo;&raquo; &times;4</button>
+<button type="button" data-rate="1" class="active">&times;1 通常</button>
 </div>
 
 <!-- NEXT（モノクロのピン＋極小「NEXT」） -->
