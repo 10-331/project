@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>「笹井綾」について ✈ AYA'S STORY</title>
+<link rel="stylesheet" href="assets/novel-play.css">
+</head>
+<body>
+<!-- ===== ノベルモードリーダー（C-6.5 実測文法）の綾版 =====
+開始演出：暗転 → 縦型の「本の表紙カード」（Season1 全体で1冊『「笹井綾」について』）
+→ 紫の AYA'S STORY チケットが下辺に差し込まれる。
+再生画面：紙テクスチャ全面・黒字明朝のタイピング表示・本文は縦に蓄積するページ式・
+名前表示なし（一人称）・左下に透かしスタンプ・NEXT はモノクロのピン。
+共通ヘッダー／フッターは付けない（ゲーム系・ノベル系は没入優先）。 -->
+
+<!-- ===== 表紙フェイズ ===== -->
+<div class="np-cover" id="npCover">
+<a class="np-cover-back" href="novel.html">&#8249; BACK</a>
+<div class="np-book" id="npBook" role="button" tabindex="0" aria-label="読みはじめる">
+<div class="np-book-photo">
+<img src="assets/aya/aya-visual-sp.png" alt="笹井綾">
+</div>
+<div class="np-book-meta">
+<span class="np-book-title">「笹井綾」について</span>
+<span class="np-book-author">笹井 綾</span>
+</div>
+<div class="np-ticket" aria-hidden="true">
+<span class="np-ticket-band"><span class="np-band-text">HAMA NICE TRIP! &#10022; AYA TRIP &#10022;</span><span class="np-band-emblem"></span></span>
+<div class="np-ticket-main">
+<div class="np-ticket-top">
+<span class="np-ticket-head">AYA'S STORY</span>
+<span class="np-ticket-no" id="tkNo">S1-01</span>
+</div>
+<p class="np-ticket-flavor">The world is a book, and those who do not travel read only one page.</p>
+<p class="np-ticket-title"><span id="tkTitle">かみさまのおうち</span><span class="np-ticket-t-author">笹井 綾</span></p>
+</div>
+<span class="np-ticket-stub"></span>
+</div>
+</div>
+<p class="np-cover-hint" id="npCoverHint">タップで読みはじめる</p>
+<div class="np-resume" id="npResume" hidden>
+<p class="np-resume-note">中断したシーンがあります</p>
+<div class="np-resume-btns">
+<button type="button" class="np-btn-lime" id="npResumeBtn">続きから読む</button>
+<button type="button" class="np-btn-white" id="npRestartBtn">はじめから</button>
+</div>
+</div>
+</div>
+
+<!-- ===== 再生フェイズ ===== -->
+<div class="np-reader" id="npReader" hidden>
+<div class="np-scroll" id="npScroll">
+<div class="np-side np-side-l" aria-hidden="true">AYA'S STORY &#10022; SEASON 1 &#10022; AYA'S STORY &#10022; SEASON 1 &#10022;</div>
+<div class="np-page" id="npPage"></div>
+<div class="np-side np-side-r" aria-hidden="true">&#128330; &#10022; HAMA NICE TRIP! &#10022; &#128330; &#10022; HAMA NICE TRIP! &#10022;</div>
+<div class="np-endpad" aria-hidden="true"></div>
+</div>
+
+<!-- 左下の透かしスタンプ（モノクロ線画・下端で見切れる位置に常駐） -->
+<div class="np-stamps" aria-hidden="true">
+<svg class="np-stamp-main" viewBox="0 0 64 64"><defs><path id="nps1" d="M32 7a25 25 0 1 1 0 50 25 25 0 1 1 0-50"/></defs><circle cx="32" cy="32" r="30" fill="none" stroke="#4a4a44" stroke-width="1.6"/><circle cx="32" cy="32" r="19" fill="none" stroke="#4a4a44" stroke-width="1"/><text font-size="7.2" letter-spacing="1.1" fill="#4a4a44" font-weight="700"><textPath href="#nps1">HEAD OF THE WARD &#9733; HAMA NICE TRIP!</textPath></text><g stroke="#4a4a44" stroke-width="2" fill="none"><path d="M24 27h13v7a5 5 0 0 1-5 5h-3a5 5 0 0 1-5-5z"/><path d="M37 28.5h2.6a3.4 3.4 0 0 1 0 6.8H37"/><path d="M22.5 44.5h16"/></g></svg>
+<svg class="np-stamp-sub" viewBox="0 0 64 64"><defs><path id="nps2" d="M32 9a23 23 0 1 1 0 46 23 23 0 1 1 0-46"/></defs><circle cx="32" cy="32" r="30" fill="none" stroke="#4a4a44" stroke-width="1.6"/><text font-size="8" letter-spacing="2" fill="#4a4a44" font-weight="700"><textPath href="#nps2">SASAI AYA &#10022; SEASON 1 &#10022;</textPath></text><text x="32" y="41" font-size="17" text-anchor="middle">&#128330;</text></svg>
+</div>
+
+<!-- メニューバー（ハンバーガーから展開。C-6 と同一の8項目） -->
+<nav class="np-menubar" id="npMenubar" hidden aria-label="ノベルメニュー">
+<button type="button" data-menu="back">もどる</button>
+<button type="button" data-menu="auto">AUTO</button>
+<button type="button" data-menu="ff">早送り</button>
+<button type="button" data-menu="skip">SKIP</button>
+<button type="button" data-menu="log">ログ</button>
+<button type="button" data-menu="uihide">UI非表示</button>
+<button type="button" data-menu="quit">中断</button>
+<button type="button" data-menu="etc">その他</button>
+</nav>
+<button class="np-burger" type="button" id="npBurger" aria-label="メニュー"><i></i><i></i><i></i></button>
+
+<!-- 早送り倍率ピル（本文左に下から ×4／×8／×16／×32 が積み上がる） -->
+<div class="np-ffstack" id="npFfStack" hidden>
+<button type="button" data-rate="32">&raquo;&raquo; &times;32</button>
+<button type="button" data-rate="16">&raquo;&raquo; &times;16</button>
+<button type="button" data-rate="8">&raquo;&raquo; &times;8</button>
+<button type="button" data-rate="4">&raquo;&raquo; &times;4</button>
+</div>
+
+<!-- NEXT（モノクロのピン＋極小「NEXT」） -->
+<button class="np-next" type="button" id="npNext" aria-label="次へ">
+<img src="assets/official/common_icon_pin.png" alt="">
+<span>NEXT</span>
+</button>
+
+<!-- 話の締め：ライムのチケット帯が右下にスライドイン -->
+<div class="np-endband" id="npEndband" hidden>
+<span class="np-endband-text" id="npEndbandText">To be continued...</span>
+</div>
+<div class="np-endactions" id="npEndactions" hidden>
+<a class="np-btn-lime" id="npNextTrack" href="novel-play.html?track=2">次の話へ &#8250;</a>
+<a class="np-btn-white" href="novel.html">一覧へ戻る</a>
+</div>
+</div>
+
+<!-- ===== ログ（ダークスレート全面） ===== -->
+<div class="np-log" id="npLog" hidden>
+<button class="np-log-close" type="button" id="npLogClose" aria-label="ログを閉じる">&#10005;</button>
+<div class="np-log-scroll" id="npLogScroll">
+<div class="np-log-list" id="npLogList"></div>
+</div>
+<div class="np-stamps np-stamps-dark" aria-hidden="true">
+<svg class="np-stamp-main" viewBox="0 0 64 64"><defs><path id="nps3" d="M32 7a25 25 0 1 1 0 50 25 25 0 1 1 0-50"/></defs><circle cx="32" cy="32" r="30" fill="none" stroke="#cfd6dd" stroke-width="1.6"/><circle cx="32" cy="32" r="19" fill="none" stroke="#cfd6dd" stroke-width="1"/><text font-size="7.2" letter-spacing="1.1" fill="#cfd6dd" font-weight="700"><textPath href="#nps3">HEAD OF THE WARD &#9733; HAMA NICE TRIP!</textPath></text><g stroke="#cfd6dd" stroke-width="2" fill="none"><path d="M24 27h13v7a5 5 0 0 1-5 5h-3a5 5 0 0 1-5-5z"/><path d="M37 28.5h2.6a3.4 3.4 0 0 1 0 6.8H37"/><path d="M22.5 44.5h16"/></g></svg>
+</div>
+</div>
+
+<!-- ===== 中断確認ダイアログ（チケット型モーダル、C-6.5 実測文言） ===== -->
+<div class="np-dialog" id="npQuitDialog" hidden>
+<div class="np-dialog-card">
+<p class="np-dialog-head">中断確認</p>
+<p class="np-dialog-body">ストーリーを中断して戻りますか？次回は中断したシーンから再開できます。</p>
+<div class="np-dialog-btns">
+<button type="button" class="np-btn-white" id="npQuitCancel">Cancel</button>
+<button type="button" class="np-btn-lime" id="npQuitOk">OK</button>
+</div>
+</div>
+</div>
+
+<!-- ===== その他（設定） ===== -->
+<div class="np-dialog" id="npEtcDialog" hidden>
+<div class="np-dialog-card">
+<p class="np-dialog-head">その他</p>
+<div class="np-etc-row">
+<span class="np-etc-label">文字送り</span>
+<div class="np-etc-opts" id="npSpeedOpts">
+<button type="button" data-speed="slow">ゆっくり</button>
+<button type="button" data-speed="normal">ふつう</button>
+<button type="button" data-speed="fast">はやい</button>
+</div>
+</div>
+<div class="np-etc-row">
+<span class="np-etc-label">文字サイズ</span>
+<div class="np-etc-opts" id="npFontOpts">
+<button type="button" data-font="normal">標準</button>
+<button type="button" data-font="large">大きめ</button>
+</div>
+</div>
+<div class="np-dialog-btns">
+<button type="button" class="np-btn-lime" id="npEtcClose">閉じる</button>
+</div>
+</div>
+</div>
+
+<!-- 暗転レイヤー -->
+<div class="np-fade" id="npFade"></div>
+
+<script src="assets/novel-data.js"></script>
+<script src="assets/novel-play.js"></script>
+</body>
+</html>

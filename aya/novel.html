@@ -152,7 +152,7 @@
 </div>
 <div class="nvl-cbtns">
 <button type="button" id="mPrev" aria-label="前の話">&#171;</button>
-<a class="play" href="#" id="mPlay" aria-label="本文を読む（準備中）">&#9654;</a>
+<a class="play" href="novel-play.html?track=1" id="mPlay" aria-label="本文を読む">&#9654;</a>
 <button type="button" id="mNext" aria-label="次の話">&#187;</button>
 </div>
 </div>
@@ -181,6 +181,7 @@ document.getElementById('mTitle').textContent=t.title;
 document.getElementById('mPickup').textContent=t.pickup;
 document.getElementById('mLocation').textContent=t.location;
 document.getElementById('mSyn').textContent=t.syn;
+document.getElementById('mPlay').setAttribute('href','novel-play.html?track='+n);
 document.getElementById('mPrev').disabled=(n<=1);
 document.getElementById('mNext').disabled=(n>=5);
 }
@@ -191,7 +192,22 @@ document.getElementById('mClose').addEventListener('click',function(){ modal.cla
 modal.addEventListener('click',function(e){ if(e.target===modal) modal.classList.remove('open');});
 document.getElementById('mPrev').addEventListener('click',function(){ fill(cur-1);});
 document.getElementById('mNext').addEventListener('click',function(){ fill(cur+1);});
-document.getElementById('mPlay').addEventListener('click',function(e){ e.preventDefault();});
+
+/* 既読（Checked）の同期：リーダー（novel-play.html）で読了した話を
+   localStorage の ayaNovelRead から反映する。静的表示との和集合にする */
+try{
+var readTracks=JSON.parse(localStorage.getItem('ayaNovelRead')||'[]');
+var rows=document.querySelectorAll('.nvl-row');
+readTracks.forEach(function(n){
+var row=rows[n-1]; if(!row) return;
+row.setAttribute('data-read','1');
+if(!row.querySelector('.nvl-checked')){
+var s=document.createElement('span');
+s.className='nvl-checked'; s.textContent='Checked';
+row.insertBefore(s,row.querySelector('.nvl-row-side'));
+}
+});
+}catch(e){}
 
 var stage=document.getElementById('nvlStage');
 document.querySelectorAll('[data-toggle]').forEach(function(btn){

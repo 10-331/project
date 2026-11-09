@@ -1,0 +1,322 @@
+/* ============================================================
+NOVEL PLAY ― ノベルモードリーダー（C-6.5 実測文法）の綾版
+区長ノベルの「ノベルモード」再生を、綾の5話短編（Season1）用に実装。
+共通部品（site.css／site.js）は読み込まない（没入優先）。
+
+設計の優先順位（DECISIONS.md 2026-11-09 本人決定）：
+モバイル縦 ＞ モバイル横 ＞ PC。
+- 縦：紙面は全幅、明朝の読み物として 1行の文字数と行間を取る
+- 横：紙面カラムを広げる
+- PC：紙面カラムを中央寄せし、両サイドに装飾を置く
+
+色は実測パレット（site.css の変数値）＋ novel.css 既出の紫
+（#b07cc6 系＝チケット／Season ラベルの紫）から外れない。
+紙テクスチャは CSS 生成（SVG ノイズ）。
+明朝は Web フォント資産が無いため、端末の明朝系フォントへ
+フォールバックする（--np-mincho に明示）。
+============================================================ */
+@import url("fonts/plex-faces.css"); /* IBM Plex Sans JP（site.css／novel.css と同じ読み込み） */
+@font-face{font-family:"18TRIPSansLight";src:url("fonts/18TRIPSans-Light.woff2") format("woff2"),url("fonts/18TRIPSans-Light.woff") format("woff")}
+@font-face{font-family:"18TRIPSansRegular";src:url("fonts/18TRIPSans-Regular.woff2") format("woff2"),url("fonts/18TRIPSans-Regular.woff") format("woff")}
+@font-face{font-family:"18TRIPSansMedium";src:url("fonts/18TRIPSans-Medium.woff2") format("woff2"),url("fonts/18TRIPSans-Medium.woff") format("woff")}
+@font-face{font-family:"18TRIPSansBold";src:url("fonts/18TRIPSans-Bold.woff2") format("woff2"),url("fonts/18TRIPSans-Bold.woff") format("woff")}
+@font-face{font-family:"18TRIPSansFunnyMedium";src:url("fonts/18TRIPSansFunny-Medium.woff2") format("woff2"),url("fonts/18TRIPSansFunny-Medium.woff") format("woff")}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-300.woff2") format("woff2");font-weight:300}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-400.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"job-clarendon";src:url("fonts/job-clarendon-700.woff2") format("woff2");font-weight:700}
+
+:root{
+--ink:#323232; /* 実測：公式共通ダーク */
+--text:#000;
+--accent:#c8ff46; /* 実測：ライム */
+--accent2:#ff8c78; /* 実測：サーモン */
+--line:#e8ebeb;
+--np-purple:#8a5cb3; /* チケットの紫（novel.css の #b07cc6 の濃い側） */
+--np-purple-light:#b07cc6; /* novel.css 既出の紫 */
+--np-paper:#faf7ec; /* 紙地（温かみのある白） */
+--np-slate:#3b4653; /* ログ画面のダークスレート */
+--np-heart:#e56a7e; /* FAVORITE ハート（novel.css 既出） */
+--np-mincho:"Hiragino Mincho ProN","Hiragino Mincho Pro","Yu Mincho","YuMincho","Noto Serif JP","MS PMincho",serif; /* 明朝フォールバック（Webフォント資産なし） */
+--np-ui:"18TRIPSansMedium","IBM Plex Sans JP","Hiragino Sans",sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;padding:0;height:100%}
+body{
+font-family:var(--np-ui);
+color:var(--text);
+background:#d9d4c2; /* PC時の両サイド地（紙に寄せたグレージュ） */
+overflow:hidden;
+-webkit-tap-highlight-color:transparent;
+}
+button{font-family:inherit;cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+/* ============ 暗転レイヤー ============ */
+.np-fade{
+position:fixed;inset:0;background:#000;z-index:300;pointer-events:none;
+opacity:1;transition:opacity .55s ease;
+}
+.np-fade.off{opacity:0}
+
+/* ============ 表紙フェイズ ============ */
+.np-cover{
+position:fixed;inset:0;z-index:50;
+background:radial-gradient(120% 90% at 50% 30%,#a3a3a0 0%,#7c7c78 55%,#5b5b57 100%);
+display:flex;flex-direction:column;align-items:center;
+padding:9vh 16px 24px;overflow:hidden;
+}
+.np-cover-back{
+position:absolute;top:14px;left:14px;z-index:3;
+background:rgba(0,0,0,.55);color:#fff;font-family:"18TRIPSansBold",var(--np-ui);
+font-size:13px;letter-spacing:.08em;padding:8px 14px;border-radius:999px;
+}
+.np-book{
+position:relative;width:min(62vw,290px);
+background:#fff;padding:10px 10px 12px;
+box-shadow:0 18px 42px rgba(0,0,0,.45),0 3px 8px rgba(0,0,0,.3);
+cursor:pointer;
+animation:npBookIn .7s cubic-bezier(.22,.9,.3,1) both .15s;
+}
+@keyframes npBookIn{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+.np-book-photo{position:relative;overflow:hidden;aspect-ratio:4/4.3;background:#e9e6da}
+.np-book-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block}
+/* 写真に重なる薄い方眼グリッド */
+.np-book-photo::after{
+content:"";position:absolute;inset:0;
+background:
+repeating-linear-gradient(0deg,rgba(70,80,90,.13) 0 1px,transparent 1px 22px),
+repeating-linear-gradient(90deg,rgba(70,80,90,.13) 0 1px,transparent 1px 22px);
+}
+.np-book-meta{
+display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+padding:10px 2px 26px;
+}
+.np-book-title{font-family:var(--np-mincho);font-size:19px;font-weight:700;letter-spacing:.04em;color:#1c1c1c}
+.np-book-author{font-family:var(--np-mincho);font-size:13px;color:#444;white-space:nowrap}
+
+/* --- AYA'S STORY チケット（紫。下辺に右から差し込まれる） --- */
+.np-ticket{
+position:absolute;left:13%;bottom:-30px;width:122%;
+display:flex;align-items:stretch;background:#fff;color:#191919;
+box-shadow:0 10px 26px rgba(0,0,0,.4);
+animation:npTicketIn .65s cubic-bezier(.22,.9,.3,1) both .75s;
+}
+@keyframes npTicketIn{from{transform:translateX(72%);opacity:0}to{transform:translateX(0);opacity:1}}
+.np-ticket-band{
+flex:0 0 30px;background:#191919;color:#fff;
+display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+padding:7px 0 6px;
+}
+.np-band-text{writing-mode:vertical-rl;font-size:7.5px;letter-spacing:.14em;font-family:"18TRIPSansRegular",var(--np-ui)}
+.np-band-emblem{width:15px;height:19px;border:1.4px solid #fff;border-radius:50%;display:block}
+.np-ticket-main{flex:1;padding:8px 10px 9px 12px;border-top:4px solid var(--np-purple);min-width:0}
+.np-ticket-top{display:flex;align-items:baseline;gap:10px}
+.np-ticket-head{font-family:"job-clarendon",Georgia,serif;font-weight:700;font-size:19px;letter-spacing:.03em;color:var(--np-purple)}
+.np-ticket-no{font-family:"Courier New",monospace;font-weight:700;font-size:14px;letter-spacing:.1em;border-left:1.5px solid #bbb;padding-left:10px}
+.np-ticket-flavor{margin:4px 0 0;font-size:8.5px;line-height:1.5;color:#666;font-family:Georgia,serif;font-style:italic}
+.np-ticket-title{
+margin:6px 0 0;padding-top:6px;border-top:1px solid #d8d8d2;
+font-weight:700;font-size:14.5px;color:#111;display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+}
+.np-ticket-t-author{font-size:8.5px;color:#777;font-weight:400;white-space:nowrap}
+.np-ticket-stub{
+flex:0 0 40px;background:#dcdcdc;border-left:2px dashed #a9a9a9;position:relative;
+}
+.np-ticket-stub::after{ /* バーコード */
+content:"";position:absolute;left:7px;right:7px;bottom:8px;height:20px;
+background:repeating-linear-gradient(90deg,#222 0 2px,transparent 2px 4px,#222 4px 5px,transparent 5px 9px,#222 9px 12px,transparent 12px 14px);
+}
+.np-cover-hint{
+margin:64px 0 0;color:#fff;font-size:12.5px;letter-spacing:.22em;
+text-shadow:0 1px 6px rgba(0,0,0,.5);animation:npHint 2.2s ease-in-out infinite;
+}
+@keyframes npHint{0%,100%{opacity:.65}50%{opacity:1}}
+.np-resume{margin-top:18px;text-align:center;animation:npBookIn .5s ease both}
+.np-resume-note{margin:0 0 10px;color:#fff;font-size:13px;letter-spacing:.1em;text-shadow:0 1px 6px rgba(0,0,0,.5)}
+.np-resume-btns{display:flex;gap:10px;justify-content:center}
+
+/* ============ ボタン（Cancel=白／OK=ライムの文法） ============ */
+.np-btn-lime,.np-btn-white{
+display:inline-block;border:1.6px solid var(--ink);border-radius:9px;
+padding:10px 20px;font-size:14px;font-weight:700;letter-spacing:.06em;
+font-family:"18TRIPSansBold",var(--np-ui);
+}
+.np-btn-lime{background:var(--accent);color:#141414}
+.np-btn-white{background:#fff;color:#141414}
+
+/* ============ 再生フェイズ ============ */
+.np-reader{position:fixed;inset:0;z-index:40}
+.np-scroll{
+height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
+background:
+url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"),
+radial-gradient(130% 100% at 50% 0%,#fdfaf1 0%,var(--np-paper) 55%,#f1ecd9 100%);
+}
+.np-page{
+max-width:620px;margin:0 auto;
+padding:11vh 8vw 6vh;
+font-family:var(--np-mincho);
+font-size:var(--np-fs,17px);
+line-height:2.05;letter-spacing:.02em;color:#171717;
+}
+.np-block{margin:0 0 1.9em;white-space:pre-wrap;word-break:break-all}
+.np-endpad{height:34vh}
+.np-side{display:none}
+
+/* 透かしスタンプ（左下・下端で見切れる） */
+.np-stamps{
+position:fixed;left:2.5vw;bottom:0;z-index:5;pointer-events:none;
+transform:translateY(26%);opacity:.5;width:120px;height:100px;
+}
+.np-stamp-main{position:absolute;left:0;bottom:0;width:96px;height:96px}
+.np-stamp-sub{position:absolute;left:58px;bottom:34px;width:62px;height:62px;transform:rotate(9deg)}
+.np-stamps-dark{opacity:.22}
+
+/* ハンバーガー（黒角丸正方形＋白3本線。開くと✕） */
+.np-burger{
+position:fixed;top:12px;right:12px;z-index:90;
+width:42px;height:42px;border:none;border-radius:9px;background:#191919;
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+.np-burger i{display:block;width:20px;height:2.4px;background:#fff;border-radius:2px;transition:transform .25s,opacity .25s}
+.np-burger.open i:nth-child(1){transform:translateY(7.4px) rotate(45deg)}
+.np-burger.open i:nth-child(2){opacity:0}
+.np-burger.open i:nth-child(3){transform:translateY(-7.4px) rotate(-45deg)}
+
+/* メニューバー（上部に展開。有効状態はライムピル） */
+.np-menubar{
+position:fixed;top:0;left:0;right:0;z-index:80;
+background:rgba(255,255,255,.97);border-bottom:1.5px solid var(--ink);
+display:flex;flex-wrap:wrap;gap:2px;padding:8px 52px 8px 8px;
+}
+.np-menubar button{
+border:none;background:transparent;padding:7px 10px;border-radius:999px;
+font-size:12.5px;font-weight:700;letter-spacing:.05em;color:#191919;
+font-family:"18TRIPSansBold",var(--np-ui);
+}
+.np-menubar button.active{background:var(--accent)}
+
+/* 早送りピル（本文左に積み上がる。現在倍率はライム地） */
+.np-ffstack{
+position:fixed;left:10px;bottom:16%;z-index:70;
+display:flex;flex-direction:column;gap:7px;
+}
+.np-ffstack button{
+background:#fff;border:1.6px solid #191919;border-radius:999px;
+padding:6px 13px;font-size:12.5px;font-weight:700;color:#191919;
+font-family:"18TRIPSansBold",var(--np-ui);box-shadow:0 2px 6px rgba(0,0,0,.18);
+}
+.np-ffstack button.active{background:var(--accent)}
+
+/* NEXT（モノクロのピン） */
+.np-next{
+position:fixed;right:16px;bottom:14px;z-index:70;
+border:none;background:transparent;padding:6px;
+display:flex;flex-direction:column;align-items:center;gap:1px;
+opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.np-next.show{opacity:1;pointer-events:auto;animation:npNextBob 1.6s ease-in-out infinite}
+.np-next img{width:30px;height:30px;filter:grayscale(1) contrast(1.15);display:block}
+.np-next span{font-size:8px;letter-spacing:.24em;font-weight:700;color:#333;font-family:"18TRIPSansBold",var(--np-ui)}
+@keyframes npNextBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+
+/* 終了チケット帯＋導線 */
+.np-endband{
+position:fixed;right:0;bottom:13%;z-index:65;
+background:var(--accent);color:#141414;
+padding:12px 26px 12px 20px;
+transform:translateX(106%);transition:transform .55s cubic-bezier(.22,.9,.3,1);
+box-shadow:0 6px 18px rgba(0,0,0,.25);
+}
+.np-endband.show{transform:translateX(0)}
+.np-endband-text{
+font-family:"Segoe Script","Bradley Hand",cursive; /* Checked と同じ cursive フォールバック */
+font-size:21px;font-weight:700;font-style:italic;letter-spacing:.02em;
+}
+.np-endactions{
+position:fixed;right:16px;bottom:5%;z-index:65;
+display:flex;gap:10px;
+}
+
+/* UI非表示 */
+.np-reader.ui-hidden .np-burger,
+.np-reader.ui-hidden .np-next{opacity:0!important;pointer-events:none!important;animation:none}
+
+/* ============ ログ（ダークスレート） ============ */
+.np-log{position:fixed;inset:0;z-index:120;background:var(--np-slate)}
+.np-log-scroll{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.np-log-list{max-width:680px;margin:0 auto;padding:64px 20px 18vh}
+.np-log-entry{
+position:relative;padding:16px 44px 16px 2px;
+border-bottom:1px solid rgba(255,255,255,.28);
+}
+.np-log-text{
+margin:0;color:#fff;font-family:var(--np-mincho);
+font-size:15px;line-height:1.95;letter-spacing:.02em;white-space:pre-wrap;word-break:break-all;
+}
+.np-heart{
+position:absolute;right:0;bottom:12px;width:34px;height:34px;
+border:none;border-radius:50%;background:#fff;padding:0;
+display:flex;align-items:center;justify-content:center;
+box-shadow:0 2px 6px rgba(0,0,0,.3);
+}
+.np-heart svg{width:19px;height:19px;fill:#b9bec4}
+.np-heart.on svg{fill:var(--np-heart)}
+.np-log-close{
+position:fixed;top:12px;right:12px;z-index:130;
+width:42px;height:42px;border:none;border-radius:9px;background:#191919;color:#fff;
+font-size:17px;box-shadow:0 2px 8px rgba(0,0,0,.3);
+}
+
+/* ============ ダイアログ（チケット型モーダル） ============ */
+.np-dialog{
+position:fixed;inset:0;z-index:150;background:rgba(18,18,18,.5);
+display:flex;align-items:center;justify-content:center;padding:20px;
+}
+.np-dialog-card{
+width:min(88vw,390px);background:#fff;border-radius:12px;overflow:hidden;
+box-shadow:0 18px 44px rgba(0,0,0,.4);
+}
+.np-dialog-head{
+margin:0;background:var(--accent);color:#141414;
+font-family:"18TRIPSansBold",var(--np-ui);font-weight:700;font-size:15.5px;
+letter-spacing:.1em;padding:11px 18px;
+}
+.np-dialog-body{margin:0;padding:20px 18px 6px;font-size:14.5px;line-height:1.85}
+.np-dialog-btns{display:flex;gap:10px;justify-content:flex-end;padding:16px 18px 18px}
+.np-etc-row{padding:14px 18px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.np-etc-label{font-size:13px;font-weight:700;letter-spacing:.06em;min-width:76px}
+.np-etc-opts{display:flex;gap:6px}
+.np-etc-opts button{
+border:1.5px solid var(--ink);background:#fff;border-radius:999px;
+padding:6px 13px;font-size:12.5px;font-weight:700;
+}
+.np-etc-opts button.active{background:var(--accent)}
+
+/* ============ モバイル横：紙面カラムを広げる ============ */
+@media(orientation:landscape) and (max-height:500px){
+.np-page{padding-top:8vh;max-width:700px}
+.np-book{width:min(36vh,290px)}
+.np-cover{padding-top:4vh}
+.np-cover-hint{margin-top:52px}
+}
+
+/* ============ PC：中央寄せ＋両サイド装飾 ============ */
+@media(min-width:769px){
+.np-scroll{max-width:720px;margin:0 auto;box-shadow:0 0 34px rgba(60,55,35,.25);position:relative}
+.np-page{padding-left:56px;padding-right:56px}
+.np-side{
+display:block;position:fixed;top:0;bottom:0;width:30px;z-index:1;
+writing-mode:vertical-rl;font-size:11px;letter-spacing:.5em;color:#8a8474;
+font-family:"18TRIPSansRegular",var(--np-ui);
+white-space:nowrap;overflow:hidden;padding:18px 0;
+}
+.np-side-l{left:calc(50% - 415px)}
+.np-side-r{right:calc(50% - 415px)}
+.np-stamps{left:calc(50% - 348px)}
+.np-menubar{left:50%;right:auto;transform:translateX(-50%);width:min(720px,100%)}
+.np-next{right:calc(50% - 344px)}
+.np-book{width:300px}
+}
