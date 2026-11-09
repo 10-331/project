@@ -342,3 +342,12 @@ PC では正本準拠の現行版を優先した）。
   フィラー（🫧）ページへ入れるかは名前と内容の対応が曖昧なため判断待ちとし、未投入。
 - Git版の公式JS一式（shared/js/app.js 等、jQuery依存）は不採用。
   ローカルは vanilla JS で zoom／voice／fit を等価実装済みのため。
+
+## 10. GitHub project リポジトリ `aya/` への反映（2026-11-09）
+
+- 2026-11-09、project リポジトリの `aya/` フォルダへ反映済み（ユーザー承認：サイトへのリンク自体は鍵垢でしか出していないため反映可、との判断）。
+- 公開URL：https://10-331.github.io/project/aya/index.html
+- 経路：ブランチ `add-aya-site` へのスナップショット push → PR → main へマージ。既存ファイル（test.html 等）は変更・削除していない。
+- **反映できたのはテキストファイル16点のみ**：HTML 7（index／character／character-filler／ten／story／terms／event-camelia）、CSS 5（site／index／ten／character／fonts/plex-faces）、JS 1（site.js）、MD 3（ASSETS／DECISIONS／FLOW）。内部リンクは全て相対パスのため、`aya/` 配置でもページ間導線（index の MEMBERS、ten⇄character⇄character-filler の BACK/NEXT、assets 参照）は壊れないことを確認済み。
+- **未反映（バイナリ 508ファイル・約12.5MB）**：woff2 378／woff 5（assets/fonts/）、png 124（assets/official／assets/ten／assets/aya）、mp3 1（assets/ten/voice/1_3.mp3）。GitHub 連携ツール（MCP の push_files／create_or_update_file）が UTF-8 テキスト専用でバイナリを送れないため。git の SSH は遮断・HTTPS は資格情報なしで push 不可だった。
+- このため GitHub Pages 上の表示は、バイナリが揃うまで不完全（フォント・画像・音声が出ない）。バイナリの追加は、ユーザーが GitHub の Web UI から `aya/assets/` 配下へフォルダごとアップロードする等、別経路が必要。完全な状態はローカル `site/` が正。
